@@ -329,7 +329,7 @@ end
 	
 for _,mob in pairs(minionManager.objects) do
 		
-   if GetTeam(mob) == 300 and hIOW:Mode() == "LaneClear" then
+   if GetTeam(mob) == 300 and IOW:Mode() == "LaneClear" then
 		
 		if IsReady(_Q) and KatarinaMenu.JungleClear.Q:Value() and ValidTarget(mob, 675) then
 		CastTargetSpell(mob, _Q)
