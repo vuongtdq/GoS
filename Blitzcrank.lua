@@ -119,7 +119,7 @@ OnTick(function(myHero)
                           
                 if GetCurrentMana(myHero) >= 200 and IsReady(_W) and IsReady(_Q) and GetDistance(target) <= 1275 and GetDistance(target) >= 975 and BlitzcrankMenu.Combo.W:Value() then
                 CastSpell(_W)
-                elseif target and IsReady(_W) and GetDistance(target) > 150 and GetDistance(target) <= 400 then
+                elseif BlitzcrankMenu.Combo.W:Value() and IsReady(_W) and GetDistance(target) > 150 and GetDistance(target) <= 400 then
 		CastSpell(_W)
 		end
 			
