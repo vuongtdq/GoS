@@ -29,3 +29,23 @@ EkkoMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 EkkoMenu.Drawings:Boolean("W", "Draw W Range", true)
 EkkoMenu.Drawings:Boolean("E", "Draw E Range", true)
 EkkoMenu.Drawings:Boolean("R", "Draw R Range", true)
+
+local twin = nil 
+
+OnDraw(function(myHero)
+if EkkoMenu.Drawings.R:Value() and twin then DrawCircle(GetOrigin(twin).x,GetOrigin(twin).y,GetOrigin(twin).z,400,1,0,0xff00ff00) end
+end)
+
+OnTick(function(myHero)
+end)
+
+OnCreateObj(function(Object) 
+if GetObjectBaseName(Object) == "Ekko_Base_R_TrailEnd.troy" then
+twin = Object
+-- "Ekko_Base_Q_Aoe_Dilation.troy", 
+--"Ekko_Base_W_Detonate_Slow.troy", 
+--"Ekko_Base_W_Indicator.troy", 
+--"Ekko_Base_W_Cas.troy"
+end
+end)
+
