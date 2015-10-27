@@ -71,14 +71,7 @@ local wardItems = {
         { id = 2043, spellName = "VisionWard"}
 }
 
-local function GetDistanceSqr(p1,p2)
-    p2 = p2 or GetOrigin(myHero)
-    local dx = p1.x - p2.x
-    local dz = (p1.z or p1.y) - (p2.z or p2.y)
-    return dx*dx + dz*dz
-end
-
-local function IsInDistance(r, p1, p2, fast)
+local function IsInDistance2(r, p1, p2, fast)
 		local fast = fast or false
 		if fast then
 		local p1y = p1.z or p1.y
@@ -98,7 +91,7 @@ local function calcMaxPos(pos)
 	return {x = origin.x + 600 * vectorx / dist ,y = origin.y + 600 * vectory / dist, z = origin.z + 600 * vectorz / dist}
 end
 
-local function ValidTarget( object )
+local function ValidTarget2( object )
 	local objType = GetObjectType(object)
 	return (objType == Obj_AI_Hero or objType == Obj_AI_Minion) and IsVisible(object)
 end
@@ -115,7 +108,7 @@ local function putWard(pos0)
 	local slot = findWardSlot()
 
 	local pos = pos0
-	if not IsInDistance(600, pos) then
+	if not IsInDistance2(600, pos) then
 	pos = calcMaxPos(pos)
 	end
 
@@ -140,11 +133,11 @@ end
 
 local function GetJumpTarget()
 	local pos = mousePos
-	if not IsInDistance(600, mousePos, GetOrigin(myHero)) then
+	if not IsInDistance2(600, mousePos, GetOrigin(myHero)) then
 	pos = maxPos
 	end
 	for _,object in pairs(objectList) do
-	  if ValidTarget(object) and IsInDistance(200, GetOrigin(object), pos) then
+	  if ValidTarget2(object) and IsInDistance2(200, GetOrigin(object), pos) then
 	   	return object
 	  end
 	end
