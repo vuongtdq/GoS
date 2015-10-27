@@ -771,17 +771,9 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			end
 		end
 		
-		if apdmg > 0 then apdmg = GoS:CalcDamage(Source, target, 0, apdmg) end
-		if addmg > 0 then addmg = GoS:CalcDamage(Source, target, addmg) end
+		if apdmg > 0 then apdmg = CalcDamage(Source, target, 0, apdmg) end
+		if addmg > 0 then addmg = CalcDamage(Source, target, addmg) end
 		TrueDmg = apdmg+addmg+dmg
-	  elseif (spellname == "AD") then
-                TrueDmg = GoS:GetDmg(Source,target)
-        elseif (spellname == "IGNITE") then
-                TrueDmg = 50+20*GetLevel(myHero)
-        elseif (spellname == "SMITESS") then
-                TrueDmg = 54+6*GetLevel(myHero) --60-162 over 3 seconds
-        elseif (spellname == "SMITESB") then
-                TrueDmg = 20+8*GetLevel(myHero) --28-164
         else
                PrintChat("Error spellDmg "..GetObjectName(Source).." "..spellname)
                 TrueDmg = 0
