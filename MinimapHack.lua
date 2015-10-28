@@ -25,7 +25,7 @@ OnDraw(function(myHero)
           if MissSec[i] == nil then
           MissSec[i] = 0
           end
-          unittraveled = GetMovementSpeed(enemy)*MissSec[i]
+          unittraveled = GetMoveSpeed(enemy)*MissSec[i]
           if unittraveled > 50 and unittraveled < 10000 then
           DrawCircle(GetOrigin(enemy), unittraveled,1,0,0xffffffff)
           end
