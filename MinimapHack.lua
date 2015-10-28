@@ -5,7 +5,7 @@ local ticks = {}
  
 OnTick(function(myHero)
         for i,enemy in pairs(GetEnemyHeroes()) do
-                if IsVisible(enemy) == false and IsDead(enemy) == false and GetTeam(enemy) ~= GetTeam(myHero) then
+                if IsVisible(enemy) == false and IsDead(enemy) == false then
                         if ticks[i] == nil then
                         ticks[i] = GetTickCount()
                         end
@@ -21,7 +21,7 @@ end)
 
 OnDraw(function(myHero)
     for i,enemy in pairs(GetEnemyHeroes()) do
-        if enemy ~= nil and GetTeam(enemy) ~= GetTeam(myHero) and IsDead(enemy) == false and IsVisible(enemy) == false then
+        if enemy ~= nil and IsDead(enemy) == false and IsVisible(enemy) == false then
           if MissSec[i] == nil then
           MissSec[i] = 0
           end
