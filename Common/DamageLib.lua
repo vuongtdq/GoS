@@ -43,7 +43,7 @@ Version = 1.0.0.0
 ]]--
 
 function getdmg(spellname,target,Source,stagedmg,spelllvl)
-    Source = Source or myHero
+        local Source = Source or GetMyHero()
 	local Qlvl = spelllvl and spelllvl or GetCastLevel(Source,_Q)
 	local Wlvl = spelllvl and spelllvl or GetCastLevel(Source,_W)
 	local Elvl = spelllvl and spelllvl or GetCastLevel(Source,_E)
