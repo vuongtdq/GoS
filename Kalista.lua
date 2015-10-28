@@ -66,6 +66,7 @@ DelayAction(function()
     if GetObjectName(k) == "Blitzcrank" then
     KalistaMenu.Ult:Boolean("Balista", "Balista Combo", true)
     end
+    -- Such OP Line 
     if GetObjectName(k) == "Skarner" then
     KalistaMenu.Ult:Boolean("Skarlista", "Skarlista Combo", true)
     end
