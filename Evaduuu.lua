@@ -291,10 +291,10 @@ DelayAction(function()
 	end
 end, 1)
 
-	local sEvade = MenuConfig("Slow Evade", "SlowEvade")
-	sEvade:Boolean("drawSkillShot", "Draw Skills", true)
-	sEvade:KeyBinding("dodgeSkillShot", "Dodge Skills", string.byte("K"), true)
-	sEvade:Slider("dodgeSpace", "Additional Dodge Distance", 150, 50, 500, 0)
+	local Evaduuu = MenuConfig("Evaduuu", "Evaduuu")
+	Evaduuu:Boolean("drawSkillShot", "Draw Skills", true)
+	Evaduuu:KeyBinding("dodgeSkillShot", "Dodge Skills", string.byte("K"), true)
+	Evaduuu:Slider("dodgeSpace", "Additional Dodge Distance", 150, 50, 500, 0)
 			
 	detectedSkillshots = {}
 			
@@ -388,31 +388,31 @@ end, 1)
 			spellArray[spell.name].lastshot = GetTickCount()
 			if spellArray[spell.name].spellType == 1 then
 			        spellArray[spell.name].skillshotpoint = calculateLinepass(GetOrigin(unit), spell.endPos, spellArray[spell.name].range)
-				if sEvade.dodgeSkillShot:Value() then
+				if Evaduuu.dodgeSkillShot:Value() then
 				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero), spellArray[spell.name].range)
 				_G.IsEvading = true
 				end
 			elseif spellArray[spell.name].spellType == 2 then
 				spellArray[spell.name].skillshotpoint = calculateLinepoint(spell.startPos, spell.endPos, spellArray[spell.name].range)
-				if sEvade.dodgeSkillShot:Value() then
+				if Evaduuu.dodgeSkillShot:Value() then
 				dodgeLinePoint(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero))
 				_G.IsEvading = true
 				end
 			elseif spellArray[spell.name].spellType == 3 then
 				spellArray[spell.name].skillshotpoint = calculateLineaoe(spell.startPos, spell.endPos, spellArray[spell.name].range)
-				if sEvade.dodgeSkillShot:Value() then
+				if Evaduuu.dodgeSkillShot:Value() then
 				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero))
 				_G.IsEvading = true
 				end
 			elseif spellArray[spell.name].spellType == 4 then
 				spellArray[spell.name].skillshotpoint = calculateLinepass(spell.startPos, spell.endPos, 5000)
-				if sEvade.dodgeSkillShot:Value() then
+				if Evaduuu.dodgeSkillShot:Value() then
 				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero), spellArray[spell.name].range)
 				_G.IsEvading = true
 				end
 			elseif spellArray[spell.name].spellType == 5 then
 				spellArray[spell.name].skillshotpoint = calculateLineaoe2(spell.startPos, spell.endPos, spellArray[spell.name].range)
-				if sEvade.dodgeSkillShot:Value() then
+				if Evaduuu.dodgeSkillShot:Value() then
 				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero))
 				_G.IsEvading = true
 				end
@@ -421,7 +421,7 @@ end, 1)
 	end)
 			
 	OnDraw(function(myHero)
-		if sEvade.drawSkillShot:Value() then
+		if Evaduuu.drawSkillShot:Value() then
 			for i, spell in pairs(spellArray) do
 				if spell.shot and #spell.skillshotpoint > 0 then
 					if #spell.skillshotpoint == 1 then
