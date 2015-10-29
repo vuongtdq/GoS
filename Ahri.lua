@@ -75,7 +75,8 @@ OnProcessSpellComplete(function(unit, spell)
 end)
 
 local UltOn = false
-
+local lastlevel = 0
+  
 OnDraw(function(myHero)
 local col = AhriMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
@@ -209,7 +210,6 @@ OnTick(function(myHero)
     end       
 	
 if AhriMenu.Misc.Autolvl:Value() then  
-  local lastlevel = 0
   if GetLevel(myHero) > lastlevel then
     if AhriMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
     elseif AhriMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
