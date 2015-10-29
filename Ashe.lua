@@ -187,7 +187,9 @@ OnTick(function(myHero)
 	  CastSkillShot(_W,GetOrigin(mobs))
 	  end
         end
-end
+      end
+      
+    end
 
 if AsheMenu.Misc.Autolvl:Value() then  
   if GetLevel(myHero) > lastlevel then
