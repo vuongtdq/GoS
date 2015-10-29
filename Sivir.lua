@@ -37,7 +37,6 @@ SivirMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "E-Q-W
 
 SivirMenu:Menu("Drawings", "Drawings")
 SivirMenu.Drawings:Boolean("Q", "Draw Q Range", true)
-Siv.
 Menu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 OnDraw(function(myHero)
