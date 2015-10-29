@@ -167,14 +167,14 @@ OnTick(function(myHero)
 	MoveToXYZ(mousePos())
         if IsReady(_W) and table.getn(AzirSoldiers) < 1 then 
         local movePos = myHeroPos() + (Vector(mousePos()) - myHeroPos()):normalized()*450
-	CastSkillShot(_W, movePos.x, movePos.y, movePos.z) 
+	CastSkillShot(_W, movePos) 
 	end
 	
 	for _,Soldier in pairs(AzirSoldiers) do
 	  local movePos = myHeroPos() + (Vector(mousePos()) - myHeroPos()):normalized()*950
 	  if movePos then
           CastTargetSpell(Soldier, _E)
-          DelayAction(function() CastSkillShot(_Q, movePos.x, movePos.y, movePos.z) end, 150)
+          DelayAction(function() CastSkillShot(_Q,movePos) end, 150)
           end
         end
 			
@@ -189,7 +189,7 @@ OnTick(function(myHero)
      end
 
      if table.getn(AzirSoldiers) < 1 and IsReady(_W) then
-     CastSkillShot(_W, myHeroPos().x, myHeroPos().y, myHeroPos().z)
+     CastSkillShot(_W,myHeroPos())
      end
      
      for _,Soldier in pairs(AzirSoldiers) do
