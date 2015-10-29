@@ -59,11 +59,11 @@ DelayAction(function()
   end
 end, 1)
 
-OnProcessSpellComplete(function(unit, spell)
+OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_R) then
       if CHANELLING_SPELLS[spell.name] then
         if ValidTarget(unit, 1000) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() then 
-        CastSkillShot(_R,GetOrigin(unit))
+        Cast(_R,unit)
         end
       end
     end
