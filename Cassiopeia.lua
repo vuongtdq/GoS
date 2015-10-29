@@ -192,10 +192,10 @@ OnTick(function(myHero)
 	      end
 	    end
             
-	    if IsReady(_W) and CassiopeiaMenu.JungleClear.W:Value() and IsInDistance(mob, 925) then
+	    if IsReady(_W) and CassiopeiaMenu.JungleClear.W:Value() then
 	      local BestPos, BestHit = GetJFarmPosition(925, 90)
               if BestPos and BestHit > 0 then 
-              CastSkillShot(_W, BestPos.x, BestPos.y, BestPos.z)
+              CastSkillShot(_W,BestPos)
 	      end
             end
 	
