@@ -13,7 +13,7 @@ spellList = {
 
 	-- Amumu
 	BandageToss = {Name = "Amumu", range = 1100, spellType = 1, size = 90, duration = 1000, speed = 2, delay = 250},
-    CurseoftheSadMummy = {Name = "Amumu", range = 0, spellType = 3, size = 550, duration = 1000, speed = 2, delay = 250},
+        CurseoftheSadMummy = {Name = "Amumu", range = 0, spellType = 3, size = 550, duration = 1000, speed = 2, delay = 250},
 	
 	-- Anivia
 	FlashFrostSpell = {Name = "Anivia", range = 1100, spellType = 1, size = 110, duration = 2000, speed = 0.85, delay = 250},
@@ -30,7 +30,7 @@ spellList = {
 	BardR = {Name = "Bard", range = 3400, spellType = 3, size = 350, duration = 1000, speed = 2.1, delay = 500},
 	
 	-- Blitzcrank
-	RocketGrabMissile = {Name = "Blitzcrank", range = 1050, spellType = 1, size = 70, duration = 1000, speed = 1.8, delay = 250},
+	RocketGrabMissile = {Name = "Blitzcrank", range = 1050, spellType = 1, size = 100, duration = 1000, speed = 1.8, delay = 250},
 	StaticField = {Name = "Blitzcrank", range = 0, spellType = 3, size = 600, duration = 250, delay = 250},
 				
 	-- Brand
@@ -325,7 +325,6 @@ end, 1)
 
 	function dodgeAOE(pos1, pos2, radius)
 		local distancePos2 = GetDistance(pos2)
-        PrintChat(distancePos2)		
 		if distancePos2 < radius then
 		movex = pos2.x + ((radius+50)/distancePos2)*(myHeroPos().x-pos2.x)
 		movez = pos2.z + ((radius+50)/distancePos2)*(myHeroPos().z-pos2.z)
@@ -421,12 +420,6 @@ end, 1)
 				if spell.shot and #spell.skillshotpoint > 0 then
 					if #spell.skillshotpoint == 1 then
 					DrawCircle(spell.skillshotpoint[1].x, spell.skillshotpoint[1].y, spell.skillshotpoint[1].z, spell.size, 1, 0, spell.color)
-					else
-					spellstart = WorldToScreen(1,spell.skillshotpoint[1])
-					spellend = WorldToScreen(1,spell.skillshotpoint[2])
-					  if spellstart.flag and spellend.flag then
-					  DrawLine(spellstart.x, spellstart.y, spellend.x, spellend.y, spell.size, spell.color)
-					  end
 					end
 					if #spell.skillshotpoint == 3 then
 					DrawCircle(spell.skillshotpoint[3].x, spell.skillshotpoint[3].y, spell.skillshotpoint[3].z, spell.size, 1, 0, spell.color)
