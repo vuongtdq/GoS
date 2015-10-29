@@ -11,7 +11,7 @@ Version = 1.0.0.0
 	Usage:
 
 		local target = GetCurrentTarget()
-		local damage =getdmg("R",target,Source,3)	
+		local damage = getdmg("R",target,Source,3)	
 -------------------------------------------------------
 	Full function:
 		getdmg("SKILL",target,myHero,stagedmg,spelllvl)
@@ -37,10 +37,11 @@ Version = 1.0.0.0
 			
 		-Returns the damage they will do "Source" to "target" with the "skill"
 		-With some skills returns a percentage of increased damage
-		-Many skills GetArmor(myHero) shown per second, hit and other
 		-Use spelllvl only if you want to specify the level of skill
 		
 ]]--
+
+local LudensStacks = 0
 
 function getdmg(spellname,target,Source,stagedmg,spelllvl)
         local Source = Source or GetMyHero()
@@ -766,7 +767,7 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			end
 		end
 		
-		if apdmg > 0 then apdmg = CalcDamage(Source, target, 0, apdmg) end
+		if apdmg > 0 then apdmg = CalcDamage(Source, target, 0, apdmg + Ludens()) end
 		if addmg > 0 then addmg = CalcDamage(Source, target, addmg) end
 		TrueDmg = apdmg+addmg+dmg
         else
@@ -774,4 +775,28 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
                 TrueDmg = 0
         end
         return TrueDmg
+end
+
+OnUpdateBuff(function(unit,buff)
+  if unit == myHero and buff.Name == "itemmagicshankcharge" then 
+  LudensStacks = buff.Count
+  end
+end)
+
+OnRemoveBuff(function(unit,buff)
+  if unit == myHero and buff.Name == "itemmagicshankcharge" then 
+  LudensStacks = 0
+  end
+end)
+
+function Ludens()
+    return LudensStacks == 100 and 100+0.1*GetBonusAP(myHero) or 0
+end
+
+function GetHP(unit)
+    return GetCurrentHP(unit)+GetDmgShield(unit)
+end
+
+function GetHP2(unit)
+    return GetCurrentHP(unit)+GetDmgShield(unit)+GetMagicShield(unit)
 end
