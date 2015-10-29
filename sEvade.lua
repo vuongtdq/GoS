@@ -400,22 +400,22 @@ end, 1)
 		end
 	end)
 			
-	--[[OnDraw(function(myHero)
+	OnDraw(function(myHero)
 		if sEvade.drawSkillShot:Value() then
 			for i, spell in pairs(spellArray) do
 				if spell.shot and #spell.skillshotpoint > 0 then
 					if #spell.skillshotpoint == 1 then
-					DrawCircle(spell.skillshotpoint[1].x, spell.skillshotpoint[1].y, spell.skillshotpoint[1].z, spell.size, 0, spell.color)
+					DrawCircle(spell.skillshotpoint[1].x, spell.skillshotpoint[1].y, spell.skillshotpoint[1].z, spell.size, 1, 0, spell.color)
 					else
-					DrawLine(spell.skillshotpoint[1], spell.skillshotpoint[2], spell.size, spell.color, 1000)
+					DrawLine(spell.skillshotpoint[1].x, spell.skillshotpoint[1].y, spell.skillshotpoint[1].z, spell.skillshotpoint[2].x, spell.skillshotpoint[2].y, spell.skillshotpoint[2].z, spell.size, spell.color)
 					end
 					if #spell.skillshotpoint == 3 then
-					DrawCircle(spell.skillshotpoint[3].x, spell.skillshotpoint[3].y, spell.skillshotpoint[3].z, spell.size,1,0, spell.color)
+					DrawCircle(spell.skillshotpoint[3].x, spell.skillshotpoint[3].y, spell.skillshotpoint[3].z, spell.size, 1, 0, spell.color)
 					end
 				end
 			end
 		end
-	end)]]
+	end)
 			
         OnTick(function(myHero)
 		local tick = GetTickCount()
