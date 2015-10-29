@@ -1,9 +1,3 @@
---[[ TODO :
--E Humanizer
--more R logic
--R Anti-Gapclose/Interrupt
-]]
-
 if GetObjectName(GetMyHero()) ~= "Cassiopeia" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
