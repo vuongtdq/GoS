@@ -388,27 +388,27 @@ end, 1)
 			if spellArray[spell.name].spellType == 1 then
 			        spellArray[spell.name].skillshotpoint = calculateLinepass(GetOrigin(unit), spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
-				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].size, spellArray[spell.name].range)
+				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero), spellArray[spell.name].range)
 				end
 			elseif spellArray[spell.name].spellType == 2 then
 				spellArray[spell.name].skillshotpoint = calculateLinepoint(spell.startPos, spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
-				dodgeLinePoint(spell.startPos, spell.endPos, spellArray[spell.name].size)
+				dodgeLinePoint(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero))
 				end
 			elseif spellArray[spell.name].spellType == 3 then
 				spellArray[spell.name].skillshotpoint = calculateLineaoe(spell.startPos, spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
-				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].size)
+				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero))
 				end
 			elseif spellArray[spell.name].spellType == 4 then
 				spellArray[spell.name].skillshotpoint = calculateLinepass(spell.startPos, spell.endPos, 5000)
 				if sEvade.dodgeSkillShot:Value() then
-				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].size, spellArray[spell.name].range)
+				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero), spellArray[spell.name].range)
 				end
 			elseif spellArray[spell.name].spellType == 5 then
 				spellArray[spell.name].skillshotpoint = calculateLineaoe2(spell.startPos, spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
-				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].size)
+				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero))
 				end
 			end
 		end
@@ -434,16 +434,16 @@ end, 1)
 			 
 		for i, detectedSkillshot in pairs(detectedSkillshots) do
 			if detectedSkillshot.endTick <= tick then
-				table.remove(detectedSkillshots, i)
-				i = i-1
-				end
-	                end
-	        
-			for i, spell in pairs(spellArray) do
-				if spell.shot and spell.lastshot < tick - 1000 then
-				spell.shot = false
-				spell.skillshotpoint = {}
-				moveTo = {}
-				end
+			table.remove(detectedSkillshots, i)
+			i = i-1
 			end
-		end)
+	        end
+	        
+	        for i, spell in pairs(spellArray) do
+			if spell.shot and spell.lastshot < tick - 1000 then
+			spell.shot = false
+			spell.skillshotpoint = {}
+			moveTo = {}
+			end
+		end
+	end)
