@@ -161,7 +161,7 @@ OnTick(function(myHero)
     if IOW:Mode() == "LaneClear" then
     	
       local closeminion = ClosestMinion(GetOrigin(myHero), MINION_ENEMY)
-      if GetPercentMP(myHero) >= AsheMenu.LaneClear.Mana:Value()
+      if GetPercentMP(myHero) >= AsheMenu.LaneClear.Mana:Value() then
       
         if IsReady(_W) and AsheMenu.LaneClear.W:Value() then
           local BestPos, BestHit = GetFarmPosition(1200, 300)
