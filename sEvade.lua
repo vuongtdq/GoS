@@ -1,3 +1,5 @@
+spellList = {
+
 	-- Ahri
 	AhriOrbofDeception = {Name = "Ahri", range = 880, spellType = 1, size = 80, duration = 1000, speed = 1.17, delay = 300, spellKey = _Q, spammable = true},
 	AhriSeduce = {Name = "Ahri", range = 975, spellType = 1, size = 80, duration = 1000, speed = 1.2, delay = 300, spellKey = _E, spammable = true},
