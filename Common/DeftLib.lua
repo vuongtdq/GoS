@@ -138,14 +138,14 @@ end
 function Cast(spell, target, origin, hitchance, speed, delay, range, width, coll)
       local hitchance = hitchance or 1
       local origin = GetOrigin(origin) or GetOrigin(myHero)
-      local speed = speed or  SpellData[GetObjectName(myHero)][spell].Speed or math.huge
-      local delay = delay or  SpellData[GetObjectName(myHero)][spell].Delay or 0
-      local range = range or  SpellData[GetObjectName(myHero)][spell].Range
-      local width = width or  SpellData[GetObjectName(myHero)][spell].Width
+      local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
+      local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
+      local range = range or SpellData[GetObjectName(myHero)][spell].Range
+      local width = width or SpellData[GetObjectName(myHero)][spell].Width
       local coll = coll or  SpellData[GetObjectName(myHero)][spell].collision
       local Predicted = GetPredictionForPlayer(origin,target,GetMoveSpeed(target), speed, delay, range, width, coll, true)
       if Predicted.HitChance >= hitchance then
-      CastSkillShot(spell, Predicted.PredPos.x, Predicted.PredPos.y, Predicted.PredPos.z)
+      CastSkillShot(spell, Predicted.PredPos)
       end
 end
 
@@ -267,7 +267,7 @@ function GetJLineFarmPosition(range, width)
     for i, object in pairs(objects) do
       local EndPos = Vector(myHero) + range * (Vector(object) - Vector(myHero)):normalized()
       local hit = CountObjectsOnLineSegment(GetOrigin(myHero), EndPos, width, objects)
-      if hit > BestHit and GetDistanceSqr(GetOrigin(object)) < range * range then
+      if GetTeam(object) == 300 and hit > BestHit and GetDistanceSqr(GetOrigin(object)) < range * range then
         BestHit = hit
         BestPos = Vector(object)
         if BestHit == #objects then
@@ -284,7 +284,7 @@ function GetJFarmPosition(range, width)
   local objects = minionManager.objects
     for i, object in pairs(objects) do
     local hit = CountObjectsNearPos(Vector(object), range, width, objects)
-    if hit > BestHit and GetDistanceSqr(Vector(object)) < range * range then
+    if GetTeam(object) == 300 and hit > BestHit and GetDistanceSqr(Vector(object)) < range * range then
       BestHit = hit
       BestPos = Vector(object)
       if BestHit == #objects then
@@ -442,17 +442,3 @@ function GetMEC(aoe_radius, listOfEntities, starTarget)
         return GetMEC(aoe_radius, ExcludeFurthest(average, listOfEntities), starTarget)
     end
 end
-
-Items = {
-		BRK = { id = 3153, range = 550, reqTarget = true, slot = nil },
-		BWC = { id = 3144, range = 400, reqTarget = true, slot = nil },
-		HGB = { id = 3146, range = 400, reqTarget = true, slot = nil },
-		RSH = { id = 3074, range = 350, reqTarget = false, slot = nil },
-		STD = { id = 3131, range = 350, reqTarget = false, slot = nil },
-		TMT = { id = 3077, range = 350, reqTarget = false, slot = nil },
-		YGB = { id = 3142, range = 350, reqTarget = false, slot = nil },
-		BFT = { id = 3188, range = 750, reqTarget = true, slot = nil },
-		RND = { id = 3143, range = 275, reqTarget = false, slot = nil }
-	}
-	
--- Damage Lib soon(tm)
