@@ -294,7 +294,7 @@ end, 1)
 	local Evaduuu = MenuConfig("Evaduuu", "Evaduuu")
 	Evaduuu:Boolean("drawSkillShot", "Draw Skills", true)
 	Evaduuu:KeyBinding("dodgeSkillShot", "Dodge Skills", string.byte("K"), true)
-	Evaduuu:Slider("dodgeSpace", "Additional Dodge Distance", 150, 50, 500, 0)
+	--Evaduuu:Slider("dodgeSpace", "Additional Dodge Distance", 150, 50, 500, 0)
 			
 	detectedSkillshots = {}
 			
