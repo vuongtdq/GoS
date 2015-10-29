@@ -74,6 +74,7 @@ if AsheMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),1200,1,0,AsheMenu.Dra
 end)
 
 local QReady = false
+local lastlevel = 0
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
