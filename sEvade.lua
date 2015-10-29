@@ -1,4 +1,4 @@
-spellList = {
+SpellData = {
 
 	-- Ahri
 	AhriOrbofDeception = {Name = "Ahri", Range = 880, spellType = 1, Radius = 80, Duration = 1000, ProjectileSpeed = 1.17, Delay = 300},
@@ -255,10 +255,10 @@ spellList = {
 	
 	for i,enemy in pairs(GetEnemyHeroes()) do
 		if enemy ~= nil then
-			for i, spell in pairs(spellList) do
+			for i, spell in pairs(SpellData) do
 				if string.lower(spell.Name) == string.lower(GetObjectName(enemy)) or (spell.Name == "") then
 				spellArrayCount = spellArrayCount + 1
-				spellArray[i] = spellList[i]
+				spellArray[i] = SpellData[i]
 				spellArray[i].color = colors[spellArray[i].spellType]
 				spellArray[i].shot = false
 				spellArray[i].lastshot = 0
@@ -268,7 +268,7 @@ spellList = {
 	        end
 	end
 	
-        spellList = nil
+        SpellData = nil
 	if spellArrayCount > 0 then
  
 	local sEvade = MenuConfig("Slow Evade", "SlowEvade")
