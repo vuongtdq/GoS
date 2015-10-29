@@ -41,8 +41,8 @@ local SpellData = {
         ["Jinx"] = {
 	Delay = 600,
         MissileSpeed = (GetDistance(Base) / (1 + (GetDistance(Base)-1500)/2500)), -- thanks Noddy
-	Damage = function(target) return CalcDamage(myHero, target, (GetMaxHP(target)-GetCurrentHP(target))*(0.2+0.05*GetCastLevel(myHero, _R)) + 150 + 100*GetCastLevel(myHero,_R) + GetBonusDmg(myHero)) end
-        }
+	Damage = function(target) return CalcDamage(myHero, target, math.max(50*GetCastLevel(myHero, _R)+75+GetBonusDmg(myHero)+(0.05*GetCastLevel(myHero, _R)+0.2)*(GetMaxHP(target)-GetCurrentHP(target)))) end
+        } 
 }
 
 if not SpellData[GetObjectName(myHero)] then return end
