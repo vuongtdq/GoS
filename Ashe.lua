@@ -190,7 +190,6 @@ OnTick(function(myHero)
 end
 
 if AsheMenu.Misc.Autolvl:Value() then  
-  local lastlevel = 0
   if GetLevel(myHero) > lastlevel then
     if AsheMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_W, _Q, _E, _W, _W, _R, _W, _Q, _W , _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
     elseif AsheMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_W, _Q, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
