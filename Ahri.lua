@@ -75,7 +75,7 @@ OnProcessSpell(function(unit, spell)
 end)
 
 local UltOn = false
-local lastlevel = 0
+local lastlevel = GetLevel(myHero)-1
   
 OnDraw(function(myHero)
 local col = AhriMenu.Drawings.color:Value()
