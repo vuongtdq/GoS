@@ -216,8 +216,9 @@ if AhriMenu.Misc.Autolvl:Value() then
     end
     DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
     lastlevel = GetLevel(myHero)
-    end
   end
+end
+
 end)
  
 OnUpdateBuff(function(unit,buff)
