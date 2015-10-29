@@ -2,6 +2,7 @@ if GetObjectName(GetMyHero()) ~= "Blitzcrank" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
 local BlitzcrankMenu = MenuConfig("Blitzcrank", "Blitzcrank")
 BlitzcrankMenu:Menu("Combo", "Combo")
@@ -47,9 +48,7 @@ local Percent = 0
 local TotalGrabs = MissedGrabs + SuccesfulGrabs
 
 DelayAction(function()
-
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
-
   for i, spell in pairs(CHANELLING_SPELLS) do
     for _,k in pairs(GetEnemyHeroes()) do
         if spell["Name"] == GetObjectName(k) then
@@ -57,19 +56,17 @@ DelayAction(function()
         end
     end
   end
-  
   for _,k in pairs(GetEnemyHeroes()) do
   BlitzcrankMenu.AutoGrab.Enemies:Boolean(GetObjectName(k).."AutoGrab", "On "..GetObjectName(k).." ", false)
   end
-		
 end, 1)
 
 OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) then
       if CHANELLING_SPELLS[spell.name] then
-        if IsInDistance(unit, 975) and IsReady(_Q) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() and InterruptMenu.SupportedSpells.Q:Value() then
+        if ValidTarget(unit, 975) and IsReady(_Q) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() and InterruptMenu.SupportedSpells.Q:Value() then
         Cast(_Q,unit)
-        elseif IsInDistance(unit, 600) and IsReady(_R) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() and InterruptMenu.SupportedSpells.R:Value() then
+        elseif ValidTarget(unit, 600) and IsReady(_R) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() and InterruptMenu.SupportedSpells.R:Value() then
         CastSpell(_R)
         end
       end
@@ -95,7 +92,6 @@ OnDraw(function(myHero)
 local col = BlitzcrankMenu.Drawings.color:Value()	
 TotalGrabs = MissedGrabs + SuccesfulGrabs
 Percentage = ((SuccesfulGrabs*100)/TotalGrabs)
-
 if BlitzcrankMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),975,1,0,col) end
 if BlitzcrankMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),600,1,0,col) end
 if BlitzcrankMenu.Drawings.Stats:Value() then 
@@ -107,12 +103,13 @@ end
 
 end)
 
-OnTick(function(myHero)
+local lastlevel = GetLevel(myHero)-1
 
+OnTick(function(myHero)
+    local target = GetCurrentTarget()
+    
     if IOW:Mode() == "Combo" then
 	
-		local target = GetCurrentTarget()
-		
                 if IsReady(_Q) and ValidTarget(target, 975) and BlitzcrankMenu.Combo.Q:Value() then
                 Cast(_Q,target)
 	        end
@@ -127,16 +124,14 @@ OnTick(function(myHero)
                 CastSpell(_E)
 		end
 		              
-		if IsReady(_R) and ValidTarget(target, 600) and BlitzcrankMenu.Combo.R:Value() and 100*GetCurrentHP(target)/GetMaxHP(target) < 60 then
+		if IsReady(_R) and ValidTarget(target, 600) and BlitzcrankMenu.Combo.R:Value() and GetPercentHP(target) < 60 then
                 CastSpell(_R)
 	        end
 	                      
 	end	
 	
-	if IOW:Mode() == "Harass" and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= BlitzcrankMenu.Harass.Mana:Value() then
+	if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= BlitzcrankMenu.Harass.Mana:Value() then
 	
-		local target = GetCurrentTarget()
-		
                 if IsReady(_Q) and ValidTarget(target, 975) and BlitzcrankMenu.Harass.Q:Value() then
                 Cast(_Q,target)
 	        end
@@ -156,25 +151,28 @@ OnTick(function(myHero)
 		end
 		
 		if Ignite and BlitzcrankMenu.Misc.Autoignite:Value() then
-                  if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 600) then
+                  if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 600) then
                   CastTargetSpell(enemy, Ignite)
                   end
                 end
 		
-  	        if IsReady(_Q) and ValidTarget(enemy, 975) and BlitzcrankMenu.Killsteal.Q:Value() and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 55*GetCastLevel(myHero,_Q)+25+GetBonusAP(myHero) + Ludens()) then 
+  	        if IsReady(_Q) and ValidTarget(enemy, 975) and BlitzcrankMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
                 Cast(_Q,enemy)
-                elseif IsReady(_R) and ValidTarget(enemy, 600) and BlitzcrankMenu.Killsteal.R:Value() and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 125*GetCastLevel(myHero,_R)+125+GetBonusAP(myHero) + Ludens()) then
+                elseif IsReady(_R) and ValidTarget(enemy, 600) and BlitzcrankMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
                 CastSpell(_R)
 	        end
 		
 	end
 
 if BlitzcrankMenu.Misc.Autolvl:Value() then    
-   if BlitzcrankMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
-   elseif BlitzcrankMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-   elseif BlitzcrankMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-   end
-DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
+  if GetLevel(myHero) > lastlevel then
+    if BlitzcrankMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
+    elseif BlitzcrankMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
+    elseif BlitzcrankMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
+    end
+    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
+    lastlevel = GetLevel(myHero)
+  end
 end
 
 end)
