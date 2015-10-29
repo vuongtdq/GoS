@@ -236,17 +236,17 @@ OnTick(function(myHero)
 	for i,enemy in pairs(GetEnemyHeroes()) do
 	  if soulboundhero then
 		if GetObjectName(soulboundhero) == "Blitzcrank" then
-  	          if ValidTarget(enemy, 2450) and KalistaMenu.Ult.Balista:Value() and GetCurrentHP(enemy) > 300 and GetCurrentHP(myHero) > 400 and GetDistance(soulboundhero, enemy) > 400 and GetDistance(enemy) > 400 and GetDistance(enemy) > GetDistance(soulboundhero, enemy)+100 and Blitzed then
+  	          if ValidTarget(enemy, 2450) and KalistaMenu.Ult.Balista:Value() and GetCurrentHP(enemy) > 300 and GetCurrentHP(myHero) > 400 and GetDistance(soulboundhero, enemy) > 400 and GetDistance(enemy) > 400 and GetDistance(enemy) > GetDistance(soulboundhero, enemy)+100 and GotBuff(enemy, "rocketgrab2") > 0 then
                   CastSpell(_R)
                   end
 	
                 elseif GetObjectName(soulboundhero) == "Skarner" then
-		  if ValidTarget(enemy, 1750) and KalistaMenu.Ult.Skarlista:Value() and GetDistance(enemy) > 400 and GetCurrentHP(enemy) > 300 and GetCurrentHP(myHero) > 400 and Skarned then
+		  if ValidTarget(enemy, 1750) and KalistaMenu.Ult.Skarlista:Value() and GetDistance(enemy) > 400 and GetCurrentHP(enemy) > 300 and GetCurrentHP(myHero) > 400 and GotBuff(enemy,"SkarnerImpale") > 0 then
                   CastSpell(_R)
                   end
 			
 	        elseif GetObjectName(soulboundhero) == "TahmKench" then
-	          if ValidTarget(enemy, 1400) and KalistaMenu.Ult.Tahmlista:Value() and GetDistance(enemy) > 400 and GetCurrentHP(enemy) > 300 and GetCurrentHP(myHero) > 400 and Tahmed then
+	          if ValidTarget(enemy, 1400) and KalistaMenu.Ult.Tahmlista:Value() and GetDistance(enemy) > 400 and GetCurrentHP(enemy) > 300 and GetCurrentHP(myHero) > 400 and GotBuff(enemy, "tahmkenchwdevoured") > 0 then
                   CastSpell(_R)
                   end
                 end
