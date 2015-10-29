@@ -424,7 +424,7 @@ end, 1)
 					else
 					spellstart = WorldToScreen(1,spell.skillshotpoint[1])
 					spellend = WorldToScreen(1,spell.skillshotpoint[2])
-					  if spellstart.flag and spellend.flag
+					  if spellstart.flag and spellend.flag then
 					  DrawLine(spellstart.x, spellstart.y, spellend.x, spellend.y, spell.size, spell.color)
 					  end
 					end
