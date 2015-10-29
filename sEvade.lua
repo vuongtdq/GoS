@@ -269,7 +269,6 @@ SpellData = {
 	end
 	
         SpellData = nil
-	if spellArrayCount > 0 then
  
 	local sEvade = MenuConfig("Slow Evade", "SlowEvade")
 	sEvade:Boolean("drawSkillShot", "Draw Skills", true)
@@ -430,5 +429,3 @@ SpellData = {
 				end
 			end
 		end)
-	
-	end
