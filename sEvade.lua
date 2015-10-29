@@ -266,7 +266,8 @@ spellList = {
 	ZyraQFissure = {Name = "Zyra", range = 825, spellType = 3, size = 275, duration = 1500,},
 	ZyraGraspingRoots = {Name = "Zyra", range = 1100, spellType = 1, size = 90, duration = 1500,},
 }
-
+       
+        _G.IsEvading = false
 	local spellArray = {}
 	local spellArrayCount = 0
 	local moveTo = {}
@@ -389,26 +390,31 @@ end, 1)
 			        spellArray[spell.name].skillshotpoint = calculateLinepass(GetOrigin(unit), spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
 				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero), spellArray[spell.name].range)
+				_G.IsEvading = true
 				end
 			elseif spellArray[spell.name].spellType == 2 then
 				spellArray[spell.name].skillshotpoint = calculateLinepoint(spell.startPos, spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
 				dodgeLinePoint(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero))
+				_G.IsEvading = true
 				end
 			elseif spellArray[spell.name].spellType == 3 then
 				spellArray[spell.name].skillshotpoint = calculateLineaoe(spell.startPos, spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
 				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero))
+				_G.IsEvading = true
 				end
 			elseif spellArray[spell.name].spellType == 4 then
 				spellArray[spell.name].skillshotpoint = calculateLinepass(spell.startPos, spell.endPos, 5000)
 				if sEvade.dodgeSkillShot:Value() then
 				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero), spellArray[spell.name].range)
+				_G.IsEvading = true
 				end
 			elseif spellArray[spell.name].spellType == 5 then
 				spellArray[spell.name].skillshotpoint = calculateLineaoe2(spell.startPos, spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
 				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].size+GetHitBox(myHero))
+				_G.IsEvading = true
 				end
 			end
 		end
@@ -436,6 +442,7 @@ end, 1)
 			if detectedSkillshot.endTick <= tick then
 			table.remove(detectedSkillshots, i)
 			i = i-1
+			_G.IsEvading = false
 			end
 	        end
 	        
