@@ -87,6 +87,7 @@ end)
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local mousePos = GetMousePos()
     
     if IOW:Mode() == "Combo" then
 
