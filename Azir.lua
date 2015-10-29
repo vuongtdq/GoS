@@ -70,7 +70,7 @@ if AzirMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),950,1,0,col) end
 end)
 
 local AzirSoldiers = {}
-local lastlevel = 0
+local lastlevel = GetLevel(myHero)-1
   
 OnTick(function(myHero)
    local target = GetCurrentTarget()	
