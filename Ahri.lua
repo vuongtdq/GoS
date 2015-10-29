@@ -2,6 +2,7 @@ if GetObjectName(GetMyHero()) ~= "Ahri" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
 local AhriMenu = MenuConfig("Ahri", "Ahri")
 AhriMenu:Menu("Combo", "Combo")
@@ -53,9 +54,7 @@ AhriMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 local InterruptMenu = MenuConfig("Interrupt (E)", "Interrupt")
 
 DelayAction(function()
-
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
-
   for i, spell in pairs(CHANELLING_SPELLS) do
     for _,k in pairs(GetEnemyHeroes()) do
         if spell["Name"] == GetObjectName(k) then
@@ -63,14 +62,13 @@ DelayAction(function()
         end
     end
   end
-		
 end, 1)
 
-OnProcessSpell(function(unit, spell)
+OnProcessSpellComplete(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_E) then
       if CHANELLING_SPELLS[spell.name] then
-        if IsInDistance(unit, 1000) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() then 
-        Cast(_E,unit)
+        if ValidTarget(unit, 1000) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() then 
+        CastSkillShot(_E,GetOrigin(unit))
         end
       end
     end
@@ -80,44 +78,38 @@ local UltOn = false
 
 OnDraw(function(myHero)
 local col = AhriMenu.Drawings.color:Value()
-if AhriMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),880,1,0,col) end
-if AhriMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),700,1,0,col) end
-if AhriMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),975,1,0,col) end
-if AhriMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),550,1,0,col) end
+local pos = GetOrigin(myHero)
+if AhriMenu.Drawings.Q:Value() then DrawCircle(pos,880,1,0,col) end
+if AhriMenu.Drawings.W:Value() then DrawCircle(pos,700,1,0,col) end
+if AhriMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,col) end
+if AhriMenu.Drawings.R:Value() then DrawCircle(pos,550,1,0,col) end
 end)
 
 OnTick(function(myHero)
-  
+    local target = GetCurrentTarget()
+    
     if IOW:Mode() == "Combo" then
-        
-        local target = GetCurrentTarget()
 
         if IsReady(_E) and ValidTarget(target,975) then
         Cast(_E,target)
         end
 	
-        if AhriMenu.Combo.RMode:Value() == 1 and AhriMenu.Combo.R:Value() then
-          if ValidTarget(target,900) then
-            local BestPos = Vector(target) - (Vector(target) - Vector(myHero)):perpendicular():normalized() * 350
-	    if UltOn and BestPos then
-            CastSkillShot(_R, BestPos.x, BestPos.y, BestPos.z)
-	    elseif IsReady(_R) and BestPos and 25+15*GetCastLevel(myHero,_Q)+.35*GetBonusAP(myHero)+24+40*GetCastLevel(myHero,_W)+.64*GetBonusAP(myHero)+25+35*GetCastLevel(myHero,_E)+.5*GetBonusAP(myHero)+30+40*GetCastLevel(myHero,_R)+.3*GetBonusAP(myHero) > GetCurrentHP(target) then
-	    CastSkillShot(_R, BestPos.x, BestPos.y, BestPos.z)
-	    end
-          end
+        if AhriMenu.Combo.RMode:Value() == 1 and AhriMenu.Combo.R:Value() and ValidTarget(target,900) then
+          local BestPos = Vector(target) - (Vector(target) - Vector(myHero)):perpendicular():normalized() * 350
+	  if UltOn and BestPos then
+          CastSkillShot(_R,BestPos)
+	  elseif IsReady(_R) and BestPos and getdmg("Q",target)+getdmg("W",target,myHero,3)+getdmg("E",target)+getdmg("R",target) > GetCurrentHP(target)+GetMagicShield(target)+GetDmgShield(target) then
+	  CastSkillShot(_R,BestPos)
+	  end
 	end
 
-        if AhriMenu.Combo.RMode:Value() == 2 and AhriMenu.Combo.R:Value() then
-          if ValidTarget(target,900) then
-            local AfterTumblePos = GetOrigin(myHero) + (Vector(mousePos()) - GetOrigin(myHero)):normalized() * 550
-            local DistanceAfterTumble = GetDistance(AfterTumblePos, target)
-   	    if UltOn then
-              if DistanceAfterTumble < 550 then
-	      CastSkillShot(_R,mousePos().x,mousePos().y,mousePos().z)
-              elseif IsReady(_R) and 25+15*GetCastLevel(myHero,_Q)+.35*GetBonusAP(myHero)+24+40*GetCastLevel(myHero,_W)+.64*GetBonusAP(myHero)+25+35*GetCastLevel(myHero,_E)+.5*GetBonusAP(myHero)+30+40*GetCastLevel(myHero,_R)+.3*GetBonusAP(myHero) > GetCurrentHP(target) then
-	      CastSkillShot(_R,mousePos().x,mousePos().y,mousePos().z) 
-              end
-            end
+        if AhriMenu.Combo.RMode:Value() == 2 and AhriMenu.Combo.R:Value() and ValidTarget(target,900)then
+          local AfterTumblePos = GetOrigin(myHero) + (Vector(mousePos()) - GetOrigin(myHero)):normalized() * 550
+          local DistanceAfterTumble = GetDistance(AfterTumblePos, target)
+   	  if UltOn and DistanceAfterTumble < 550 then
+	  CastSkillShot(_R,mousePos)
+          elseif IsReady(_R) and getdmg("Q",target)+getdmg("W",target,myHero,3)+getdmg("E",target)+getdmg("R",target) > GetCurrentHP(target)+GetMagicShield(target)+GetDmgShield(target) then
+	  CastSkillShot(_R,mousePos) 
           end
 	end
 			
@@ -131,9 +123,7 @@ OnTick(function(myHero)
 					
     end
 	
-    if IOW:Mode() == "Harass" and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= AhriMenu.Harass.Mana:Value() then
-        
-        local target = GetCurrentTarget()
+    if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= AhriMenu.Harass.Mana:Value() then
 
         if IsReady(_E) and ValidTarget(target, 975) and AhriMenu.Harass.E:Value() then
         Cast(_E,target)
@@ -149,80 +139,84 @@ OnTick(function(myHero)
 		
     end
 	
-for i,enemy in pairs(GetEnemyHeroes()) do
-	
-		if Ignite and AhriMenu.Misc.Autoignite:Value() then
-                  if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 600) then
-                  CastTargetSpell(enemy, Ignite)
-                  end
-                end
-                
-		if IsReady(_W) and ValidTarget(enemy, 700) and AhriMenu.Killsteal.W:Value() and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 24+40*GetCastLevel(myHero,_W)+.64*GetBonusAP(myHero) + Ludens()) then
-		CastSpell(_W)
-		elseif IsReady(_Q) and ValidTarget(enemy, 880) and AhriMenu.Killsteal.Q:Value() and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 25+15*GetCastLevel(myHero,_Q)+.35*GetBonusAP(myHero) + Ludens()) then 
-		Cast(_Q,enemy)
-		elseif IsReady(_E) and ValidTarget(enemy, 975) and AhriMenu.Killsteal.E:Value() and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 25+35*GetCastLevel(myHero,_E)+.5*GetBonusAP(myHero) + Ludens()) then
-		Cast(_E,enemy)
-	        end
-	
-end
-
-for i=1, IOW.mobs.maxObjects do
-                local minion = IOW.mobs.objects[i]
-                
-                if IOW:Mode() == "LaneClear" and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= AhriMenu.LaneClear.Mana:Value() then
-		  if IsReady(_Q) and AhriMenu.LaneClear.Q:Value() then
-                    local BestPos, BestHit = GetLineFarmPosition(880, 50)
-                    if BestPos and BestHit > 0 then 
-                    CastSkillShot(_Q, BestPos.x, BestPos.y, BestPos.z)
-                    end
-	          end
-
-                  if IsReady(_W) and AhriMenu.LaneClear.W:Value() then
-                    if GetCurrentHP(minion) < CalcDamage(myHero, minion, 0, 24+40*GetCastLevel(myHero,_W)+.64*GetBonusAP(myHero) + Ludens()) then
-                    CastSpell(_W)
-                    end
-                  end
-
-                  if IsReady(_E) and AhriMenu.LaneClear.E:Value() then
-                    if GetCurrentHP(minion) < CalcDamage(myHero, minion, 0, 25+35*GetCastLevel(myHero,_E)+.5*GetBonusAP(myHero) + Ludens()) then
-                    CastSkillShot(_E, GetOrigin(minion).x, GetOrigin(minion).y, GetOrigin(minion).z)
-                    end
-                  end
-	        end
-
-	        if IOW:Mode() == "LastHit" and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= AhriMenu.Lasthit.Mana:Value() then
-	          if IsReady(_Q) and ValidTarget(minion, 880) and AhriMenu.Lasthit.Q:Value() and GetCurrentHP(minion) < CalcDamage(myHero, minion, 0, 25+15*GetCastLevel(myHero,_Q)+.35*GetBonusAP(myHero) + Ludens()) then
-                  CastSkillShot(_Q, GetOrigin(minion).x, GetOrigin(minion).y, GetOrigin(minion).z)
-       	          end
-                end
-	        
-end
-
-for _,mob in pairs(minionManager.objects) do
-        if IOW:Mode() == "LaneClear" and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= AhriMenu.JungleClear.Mana:Value() then
-		local mobPos = GetOrigin(mob)
-		
-		if IsReady(_Q) and AhriMenu.JungleClear.Q:Value() and ValidTarget(mob, 880) then
-		CastSkillShot(_Q,mobPos.x, mobPos.y, mobPos.z)
-		end
-		
-		if IsReady(_W) and AhriMenu.JungleClear.W:Value() and ValidTarget(mob, 700) then
-		CastSpell(_W)
-		end
-		
-	        if IsReady(_E) and AhriMenu.JungleClear.E:Value() and ValidTarget(mob, 975) then
-		CastSkillShot(_E,mobPos.x, mobPos.y, mobPos.z)
-		end
+    for i,enemy in pairs(GetEnemyHeroes()) do
+    	
+	if Ignite and AhriMenu.Misc.Autoignite:Value() then
+          if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 600) then
+          CastTargetSpell(enemy, Ignite)
+          end
         end
-end
+                
+	if IsReady(_W) and ValidTarget(enemy, 700) and AhriMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("Q",enemy) then
+	CastSpell(_W)
+	elseif IsReady(_Q) and ValidTarget(enemy, 880) and AhriMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("W",enemy,myHero,3) then 
+	Cast(_Q,enemy)
+	elseif IsReady(_E) and ValidTarget(enemy, 975) and AhriMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
+	Cast(_E,enemy)
+        end
+
+    end
+     
+    if IOW:Mode() == "LaneClear" then
+     	
+        local closeminion = ClosestMinion(GetOrigin(myHero), MINION_ENEMY)
+        if GetPercentMP(myHero) >= AhriMenu.LaneClear.Mana:Value() then
+       	
+         if IsReady(_Q) and AhriMenu.LaneClear.Q:Value() then
+           local BestPos, BestHit = GetLineFarmPosition(880, 50)
+           if BestPos and BestHit > 0 then 
+           CastSkillShot(_Q, BestPos)
+           end
+	 end
+
+         if IsReady(_W) and AhriMenu.LaneClear.W:Value() then
+           if GetCurrentHP(closeminion) < getdmg("W",closeminion,myHero,3) and ValidTarget(closestminion, 700) then
+           CastSpell(_W)
+           end
+         end
+
+         if IsReady(_E) and AhriMenu.LaneClear.E:Value() then
+           if GetCurrentHP(closeminion) < getdmg("E",closeminion) and ValidTarget(closestminion, 1000) then
+           CastSkillShot(_E, GetOrigin(closeminion))
+           end
+         end
+        
+        end
+
+    end
+         
+    for i,mobs in pairs(minionManager.objects) do
+        if IOW:Mode() == "LaneClear" and GetTeam(mobs) == 300 and GetPercentMP(myHero) >= AhriMenu.JungleClear.Mana:Value() then
+          if IsReady(_Q) and AhriMenu.JungleClear.Q:Value() and ValidTarget(mobs, 880) then
+          CastSkillShot(_Q,GetOrigin(mobs))
+	  end
+		
+	  if IsReady(_W) and AhriMenu.JungleClear.W:Value() and ValidTarget(mobs, 700) then
+	  CastSpell(_W)
+	  end
+		
+	  if IsReady(_E) and AhriMenu.JungleClear.E:Value() and ValidTarget(mobs, 1000) then
+	  CastSkillShot(_E,GetOrigin(mobs))
+          end
+        end
+     	
+	if IOW:Mode() == "LastHit" and GetTeam(mobs) == MINION_ENEMY and GetPercentMP(myHero) >= AhriMenu.Lasthit.Mana:Value() then
+	  if IsReady(_Q) and ValidTarget(mobs, 880) and AhriMenu.Lasthit.Q:Value() and GetCurrentHP(mobs) < getdmg("Q",mobs) then
+          CastSkillShot(_Q, GetOrigin(mobs))
+       	  end
+        end
+    end       
 	
 if AhriMenu.Misc.Autolvl:Value() then  
-  if AhriMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
-  elseif AhriMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-  elseif AhriMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
+  local lastlevel = 0
+  if GetLevel(myHero) > lastlevel then
+    if AhriMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
+    elseif AhriMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
+    elseif AhriMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
+    end
+  DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
+  lastlevel = GetLevel(myHero)
   end
-DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
 end
 end)
  
