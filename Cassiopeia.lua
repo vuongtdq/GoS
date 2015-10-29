@@ -183,7 +183,7 @@ OnTick(function(myHero)
 	    
 	  end
 	  
-	  if GetPercentMP(myHero) >= CassiopeiaMenu.JungleClear.Mana:Value()
+	  if GetPercentMP(myHero) >= CassiopeiaMenu.JungleClear.Mana:Value() then
 	  
 	    if IsReady(_Q) and CassiopeiaMenu.JungleClear.Q:Value() then
 	      local BestPos, BestHit = GetJFarmPosition(850, 100)
