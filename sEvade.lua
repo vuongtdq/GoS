@@ -1,250 +1,254 @@
-SpellData = {
-
+if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
+                  
+spellList = {
+    
+	AatroxQ = { Name = "Aatrox", range = 650, spellType = 3, speed = 2000, size = 250, delay = 600},
+	AatroxE = { Name = "Aatrox", range = 1075, spellType = 1, speed = 1250, size = 100, delay = 250},
 	-- Ahri
-	AhriOrbofDeception = {Name = "Ahri", Range = 880, spellType = 1, Radius = 80, Duration = 1000, ProjectileSpeed = 1.17, Delay = 300},
-	AhriSeduce = {Name = "Ahri", Range = 975, spellType = 1, Radius = 80, Duration = 1000, ProjectileSpeed = 1.2, Delay = 300},
+	AhriOrbofDeception = {Name = "Ahri", range = 880, spellType = 1, size = 80, duration = 1000, speed = 1.17, delay = 300, spellKey = _Q, spammable = true},
+	AhriSeduce = {Name = "Ahri", range = 975, spellType = 1, size = 80, duration = 1000, speed = 1.2, delay = 300, spellKey = _E, spammable = true},
 
 	-- Amumu
-	BandageToss = {Name = "Amumu", Range = 1100, spellType = 1, Radius = 80, Duration = 1000, ProjectileSpeed = 2, Delay = 300},
+	BandageToss = {Name = "Amumu", range = 1100, spellType = 1, size = 80, duration = 1000, speed = 2, delay = 300, spellKey = _Q, spammable = true},
 
 	-- Anivia
-	FlashFrostSpell = {Name = "Anivia", Range = 1100, spellType = 1, Radius = 90, Duration = 2000, ProjectileSpeed = 0.845, Delay = 300},
-	GlacialStorm = {Name = "Anivia", Range = 625, spellType = 3, Radius = 300, Duration = 4000},
+	FlashFrostSpell = {Name = "Anivia", range = 1100, spellType = 1, size = 90, duration = 2000, speed = 0.845, delay = 300, spellKey = _Q, spammable = true},
+	GlacialStorm = {Name = "Anivia", range = 625, spellType = 3, size = 300, duration = 4000},
 
 	-- Ashe
-	EnchantedCrystalArrow = {Name = "Ashe", Range = 50000, spellType = 1, Radius = 120, Duration = 4000},
+	EnchantedCrystalArrow = {Name = "Ashe", range = 50000, spellType = 1, size = 120, duration = 4000},
 
 	-- Blitzcrank
-	RocketGrabMissile = {Name = "Blitzcrank", Range = 925, spellType = 1, Radius = 80, Duration = 1000, ProjectileSpeed = 1.7, Delay = 300},
+	RocketGrabMissile = {Name = "Blitzcrank", range = 925, spellType = 1, size = 80, duration = 1000, speed = 1.7, delay = 300, spellKey = _Q, spammable = true},
 				
 	-- Brand
-	BrandBlazeMissile = {Name = "Brand", Range = 1050, spellType = 1, Radius = 50, Duration = 1000},
-	BrandFissure = {Name = "Brand", Range = 900, spellType = 3, Radius = 250, Duration = 1000},
+	BrandBlazeMissile = {Name = "Brand", range = 1050, spellType = 1, size = 50, duration = 1000},
+	BrandFissure = {Name = "Brand", range = 900, spellType = 3, size = 250, duration = 1000},
 
 	-- Caitlyn
-	CaitlynPiltoverPeacemaker = {Name = "Caitlyn", Range = 1300, spellType = 1, Radius = 80, Duration = 1000},
-	CaitlynEntrapmentMissile = {Name = "Caitlyn", Range = 1000, spellType = 1, Radius = 50, Duration = 1000},
+	CaitlynPiltoverPeacemaker = {Name = "Caitlyn", range = 1300, spellType = 1, size = 80, duration = 1000},
+	CaitlynEntrapmentMissile = {Name = "Caitlyn", range = 1000, spellType = 1, size = 50, duration = 1000},
 
 	-- Cassiopeia
-	CassiopeiaNoxiousBlast = {Name = "Cassiopeia", Range = 850, spellType = 3, Radius = 75, Duration = 1000},
-	CassiopeiaMiasma = {Name = "Cassiopeia", Range = 850, spellType = 3, Radius = 175, Duration = 1000},
-	CassiopeiaPetrifyingGaze = {Name = "Cassiopeia", Range = 850, spellType = 6, Radius = 300, Duration = 1000},
+	CassiopeiaNoxiousBlast = {Name = "Cassiopeia", range = 850, spellType = 3, size = 75, duration = 1000},
+	CassiopeiaMiasma = {Name = "Cassiopeia", range = 850, spellType = 3, size = 175, duration = 1000},
+	CassiopeiaPetrifyingGaze = {Name = "Cassiopeia", range = 850, spellType = 6, size = 300, duration = 1000},
 
 	-- Cho'Gath
-	Rupture = {Name = "Chogath", Range = 950, spellType = 3, Radius = 275, Duration = 1500},
+	Rupture = {Name = "Chogath", range = 950, spellType = 3, size = 275, duration = 1500},
 
 	-- Corki
-	PhosphorusBomb = {Name = "Corki", Range = 650, spellType = 3, Radius = 150, Duration = 1000},
-	MissileBarrageMissile = {Name = "Corki", Range = 1225, spellType = 1, Radius = 80, Duration = 1000, ProjectileSpeed = 2.0, Delay = 300,  spammable = true},
-	MissileBarrageMissile2 = {Name = "Corki", Range = 1225, spellType = 1, Radius = 100, Duration = 1000, ProjectileSpeed = 2.0, Delay = 300,  spammable = true},
-	CarpetBomb = {Name = "Corki", Range = 800, spellType = 2, Radius = 150, Duration = 1000},
+	PhosphorusBomb = {Name = "Corki", range = 650, spellType = 3, size = 150, duration = 1000},
+	MissileBarrageMissile = {Name = "Corki", range = 1225, spellType = 1, size = 80, duration = 1000, speed = 2.0, delay = 300, spellKey = _R, spammable = true},
+	MissileBarrageMissile2 = {Name = "Corki", range = 1225, spellType = 1, size = 100, duration = 1000, speed = 2.0, delay = 300, spellKey = _R, spammable = true},
+	CarpetBomb = {Name = "Corki", range = 800, spellType = 2, size = 150, duration = 1000},
 
 	-- Diana
-	DianaArc = {Name = "Diana", Range = 900, spellType = 3, Radius = 205, Duration = 1000},
+	DianaArc = {Name = "Diana", range = 900, spellType = 3, size = 205, duration = 1000},
 
 	-- Draven
-	DravenDoubleShot = {Name = "Draven", Range = 1050, spellType = 1, Radius = 125, Duration = 1000},
-	DravenRCast = {Name = "Draven", Range = 20000, spellType = 1, Radius = 100, Duration = 6000},
+	DravenDoubleShot = {Name = "Draven", range = 1050, spellType = 1, size = 125, duration = 1000},
+	DravenRCast = {Name = "Draven", range = 20000, spellType = 1, size = 100, duration = 6000},
 
 	-- DrMundo
-	InfectedCleaver = {Name = "DrMundo", Range = 1000, spellType = 1, Radius = 80, Duration = 1000, ProjectileSpeed = 2, Delay = 300,  spammable = true},
-	InfectedCleaverMissile = {Name = "DrMundo", Range = 1000, spellType = 1, Radius = 80, Duration = 1000, ProjectileSpeed = 2, Delay = 300,  spammable = true},
+	InfectedCleaver = {Name = "DrMundo", range = 1000, spellType = 1, size = 80, duration = 1000, speed = 2, delay = 300, spellKey = _Q, spammable = true},
+	InfectedCleaverMissile = {Name = "DrMundo", range = 1000, spellType = 1, size = 80, duration = 1000, speed = 2, delay = 300, spellKey = _Q, spammable = true},
 
 	-- Ezreal
-	EzrealMysticShotMissile = {Name = "Ezreal", Range = 1200, spellType = 1, Radius = 50, Delay = 250, ProjectileSpeed = 1975, Duration = 1000,  spammable = true},
-	EzrealEssenceFluxMissile = {Name = "Ezreal", Range = 900, spellType = 1, Radius = 100, Duration = 1000, ProjectileSpeed = 1.5, Delay = 300,  spammable = true},
-	EzrealTrueshotBarrage = {Name = "Ezreal", Range = 50000, spellType = 4, Radius = 150, Duration = 4000, ProjectileSpeed = 0, Delay = 1000, spellKey = _R},
-	EzrealArcaneShift = {Name = "Ezreal", Range = 475, spellType = 5, Radius = 100, Duration = 1000,  spammable = true},
+	EzrealMysticShotMissile = {Name = "Ezreal", range = 1200, spellType = 1, size = 50, delay = 250, speed = 1975, duration = 1000, spellKey = _Q, spammable = true},
+	EzrealEssenceFluxMissile = {Name = "Ezreal", range = 900, spellType = 1, size = 100, duration = 1000, speed = 1.5, delay = 300, spellKey = _W, spammable = true},
+	EzrealTrueshotBarrage = {Name = "Ezreal", range = 50000, spellType = 4, size = 150, duration = 4000, speed = 0, delay = 1000, spellKey = _R},
+	EzrealArcaneShift = {Name = "Ezreal", range = 475, spellType = 5, size = 100, duration = 1000, spellKey = _E, spammable = true},
 
 	--Fizz
-	FizzMarinerDoom = {Name = "Fizz", Range = 1275, spellType = 2, Radius = 100, Duration = 1500},
+	FizzMarinerDoom = {Name = "Fizz", range = 1275, spellType = 2, size = 100, duration = 1500},
 
 	--FiddleSticks
-	Crowstorm = {Name = "FiddleSticks", Range = 800, spellType = 3, Radius = 600, Duration = 1500},
+	Crowstorm = {Name = "FiddleSticks", range = 800, spellType = 3, size = 600, duration = 1500},
 
 	-- Galio
-	GalioResoluteSmite = {Name = "Galio", Range = 900, spellType = 3, Radius = 200, Duration = 1500},
-	GalioRighteousGust = {Name = "Galio", Range = 1000, spellType = 1, Radius = 200, Duration = 1500},
+	GalioResoluteSmite = {Name = "Galio", range = 900, spellType = 3, size = 200, duration = 1500},
+	GalioRighteousGust = {Name = "Galio", range = 1000, spellType = 1, size = 200, duration = 1500},
 
 	-- Gragas
-	GragasBarrelRoll = {Name = "Gragas", Range = 1100, spellType = 3, Radius = 320, Duration = 2500, ProjectileSpeed = 1, Delay = 300,  spammable = true},
-	GragasExplosiveCask = {Name = "Gragas", Range = 1050, spellType = 3, Radius = 400, Duration = 1500},
-	GragasBodySlam = {Name = "Gragas", Range = 650, spellType = 2, Radius = 60, Duration = 1500},
+	GragasBarrelRoll = {Name = "Gragas", range = 1100, spellType = 3, size = 320, duration = 2500, speed = 1, delay = 300, spellKey = _Q, spammable = true},
+	GragasExplosiveCask = {Name = "Gragas", range = 1050, spellType = 3, size = 400, duration = 1500},
+	GragasBodySlam = {Name = "Gragas", range = 650, spellType = 2, size = 60, duration = 1500},
 
 	-- Graves
-	GravesChargeShot = {Name = "Graves", Range = 1000, spellType = 1, Radius = 110, Duration = 1000},
-	GravesClusterShot = {Name = "Graves", Range = 750, spellType = 1, Radius = 50, Duration = 1000},
-	GravesSmokeGrenade = {Name = "Graves", Range = 700, spellType = 3, Radius = 275, Duration = 1500},
+	GravesChargeShot = {Name = "Graves", range = 1000, spellType = 1, size = 110, duration = 1000},
+	GravesClusterShot = {Name = "Graves", range = 750, spellType = 1, size = 50, duration = 1000},
+	GravesSmokeGrenade = {Name = "Graves", range = 700, spellType = 3, size = 275, duration = 1500},
 
 	-- Heimerdinger
-	CH1ConcussionGrenade = {Name = "Heimerdinger", Range = 950, spellType = 3, Radius = 225, Duration = 1500},
+	CH1ConcussionGrenade = {Name = "Heimerdinger", range = 950, spellType = 3, size = 225, duration = 1500},
 
 	-- Irelia
-	IreliaTranscendentBlades = {Name = "Irelia", Range = 1200, spellType = 1, Radius = 80, Duration = 800},
+	IreliaTranscendentBlades = {Name = "Irelia", range = 1200, spellType = 1, size = 80, duration = 800},
 
 	-- Janna
-	HowlingGale = {Name = "Janna", Range = 1700, spellType = 1, Radius = 100, Duration = 2000},
+	HowlingGale = {Name = "Janna", range = 1700, spellType = 1, size = 100, duration = 2000},
 
 	-- JarvanIV
-	JarvanIVDemacianStandard = {Name = "JarvanIV", Range = 830, spellType = 3, Radius = 150, Duration = 2000},
-	JarvanIVDragonStrike = {Name = "JarvanIV", Range = 770, spellType = 1, Radius = 70, Duration = 1000},
-	JarvanIVCataclysm = {Name = "JarvanIV", Range = 650, spellType = 3, Radius = 300, Duration = 1500},
+	JarvanIVDemacianStandard = {Name = "JarvanIV", range = 830, spellType = 3, size = 150, duration = 2000},
+	JarvanIVDragonStrike = {Name = "JarvanIV", range = 770, spellType = 1, size = 70, duration = 1000},
+	JarvanIVCataclysm = {Name = "JarvanIV", range = 650, spellType = 3, size = 300, duration = 1500},
 
 	-- Kartus
-	LayWaste = {Name = "Karthus", Range = 875, spellType = 3, Radius = 150, Duration = 1000},
+	LayWaste = {Name = "Karthus", range = 875, spellType = 3, size = 150, duration = 1000},
 
 	--Kassadin
-	RiftWalk = {Name = "Kassadin", Range = 700, spellType = 5, Radius = 150, Duration = 1000},
+	RiftWalk = {Name = "Kassadin", range = 700, spellType = 5, size = 150, duration = 1000},
 
 	-- Katarina
-	ShadowStep = {Name = "Katarina", Range = 700, spellType = 3, Radius = 75, Duration = 1000},
+	ShadowStep = {Name = "Katarina", range = 700, spellType = 3, size = 75, duration = 1000},
 
 	-- Kennen
-	KennenShurikenThrow = {Name = "Kennen", Range = 1050, spellType = 1, Radius = 75, Duration = 1000, ProjectileSpeed = 1.7, Delay = 300,  spammable = true},
-	KennenShurikenHurlMissile1 = {Name = "Kennen", Range = 1050, spellType = 1, Radius = 75, Duration = 1000, ProjectileSpeed = 1.7, Delay = 300,  spammable = true},
+	KennenShurikenThrow = {Name = "Kennen", range = 1050, spellType = 1, size = 75, duration = 1000, speed = 1.7, delay = 300, spellKey = _Q, spammable = true},
+	KennenShurikenHurlMissile1 = {Name = "Kennen", range = 1050, spellType = 1, size = 75, duration = 1000, speed = 1.7, delay = 300, spellKey = _Q, spammable = true},
 
 	-- KogMaw
-	KogMawVoidOoze = {Name = "KogMaw", Range = 1115, spellType = 1, Radius = 100, Duration = 1000},
-	KogMawVoidOozeMissile = {Name = "KogMaw", Range = 1115, spellType = 1, Radius = 100, Duration = 1000},
-	KogMawLivingArtillery = {Name = "KogMaw", Range = 2200, spellType = 3, Radius = 200, Duration = 1500},
+	KogMawVoidOoze = {Name = "KogMaw", range = 1115, spellType = 1, size = 100, duration = 1000},
+	KogMawVoidOozeMissile = {Name = "KogMaw", range = 1115, spellType = 1, size = 100, duration = 1000},
+	KogMawLivingArtillery = {Name = "KogMaw", range = 2200, spellType = 3, size = 200, duration = 1500},
 
 	-- Leblanc
-	LeblancSoulShackle = {Name = "Leblanc", Range = 1000, spellType = 1, Radius = 80, Duration = 1000},
-	LeblancSoulShackleM = {Name = "Leblanc", Range = 1000, spellType = 1, Radius = 80, Duration = 1000},
-	LeblancSlide = {Name = "Leblanc", Range = 600, spellType = 3, Radius = 250, Duration = 1000},
-	LeblancSlideM = {Name = "Leblanc", Range = 600, spellType = 3, Radius = 250, Duration = 1000},
-	leblancslidereturn = {Name = "Leblanc", Range = 1000, spellType = 3, Radius = 50, Duration = 1000},
-	leblancslidereturnm = {Name = "Leblanc", Range = 1000, spellType = 3, Radius = 50, Duration = 1000},
+	LeblancSoulShackle = {Name = "Leblanc", range = 1000, spellType = 1, size = 80, duration = 1000},
+	LeblancSoulShackleM = {Name = "Leblanc", range = 1000, spellType = 1, size = 80, duration = 1000},
+	LeblancSlide = {Name = "Leblanc", range = 600, spellType = 3, size = 250, duration = 1000},
+	LeblancSlideM = {Name = "Leblanc", range = 600, spellType = 3, size = 250, duration = 1000},
+	leblancslidereturn = {Name = "Leblanc", range = 1000, spellType = 3, size = 50, duration = 1000},
+	leblancslidereturnm = {Name = "Leblanc", range = 1000, spellType = 3, size = 50, duration = 1000},
 
 	-- LeeSin
-	BlindMonkQOne = {Name = "LeeSin", Range = 975, spellType = 1, Radius = 80, Duration = 1000, ProjectileSpeed = 1.8, Delay = 300,  spammable = true},
-	BlindMonkRKick = {Name = "LeeSin", Range = 1200, spellType = 1, Radius = 100, Duration = 1000, spellKey = _R},
+	BlindMonkQOne = {Name = "LeeSin", range = 975, spellType = 1, size = 80, duration = 1000, speed = 1.8, delay = 300, spellKey = _Q, spammable = true},
+	BlindMonkRKick = {Name = "LeeSin", range = 1200, spellType = 1, size = 100, duration = 1000, spellKey = _R},
 
 	-- Leona
-	LeonaZenithBladeMissile = {Name = "Leona", Range = 700, spellType = 1, Radius = 80, Duration = 1000},
+	LeonaZenithBladeMissile = {Name = "Leona", range = 700, spellType = 1, size = 80, duration = 1000},
 
 	-- Lulu
-	LuluQ = {Name = "Lulu", Range = 975, spellType = 1, Radius = 50, Duration = 1000},
+	LuluQ = {Name = "Lulu", range = 975, spellType = 1, size = 50, duration = 1000},
 
 	-- Lux
-	LuxLightBinding = {Name = "Lux", Range = 1300, spellType = 1, Radius = 80, Duration = 1000, ProjectileSpeed = 1.17, Delay = 300,  spammable = true},
-	LucentSingularity = {Name = "Lux", Range = 1100, spellType = 3, Radius = 300, Duration = 2500, ProjectileSpeed = 1.24, Delay = 300,  spammable = true},
-	LuxLightStrikeKugel = {Name = "Lux", Range = 1100, spellType = 3, Radius = 300, Duration = 2500, ProjectileSpeed = 1.24, Delay = 300,  spammable = true},
-	FinalesFunkeln = {Name = "Lux", Range = 3000, spellType = 1, Radius = 80, Duration = 1500, ProjectileSpeed = 0, Delay = 500, spellKey = _R},
-	LuxMaliceCannon = {Name = "Lux", Range = 3000, spellType = 1, Radius = 80, Duration = 1500, ProjectileSpeed = 0, Delay = 500, spellKey = _R},
+	LuxLightBinding = {Name = "Lux", range = 1300, spellType = 1, size = 80, duration = 1000, speed = 1.17, delay = 300, spellKey = _Q, spammable = true},
+	LucentSingularity = {Name = "Lux", range = 1100, spellType = 3, size = 300, duration = 2500, speed = 1.24, delay = 300, spellKey = _E, spammable = true},
+	LuxLightStrikeKugel = {Name = "Lux", range = 1100, spellType = 3, size = 300, duration = 2500, speed = 1.24, delay = 300, spellKey = _E, spammable = true},
+	FinalesFunkeln = {Name = "Lux", range = 3000, spellType = 1, size = 80, duration = 1500, speed = 0, delay = 500, spellKey = _R},
+	LuxMaliceCannon = {Name = "Lux", range = 3000, spellType = 1, size = 80, duration = 1500, speed = 0, delay = 500, spellKey = _R},
 		
 	-- Malphite
-	UFSlash = {Name = "Malphite", Range = 1000, spellType = 3, Radius = 325, Duration = 1000},
+	UFSlash = {Name = "Malphite", range = 1000, spellType = 3, size = 325, duration = 1000},
 
 	-- Malzahar
-	AlZaharCalloftheVoid = {Name = "Malzahar", Range = 900, spellType = 3, Radius = 100, Duration = 1000},
-	AlZaharNullZone = {Name = "Malzahar", Range = 800, spellType = 3, Radius = 250, Duration = 1000},
+	AlZaharCalloftheVoid = {Name = "Malzahar", range = 900, spellType = 3, size = 100, duration = 1000},
+	AlZaharNullZone = {Name = "Malzahar", range = 800, spellType = 3, size = 250, duration = 1000},
 		
 	-- Maokai
-	MaokaiTrunkLineMissile = {Name = "Maokai", Range = 600, spellType = 1, Radius = 100, Duration = 1000},
-	MaokaiSapling2 = {Name = "Maokai", Range = 1100, spellType = 3, Radius = 350, Duration = 1000},
+	MaokaiTrunkLineMissile = {Name = "Maokai", range = 600, spellType = 1, size = 100, duration = 1000},
+	MaokaiSapling2 = {Name = "Maokai", range = 1100, spellType = 3, size = 350, duration = 1000},
 
 	-- MissFortune
-	MissFortuneScattershot = {Name = "MissFortune", Range = 800, spellType = 3, Radius = 400, Duration = 1000},
+	MissFortuneScattershot = {Name = "MissFortune", range = 800, spellType = 3, size = 400, duration = 1000},
 		
 	-- Morgana
-	DarkBinding = {Name = "Morgana", Range = 1300, spellType = 1, Radius = 100, Duration = 1500, ProjectileSpeed = 1.2, Delay = 300,  spammable = true},
-	DarkBindingMissile = {Name = "Morgana", Range = 1300, spellType = 1, Radius = 100, Duration = 1500, ProjectileSpeed = 1.2, Delay = 300,  spammable = true},
-	TormentedSoil = {Name = "Morgana", Range = 900, spellType = 3, Radius = 350, Duration = 1500},
+	DarkBinding = {Name = "Morgana", range = 1300, spellType = 1, size = 100, duration = 1500, speed = 1.2, delay = 300, spellKey = _Q, spammable = true},
+	DarkBindingMissile = {Name = "Morgana", range = 1300, spellType = 1, size = 100, duration = 1500, speed = 1.2, delay = 300, spellKey = _Q, spammable = true},
+	TormentedSoil = {Name = "Morgana", range = 900, spellType = 3, size = 350, duration = 1500},
 
 	-- Nautilus
-	NautilusAnchorDrag = {Name = "Nautilus", Range = 950, spellType = 1, Radius = 80, Duration = 1500},
+	NautilusAnchorDrag = {Name = "Nautilus", range = 950, spellType = 1, size = 80, duration = 1500},
 
 	-- Nidalee
-	JavelinToss = {Name = "Nidalee", Range = 1500, spellType = 1, Radius = 80, Duration = 1500, ProjectileSpeed = 1.3, Delay = 300,  spammable = true},
+	JavelinToss = {Name = "Nidalee", range = 1500, spellType = 1, size = 80, duration = 1500, speed = 1.3, delay = 300, spellKey = _Q, spammable = true},
 
 	-- Nocturne
-	NocturneDuskbringer = {Name = "Nocturne", Range = 1200, spellType = 1, Radius = 80, Duration = 1500},
+	NocturneDuskbringer = {Name = "Nocturne", range = 1200, spellType = 1, size = 80, duration = 1500},
 
 	-- Olaf
-	OlafAxeThrow = {Name = "Olaf", Range = 1000, spellType = 2, Radius = 100, Duration = 1500, ProjectileSpeed = 1.6, Delay = 300,  spammable = true},
+	OlafAxeThrow = {Name = "Olaf", range = 1000, spellType = 2, size = 100, duration = 1500, speed = 1.6, delay = 300, spellKey = _Q, spammable = true},
 
 	-- Orianna
-	OrianaIzunaCommand = {Name = "Orianna", Range = 825, spellType = 3, Radius = 150, Duration = 1500},
+	OrianaIzunaCommand = {Name = "Orianna", range = 825, spellType = 3, size = 150, duration = 1500},
 
 	-- Renekton
-	RenektonSliceAndDice = {Name = "Renekton", Range = 450, spellType = 1, Radius = 80, Duration = 1000},
-	renektondice = {Name = "Renekton", Range = 450, spellType = 1, Radius = 80, Duration = 1000},
+	RenektonSliceAndDice = {Name = "Renekton", range = 450, spellType = 1, size = 80, duration = 1000},
+	renektondice = {Name = "Renekton", range = 450, spellType = 1, size = 80, duration = 1000},
 
 	-- Rumble
-	RumbleGrenadeMissile = {Name = "Rumble", Range = 1000, spellType = 1, Radius = 100, Duration = 1500},
+	RumbleGrenadeMissile = {Name = "Rumble", range = 1000, spellType = 1, size = 100, duration = 1500},
 
 	-- Sejuani
-	SejuaniGlacialPrison = {Name = "Sejuani", Range = 1150, spellType = 1, Radius = 80, Duration = 1000},
+	SejuaniGlacialPrison = {Name = "Sejuani", range = 1150, spellType = 1, size = 80, duration = 1000},
 
 	-- Sivir
-	SpiralBlade = {Name = "Sivir", Range = 1000, spellType = 1, Radius = 100, Duration = 1000, ProjectileSpeed = 1.33, Delay = 300,  spammable = true},
+	SpiralBlade = {Name = "Sivir", range = 1000, spellType = 1, size = 100, duration = 1000, speed = 1.33, delay = 300, spellKey = _Q, spammable = true},
 
 	-- Singed
-	MegaAdhesive = {Name = "Singed", Range = 1000, spellType = 3, Radius = 350, Duration = 1500},
+	MegaAdhesive = {Name = "Singed", range = 1000, spellType = 3, size = 350, duration = 1500},
 
 	-- Shaco
-	Deceive = {Name = "Shaco", Range = 500, spellType = 5, Radius = 100, Duration = 3500},
+	Deceive = {Name = "Shaco", range = 500, spellType = 5, size = 100, duration = 3500},
 
 	-- Shen
-	ShenShadowDash = {Name = "Shen", Range = 600, spellType = 2, Radius = 80, Duration = 1000},
+	ShenShadowDash = {Name = "Shen", range = 600, spellType = 2, size = 80, duration = 1000},
 
 	-- Shyvana
-	ShyvanaTransformLeap = {Name = "Shyvana", Range = 925, spellType = 1, Radius = 80, Duration = 1500},
-	ShyvanaFireballMissile = {Name = "Shyvana", Range = 1000, spellType = 1, Radius = 80, Duration = 1000},
+	ShyvanaTransformLeap = {Name = "Shyvana", range = 925, spellType = 1, size = 80, duration = 1500},
+	ShyvanaFireballMissile = {Name = "Shyvana", range = 1000, spellType = 1, size = 80, duration = 1000},
 
 	-- Skarner
-	SkarnerFracture = {Name = "Skarner", Range = 600, spellType = 1, Radius = 100, Duration = 1000},
+	SkarnerFracture = {Name = "Skarner", range = 600, spellType = 1, size = 100, duration = 1000},
 
 	-- Sona
-	SonaCrescendo = {Name = "Sona", Range = 1000, spellType = 1, Radius = 150, Duration = 1000},
+	SonaCrescendo = {Name = "Sona", range = 1000, spellType = 1, size = 150, duration = 1000},
 
 	-- Swain
 	--Nevermove
-	SwainShadowGrasp = {Name = "Swain", Range = 900, spellType = 3, Radius = 265, Duration = 1500},
+	SwainShadowGrasp = {Name = "Swain", range = 900, spellType = 3, size = 265, duration = 1500},
 
 	-- Tristana
-	RocketJump = {Name = "Tristana", Range = 900, spellType = 3, Radius = 200, Duration = 1000},
+	RocketJump = {Name = "Tristana", range = 900, spellType = 3, size = 200, duration = 1000},
 
 	-- Tryndamere
-	MockingShout = {Name = "Tryndamere", Range = 850, spellType = 6, Radius = 100, Duration = 1000},
-	Slash = {Name = "Tryndamere", Range = 600, spellType = 2, Radius = 100, Duration = 1000},
+	MockingShout = {Name = "Tryndamere", range = 850, spellType = 6, size = 100, duration = 1000},
+	Slash = {Name = "Tryndamere", range = 600, spellType = 2, size = 100, duration = 1000},
 
 	-- TwistedFate
-	WildCards = {Name = "TwistedFate", Range = 1450, spellType = 1, Radius = 80, Duration = 1000},
+	WildCards = {Name = "TwistedFate", range = 1450, spellType = 1, size = 80, duration = 1000},
 
 	-- Urgot
-	UrgotHeatseekingLineMissile = {Name = "Urgot", Range = 1000, spellType = 1, Radius = 80, Duration = 800},
-	UrgotPlasmaGrenade = {Name = "Urgot", Range = 950, spellType = 3, Radius = 300, Duration = 1000},
+	UrgotHeatseekingLineMissile = {Name = "Urgot", range = 1000, spellType = 1, size = 80, duration = 800},
+	UrgotPlasmaGrenade = {Name = "Urgot", range = 950, spellType = 3, size = 300, duration = 1000},
 
 	-- Varus
-	VarusR = {Name = "Varus", Range = 1075, spellType = 1, Radius = 80, Duration = 1500},
-	VarusQ = {Name = "Varus", Range = 1475, spellType = 1, Radius = 50, Duration = 1000},
+	VarusR = {Name = "Varus", range = 1075, spellType = 1, size = 80, duration = 1500},
+	VarusQ = {Name = "Varus", range = 1475, spellType = 1, size = 50, duration = 1000},
 
 	-- Vayne
-	VayneTumble = {Name = "Vayne", Range = 250, spellType = 5, Radius = 100, Duration = 1000},
+	VayneTumble = {Name = "Vayne", range = 250, spellType = 5, size = 100, duration = 1000},
 
 	-- Veigar
-	VeigarDarkMatter = {Name = "Veigar", Range = 900, spellType = 3, Radius = 225, Duration = 2000},
+	VeigarDarkMatter = {Name = "Veigar", range = 900, spellType = 3, size = 225, duration = 2000},
 
 	-- Viktor
-	ViktorDeathRay = {Name = "Viktor", Range = 700, spellType = 1, Radius = 80, Duration = 2000},
+	ViktorDeathRay = {Name = "Viktor", range = 700, spellType = 1, size = 80, duration = 2000},
 
 	-- Xerath
-	xeratharcanopulsedamage = {Name = "Xerath", Range = 900, spellType = 1, Radius = 80, Duration = 1000},
-	xeratharcanopulsedamageextended = {Name = "Xerath", Range = 1300, spellType = 1, Radius = 80, Duration = 1000},
-	xeratharcanebarragewrapper = {Name = "Xerath", Range = 900, spellType = 3, Radius = 250, Duration = 1000},
-	xeratharcanebarragewrapperext = {Name = "Xerath", Range = 1300, spellType = 3, Radius = 250, Duration = 1000},
+	xeratharcanopulsedamage = {Name = "Xerath", range = 900, spellType = 1, size = 80, duration = 1000},
+	xeratharcanopulsedamageextended = {Name = "Xerath", range = 1300, spellType = 1, size = 80, duration = 1000},
+	xeratharcanebarragewrapper = {Name = "Xerath", range = 900, spellType = 3, size = 250, duration = 1000},
+	xeratharcanebarragewrapperext = {Name = "Xerath", range = 1300, spellType = 3, size = 250, duration = 1000},
 
 	-- Ziggs
-	ZiggsQ = {Name = "Ziggs", Range = 850, spellType = 3, Radius = 160, Duration = 1000, spellKey = _Q},
-	ZiggsW = {Name = "Ziggs", Range = 1000, spellType = 3, Radius = 225, Duration = 1000, spellKey = _W},
-	ZiggsE = {Name = "Ziggs", Range = 900, spellType = 3, Radius = 250, Duration = 1000, spellKey = _E},
-	ZiggsR = {Name = "Ziggs", Range = 5300, spellType = 3, Radius = 550, Duration = 3000, spellKey = _R},
+	ZiggsQ = {Name = "Ziggs", range = 850, spellType = 3, size = 160, duration = 1000, spellKey = _Q},
+	ZiggsW = {Name = "Ziggs", range = 1000, spellType = 3, size = 225, duration = 1000, spellKey = _W},
+	ZiggsE = {Name = "Ziggs", range = 900, spellType = 3, size = 250, duration = 1000, spellKey = _E},
+	ZiggsR = {Name = "Ziggs", range = 5300, spellType = 3, size = 550, duration = 3000, spellKey = _R},
 	
 	-- Zyra
-	ZyraQFissure = {Name = "Zyra", Range = 825, spellType = 3, Radius = 275, Duration = 1500, spellKey = _Q},
-	ZyraGraspingRoots = {Name = "Zyra", Range = 1100, spellType = 1, Radius = 90, Duration = 1500, spellKey = _E},
+	ZyraQFissure = {Name = "Zyra", range = 825, spellType = 3, size = 275, duration = 1500, spellKey = _Q},
+	ZyraGraspingRoots = {Name = "Zyra", range = 1100, spellType = 1, size = 90, duration = 1500, spellKey = _E},
 }
 
 	local spellArray = {}
@@ -253,12 +257,14 @@ SpellData = {
 	
 	local colors = {0xffffffff, 0xff00ffff, 0xffff0000, 0xff00ff00, 0xffffff00}
 	
-	for i,enemy in pairs(GetEnemyHeroes()) do
+DelayAction(function()
+	for _,enemy in pairs(GetEnemyHeroes()) do
 		if enemy ~= nil then
-			for i, spell in pairs(SpellData) do
-				if string.lower(spell.Name) == string.lower(GetObjectName(enemy)) or (spell.Name == "") then
+		PrintChat("..GetObjectName(enemy)..")	
+			for i, spell in pairs(spellList) do
+				if spell.Name == GetObjectName(enemy) then
 				spellArrayCount = spellArrayCount + 1
-				spellArray[i] = SpellData[i]
+				spellArray[i] = spellList[i]
 				spellArray[i].color = colors[spellArray[i].spellType]
 				spellArray[i].shot = false
 				spellArray[i].lastshot = 0
@@ -267,9 +273,8 @@ SpellData = {
 			end
 	        end
 	end
-	
-        SpellData = nil
- 
+end, 1)
+
 	local sEvade = MenuConfig("Slow Evade", "SlowEvade")
 	sEvade:Boolean("drawSkillShot", "Draw Skills", true)
 	sEvade:KeyBinding("dodgeSkillShot", "Dodge Skills", string.byte("K"), true)
@@ -304,7 +309,8 @@ SpellData = {
 	end
 
 	function dodgeAOE(pos1, pos2, radius)
-		local distancePos2 = GetDistance(pos2) 
+		local distancePos2 = GetDistance(pos2)
+        PrintChat(distancePos2)		
 		if distancePos2 < radius then
 		movex = pos2.x + ((radius+50)/distancePos2)*(myHeroPos().x-pos2.x)
 		movez = pos2.z + ((radius+50)/distancePos2)*(myHeroPos().z-pos2.z)
@@ -350,66 +356,66 @@ SpellData = {
 		end
 	end
 		
-	OnProcessSpellComplete(function(unit,spell)
+	OnProcessSpell(function(unit,spell)
 		if IsDead(unit) == true then return end
-		if unit ~= nil and GetTeam(unit) ~= GetTeam(GetMyHero()) and spellArray[spell.name] ~= nil and GetDistance(unit) < spellArray[spell.name].Range + spellArray[spell.name].Radius + 500 then
+		if unit ~= nil and GetTeam(unit) ~= GetTeam(GetMyHero()) and spellArray[spell.name] ~= nil and GetDistance(unit) < spellArray[spell.name].range + spellArray[spell.name].size + 500 then
 			local startPosition = Vector(unit)
 			local endPosition = Vector(spell.endPos)
-			local Delay = spellArray[spell.name].spellDelay or 0
-			local Range = spellArray[spell.name].Range or 0
+			local delay = spellArray[spell.name].spellDelay or 0
+			local range = spellArray[spell.name].range or 0
 			local projectileSpeed = spellArray[spell.name].projectileSpeed or 1
-			local Duration = Range/projectileSpeed*1000
+			local duration = range/projectileSpeed*1000
 			local directionVector = (endPosition - startPosition):normalized()
-			endPosition = startPosition + directionVector * Range
-			table.insert(detectedSkillshots, {startPosition = startPosition, endPosition = endPosition, directionVector = directionVector, startTick = GetTickCount() + Delay, endTick = GetTickCount() + Delay + Duration, skillshot = skillshot})
+			endPosition = startPosition + directionVector * range
+			table.insert(detectedSkillshots, {startPosition = startPosition, endPosition = endPosition, directionVector = directionVector, startTick = GetTickCount() + delay, endTick = GetTickCount() + delay + duration, skillshot = skillshot})
 					
 			spellArray[spell.name].shot = true
 			spellArray[spell.name].lastshot = GetTickCount()
 			if spellArray[spell.name].spellType == 1 then
-			        spellArray[spell.name].skillshotpoint = calculateLinepass(object.pos, spell.endPos, spellArray[spell.name].Range)
+			        spellArray[spell.name].skillshotpoint = calculateLinepass(GetOrigin(unit), spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
-				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].Radius, spellArray[spell.name].Range)
+				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].size, spellArray[spell.name].range)
 				end
 			elseif spellArray[spell.name].spellType == 2 then
-				spellArray[spell.name].skillshotpoint = calculateLinepoint(spell.startPos, spell.endPos, spellArray[spell.name].Range)
+				spellArray[spell.name].skillshotpoint = calculateLinepoint(spell.startPos, spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
-				dodgeLinePoint(spell.startPos, spell.endPos, spellArray[spell.name].Radius)
+				dodgeLinePoint(spell.startPos, spell.endPos, spellArray[spell.name].size)
 				end
 			elseif spellArray[spell.name].spellType == 3 then
-				spellArray[spell.name].skillshotpoint = calculateLineaoe(spell.startPos, spell.endPos, spellArray[spell.name].Range)
+				spellArray[spell.name].skillshotpoint = calculateLineaoe(spell.startPos, spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
-				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].Radius)
+				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].size)
 				end
 			elseif spellArray[spell.name].spellType == 4 then
 				spellArray[spell.name].skillshotpoint = calculateLinepass(spell.startPos, spell.endPos, 5000)
 				if sEvade.dodgeSkillShot:Value() then
-				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].Radius, spellArray[spell.name].Range)
+				dodgeLinePass(spell.startPos, spell.endPos, spellArray[spell.name].size, spellArray[spell.name].range)
 				end
 			elseif spellArray[spell.name].spellType == 5 then
-				spellArray[spell.name].skillshotpoint = calculateLineaoe2(spell.startPos, spell.endPos, spellArray[spell.name].Range)
+				spellArray[spell.name].skillshotpoint = calculateLineaoe2(spell.startPos, spell.endPos, spellArray[spell.name].range)
 				if sEvade.dodgeSkillShot:Value() then
-				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].Radius)
+				dodgeAOE(spell.startPos, spell.endPos, spellArray[spell.name].size)
 				end
 			end
 		end
 	end)
 			
-	OnDraw(function(myHero)
+	--[[OnDraw(function(myHero)
 		if sEvade.drawSkillShot:Value() then
 			for i, spell in pairs(spellArray) do
 				if spell.shot and #spell.skillshotpoint > 0 then
 					if #spell.skillshotpoint == 1 then
-					DrawCircle(spell.skillshotpoint[1].x, spell.skillshotpoint[1].y, spell.skillshotpoint[1].z, spell.Radius, 0, spell.color)
+					DrawCircle(spell.skillshotpoint[1].x, spell.skillshotpoint[1].y, spell.skillshotpoint[1].z, spell.size, 0, spell.color)
 					else
-					DrawLine(spell.skillshotpoint[1], spell.skillshotpoint[2], spell.Radius, spell.color, 1000)
+					DrawLine(spell.skillshotpoint[1], spell.skillshotpoint[2], spell.size, spell.color, 1000)
 					end
 					if #spell.skillshotpoint == 3 then
-					DrawCircle(spell.skillshotpoint[3].x, spell.skillshotpoint[3].y, spell.skillshotpoint[3].z, spell.Radius,1,0, spell.color)
+					DrawCircle(spell.skillshotpoint[3].x, spell.skillshotpoint[3].y, spell.skillshotpoint[3].z, spell.size,1,0, spell.color)
 					end
 				end
 			end
 		end
-	end)
+	end)]]
 			
         OnTick(function(myHero)
 		local tick = GetTickCount()
@@ -422,7 +428,7 @@ SpellData = {
 	                end
 	        
 			for i, spell in pairs(spellArray) do
-				if spell.shot and spell.lastshot < tick - spell.Duration then
+				if spell.shot and spell.lastshot < tick - 1000 then
 				spell.shot = false
 				spell.skillshotpoint = {}
 				moveTo = {}
