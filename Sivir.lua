@@ -37,7 +37,7 @@ SivirMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "E-Q-W
 
 SivirMenu:Menu("Drawings", "Drawings")
 SivirMenu.Drawings:Boolean("Q", "Draw Q Range", true)
-Menu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
+SivirMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 OnDraw(function(myHero)
 if SivirMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),1075,1,0,0xff00ff00) end
