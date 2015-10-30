@@ -106,7 +106,7 @@ OnTick(function(myHero)
 	end
 
         if AhriMenu.Combo.RMode:Value() == 2 and AhriMenu.Combo.R:Value() and ValidTarget(target,900)then
-          local AfterTumblePos = GetOrigin(myHero) + (Vector(mousePos()) - GetOrigin(myHero)):normalized() * 550
+          local AfterTumblePos = GetOrigin(myHero) + (Vector(mousePos) - GetOrigin(myHero)):normalized() * 550
           local DistanceAfterTumble = GetDistance(AfterTumblePos, target)
    	  if UltOn and DistanceAfterTumble < 550 then
 	  CastSkillShot(_R,mousePos)
