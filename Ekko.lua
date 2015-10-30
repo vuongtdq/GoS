@@ -1,6 +1,7 @@
 if GetObjectName(GetMyHero()) ~= "Ekko" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
+if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 
 local EkkoMenu = MenuConfig("Ekko", "Ekko")
 EkkoMenu:Menu("Combo", "Combo")
@@ -17,6 +18,7 @@ EkkoMenu.Harass:Slider("Mana", "if Mana % is More than", 30, 0, 80, 1)
 
 EkkoMenu:Menu("Killsteal", "Killsteal")
 EkkoMenu.Killsteal:Boolean("Q", "Killsteal with Q", true)
+EkkoMenu.Killsteal:Boolean("E", "Killsteal with E", true)
 EkkoMenu.Killsteal:Boolean("R", "Killsteal with R", true)
 
 EkkoMenu:Menu("Misc", "Misc")
@@ -39,7 +41,7 @@ local col = EkkoMenu.Drawings.color:Value()
 if EkkoMenu.Drawings.Q:Value() then DrawCircle(GetOrigin(myHero),925,1,0,col) end
 if EkkoMenu.Drawings.W:Value() then DrawCircle(GetOrigin(myHero),1600,1,0,col) end
 if EkkoMenu.Drawings.E:Value() then DrawCircle(GetOrigin(myHero),350,1,0,col) end
-if EkkoMenu.Drawings.R:Value() and twin then DrawCircle(GetOrigin(twin),400,1,0,col) end
+if EkkoMenu.Drawings.R:Value() and twin then DrawCircle(GetOrigin(twin),400,2,100,ARGB(255, 255, 0, 0)) end
 if EkkoMenu.Drawings.OP:Value() then
   if EkkoQ then
   DrawCircle(GetOrigin(EkkoQ),140,1,100,ARGB(255, 255, 0, 0))
@@ -62,6 +64,8 @@ function DrawLine3D(x,y,z,a,b,c,width,col)
 end
 
 OnTick(function(myHero)
+
+
 end)
 
 OnCreateObj(function(Object) 
@@ -83,7 +87,7 @@ end
 end)
 
 OnDeleteObj(function(Object) 
-if GetObjectBaseName(Object) == "Ekko" then
+if GetObjectBaseName(Object) == "Ekko_Base_R_TrailEnd.troy" then
 twin = nil
 end
 
