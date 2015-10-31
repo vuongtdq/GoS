@@ -1,4 +1,7 @@
 if GetObjectName(GetMyHero()) ~= "Ryze" then return end
+	
+if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
+if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 
 local RyzeMenu = MenuConfig("Ryze", "Ryze")
 RyzeMenu:Menu("Combo", "Combo")
