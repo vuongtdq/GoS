@@ -6,6 +6,7 @@ if GetObjectName(GetMyHero()) ~= "Orianna" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
 local Ball = myHero
 	
@@ -67,11 +68,10 @@ if OriannaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1000,1,128,0xff00f
 end)
 
 OnTick(function(myHero)
-	
+     local target = GetCurrentTarget()	
+     
      if IOW:Mode() == "Combo" then
-	    
-        local target = GetCurrentTarget()
-
+     	
 	if IsReady(_R) and OriannaMenu.Combo.R.REnabled:Value() then
 	  if EnemiesAround(GetOrigin(Ball), 400) >= OriannaMenu.Combo.R.Rcatch:Value() then
 	  CastSpell(_R)
@@ -100,9 +100,7 @@ OnTick(function(myHero)
         end	
      end
 	
-     if IOW:Mode() == "Harass" and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= OriannaMenu.Harass.Mana:Value() then
-	
-        local target = GetCurrentTarget()
+     if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= OriannaMenu.Harass.Mana:Value() then
 
 	if IsReady(_Q) and OriannaMenu.Harass.Q:Value() and EnemiesAround(myHeroPos(), 825) < 2 and ValidTarget(target, 825) then
         Cast(_Q,target,Ball)   
@@ -125,7 +123,7 @@ OnTick(function(myHero)
         for i,enemy in pairs(GetEnemyHeroes()) do
 		
 	    if Ignite and OriannaMenu.Misc.AutoIgnite:Value() then
-              if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 600) then
+              if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 600) then
               CastTargetSpell(enemy, Ignite)
               end
             end
@@ -135,7 +133,7 @@ OnTick(function(myHero)
             end
 		
 	    if IsReady(_R) and OriannaMenu.Misc.AutoUlt.Enabled:Value() then
-              if ValidTarget(enemy, 1200) and GetDistance(Ball, enemy) <= 400 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 75*GetCastLevel(myHero, _R)+75+0.7*GetBonusAP(myHero) + Ludens()) then 
+              if ValidTarget(enemy, 1200) and GetDistance(Ball, enemy) <= 400 and GetHP2(enemy) < getdmg("R",enemy) then 
               KillableEnemies = KillableEnemies + 1
               end
 		  
@@ -144,13 +142,13 @@ OnTick(function(myHero)
 	      end
 	    end
 		
-	    if IsReady(_W) and OriannaMenu.Killsteal.W:Value() and ValidTarget(enemy, 1200) and GetDistance(Ball, enemy) <= 250 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 45*GetCastLevel(myHero,_W)+25+0.7*GetBonusAP(myHero) + Ludens()) then
+	    if IsReady(_W) and OriannaMenu.Killsteal.W:Value() and ValidTarget(enemy, 1200) and GetDistance(Ball, enemy) <= 250 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < getdmg("W",enemy) then
 	    CastSpell(_W)
-	    elseif IsReady(_Q) and ValidTarget(enemy, 825) and OriannaMenu.Killsteal.Q:Value() and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 30*GetCastLevel(myHero, _Q)+30+0.5*GetBonusAP(myHero) + Ludens()) then 
+	    elseif IsReady(_Q) and ValidTarget(enemy, 825) and OriannaMenu.Killsteal.Q:Value() and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < getdmg("Q",enemy) then 
             Cast(_Q,enemy,Ball)
             elseif Ball ~= myHero and IsReady(_E) and ValidTarget(enemy, 1000) and OriannaMenu.Killsteal.E:Value() then
               local pointSegment,pointLine,isOnSegment  = VectorPointProjectionOnLineSegment(myHeroPos(), GetOrigin(enemy), Vector(Ball))
-              if pointLine and GetDistance(pointSegment, enemy) <= 80 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 30*GetCastLevel(myHero, _R)+30+0.3*GetBonusAP(myHero) + Ludens()) then
+              if pointLine and GetDistance(pointSegment, enemy) <= 80 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < getdmg("E",enemy) then
               CastTargetSpell(myHero, _E)
               end 
 	    end
