@@ -2,6 +2,7 @@ if GetObjectName(GetMyHero()) ~= "Katarina" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
@@ -50,6 +51,278 @@ KatarinaMenu.Drawings:Boolean("R", "Draw R Range", true)
 KatarinaMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 KatarinaMenu.Drawings:Boolean("Text", "Draw Damage Text", true)
 
+OnDraw(function(myHero)
+local col = KatarinaMenu.Drawings.color:Value()
+if KatarinaMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),675,1,0,col) end
+if KatarinaMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),375,1,0,col) end
+if KatarinaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),700,1,0,col) end
+if KatarinaMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),550,1,0,col) end
+  if KatarinaMenu.Drawings.Text:Value() then
+    for _, enemy in pairs(GetEnemyHeroes()) do
+      if ValidTarget(enemy) then
+      local enemyPos = GetOrigin(enemy)
+      local drawpos = WorldToScreen(1,enemyPos.x, enemyPos.y, enemyPos.z)
+      local enemyText, color = GetDrawText(enemy)
+      DrawText(enemyText, 20, drawpos.x, drawpos.y, color)
+      end
+    end
+  end
+end)
+
+local CastingR = false
+local lastlevel = GetLevel(myHero)-1
+
+OnTick(function(myHero)
+  local target = GetCurrentTarget()
+  
+  if IOW:Mode() == "Combo" then
+
+      if IsReady(_Q) and KatarinaMenu.Combo.Q:Value() and ValidTarget(target, 675) and not CastingR then
+      CastTargetSpell(target, _Q)
+      end
+	  
+      if IsReady(_W) and KatarinaMenu.Combo.W:Value() and ValidTarget(target, 375) and not CastingR then
+      CastSpell(_W)
+      end
+	  
+      if IsReady(_E) and KatarinaMenu.Combo.E:Value() and ValidTarget(target, 700) and not CastingR then
+      CastTargetSpell(target, _E)
+      end
+	  
+      if KatarinaMenu.Combo.R:Value() and CanUseSpell(myHero, _Q) ~= READY and CanUseSpell(myHero, _W) ~= READY and CanUseSpell(myHero, _E) ~= READY and CanUseSpell(myHero, _R)  ~= ONCOOLDOWN and ValidTarget(target, 550) and GetCastLevel(myHero,_R) > 0 then
+      IOW.movementEnabled = false
+      IOW.attacksEnabled = false
+      CastSpell(_R)
+      end
+  end
+
+  if IOW:Mode() == "Harass" then
+ 
+      if IsReady(_Q) and KatarinaMenu.Harass.Q:Value() and ValidTarget(target, 675) then
+      CastTargetSpell(target, _Q)
+      end
+	  
+      if IsReady(_W) and KatarinaMenu.Harass.W:Value() and ValidTarget(target, 375) then
+      CastSpell(_W)
+      end
+	  
+      if IsReady(_E) and KatarinaMenu.Harass.E:Value() and ValidTarget(target, 700) then
+      CastTargetSpell(target, _E)
+      end
+  end
+
+if KatarinaMenu.Harass.AutoQ:Value() and ValidTarget(target, 675) and not CastingR then
+CastTargetSpell(target, _Q)
+end
+
+if KatarinaMenu.Harass.AutoW:Value() and ValidTarget(target, 375) and not CastingR then
+CastSpell(_W)
+end
+
+    for i,enemy in pairs(GetEnemyHeroes()) do
+       if KatarinaMenu.Killsteal.SmartKS:Value() then
+				
+		if Ignite and KatarinaMenu.Misc.Autoignite:Value() then
+                  if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 600) then
+                  CastTargetSpell(enemy, Ignite)
+                  end
+                end
+		
+                if IsReady(_W) and GetHP2(enemy) < getdmg("W",enemy) and ValidTarget(enemy, 375) then 
+		CastSpell(_W)
+	        end		
+	
+		if IsReady(_Q) and GetHP2(enemy) < getdmg("Q",enemy) and ValidTarget(enemy, 675) then 
+		CastTargetSpell(enemy, _Q)
+		end	
+		
+		if IsReady(_E) and GetHP2(enemy) < getdmg("E",enemy) and ValidTarget(enemy, 700) then 
+		CastTargetSpell(enemy, _E)
+	        end		
+		
+		if IsReady(_Q) and IsReady(_W) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 375) then 
+		CastSpell(_W)
+                DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
+		end
+	
+	        if IsReady(_E) and IsReady(_W) and GetHP2(enemy) < getdmg("W",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 700) then 
+		CastTargetSpell(enemy, _E)
+		DelayAction(function() CastSpell(_W) end, 250)
+				
+		if IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) + getdmg("E",enemy) and ValidTarget(enemy, 700) then 
+		CastTargetSpell(enemy, _E)
+		DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
+		DelayAction(function() CastSpell(_W) end, 250)
+		end
+				
+	        if KatarinaMenu.Killsteal.UseWards:Value() and ValidTarget(enemy, 1275) and GetDistance(enemy) > 700 and IsReady(_Q) and GetHP2(enemy) < getdmg("Q",enemy) then
+		wardJump(GetOrigin(enemy))
+		DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
+	        end
+				
+	end
+     end
+
+
+
+        if IOW:Mode() == "LaneClear" then
+          for _,mobs in pairs(minionManager.objects) do
+            if GetTeam(mobs) == MINION_ENEMY then
+		if IsReady(_Q) and KatarinaMenu.Laneclear.Q:Value() and ValidTarget(mobs, 675) then
+		CastTargetSpell(mobs, _Q)
+		end
+		
+		if IsReady(_W) and KatarinaMenu.Laneclear.W:Value() and ValidTarget(mobs, 375) then
+		CastSpell(_W)
+		end
+		
+		if IsReady(_E) and KatarinaMenu.Laneclear.E:Value() and ValidTarget(mobs, 700) then
+		CastTargetSpell(mobs, _E)
+                end
+            
+	    elseif GetTeam(mobs) == 300 then
+	        if IsReady(_Q) and KatarinaMenu.JungleClear.Q:Value() and ValidTarget(mobs, 675) then
+		CastTargetSpell(mobs, _Q)
+		end
+		
+		if IsReady(_W) and KatarinaMenu.JungleClear.W:Value() and ValidTarget(mobs, 375) then
+		CastSpell(_W)
+		end
+		
+	        if IsReady(_E) and KatarinaMenu.JungleClear.E:Value() and ValidTarget(mobs, 700) then
+		CastTargetSpell(mobs, _E)
+	        end
+	    end
+          end
+   
+	end
+	
+	if IOW:Mode() == "LastHit" then
+	  for _,mobs in pairs(minionManager.objects) do
+            if GetTeam(mobs) == MINION_ENEMY then
+	        if IsReady(_W) and KatarinaMenu.Lasthit.W:Value() and ValidTarget(mobs, 375) and GetCurrentHP(mobs) < getdmg("W",mobs) then
+		CastSpell(_W)
+		elseif IsReady(_Q) and KatarinaMenu.Lasthit.Q:Value() and ValidTarget(mobs, 675) and GetCurrentHP(mobs) < getdmg("Q",mobs) then
+		CastTargetSpell(mobs, _Q)
+		elseif IsReady(_E) and KatarinaMenu.Lasthit.E:Value() and ValidTarget(mobs, 700) and GetCurrentHP(mobs) < getdmg("E",mobs) then
+		CastTargetSpell(mobs, _E)
+		end
+            end
+          end
+	end
+
+end
+
+        mousePos = GetMousePos()
+	maxPos = calcMaxPos(mousePos)
+	jumpTarget = GetJumpTarget()
+
+	if not spellLock and wardLock and jumpTarget and IsReady(_E) then
+	CastTargetSpell(jumpTarget, _E)
+	spellLock = GetTickCount()
+	end
+
+	if KatarinaMenu.Combo.WardJumpkey:Value() then
+	wardJump(mousePos)
+	MoveToXYZ(mousePos.x, mousePos.y, mousePos.z)
+	end
+	
+	if wardLock and (wardLock + 500) < GetTickCount()  then
+	wardLock = nil
+	end
+	
+	if spellLock and (spellLock + 500) < GetTickCount()  then
+	spellLock = nil
+	end
+
+	jumpTarget = nil
+	spellObj = nil
+	wardpos = nil
+
+if KatarinaMenu.Misc.Autolvl:Value() then
+ if GetLevel(myHero) > lastlevel then
+   if KatarinaMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _W, _E, _Q, _Q , _R, _Q, _W, _Q , _W, _R, _W, _W, _E, _E, _R, _E, _E}
+   elseif KatarinaMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _W, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
+   elseif KatarinaMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _E, _Q, _E, _R, _E, _E, _W, _W, _R, _W, _W,}
+   end
+   DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
+   lastlevel = GetLevel(myHero)
+ end
+end
+
+end)
+
+OnProcessSpell(function(unit,spell)
+  if unit == myHero and spell.name:lower():find("katarinar") then
+  CastingR = true
+  IOW.movementEnabled = false
+  IOW.attacksEnabled = false
+  end
+
+  if unit == myHero and not spell.name:lower():find("katarina") then
+  spellObj = spell
+  wardpos = spellObj.endPos
+  end
+end)
+
+OnCreateObj(function(object)
+  local objType = GetObjectType(object)
+  if objType == Obj_AI_Hero or objType == Obj_AI_Minion then
+  objectList[object] = object
+  end
+end)
+
+OnDeleteObj(function(object)
+  local objType = GetObjectType(object)
+  if objType == Obj_AI_Hero or objType == Obj_AI_Minion then
+  objectList[object] = nil
+  end
+end)
+
+OnUpdateBuff(function(unit,buff)
+  if unit == myHero and buff.Name == "katarinarsound" then
+  CastingR = true
+  IOW.movementEnabled = false
+  IOW.attacksEnabled = false
+  end
+end)
+
+OnRemoveBuff(function(unit,buff)
+  if unit == myHero and buff.Name == "katarinarsound" then
+  CastingR = false
+  IOW.movementEnabled = true
+  IOW.attacksEnabled = true
+  end
+end)
+
+function GetDrawText(enemy)
+	local IgniteDmg = 0
+	if Ignite and IsReady(Ignite) then
+	IgniteDmg = IgniteDmg + 20*GetLevel(myHero)+50
+	end
+	
+	if IsReady(_Q) and GetHP2(enemy) < getdmg("Q",enemy) then
+		return 'Q = Kill!', ARGB(255, 200, 160, 0)
+	elseif IsReady(_W) and GetHP2(enemy) < getdmg("W",enemy) then
+		return 'W = Kill!', ARGB(255, 200, 160, 0)
+	elseif IsReady(_E) and GetHP2(enemy) < getdmg("E",enemy) then
+		return 'E = Kill!', ARGB(255, 200, 160, 0)
+	elseif IsReady(_Q) and IsReady(_W) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) then
+		return 'W + Q = Kill!', ARGB(255, 200, 160, 0)
+	elseif IsReady(_W) and IsReady(_E) and GetHP2(enemy) < getdmg("W",enemy) + getdmg("E",enemy) then
+		return 'E + W = Kill!', ARGB(255, 200, 160, 0)
+	elseif IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) + getdmg("E",enemy) then
+		return 'Q + W + E = Kill!', ARGB(255, 200, 160, 0)
+	elseif IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("Q",enemy,myHero,2) + getdmg("W",enemy) + getdmg("E",enemy) then
+		return '(Q + Passive) + W +E = Kill!', ARGB(255, 200, 160, 0)
+	elseif IgniteDmg > 0 and IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetHP2(enemy) < IgniteDmg + getdmg("Q",enemy) + getdmg("Q",enemy,myHero,2) + getdmg("W",enemy) + getdmg("E",enemy) then
+		return '(Q + Passive) + W + E + Ignite = Kill!', ARGB(255, 200, 160, 0)
+	elseif IsReady(_Q) and IsReady(_W) and IsReady(_E) and IsReady(_R) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) + getdmg("E",enemy) + getdmg("R",enemy,myHero,3) then
+		return 'Q + W + E + Ult ('.. string.format('%4.1f', (GetHP2(enemy) - getdmg("Q",enemy) - getdmg("W",enemy) - getdmg("E",enemy) - getdmg("R",enemy,myHero,3))/4) .. ' Secs) = Kill!', ARGB(255, 255, 69, 0)
+	else
+		return 'Cant Kill Yet', ARGB(255, 200, 160, 0)
+	end
+end
 
 local jumpTarget
 local wardLock
@@ -113,7 +386,7 @@ local function putWard(pos0)
 	end
 
 	if slot and slot > 0 then
-	CastSkillShot(slot,pos.x,pos.y,pos.z)
+	CastSkillShot(slot,pos)
 	end
 end
 
@@ -138,277 +411,8 @@ local function GetJumpTarget()
 	end
 	for _,object in pairs(objectList) do
 	  if ValidTarget2(object) and IsInDistance2(200, GetOrigin(object), pos) then
-	   	return object
+	  return object
 	  end
 	end
 	return nil
-end
-
-OnDraw(function(myHero)
-local col = KatarinaMenu.Drawings.color:Value()
-if KatarinaMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),675,1,0,col) end
-if KatarinaMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),375,1,0,col) end
-if KatarinaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),700,1,0,col) end
-if KatarinaMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),550,1,0,col) end
-  if KatarinaMenu.Drawings.Text:Value() then
-	for _, enemy in pairs(GetEnemyHeroes()) do
-		if ValidTarget(enemy) then
-		        local enemyPos = GetOrigin(enemy)
-			local drawpos = WorldToScreen(1,enemyPos.x, enemyPos.y, enemyPos.z)
-			local enemyText, color = GetDrawText(enemy)
-			DrawText(enemyText, 20, drawpos.x, drawpos.y, color)
-		end
-	end
-  end
-end)
-
-local CastingR = false
-
-OnTick(function(myHero)
-
-        mousePos = GetMousePos()
-	maxPos = calcMaxPos(mousePos)
-
-	jumpTarget = GetJumpTarget()
-
-	if not spellLock and wardLock and jumpTarget and IsReady(_E) then
-	CastTargetSpell(jumpTarget, _E)
-	spellLock = GetTickCount()
-	end
-
-	if KatarinaMenu.Combo.WardJumpkey:Value() then
-	wardJump(mousePos)
-	MoveToXYZ(mousePos.x, mousePos.y, mousePos.z)
-	end
-	
-	if wardLock and (wardLock + 500) < GetTickCount()  then
-	wardLock = nil
-	end
-	
-	if spellLock and (spellLock + 500) < GetTickCount()  then
-	spellLock = nil
-	end
-
-	jumpTarget = nil
-	spellObj = nil
-	wardpos = nil
-
-  if IOW:Mode() == "Combo" then
-      local target = GetCurrentTarget()
-	  
-      if IsReady(_Q) and KatarinaMenu.Combo.Q:Value() and ValidTarget(target, 675) then
-      CastTargetSpell(target, _Q)
-      end
-	  
-      if IsReady(_W) and KatarinaMenu.Combo.W:Value() and ValidTarget(target, 375) then
-      CastSpell(_W)
-      end
-	  
-      if IsReady(_E) and KatarinaMenu.Combo.E:Value() and ValidTarget(target, 700) then
-      CastTargetSpell(target, _E)
-      end
-	  
-      if KatarinaMenu.Combo.R:Value() and CanUseSpell(myHero, _Q) ~= READY and CanUseSpell(myHero, _W) ~= READY and CanUseSpell(myHero, _E) ~= READY and CanUseSpell(myHero, _R)  ~= ONCOOLDOWN and ValidTarget(target, 550) and GetCastLevel(myHero,_R) > 0 then
-      IOW.movementEnabled = false
-      IOW.attacksEnabled = false
-      CastSpell(_R)
-      end
-  end
-
-  if IOW:Mode() == "Harass" then
-      local target = GetCurrentTarget()
-	  
-      if IsReady(_Q) and KatarinaMenu.Harass.Q:Value() and ValidTarget(target, 675) then
-      CastTargetSpell(target, _Q)
-      end
-	  
-      if IsReady(_W) and KatarinaMenu.Harass.W:Value() and ValidTarget(target, 375) then
-      CastSpell(_W)
-      end
-	  
-      if IsReady(_E) and KatarinaMenu.Harass.E:Value() and ValidTarget(target, 700) then
-      CastTargetSpell(target, _E)
-      end
-  end
-
-local target = GetCurrentTarget()
-
-if KatarinaMenu.Harass.AutoQ:Value() and ValidTarget(target, 675) and not CastingR then
-CastTargetSpell(target, _Q)
-end
-
-if KatarinaMenu.Harass.AutoW:Value() and ValidTarget(target, 375) and not CastingR then
-CastSpell(_W)
-end
-
-    for i,enemy in pairs(GetEnemyHeroes()) do
-       if KatarinaMenu.Killsteal.SmartKS:Value() then
-				
-		if Ignite and KatarinaMenu.Misc.Autoignite:Value() then
-                  if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 600) then
-                  CastTargetSpell(enemy, Ignite)
-                  end
-                end
-		
-                                if IsReady(_W) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 5 + 35*GetCastLevel(myHero,_W) + 0.25*GetBonusAP(myHero) + 0.60*GetBonusDmg(myHero) + Ludens()) and ValidTarget(enemy, 375) then 
-				CastSpell(_W)
-				
-				elseif IsReady(_Q) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 35 + 25*GetCastLevel(myHero,_Q) + 0.45*GetBonusAP(myHero) + Ludens()) and ValidTarget(enemy, 675) then 
-				CastTargetSpell(enemy, _Q)
-				
-				elseif IsReady(_E) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 10 + 30*GetCastLevel(myHero,_E) + 0.25*GetBonusAP(myHero) + Ludens()) and ValidTarget(enemy, 700) then 
-				CastTargetSpell(enemy, _E)
-				
-				elseif IsReady(_Q) and IsReady(_W) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 35 + 25*GetCastLevel(myHero,_Q) + 0.45*GetBonusAP(myHero) + 5 + 35*GetCastLevel(myHero,_W) + 0.25*GetBonusAP(myHero) + 0.60*GetBonusDmg(myHero) + Ludens()) and ValidTarget(enemy, 375) then 
-				CastSpell(_W)
-                                DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
-		
-				elseif IsReady(_E) and IsReady(_W) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 10 + 30*GetCastLevel(myHero,_E) + 0.25*GetBonusAP(myHero) + 5 + 35*GetCastLevel(myHero,_W) + 0.25*GetBonusAP(myHero) + 0.60*GetBonusDmg(myHero) + Ludens()) and ValidTarget(enemy, 700) then 
-				CastTargetSpell(enemy, _E)
-				DelayAction(function() CastSpell(_W) end, 250)
-				
-				elseif IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 35 + 25*GetCastLevel(myHero,_Q) + 0.45*GetBonusAP(myHero) + 5 + 35*GetCastLevel(myHero,_W) + 0.25*GetBonusAP(myHero) + 0.60*GetBonusDmg(myHero) + 10 + 30*GetCastLevel(myHero,_E) + 0.25*GetBonusAP(myHero) + Ludens()) and ValidTarget(enemy, 700) then 
-				CastTargetSpell(enemy, _E)
-				DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
-				DelayAction(function() CastSpell(_W) end, 250)
-				end
-				
-	                        if KatarinaMenu.Killsteal.UseWards:Value() and ValidTarget(enemy, 1275) and GetDistance(enemy) > 700 and IsReady(_Q) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 35 + 25*GetCastLevel(myHero,_Q) + 0.45*GetBonusAP(myHero) + Ludens()) then
-			        wardJump(GetOrigin(enemy))
-		                DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
-	                        end
-				
-	end
-     end
-
-if KatarinaMenu.Misc.Autolvl:Value() then
-   if KatarinaMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _W, _E, _Q, _Q , _R, _Q, _W, _Q , _W, _R, _W, _W, _E, _E, _R, _E, _E}
-   elseif KatarinaMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _W, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-   elseif KatarinaMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _E, _Q, _E, _R, _E, _E, _W, _W, _R, _W, _W,}
-   end
-DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-end
-
-for i=1, IOW.mobs.maxObjects do
-        local minion = IOW.mobs.objects[i]
-
-        if IOW:Mode() == "LaneClear" then
-		if IsReady(_Q) and KatarinaMenu.Laneclear.Q:Value() and ValidTarget(minion, 675) then
-		CastTargetSpell(minion, _Q)
-		end
-		
-		if IsReady(_W) and KatarinaMenu.Laneclear.W:Value() and ValidTarget(minion, 375) then
-		CastSpell(_W)
-		end
-		
-		if IsReady(_E) and KatarinaMenu.Laneclear.E:Value() and ValidTarget(minion, 700) then
-		CastTargetSpell(minion, _E)
-		end
-	end
-	
-	if IOW:Mode() == "LastHit" then
-		
-	        if IsReady(_W) and KatarinaMenu.Lasthit.W:Value() and ValidTarget(minion, 375) and GetCurrentHP(minion) < CalcDamage(myHero, minion, 0, 5 + 35*GetCastLevel(myHero,_W) + 0.25*GetBonusAP(myHero) + 0.60*GetBonusDmg(myHero) + Ludens()) then
-		CastSpell(_W)
-		elseif IsReady(_Q) and KatarinaMenu.Lasthit.Q:Value() and ValidTarget(minion, 675) and GetCurrentHP(minion) < CalcDamage(myHero, minion, 0, 35 + 25*GetCastLevel(myHero,_Q) + 0.45*GetBonusAP(myHero) + Ludens()) then
-		CastTargetSpell(minion, _Q)
-		elseif IsReady(_E) and KatarinaMenu.Lasthit.E:Value() and ValidTarget(minion, 700) and GetCurrentHP(minion) < CalcDamage(myHero, minion, 0, 10 + 30*GetCastLevel(myHero,_E) + 0.25*GetBonusAP(myHero) + Ludens()) then
-		CastTargetSpell(minion, _E)
-		end
-		
-	end
-
-end
-	
-for _,mob in pairs(minionManager.objects) do
-		
-   if GetTeam(mob) == 300 and IOW:Mode() == "LaneClear" then
-		
-		if IsReady(_Q) and KatarinaMenu.JungleClear.Q:Value() and ValidTarget(mob, 675) then
-		CastTargetSpell(mob, _Q)
-		end
-		
-		if IsReady(_W) and KatarinaMenu.JungleClear.W:Value() and ValidTarget(mob, 375) then
-		CastSpell(_W)
-		end
-		
-	        if IsReady(_E) and KatarinaMenu.JungleClear.E:Value() and ValidTarget(mob, 700) then
-		CastTargetSpell(mob, _E)
-		end
-		
-	end
-end
-
-end)
-
-OnProcessSpell(function(unit,spell)
-  if unit == myHero and spell.name:lower():find("katarinar") then
-  CastingR = true
-  IOW.movementEnabled = false
-  IOW.attacksEnabled = false
-  end
-
-  if unit == myHero and not spell.name:lower():find("katarina") then
-  spellObj = spell
-  wardpos = spellObj.endPos
-  end
-end)
-
-OnCreateObj(function(object)
-  local objType = GetObjectType(object)
-  if objType == Obj_AI_Hero or objType == Obj_AI_Minion then
-  objectList[object] = object
-  end
-end)
-
-OnDeleteObj(function(object)
-  local objType = GetObjectType(object)
-  if objType == Obj_AI_Hero or objType == Obj_AI_Minion then
-  objectList[object] = nil
-  end
-end)
-
-OnUpdateBuff(function(unit,buff)
-  if unit == myHero and buff.Name == "katarinarsound" then
-  CastingR = true
-  IOW.movementEnabled = false
-  IOW.attacksEnabled = false
-  end
-end)
-
-OnRemoveBuff(function(unit,buff)
-  if unit == myHero and buff.Name == "katarinarsound" then
-  CastingR = false
-  IOW.movementEnabled = true
-  IOW.attacksEnabled = true
-  end
-end)
-
-function GetDrawText(enemy)
-	local IgniteDmg = 0
-	if Ignite and IsReady(Ignite) then
-	IgniteDmg = IgniteDmg + 20*GetLevel(myHero)+50
-	end
-	
-	if IsReady(_Q) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 35+25*GetCastLevel(myHero,_Q)+0.45*GetBonusAP(myHero) + Ludens()) then
-		return 'Q = Kill!', ARGB(255, 200, 160, 0)
-	elseif IsReady(_W) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 5+35*GetCastLevel(myHero,_W)+0.25*GetBonusAP(myHero)+0.6*GetBonusDmg(myHero) + Ludens()) then
-		return 'W = Kill!', ARGB(255, 200, 160, 0)
-	elseif IsReady(_E) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 10+30*GetCastLevel(myHero,_E)+0.25*GetBonusAP(myHero) + Ludens()) then
-		return 'E = Kill!', ARGB(255, 200, 160, 0)
-	elseif IsReady(_Q) and IsReady(_W) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 35+25*GetCastLevel(myHero,_Q)+0.45*GetBonusAP(myHero) + 5+35*GetCastLevel(myHero,_W)+0.25*GetBonusAP(myHero)+0.6*GetBonusDmg(myHero) + Ludens()) then
-		return 'W + Q = Kill!', ARGB(255, 200, 160, 0)
-	elseif IsReady(_W) and IsReady(_E) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 5+35*GetCastLevel(myHero,_W)+0.25*GetBonusAP(myHero)+0.6*GetBonusDmg(myHero) + 10+30*GetCastLevel(myHero,_E)+0.25*GetBonusAP(myHero) + Ludens()) then
-		return 'E + W = Kill!', ARGB(255, 200, 160, 0)
-	elseif IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 35+25*GetCastLevel(myHero,_Q)+0.45*GetBonusAP(myHero) + 5+35*GetCastLevel(myHero,_W)+0.25*GetBonusAP(myHero)+0.6*GetBonusDmg(myHero) + 10+30*GetCastLevel(myHero,_E)+0.25*GetBonusAP(myHero) + Ludens()) then
-		return 'Q + W + E = Kill!', ARGB(255, 200, 160, 0)
-	elseif IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 35+25*GetCastLevel(myHero,_Q)+0.45*GetBonusAP(myHero) + 15*GetCastLevel(myHero,_Q)+0.15*GetBonusAP(myHero) + 5+35*GetCastLevel(myHero,_W)+0.25*GetBonusAP(myHero)+0.6*GetBonusDmg(myHero) + 10+30*GetCastLevel(myHero,_E)+0.25*GetBonusAP(myHero) + Ludens()) then
-		return '(Q + Passive) + W +E = Kill!', ARGB(255, 200, 160, 0)
-	elseif IgniteDmg > 0 and IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < IgniteDmg + CalcDamage(myHero, enemy, 0, 35+25*GetCastLevel(myHero,_Q)+0.45*GetBonusAP(myHero) + 15*GetCastLevel(myHero,_Q)+0.15*GetBonusAP(myHero) + 5+35*GetCastLevel(myHero,_W)+0.25*GetBonusAP(myHero)+0.6*GetBonusDmg(myHero) + 10+30*GetCastLevel(myHero,_E)+0.25*GetBonusAP(myHero) + Ludens()) then
-		return '(Q + Passive) + W + E + Ignite = Kill!', ARGB(255, 200, 160, 0)
-	elseif IsReady(_Q) and IsReady(_W) and IsReady(_E) and IsReady(_R) and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 35+25*GetCastLevel(myHero,_Q)+0.45*GetBonusAP(myHero)) + CalcDamage(myHero, enemy, 0, 5+35*GetCastLevel(myHero,_W)+0.25*GetBonusAP(myHero)+0.6*GetBonusDmg(myHero)) + CalcDamage(myHero, enemy, 0, 10+30*GetCastLevel(myHero,_E)+0.25*GetBonusAP(myHero)) + (CalcDamage(myHero, enemy, 0, 15+20*GetCastLevel(myHero,_R)+0.25*GetBonusAP(myHero)+0.375*GetBonusDmg(myHero)) *10 + Ludens()) then
-		return 'Q + W + E + Ult ('.. string.format('%4.1f', ((GetCurrentHP(enemy) -  CalcDamage(myHero, enemy, 0, 35+25*GetCastLevel(myHero,_Q)+0.45*GetBonusAP(myHero)) - CalcDamage(myHero, enemy, 0, 5+35*GetCastLevel(myHero,_W)+0.25*GetBonusAP(myHero)+0.6*GetBonusDmg(myHero)) - CalcDamage(myHero, enemy, 0, 10+30*GetCastLevel(myHero,_E)+0.25*GetBonusAP(myHero))) / CalcDamage(myHero, enemy, 0, 15+20*GetCastLevel(myHero,_R)+0.25*GetBonusAP(myHero)+0.375*GetBonusDmg(myHero)))/4) .. ' Secs) = Kill!', ARGB(255, 255, 69, 0)
-	else
-		return 'Cant Kill Yet', ARGB(255, 200, 160, 0)
-	end
 end
