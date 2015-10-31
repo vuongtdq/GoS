@@ -51,7 +51,7 @@ OnProcessSpell(function(unit,spell)
       end
     end
 	
-    if spellName == "MockingShout" and GetDistance(spell) <= 850 then
+    if spell.name == "MockingShout" and GetDistance(spell) <= 850 then
       IOW.movementEnabled = false
       local DodgeThat = Vector(myHero)+(Vector(myHero)-Vector(spell)):normalize()*(-100)
       MoveToXYZ(DodgeThat)
