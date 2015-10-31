@@ -1,6 +1,10 @@
 local Supported = {["Cassiopeia"], ["Tryndamere"]}
 
-if not Supported[GetObjectName(enemy)] then return end
+DelayAction(function()
+  for _,k in pairs(GetEnemyHeroes()) do
+  if not Supported[GetObjectName(k)] then return end
+  end
+end, 1)
 
 LastMove = 0
 Move = false
