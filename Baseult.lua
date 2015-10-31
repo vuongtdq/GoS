@@ -45,12 +45,13 @@ local SpellData = {
         } 
 }
 
+local BaseultMenu = MenuConfig("Baseult", "Baseult")
+BaseultMenu:Boolean("RT", "RecallTracker", true)
+
 if not SpellData[GetObjectName(myHero)] then return end
 PrintChat("Baseult for "..GetObjectName(myHero).." loaded")
 	
-local BaseultMenu = MenuConfig("Baseult", "Baseult")
 BaseultMenu:Boolean("Enabled", "Enabled", true)
-BaseultMenu:Boolean("RT", "RecallTracker", true)
 
 local Isrecalling = {}
 
@@ -58,16 +59,43 @@ local Delay = SpellData[GetObjectName(myHero)].Delay
 local MissileSpeed = SpellData[GetObjectName(myHero)].MissileSpeed
 local Damage = SpellData[GetObjectName(myHero)].Damage
 
-OnProcessRecall(function(unit,recall)
-	if CanUseSpell(myHero, _R) == READY and BaseultMenu.Enabled:Value() and GetTeam(unit) ~= GetTeam(myHero) then
-		if Damage(unit) > GetCurrentHP(unit)+GetDmgShield(unit)+GetHPRegen(unit)*8 then
-	                if (recall.totalTime-recall.passedTime) > Delay + (GetDistance(Base) * 1000 / MissileSpeed) then
-				DelayAction(function() CastSkillShot(_R, Base.x, Base.y, Base.z) end, (recall.totalTime-recall.passedTime)- (Delay + (GetDistance(Base) * 1000 / MissileSpeed)))
-			end
+OnDraw(function()
+
+if BaseultMenu.RT:Value() then
+	local i = 0
+	for Champ, recall in pairs(Isrecalling) do
+	  local percent=math.floor(GetCurrentHP(recall.Champ)/GetMaxHP(recall.Champ)*100)
+	  local leftTime = recall.starttime - GetTickCount() + recall.info.totalTime
+	  if leftTime<0 then leftTime = 0 end
+	  FillRect(400,500+18*i-2,168,18,0x50000000)
+	  if i>0 then FillRect(400,500+18*i-2,168,1,0xC0000000) end
+  	  DrawText(string.format("%s (%d%%)", Champ, percent), 14, 402, 500+18*i, percentToRGB(percent))
+	    if recall.info.isStart then
+	    DrawText(string.format("%.1fs", leftTime/1000), 14, 515, 500+18*i, percentToRGB(percent))
+	    FillRect(569,500+18*i, 300*leftTime/recall.info.totalTime,14,0x80000000)
+	    else
+ 	      if recall.killtime == nil then
+	        if recall.info.isFinish and not recall.info.isStart then
+		recall.result = "finished"
+		recall.killtime =  GetTickCount()+2000
+		elseif not recall.info.isFinish then
+	 	recall.result = "cancelled"
+	        recall.killtime =  GetTickCount()+2000
 		end
+              end
+	      DrawText(recall.result, 14, 515, 500+18*i, percentToRGB(percent))
+	    end
+	    if recall.killtime~=nil and GetTickCount() > recall.killtime then
+	    Isrecalling[Champ] = nil
+	    end
+	    i=i+1
+	  end
         end
 
-        if GetTeam(myHero) ~= GetTeam(unit) then
+end)
+
+OnProcessRecall(function(unit,recall)
+	if GetTeam(myHero) ~= GetTeam(unit) then
 	rec = {}
 	rec.Champ = unit
 	rec.info = recall
@@ -75,48 +103,16 @@ OnProcessRecall(function(unit,recall)
 	rec.killtime = nil
 	rec.result = nil
 	Isrecalling[GetObjectName(unit)] = rec
-	end
-end)
-
-OnDraw(function()
-
-if BaseultMenu.RT:Value() then
-	local i = 0
-	for Champ, recall in pairs(Isrecalling) do
-		local percent=math.floor(GetCurrentHP(recall.Champ)/GetMaxHP(recall.Champ)*100)
-		local leftTime = recall.starttime - GetTickCount() + recall.info.totalTime
 		
-		if leftTime<0 then leftTime = 0 end
-		FillRect(400,500+18*i-2,168,18,0x50000000)
-		if i>0 then FillRect(400,500+18*i-2,168,1,0xC0000000) end
-		
-		DrawText(string.format("%s (%d%%)", Champ, percent), 14, 402, 500+18*i, percentToRGB(percent))
-		
-		if recall.info.isStart then
-			DrawText(string.format("%.1fs", leftTime/1000), 14, 515, 500+18*i, percentToRGB(percent))
-			FillRect(569,500+18*i, 300*leftTime/recall.info.totalTime,14,0x80000000)
-		else
-			if recall.killtime == nil then
-				if recall.info.isFinish and not recall.info.isStart then
-					recall.result = "finished"
-					recall.killtime =  GetTickCount()+2000
-				elseif not recall.info.isFinish then
-					recall.result = "cancelled"
-					recall.killtime =  GetTickCount()+2000
-				end
-				
-			end
-			DrawText(recall.result, 14, 515, 500+18*i, percentToRGB(percent))
-		end
-		
-		if recall.killtime~=nil and GetTickCount() > recall.killtime then
-			Isrecalling[Champ] = nil
-		end
-		
-		i=i+1
-	end
-end
-
+	  if SpellData[GetObjectName(myHero)] then
+	    if CanUseSpell(myHero, _R) == READY and BaseultMenu.Enabled:Value() and Damage(unit) > GetCurrentHP(unit)+GetDmgShield(unit)+GetHPRegen(unit)*8 then
+	      if (recall.totalTime-recall.passedTime) > Delay + (GetDistance(Base) * 1000 / MissileSpeed) then
+	      DelayAction(function() CastSkillShot(_R,Base) end, (recall.totalTime-recall.passedTime)- (Delay + (GetDistance(Base) * 1000 / MissileSpeed)))
+    	      end
+	    end
+          end
+  
+        end
 end)
 
 function percentToRGB(percent) 
