@@ -31,9 +31,10 @@ ViktorMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 ViktorMenu.Drawings:Boolean("W", "Draw W Range", true)
 ViktorMenu.Drawings:Boolean("E", "Draw E Range", true)
 ViktorMenu.Drawings:Boolean("R", "Draw R Range", true)
+ViktorMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 OnDraw(function(myHero)
-local col = 
+local col = ViktorMenu.Drawings.color:Value()
 if ViktorMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),700,1,0,col) end
 if ViktorMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),700,1,0,col) end
 if ViktorMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1225,1,0,col) end
