@@ -52,11 +52,7 @@ local BaseultMenu = MenuConfig("Baseult", "Baseult")
 BaseultMenu:Boolean("Enabled", "Enabled", true)
 BaseultMenu:Boolean("RT", "RecallTracker", true)
 
-local recalling = {}
-local x = 5
-local y = 500
-local barWidth = 250
-local rowHeight = 18
+local Isrecalling = {}
 
 local Delay = SpellData[GetObjectName(myHero)].Delay
 local MissileSpeed = SpellData[GetObjectName(myHero)].MissileSpeed
@@ -78,7 +74,7 @@ OnProcessRecall(function(unit,recall)
 	rec.starttime = GetTickCount()
 	rec.killtime = nil
 	rec.result = nil
-	recalling[GetObjectName(unit)] = rec
+	Isrecalling[GetObjectName(unit)] = rec
 	end
 end)
 
@@ -86,19 +82,19 @@ OnDraw(function()
 
 if BaseultMenu.RT:Value() then
 	local i = 0
-	for Champ, recall in pairs(recalling) do
+	for Champ, recall in pairs(Isrecalling) do
 		local percent=math.floor(GetCurrentHP(recall.Champ)/GetMaxHP(recall.Champ)*100)
 		local leftTime = recall.starttime - GetTickCount() + recall.info.totalTime
 		
 		if leftTime<0 then leftTime = 0 end
-		FillRect(x,y+rowHeight*i-2,168,rowHeight,0x50000000)
-		if i>0 then FillRect(x,y+rowHeight*i-2,168,1,0xC0000000) end
+		FillRect(400,500+18*i-2,168,18,0x50000000)
+		if i>0 then FillRect(400,500+18*i-2,168,1,0xC0000000) end
 		
-		DrawText(string.format("%s (%d%%)", Champ, percent), 14, x+2, y+rowHeight*i, percentToRGB(percent))
+		DrawText(string.format("%s (%d%%)", Champ, percent), 14, 402, 500+18*i, percentToRGB(percent))
 		
 		if recall.info.isStart then
-			DrawText(string.format("%.1fs", leftTime/1000), 14, x+115, y+rowHeight*i, percentToRGB(percent))
-			FillRect(x+169,y+rowHeight*i, barWidth*leftTime/recall.info.totalTime,14,0x80000000)
+			DrawText(string.format("%.1fs", leftTime/1000), 14, 515, 500+18*i, percentToRGB(percent))
+			FillRect(569,500+18*i, 300*leftTime/recall.info.totalTime,14,0x80000000)
 		else
 			if recall.killtime == nil then
 				if recall.info.isFinish and not recall.info.isStart then
@@ -110,11 +106,11 @@ if BaseultMenu.RT:Value() then
 				end
 				
 			end
-			DrawText(recall.result, 14, x+115, y+rowHeight*i, percentToRGB(percent))
+			DrawText(recall.result, 14, 515, 500+18*i, percentToRGB(percent))
 		end
 		
 		if recall.killtime~=nil and GetTickCount() > recall.killtime then
-			recalling[Champ] = nil
+			Isrecalling[Champ] = nil
 		end
 		
 		i=i+1
