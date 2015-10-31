@@ -48,11 +48,11 @@ local SpellData = {
 local BaseultMenu = MenuConfig("Baseult", "Baseult")
 BaseultMenu:Boolean("RT", "RecallTracker", true)
 
-if not SpellData[GetObjectName(myHero)] then return end
-PrintChat("Baseult for "..GetObjectName(myHero).." loaded")
-	
+if SpellData[GetObjectName(myHero)] then 
 BaseultMenu:Boolean("Enabled", "Enabled", true)
-
+PrintChat("Baseult for "..GetObjectName(myHero).." loaded") 
+end
+	
 local Isrecalling = {}
 
 local Delay = SpellData[GetObjectName(myHero)].Delay
