@@ -65,7 +65,7 @@ OnTick(function(myHero)
 	
 	if CanUseSpell(myHero, _Q) == READY and Q2Pred.HitChance == 1 and GotBuff(myHero, "ryzepassivestack") > 3 or GotBuff(myHero, "ryzepassivecharged") > 0 and RyzeMenu.Combo.Q:Value() and ValidTarget(target, 900) then
 	CastSkillShot(_Q,Q2Pred.PredPos.x,Q2Pred.PredPos.y,Q2Pred.PredPos.z)
-        elseif CanUseSpell(myHero, _Q) == READY and QPred.HitChance == 1 and RyzeMenu.Combo.Q:Value() and ValidTarget(target, 900) then
+        elseif CanUseSpell(myHero, _Q) == READY and RyzeMenu.Combo.Q:Value() and ValidTarget(target, 900) then
         Cast(_Q,target)
 	end				
 		
