@@ -69,6 +69,99 @@ if KatarinaMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),550,1,0,col) end
   end
 end)
 
+local jumpTarget
+local wardLock
+local mousePos
+local wardpos
+local maxPos 
+local spellObj
+local objectList = {}
+
+local wardItems = {        
+        { id = 3340, spellName = "TrinketTotemLvl1"},
+        { id = 3350, spellName = "TrinketTotemLvl2"},
+        { id = 3361, spellName = "TrinketTotemLvl3"},
+        { id = 3362, spellName = "TrinketTotemLvl3B"},
+        { id = 2045, spellName = "ItemGhostWard"},
+        { id = 2049, spellName = "ItemGhostWard"},
+        { id = 2050, spellName = "ItemMiniWard"},
+        { id = 2044, spellName = "sightward"},
+        { id = 2043, spellName = "VisionWard"}
+}
+
+local function IsInDistance2(r, p1, p2, fast)
+		local fast = fast or false
+		if fast then
+		local p1y = p1.z or p1.y
+		local p2y = p2.z or p2.y
+		return (p1.x + r >= p2.x) and (p1.x - r <= p2.x) and (p1y + r >= p2y) and (p1y - r <= p2y)
+		else
+    	return GetDistanceSqr(p1, p2) < r*r
+    end
+end
+
+local function calcMaxPos(pos)
+	local origin = GetOrigin(myHero)
+	local vectorx = pos.x-origin.x
+	local vectory = pos.y-origin.y
+	local vectorz = pos.z-origin.z
+	local dist= math.sqrt(vectorx^2+vectory^2+vectorz^2)
+	return {x = origin.x + 600 * vectorx / dist ,y = origin.y + 600 * vectory / dist, z = origin.z + 600 * vectorz / dist}
+end
+
+local function ValidTarget2( object )
+	local objType = GetObjectType(object)
+	return (objType == Obj_AI_Hero or objType == Obj_AI_Minion) and IsVisible(object)
+end
+
+local findWardSlot = function ()
+	local slot = 0
+	for i,wardItem in pairs(wardItems) do
+	slot = GetItemSlot(myHero,wardItem.id)
+	if slot > 0 and IsReady(slot) then return slot end
+	end
+end
+
+local function putWard(pos0)	
+	local slot = findWardSlot()
+
+	local pos = pos0
+	if not IsInDistance2(600, pos) then
+	pos = calcMaxPos(pos)
+	end
+
+	if slot and slot > 0 then
+	CastSkillShot(slot,pos)
+	end
+end
+
+local spellLock = nil
+
+function wardJump( pos )
+	if not spellLock and IsReady(_E) then
+		if jumpTarget then
+		CastTargetSpell(jumpTarget, _E)
+		spellLock = GetTickCount()
+		elseif not wardLock then
+		wardLock = GetTickCount()
+		putWard(pos)
+		end
+	end
+end
+
+local function GetJumpTarget()
+	local pos = mousePos
+	if not IsInDistance2(600, mousePos, GetOrigin(myHero)) then
+	pos = maxPos
+	end
+	for _,object in pairs(objectList) do
+	  if ValidTarget2(object) and IsInDistance2(200, GetOrigin(object), pos) then
+	  return object
+	  end
+	end
+	return nil
+end
+
 local CastingR = false
 local lastlevel = GetLevel(myHero)-1
 
@@ -322,97 +415,4 @@ function GetDrawText(enemy)
 	else
 		return 'Cant Kill Yet', ARGB(255, 200, 160, 0)
 	end
-end
-
-local jumpTarget
-local wardLock
-local mousePos
-local wardpos
-local maxPos 
-local spellObj
-local objectList = {}
-
-local wardItems = {        
-        { id = 3340, spellName = "TrinketTotemLvl1"},
-        { id = 3350, spellName = "TrinketTotemLvl2"},
-        { id = 3361, spellName = "TrinketTotemLvl3"},
-        { id = 3362, spellName = "TrinketTotemLvl3B"},
-        { id = 2045, spellName = "ItemGhostWard"},
-        { id = 2049, spellName = "ItemGhostWard"},
-        { id = 2050, spellName = "ItemMiniWard"},
-        { id = 2044, spellName = "sightward"},
-        { id = 2043, spellName = "VisionWard"}
-}
-
-local function IsInDistance2(r, p1, p2, fast)
-		local fast = fast or false
-		if fast then
-		local p1y = p1.z or p1.y
-		local p2y = p2.z or p2.y
-		return (p1.x + r >= p2.x) and (p1.x - r <= p2.x) and (p1y + r >= p2y) and (p1y - r <= p2y)
-		else
-    	return GetDistanceSqr(p1, p2) < r*r
-    end
-end
-
-local function calcMaxPos(pos)
-	local origin = GetOrigin(myHero)
-	local vectorx = pos.x-origin.x
-	local vectory = pos.y-origin.y
-	local vectorz = pos.z-origin.z
-	local dist= math.sqrt(vectorx^2+vectory^2+vectorz^2)
-	return {x = origin.x + 600 * vectorx / dist ,y = origin.y + 600 * vectory / dist, z = origin.z + 600 * vectorz / dist}
-end
-
-local function ValidTarget2( object )
-	local objType = GetObjectType(object)
-	return (objType == Obj_AI_Hero or objType == Obj_AI_Minion) and IsVisible(object)
-end
-
-local findWardSlot = function ()
-	local slot = 0
-	for i,wardItem in pairs(wardItems) do
-	slot = GetItemSlot(myHero,wardItem.id)
-	if slot > 0 and IsReady(slot) then return slot end
-	end
-end
-
-local function putWard(pos0)	
-	local slot = findWardSlot()
-
-	local pos = pos0
-	if not IsInDistance2(600, pos) then
-	pos = calcMaxPos(pos)
-	end
-
-	if slot and slot > 0 then
-	CastSkillShot(slot,pos)
-	end
-end
-
-local spellLock = nil
-
-function wardJump( pos )
-	if not spellLock and IsReady(_E) then
-		if jumpTarget then
-		CastTargetSpell(jumpTarget, _E)
-		spellLock = GetTickCount()
-		elseif not wardLock then
-		wardLock = GetTickCount()
-		putWard(pos)
-		end
-	end
-end
-
-local function GetJumpTarget()
-	local pos = mousePos
-	if not IsInDistance2(600, mousePos, GetOrigin(myHero)) then
-	pos = maxPos
-	end
-	for _,object in pairs(objectList) do
-	  if ValidTarget2(object) and IsInDistance2(200, GetOrigin(object), pos) then
-	  return object
-	  end
-	end
-	return nil
 end
