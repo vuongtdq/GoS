@@ -15,6 +15,7 @@ PrintChat(" >> TurnAround Script loaded! <<")
 
 OnTick(function(myHero)
   if Move = true and GetTickCount() - LastMove > 850 then
+  IOW.movementEnabled = true
   MoveToXYZ(lastRightClick)
   Move = false
   end
@@ -41,6 +42,7 @@ OnProcessSpell(function(unit,spell)
   if GetTeam(unit) ~= GetTeam(myHero) then 
   
     if spell.name == "CassiopeiaPetrifyingGaze" and GetDistance(spell) <= 750 then 
+      IOW.movementEnabled = false
       local DodgeThat = Vector(myHero)+(Vector(myHero)-Vector(spell)):normalize()*100
       MoveToXYZ(DodgeThat)
       if lastRightClick.x ~= nil then
@@ -50,6 +52,7 @@ OnProcessSpell(function(unit,spell)
     end
 	
     if spellName == "MockingShout" and GetDistance(spell) <= 850 then
+      IOW.movementEnabled = false
       local DodgeThat = Vector(myHero)+(Vector(myHero)-Vector(spell)):normalize()*(-100)
       MoveToXYZ(DodgeThat)
       if lastRightClick.x ~= nil then
