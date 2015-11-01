@@ -1,5 +1,7 @@
 local Supported = {["Cassiopeia"], ["Tryndamere"]}
 
+if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
+
 DelayAction(function()
   for _,k in pairs(GetEnemyHeroes()) do
   if not Supported[GetObjectName(k)] then return end
