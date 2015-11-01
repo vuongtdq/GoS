@@ -112,7 +112,7 @@ OnTick(function(myHero)
 	   
      if IsReady(_R) and IsDead(target) and EkkoMenu.Combo.R:Value() then
        for _,turret in pairs(Turrets) do
-         if GetCurrentHP(myHero) < IOW:GetDmg(turret, myHero) then
+         if GetCurrentHP(myHero) < IOW:GetDmg(turret, myHero) and IsUnderTower(myHero) then
 	 CastSpell(_R)
 	 end
        end
@@ -184,7 +184,7 @@ OnTick(function(myHero)
      elseif IsReady(_E) and ValidTarget(enemy, 800) and EkkoMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
      CastSkillShot(_E,GetOrigin(enemy))
      DelayAction(function() AttackUnit(enemy) end, 250)
-     elseif twin and IsReady(_R) and ValidTarget(enemy, 20000) and EkkoMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
+     elseif twin and IsReady(_R) and GetDistance(twin, target) <= 400 and ValidTarget(enemy, 20000) and EkkoMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
      CastSpell(_R)
      end
 
