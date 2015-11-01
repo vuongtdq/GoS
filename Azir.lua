@@ -141,7 +141,14 @@ OnTick(function(myHero)
           CastTargetSpell(enemy, Ignite)
           end
         end
-        
+		
+	if ValidTarget(enemy, 520) then
+	  local RThrowPos = GetMEC(600,GetEnemyHeroes())
+	  if IsReady(_R) and AzirMenu.Misc.AutoUlt.Enabled:Value() and RThrowPos.count >= AzirMenu.Misc.AutoUlt.Push:Value() then
+	  CastSkillShot(_R, RThrowPos)
+	  end
+        end
+		
         for _,Soldier in pairs(AzirSoldiers) do
 	  if IsReady(_Q) and ValidTarget(enemy, 950) and AzirMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
 	  Cast(_Q,enemy,Soldier)
@@ -157,10 +164,7 @@ OnTick(function(myHero)
 
    end
 	
-	local RThrowPos = GetMEC(600,GetEnemyHeroes()) 
-	if IsReady(_R) and AzirMenu.Misc.AutoUlt.Enabled:Value() and RThrowPos.count >= AzirMenu.Misc.AutoUlt.Push:Value() then
-	CastSkillShot(_R, RThrowPos)
-	end
+	
 	
    if AzirMenu.Combo.Flee:Value() then
 	
@@ -182,28 +186,28 @@ OnTick(function(myHero)
 	
    if AzirMenu.Combo.Insec:Value() then
 	
-     local enemy = ClosestEnemy(mousePos())
-     if not enemy or GetDistance(enemy) > 750 then
-     MoveToXYZ(mousePos())
-     return 
-     end
-
-     if table.getn(AzirSoldiers) < 1 and IsReady(_W) then
-     CastSkillShot(_W,myHeroPos())
-     end
+     local toInsec = ClosestEnemy(GetMousePos())
+     MoveToXYZ(GetMousePos())
+     if toInsec and GetDistance(toInsec) < 750 then
+     	
+       if table.getn(AzirSoldiers) < 1 and IsReady(_W) then
+       CastSkillShot(_W,myHeroPos())
+       end
      
-     for _,Soldier in pairs(AzirSoldiers) do
-       local movePos = myHeroPos() + (Vector(enemy) - myHeroPos()):normalized() * 950
-       if movePos then
-       CastSkillShot(_Q, movePos.x, movePos.y, movePos.z)
-       DelayAction(function() CastTargetSpell(Soldier, _E) end, 250)
-         if GetDistance(enemy) < 250 then
-         CastSkillShot(_R,GetOrigin(enemy))
-         end
+       for _,Soldier in pairs(AzirSoldiers) do
+         local movePos = myHeroPos() + (Vector(toInsec) - myHeroPos()):normalized() * 950
+         if movePos then
+         CastSkillShot(_Q, movePos.x, movePos.y, movePos.z)
+         DelayAction(function() CastTargetSpell(Soldier, _E) end, 250)
+	 end
+       end
+	 
+       if GetDistance(toInsec) < 250 then
+       CastSkillShot(_R,GetOrigin(toInsec))
        end
      end
-   
-    end
+     
+   end
 	
 if AzirMenu.Misc.Autolvl:Value() then
   if GetLevel(myHero) > lastlevel then
