@@ -179,8 +179,8 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			elseif spellname == "R" then addmg = 100*Rlvl+75+1.1*(GetBonusDmg(Source)+GetBaseDamage(Source)) --xhit (max 2 hits), deals 8% less damage for each unit hit, down to a minimum of 40%
 			end
 		elseif GetObjectName(Source) == "Ekko" then
-		    if spellname == "P" then apdmg = 10+10*GetLevel(Source)+.8*GetBonusAP(Source)
-			elseif spellname == "Q" then apdmg = (15*Qlvl+45+.1*GetBonusAP(Source))+(25*Qlvl+35+.6*GetBonusAP(Source))
+		        if spellname == "P" then apdmg = 10+10*GetLevel(Source)+.8*GetBonusAP(Source)
+			elseif spellname == "Q" then apdmg = math.max((15*Qlvl+45+.1*GetBonusAP(Source))*stagedmg1,(25*Qlvl+35+.6*GetBonusAP(Source))*stagedmg2,(40*Qlvl+80+.7*GetBonusAP(Source))*stagedmg3) -- Stage 1 : First Cast, Stage 2 : Q Back, Stage 3 : Max Damage
 			elseif spellname == "E" then apdmg = 30*Elvl+20+.2*GetBonusAP(Source)
 			elseif spellname == "R" then apdmg = 150*Rlvl+50+1.3*GetBonusAP(Source)
 			end
