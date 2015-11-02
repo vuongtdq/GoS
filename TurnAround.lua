@@ -1,4 +1,4 @@
-local Supported = {["Cassiopeia"], ["Tryndamere"]}
+local Supported = {["Cassiopeia"] = true, ["Tryndamere"] = true}
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 
