@@ -114,9 +114,7 @@ OnTick(function(myHero)
 	
 	if GetCastName(myHero, _W) ~= "SyndraW" and SyndraMenu.Combo.W:Value() and ValidTarget(target, 925) then
         Cast(_W,target)
-        end
-	  
-        if IsReady(_W) and GetCastName(myHero, _W) == "SyndraW" and ValidTarget(target, 925) and SyndraMenu.Combo.W:Value() then
+        elseif IsReady(_W) and GetCastName(myHero, _W) == "SyndraW" and ValidTarget(target, 925) and SyndraMenu.Combo.W:Value() then
           for _,Ball in pairs(Balls) do
             if GetDistance(myHero, Ball) <= 925 then
             CastTargetSpell(Ball, _W)
@@ -127,7 +125,6 @@ OnTick(function(myHero)
 	    CastTargetSpell(mobs,_W)
 	    end
 	  end
-			
 	end
 
   end
@@ -154,21 +151,17 @@ OnTick(function(myHero)
 	
 	if GetCastName(myHero, _W) ~= "SyndraW" and SyndraMenu.Harass.W:Value() and ValidTarget(target, 925) then
         Cast(_W,target)
-        end
-	  
-        if IsReady(_W) and GetCastName(myHero, _W) == "SyndraW" and ValidTarget(target, 925) and SyndraMenu.Harass.W:Value() then
+        elseif IsReady(_W) and GetCastName(myHero, _W) == "SyndraW" and ValidTarget(target, 925) and SyndraMenu.Harass.W:Value() then
           for _,Ball in pairs(Balls) do
             if GetDistance(myHero, Ball) <= 925 then
             CastTargetSpell(Ball, _W)
             end
           end	  
-	    
           for i,mobs in pairs(minionManager.objects) do
 	    if GetDistance(mobs) <= 925 then
 	    CastTargetSpell(mobs,_W)
 	    end
 	  end
-
         end
 
    end
@@ -228,6 +221,7 @@ OnTick(function(myHero)
          end
        end
        
+      end
      
      for _,mobs in pairs(minionManager.objects) do
        if GetTeam(mobs) == 300 then
