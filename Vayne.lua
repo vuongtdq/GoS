@@ -147,7 +147,7 @@ OnTick(function(myHero)
             end
 	  end
         
-	if IsReady(_E) and VayneMenu.Combo.E.EMenu[GetObjectName(enemy).."Pleb"]:Value() and ValidTarget(enemy, 710) then
+	if IsReady(_E) and VayneMenu.Combo.E.Enabled:Value() and VayneMenu.Combo.E.EMenu[GetObjectName(enemy).."Pleb"]:Value() and ValidTarget(enemy, 710) then
         StunThisPleb(enemy)
         end
 
@@ -155,9 +155,6 @@ OnTick(function(myHero)
         CastTargetSpell(enemy, _E)
         end
 
-        if IsReady(_E) and ValidTarget(enemy, 710) and VayneMenu.Combo.E.Enabled:Value() and IOW:Mode() == "Combo" and VayneMenu.Combo.E.stuntarget:Value() == false then
-        StunThisPleb(enemy)
-        end
    end
 
         if VayneMenu.Misc.WallTumble1:Value() and myHeroPos().x == 6962 and myHeroPos().z == 8952 then
