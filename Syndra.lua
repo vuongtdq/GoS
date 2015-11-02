@@ -184,7 +184,7 @@ OnTick(function(myHero)
      Cast(_Q,enemy)
      end
 
-     if IsReady(_W) and GetCastName(myHero,_W) ~= "SyndraW" and ValidTarget(enemy, 925) and SyndraMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("W",enemy) then 
+     if GetCastName(myHero,_W) ~= "SyndraW" and ValidTarget(enemy, 925) and SyndraMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("W",enemy) then 
      Cast(_W,enemy)
      end
 
@@ -203,7 +203,7 @@ OnTick(function(myHero)
          end
        end
        
-       if IsReady(_W) and GetCastName(myHero,_W) ~= "SyndraW" and SyndraMenu.LaneClear.W:Value() then
+       if GetCastName(myHero,_W) ~= "SyndraW" and SyndraMenu.LaneClear.W:Value() then
          local BestPos, BestHit = GetFarmPosition(925, 190)
          if BestPos and BestHit > 0 then 
          CastSkillShot(_W,BestPos)
@@ -229,7 +229,7 @@ OnTick(function(myHero)
 	 CastSkillShot(_Q,GetOrigin(mobs))
 	 end
 		
-	 if IsReady(_W) and GetCastName(myHero, _W) ~= "SyndraW" and SyndraMenu.JungleClear.W:Value() and ValidTarget(mobs, 925) then
+	 if GetCastName(myHero, _W) ~= "SyndraW" and SyndraMenu.JungleClear.W:Value() and ValidTarget(mobs, 925) then
          CastSkillShot(_W,GetOrigin(mobs))
          end
 	  
