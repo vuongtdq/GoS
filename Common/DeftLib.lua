@@ -56,6 +56,10 @@ SpellData = {
   	        [_W] = { Name = "SyndraW", ProjectileName = "", Range = 925, Speed = math.huge, Delay = 250, Width = 190, collision = false, aoe = false, type = "circular", IsDangerous = false},
   	        [_E] = { Name = "SyndraE", ProjectileName = "", Range = 1250, Speed = 2500, Delay = 250, Width = 45, collision = false, aoe = false, type = "cone", IsDangerous = false}
        }
+   ["Viktor"] = {
+  	        [_W] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 500, Width = 300, collision = false, aoe = false, type = "circular", IsDangerous = false},
+  	        [_R] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 250, Width = 450, collision = false, aoe = false, type = "circular", IsDangerous = false}
+       }
 }
 
 CHANELLING_SPELLS = {
