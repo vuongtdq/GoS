@@ -13,12 +13,12 @@ VayneMenu.Combo.Q:Boolean("KeepInvis", "Don't AA While Stealthed", true)
 VayneMenu.Combo.Q:Slider("KeepInvisdis", "Only if Distance <", 230, 0, 550, 1)
 
 VayneMenu.Combo:Menu("E", "Condemn (E)")
-VayneMenu.Combo.E:Menu("EMenu", "AutoStun")
-VayneMenu.Combo.E.EMenu:Boolean("Enabled", "Enabled", true)
+VayneMenu.Combo.E:Boolean("Enabled", "Enabled", true)
 VayneMenu.Combo.E:Slider("pushdistance", "E Push Distance", 400, 350, 490, 1)
 VayneMenu.Combo.E:Boolean("stuntarget", "Stun Current Target Only", false)
 VayneMenu.Combo.E:Boolean("lowhp", "Peel with E when low health", true)
 VayneMenu.Combo.E:Boolean("AutoE", "Auto Wall Condemn", true)
+VayneMenu.Combo.E:Menu("EMenu", "AutoStun")
 
 VayneMenu.Combo:Menu("R", "Final Hour (R)")
 VayneMenu.Combo.R:Boolean("Enabled", "Enabled", true)
@@ -99,11 +99,11 @@ OnTick(function(myHero)
           end
         end
 
-	if GetItemSlot(myHero,3140) > 0 and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
+	if GetItemSlot(myHero,3140) > 0 and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
         CastTargetSpell(myHero, GetItemSlot(myHero,3140))
         end
 
-        if GetItemSlot(myHero,3139) > 0 and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
+        if GetItemSlot(myHero,3139) > 0 and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
         CastTargetSpell(myHero, GetItemSlot(myHero,3139))
         end
 		
