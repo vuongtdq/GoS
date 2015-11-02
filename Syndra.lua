@@ -254,8 +254,9 @@ OnTick(function(myHero)
            end	
          end
        end
-       
      end
+     
+   end
   
 if SyndraMenu.Misc.Autolvl:Value() then
   if GetLevel(myHero) > lastlevel then
