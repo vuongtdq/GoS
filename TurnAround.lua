@@ -23,7 +23,7 @@ OnTick(function(myHero)
   end
   
   if lastRightClick.x ~= nil then
-    if math.abs(player.x-lastRightClick.x) <= 75 and math.abs(player.z-lastRightClick.z) <= 75 then
+    if math.abs(GetOrigin(myHero).x-lastRightClick.x) <= 75 and math.abs(GetOrigin(myHero).y-lastRightClick.y) <= 75 and math.abs(GetOrigin(myHero).z-lastRightClick.z) <= 75 then
     lastRightClick.x = nil
     lastRightClick.y = nil
     lastRightClick.z = nil
@@ -66,7 +66,6 @@ OnProcessSpell(function(unit,spell)
    end
 end)    
 
-     
 OnWndMsg(function(msg,wParam)
   if msg == WM_RBUTTONDOWN then
   local mousePos = GetMousePos()
