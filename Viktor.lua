@@ -108,6 +108,7 @@ OnTick(function(myHero)
 	if IsReady(_Q) and ValidTarget(enemy, 700) and ViktorMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then
         CastTargetSpell(enemy, _Q)
         elseif IsReady(_E) and ValidTarget(enemy,1225) and ViktorMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
+	  local EPred = GetPredictionForPlayer(StartPos,enemy,GetMoveSpeed(enemy),1200,0,1225,80,false,true)
 	  local StartPos = Vector(myHero) - 525 * (Vector(myHero) - Vector(enemy)):normalized()
           if EPred.HitChance == 1 then
           CastSkillShot3(_E,StartPos,EPred.PredPos)
