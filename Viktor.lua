@@ -42,6 +42,8 @@ if ViktorMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1225,1,0,col) end
 if ViktorMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),700,1,0,col) end	
 end)
 
+local lastlevel = GetLevel(myHero)-1
+
 OnTick(function(myHero)
     local target = GetCurrentTarget()
 	
