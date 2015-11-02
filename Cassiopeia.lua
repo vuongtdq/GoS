@@ -28,7 +28,7 @@ CassiopeiaMenu.Misc:Boolean("Autolvl", "Auto level", true)
 CassiopeiaMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"E-Q-W", "Q-E-W", "W-E-Q"})
 
 CassiopeiaMenu:Menu("Farm", "Farm")
-CassiopeiaMenu.Misc:Boolean("AutoE", "Auto E if pois", true)
+CassiopeiaMenu.Farm:Boolean("AutoE", "Auto E if pois", true)
 CassiopeiaMenu.Farm:Menu("LastHit2", "LastHit with E")
 CassiopeiaMenu.Farm.LastHit2:Boolean("EX", "Enabled", true)
 CassiopeiaMenu.Farm.LastHit2:Boolean("EXP", "Only if pois", true)
@@ -163,7 +163,13 @@ OnTick(function(myHero)
 		end
 		
 	end
-        
+
+        for i,mobs in pairs(minionManager.objects) do
+          if GetTeam(mobs) == MINION_ENEMY and IsReady(_E) and IsPoisoned(mobs) and CassiopeiaMenu.Farm.AutoE:Value() and ValidTarget(mobs, 700) and GetCurrentHP(mobs) < getdmg("E",mobs) then
+	  CastTargetSpell(mobs, _E)
+	  end
+        end
+
         if IOW:Mode() == "LaneClear" then
           if GetPercentMP(myHero) >= CassiopeiaMenu.Farm.LaneClear.Mana:Value() then
           
