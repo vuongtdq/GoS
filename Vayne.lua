@@ -13,7 +13,8 @@ VayneMenu.Combo.Q:Boolean("KeepInvis", "Don't AA While Stealthed", true)
 VayneMenu.Combo.Q:Slider("KeepInvisdis", "Only if Distance <", 230, 0, 550, 1)
 
 VayneMenu.Combo:Menu("E", "Condemn (E)")
-VayneMenu.Combo.E:Boolean("Enabled", "Enabled", true)
+VayneMenu.Combo.E:Menu("EMenu", "AutoStun")
+VayneMenu.Combo.E.EMenu:Boolean("Enabled", "Enabled", true)
 VayneMenu.Combo.E:Slider("pushdistance", "E Push Distance", 400, 350, 490, 1)
 VayneMenu.Combo.E:Boolean("stuntarget", "Stun Current Target Only", false)
 VayneMenu.Combo.E:Boolean("lowhp", "Peel with E when low health", true)
@@ -38,8 +39,8 @@ VayneMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then VayneMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
 VayneMenu.Misc:Boolean("Autolvl", "Auto level", true)
 VayneMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"W-Q-E", "Q-W-E"})
-VayneMenu.Misc:Key("WallTumble1", "WallTumble Mid", string.byte("T"))
-VayneMenu.Misc:Key("WallTumble2", "WallTumble Drake", string.byte("U"))
+VayneMenu.Misc:KeyBinding("WallTumble1", "WallTumble Mid", string.byte("T"))
+VayneMenu.Misc:KeyBinding("WallTumble2", "WallTumble Drake", string.byte("U"))
 
 VayneMenu:Menu("Drawings", "Drawings")
 VayneMenu.Drawings:Boolean("Q", "Draw Q Range", true)
@@ -62,6 +63,10 @@ DelayAction(function()
         InterruptMenu:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)   
         end
     end
+  end
+  
+  for _,k in pairs(GetEnemyHeroes()) do
+  VayneMenu.Combo.E.EMenu:Boolean(GetObjectName(k).."Pleb", "..GetObjectName(k)..", true)
   end
 		
 end, 1)
@@ -142,7 +147,7 @@ OnTick(function(myHero)
             end
 	  end
         
-	if IsReady(_E) and VayneMenu.Combo.E.AutoE:Value() and ValidTarget(enemy, 710) then
+	if IsReady(_E) and VayneMenu.Combo.E.EMenu[GetObjectName(enemy).."Pleb"]:Value() and ValidTarget(enemy, 710) then
         StunThisPleb(enemy)
         end
 
@@ -232,7 +237,7 @@ OnRemoveBuff(function(unit,buff)
 end)
 
 function StunThisPleb(unit)
-        local EPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),2200,0,750,10,false,true)
+        local EPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),2200,250,750,1,false,true)
         local PredPos = Vector(EPred.PredPos)
         local HeroPos = Vector(myHero)
         local maxERange = PredPos - (PredPos - HeroPos) * ( - VayneMenu.Combo.E.pushdistance:Value() / GetDistance(EPred.PredPos))
@@ -240,6 +245,19 @@ function StunThisPleb(unit)
        	for i, Pos in pairs(shootLine:__getPoints()) do
           if MapPosition:inWall(Pos) then
           CastTargetSpell(unit, _E) 
+          end
+        end
+end
+
+function StunThisPlebV2(unit)
+        local EPred = GetPredictionForPlayer(GetMousePos(),unit,GetMoveSpeed(unit),2200,250,750,1,false,true)
+        local PredPos = Vector(EPred.PredPos)
+        local maxERange = PredPos - (PredPos - GetMousePos()) * ( - VayneMenu.Combo.E.pushdistance:Value() / GetDistance(EPred.PredPos))
+        local shootLine = Line(Point(PredPos.x, PredPos.y, PredPos.z), Point(maxERange.x, maxERange.y, maxERange.z))
+       	for i, Pos in pairs(shootLine:__getPoints()) do
+          if MapPosition:inWall(Pos) then
+          CastTargetSpell(unit, _E) 
+          DelayAction(function() CastSkillShot(Flash,GetMousePos() end, 1)
           end
         end
 end
