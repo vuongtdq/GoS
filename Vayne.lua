@@ -66,7 +66,7 @@ DelayAction(function()
   end
   
   for _,k in pairs(GetEnemyHeroes()) do
-  VayneMenu.Combo.E.EMenu:Boolean(GetObjectName(k).."Pleb", ""..GetObjectName(k).."", true)
+  VayneMenu.Combo.E.EMenu:Boolean(GetObjectName(k).."Pleb", "..GetObjectName(k)..", true)
   end
 		
 end, 1)
@@ -254,7 +254,7 @@ function StunThisPlebV2(unit)
        	for i, Pos in pairs(shootLine:__getPoints()) do
           if MapPosition:inWall(Pos) then
           CastTargetSpell(unit, _E) 
-          DelayAction(function() CastSkillShot(Flash,GetMousePos() end, 1)
+          DelayAction(function() CastSkillShot(Flash,GetMousePos()) end, 1)
           end
         end
 end
