@@ -55,9 +55,11 @@ end
 	
 local Isrecalling = {}
 
+if SpellData[GetObjectName(myHero)] then
 local Delay = SpellData[GetObjectName(myHero)].Delay
 local MissileSpeed = SpellData[GetObjectName(myHero)].MissileSpeed
 local Damage = SpellData[GetObjectName(myHero)].Damage
+end
 
 OnDraw(function()
 
@@ -105,7 +107,7 @@ OnProcessRecall(function(unit,recall)
 	Isrecalling[GetObjectName(unit)] = rec
 		
 	  if SpellData[GetObjectName(myHero)] then
-	    if CanUseSpell(myHero, _R) == READY and BaseultMenu.Enabled:Value() and Damage(unit) > GetCurrentHP(unit)+GetDmgShield(unit)+GetHPRegen(unit)*8 then
+	    if IsReady(_R) and BaseultMenu.Enabled:Value() and Damage(unit) > GetCurrentHP(unit)+GetDmgShield(unit)+GetHPRegen(unit)*8 then
 	      if (recall.totalTime-recall.passedTime) > Delay + (GetDistance(Base) * 1000 / MissileSpeed) then
 	      DelayAction(function() CastSkillShot(_R,Base) end, (recall.totalTime-recall.passedTime)- (Delay + (GetDistance(Base) * 1000 / MissileSpeed)))
     	      end
