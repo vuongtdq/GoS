@@ -15,6 +15,7 @@ VayneMenu.Combo.Q:Slider("KeepInvisdis", "Only if Distance <", 230, 0, 550, 1)
 VayneMenu.Combo:Menu("E", "Condemn (E)")
 VayneMenu.Combo.E:Boolean("Enabled", "Enabled", true)
 VayneMenu.Combo.E:Slider("pushdistance", "E Push Distance", 400, 350, 490, 1)
+if Flash ~= nil then VayneMenu.Combo.E:KeyBinding("cf", "Condemn-Flash", string.byte("G")) end
 
 VayneMenu.Combo:Menu("R", "Final Hour (R)")
 VayneMenu.Combo.R:Boolean("Enabled", "Enabled", true)
@@ -119,6 +120,11 @@ OnTick(function(myHero)
 	IOW.attacksEnabled = false
 	end
 	
+   end
+
+   local ElitePleb = ClosestEnemy(GetMousePos())
+   if Flash and IsReady(Flash) and IsReady(_E) and VayneMenu.Combo.E.cf:Value() and ValidTarget(ElitePleb, 1100) then
+   StunThisPlebV2(ElitePleb)
    end
 
    for i,enemy in pairs(GetEnemyHeroes()) do
@@ -239,9 +245,9 @@ function StunThisPleb(unit)
 end
 
 function StunThisPlebV2(unit)
-        local EPred = GetPredictionForPlayer(GetMousePos(),unit,GetMoveSpeed(unit),2200,250,750,1,false,true)
+        local EPred = GetPredictionForPlayer(GetMousePos(),unit,GetMoveSpeed(unit),2200,250,1100,1,false,true)
         local PredPos = Vector(EPred.PredPos)
-        local maxERange = PredPos - (PredPos - GetMousePos()) * ( - VayneMenu.Combo.E.pushdistance:Value() / GetDistance(EPred.PredPos))
+        local maxERange = PredPos - (PredPos - GetMousePos()) * ( - VayneMenu.Combo.E.pushdistance:Value() / GetDistance(GetMousePos(), EPred.PredPos))
         local shootLine = Line(Point(PredPos.x, PredPos.y, PredPos.z), Point(maxERange.x, maxERange.y, maxERange.z))
        	for i, Pos in pairs(shootLine:__getPoints()) do
           if MapPosition:inWall(Pos) then
