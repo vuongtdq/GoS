@@ -66,7 +66,7 @@ DelayAction(function()
   end
   
   for _,k in pairs(GetEnemyHeroes()) do
-  VayneMenu.Combo.E.EMenu:Boolean(GetObjectName(k).."Pleb", "..GetObjectName(k)..", true)
+  VayneMenu.Combo.E.EMenu:Boolean(GetObjectName(k).."Pleb", ""..GetObjectName(k).."", true)
   end
 		
 end, 1)
