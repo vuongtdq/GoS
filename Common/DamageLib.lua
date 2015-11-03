@@ -342,7 +342,13 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			elseif spellname == "W" then addmg = 30*Wlvl+50+(GetBonusDmg(Source)+GetBaseDamage(Source))
 			elseif spellname == "E" then addmg = 35*Elvl+30+.2*(GetBonusDmg(Source)+GetBaseDamage(Source))
 			end
-		elseif GetObjectName(Source) == "KogMaw" then
+                elseif GetObjectName(Source) == "Kindred" then
+			if spellname == "P" then addmg = 0.0125*GetCurrentHP(target)
+                        elseif spellname = "Q" then addmg = 30*Qlvl+30+.2*(GetBonusDmg(Source)+GetBaseDamage(Source))
+                        elseif spellname = "W" then addmg = 5*Wlvl+20+.4*(GetBonusDmg(Source)+GetBaseDamage(Source))
+                        elseif spellname = "E" then addmg = 30*Elvl+50+0.05*GetMaxHP(target)+.2*(GetBonusDmg(Source)+GetBaseDamage(Source))
+                        end
+	        elseif GetObjectName(Source) == "KogMaw" then
 			if spellname == "P" then dmg = 100+25*GetLevel(Source)
 			elseif spellname == "Q" then apdmg = 50*Qlvl+30+.5*GetBonusAP(Source)
 			elseif spellname == "W" then apdmg = (Wlvl+1+.01*GetBonusAP(Source))*GetMaxHP(target)/100  --xhit (bonus)
