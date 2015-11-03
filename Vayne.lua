@@ -15,10 +15,6 @@ VayneMenu.Combo.Q:Slider("KeepInvisdis", "Only if Distance <", 230, 0, 550, 1)
 VayneMenu.Combo:Menu("E", "Condemn (E)")
 VayneMenu.Combo.E:Boolean("Enabled", "Enabled", true)
 VayneMenu.Combo.E:Slider("pushdistance", "E Push Distance", 400, 350, 490, 1)
-VayneMenu.Combo.E:Boolean("stuntarget", "Stun Current Target Only", false)
-VayneMenu.Combo.E:Boolean("lowhp", "Peel with E when low health", true)
-VayneMenu.Combo.E:Boolean("AutoE", "Auto Wall Condemn", true)
-VayneMenu.Combo.E:Menu("EMenu", "AutoStun")
 
 VayneMenu.Combo:Menu("R", "Final Hour (R)")
 VayneMenu.Combo.R:Boolean("Enabled", "Enabled", true)
@@ -36,6 +32,8 @@ VayneMenu.Combo:Slider("QSSHP", "if My Health % <", 75, 0, 100, 1)
 
 
 VayneMenu:Menu("Misc", "Misc")
+VayneMenu.Misc:Menu("EMenu", "AutoStun")
+VayneMenu.Misc:Boolean("lowhp", "Peel with E when low health", true)
 if Ignite ~= nil then VayneMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
 VayneMenu.Misc:Boolean("Autolvl", "Auto level", true)
 VayneMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"W-Q-E", "Q-W-E"})
@@ -66,7 +64,7 @@ DelayAction(function()
   end
   
   for _,k in pairs(GetEnemyHeroes()) do
-  VayneMenu.Combo.E.EMenu:Boolean(GetObjectName(k).."Pleb", ""..GetObjectName(k).."", true)
+  VayneMenu.Misc.EMenu:Boolean(GetObjectName(k).."Pleb", ""..GetObjectName(k).."", true)
   end
 		
 end, 1)
@@ -84,30 +82,28 @@ end)
 local IsStealthed = false
 
 OnTick(function(myHero)
-    HeroPos = GetOrigin(myHero)
-    mousePos = GetMousePos()
+    local target = GetCurrentTarget()
+
     if IOW:Mode() == "Combo" then
-	
-	local target = GetCurrentTarget()
-	
+
 	if VayneMenu.Combo.Q.Mode:Value() == 2 and ValidTarget(target, 900) and VayneMenu.Combo.Q.Enabled:Value() then
-          local AfterTumblePos = HeroPos + (Vector(mousePos) - HeroPos):normalized() * 300
+          local AfterTumblePos = GetOrigin(myHero) + (Vector(GetMousePos()) - GetOrigin(myHero)):normalized() * 300
           local DistanceAfterTumble = GetDistance(AfterTumblePos, target)
   
-          if GetDistance(myHero, target) > 630 and DistanceAfterTumble < 630 then
-          CastSkillShot(_Q, mousePos.x, mousePos.y, mousePos.z)
+          if GetDistance(target) > 630 and DistanceAfterTumble < 630 then
+          CastSkillShot(_Q,GetMousePos())
           end
         end
 
-	if GetItemSlot(myHero,3140) > 0 and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
-        CastTargetSpell(myHero, GetItemSlot(myHero,3140))
+	if GetItemSlot(myHero,3140) > 0 and IsReady(GetItemSlot(myHero,3140)) and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
+        CastSpell(GetItemSlot(myHero,3140))
         end
 
-        if GetItemSlot(myHero,3139) > 0 and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
-        CastTargetSpell(myHero, GetItemSlot(myHero,3139))
+        if GetItemSlot(myHero,3139) > 0 and IsReady(GetItemSlot(myHero,3139)) and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
+        CastSpell(GetItemSlot(myHero,3139))
         end
 		
-	if IsReady(_E) and VayneMenu.Combo.E.stuntarget:Value() and VayneMenu.Combo.E.Enabled:Value() and ValidTarget(target, 710) then
+	if IsReady(_E) and VayneMenu.Combo.E.Enabled:Value() and ValidTarget(target, 710) then
         StunThisPleb(target)
         end
 
@@ -128,16 +124,16 @@ OnTick(function(myHero)
    for i,enemy in pairs(GetEnemyHeroes()) do
         
         if IOW:Mode() == "Combo" then  
-          if GetItemSlot(myHero,3153) > 0 and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < VayneMenu.Combo.myHP:Value() and 100*GetCurrentHP(enemy)/GetMaxHP(enemy) > VayneMenu.Combo.targetHP:Value() then
+          if GetItemSlot(myHero,3153) > 0 and IsReady(GetItemSlot(myHero,3153)) and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < VayneMenu.Combo.myHP:Value() and GetPercentHP(enemy) > VayneMenu.Combo.targetHP:Value() then
           CastTargetSpell(enemy, GetItemSlot(myHero,3153))
           end
 
-          if GetItemSlot(myHero,3144) > 0 and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < VayneMenu.Combo.myHP:Value() and 100*GetCurrentHP(enemy)/GetMaxHP(enemy) > VayneMenu.Combo.targetHP:Value() then
+          if GetItemSlot(myHero,3144) > 0 and IsReady(GetItemSlot(myHero,3144)) and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < VayneMenu.Combo.myHP:Value() and GetPercentHP(enemy) > VayneMenu.Combo.targetHP:Value() then
           CastTargetSpell(enemy, GetItemSlot(myHero,3144))
           end
 
-          if GetItemSlot(myHero,3142) > 0 and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
-          CastTargetSpell(myHero, GetItemSlot(myHero,3142))
+          if GetItemSlot(myHero,3142) > 0 and IsReady(GetItemSlot(myHero,3142)) and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
+          CastSpell(GetItemSlot(myHero,3142))
           end
         end
         
@@ -147,11 +143,11 @@ OnTick(function(myHero)
             end
 	  end
         
-	if IsReady(_E) and VayneMenu.Combo.E.Enabled:Value() and VayneMenu.Combo.E.EMenu[GetObjectName(enemy).."Pleb"]:Value() and ValidTarget(enemy, 710) then
+	if IsReady(_E) and VayneMenu.Misc.EMenu[GetObjectName(enemy).."Pleb"]:Value() and ValidTarget(enemy, 710) then
         StunThisPleb(enemy)
         end
 
-        if IsReady(_E) and VayneMenu.Combo.E.lowhp:Value() and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) <= 15 and EnemiesAround(myHeroPos(), 375) >= 1 then
+        if IsReady(_E) and VayneMenu.Misc.lowhp:Value() and GetPercentHP(myHero) <= 15 and EnemiesAround(myHeroPos(), 375) >= 1 then
         CastTargetSpell(enemy, _E)
         end
 
@@ -183,24 +179,24 @@ OnProcessSpell(function(unit, spell)
 	        DelayAction(function() 
 	        	for i,enemy in pairs(GetEnemyHeroes()) do
                            if enemy and VayneMenu.Combo.Q.Mode:Value() == 1 and VayneMenu.Combo.Q.Enabled:Value()then
-                                local AfterTumblePos = HeroPos + (Vector(mousePos) - HeroPos):normalized() * 300
+                                local AfterTumblePos = GetOrigin(myHero) + (Vector(GetMousePos()) - GetOrigin(myHero)):normalized() * 300
                                 local DistanceAfterTumble = GetDistance(AfterTumblePos, enemy)
 						  
                                 if DistanceAfterTumble < 800 and DistanceAfterTumble > 200 then
-                                CastSkillShot(_Q, mousePos.x, mousePos.y, mousePos.z)
+                                CastSkillShot(_Q,GetMousePos())
                                 end
   
                                 if GetDistance(myHero, enemy) > 630 and DistanceAfterTumble < 630 then
-                                CastSkillShot(_Q, mousePos.x, mousePos.y, mousePos.z)
+                                CastSkillShot(_Q,GetMousePos())
                                 end
                             end
                            
                             if enemy and VayneMenu.Combo.Q.Mode:Value() == 2 and VayneMenu.Combo.Q.Enabled:Value() then
-                                local AfterTumblePos = HeroPos + (Vector(mousePos) - HeroPos):normalized() * 300
+                                local AfterTumblePos = GetOrigin(myHero) + (Vector(GetMousePos()) - GetOrigin(myHero)):normalized() * 300
                                 local DistanceAfterTumble = GetDistance(AfterTumblePos, enemy)
   
                                 if DistanceAfterTumble < 800 and DistanceAfterTumble > 200 then
-                                CastSkillShot(_Q, mousePos.x, mousePos.y, mousePos.z)
+                                CastSkillShot(_Q,GetMousePos())
                                 end
                             end
                         end
@@ -218,18 +214,14 @@ OnProcessSpell(function(unit, spell)
 end)
 
 OnUpdateBuff(function(unit,buff)
-  if unit == myHero then
-    if buff.Name == "vaynetumblefade" then 
-    IsStealthed = true
-    end
+  if unit == myHero and buff.Name == "vaynetumblefade" then 
+  IsStealthed = true
   end
 end)
 
 OnRemoveBuff(function(unit,buff)
-  if unit == myHero then
-    if buff.Name == "vaynetumblefade" then 
-    IsStealthed = false
-    end
+  if unit == myHero and buff.Name == "vaynetumblefade" then 
+  IsStealthed = false
   end
 end)
 
