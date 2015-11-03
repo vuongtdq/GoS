@@ -68,29 +68,29 @@ OnRemoveBuff(function(unit,buff)
 end)
 
 OnTick(function(myHero)
+    local target = GetCurrentTarget()
 
     if IOW:Mode() == "Combo" then
 	
-	local target = GetCurrentTarget()
 	local EPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),1750,1200,920,60,false,true)
 		
-	if GetItemSlot(myHero,3140) > 0 and JinxMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < JinxMenu.Combo.QSSHP:Value() then
-        CastTargetSpell(myHero, GetItemSlot(myHero,3140))
+	if GetItemSlot(myHero,3140) > 0 and IsReady(GetItemSlot(myHero,3140)) and JinxMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < JinxMenu.Combo.QSSHP:Value() then
+        CastSpell(GetItemSlot(myHero,3140))
         end
 
-        if GetItemSlot(myHero,3139) > 0 and JinxMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < JinxMenu.Combo.QSSHP:Value() then
-        CastTargetSpell(myHero, GetItemSlot(myHero,3139))
+        if GetItemSlot(myHero,3139) > 0 and IsReady(GetItemSlot(myHero,3139)) and JinxMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < JinxMenu.Combo.QSSHP:Value() then
+        CastSpell(GetItemSlot(myHero,3139))
         end
 		
-	if IsReady(_Q) and JinxMenu.Combo.Q:Value() and ValidTarget(target, 700) then
-          if GetDistance(myHero, target) >= 570 and IsMinigun then
+	if IsReady(_Q) and JinxMenu.Combo.Q:Value() and ValidTarget(target, 800) then
+          if GetDistance(target) >= 570 and IsMinigun then
           CastSpell(_Q)
-          elseif GetDistance(myHero, target) <= 525 and not IsMinigun then
+          elseif GetDistance(target) <= 525 and not IsMinigun then
           CastSpell(_Q)
           end
         end
 	
-	if IsReady(_W) and ValidTarget(target, 1500) and GetDistance(myHero, target) > 525 and JinxMenu.Combo.W:Value() then
+	if IsReady(_W) and ValidTarget(target, 1500) and GetDistance(target) > 525 and JinxMenu.Combo.W:Value() then
         Cast(_W,target)
         end
 	
@@ -106,20 +106,19 @@ OnTick(function(myHero)
 
   end
 
-    if IOW:Mode() == "Harass" and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= JinxMenu.Harass.Mana:Value() then
+    if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= JinxMenu.Harass.Mana:Value() then
 	
-	local target = GetCurrentTarget()
 	local EPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),1750,1200,920,60,false,true)
 		
 	if IsReady(_Q) and JinxMenu.Harass.Q:Value() and ValidTarget(target, 700) then
-          if GetDistance(myHero, target) >= 570 and IsMinigun then
+          if GetDistance(target) >= 570 and IsMinigun then
           CastSpell(_Q)
-          elseif GetDistance(myHero, target) <= 525 and not IsMinigun then
+          elseif GetDistance(target) <= 525 and not IsMinigun then
           CastSpell(_Q)
           end
         end
 	
-	if IsReady(_W) and ValidTarget(target, 1500) and GetDistance(myHero, target) > 525 and JinxMenu.Harass.W:Value() then
+	if IsReady(_W) and ValidTarget(target, 1500) and GetDistance(target) > 525 and JinxMenu.Harass.W:Value() then
         Cast(_W,target)
         end
 	
@@ -131,40 +130,33 @@ OnTick(function(myHero)
 		
 	end
 
-local target = GetCurrentTarget()
-
 if IsReady(_E) and ValidTarget(target, 920) then
   if IsImmobile(target) then
   CastSkillShot(_E, GetOrigin(target))
   end
 end
 
-if IOW:Mode() == "LastHit" then
-  if not IsMinigun and JinxMenu.Lasthit.Farm:Value() then
+if IOW:Mode() == "LastHit" and not IsMinigun and JinxMenu.Lasthit.Farm:Value() then
   CastSpell(_Q)
-  end
 end
   
-if IOW:Mode() == "LaneClear" then
-  if not IsMinigun and JinxMenu.LaneClear.Farm:Value() then
+if IOW:Mode() == "LaneClear" and not IsMinigun and JinxMenu.LaneClear.Farm:Value() then
   CastSpell(_Q)
-  end
 end
   
-
     for i,enemy in pairs(GetEnemyHeroes()) do
 	
 	if IOW:Mode() == "Combo" then	
-	if GetItemSlot(myHero,3153) > 0 and JinxMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < JinxMenu.Combo.myHP:Value() and 100*GetCurrentHP(enemy)/GetMaxHP(enemy) > JinxMenu.Combo.targetHP:Value() then
+	if GetItemSlot(myHero,3153) > 0 and IsReady(GetItemSlot(myHero,3153)) and JinxMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < JinxMenu.Combo.myHP:Value() and GetPercentHP(enemy) > JinxMenu.Combo.targetHP:Value() then
         CastTargetSpell(enemy, GetItemSlot(myHero,3153))
         end
 
-        if GetItemSlot(myHero,3144) > 0 and JinxMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < JinxMenu.Combo.myHP:Value() and 100*GetCurrentHP(enemy)/GetMaxHP(enemy) > JinxMenu.Combo.targetHP:Value() then
+        if GetItemSlot(myHero,3144) > 0 and IsReady(GetItemSlot(myHero,3144)) and JinxMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < JinxMenu.Combo.myHP:Value() and GetPercentHP(enemy) > JinxMenu.Combo.targetHP:Value() then
         CastTargetSpell(enemy, GetItemSlot(myHero,3144))
         end
 
-        if GetItemSlot(myHero,3142) > 0 and JinxMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
-        CastTargetSpell(myHero, GetItemSlot(myHero,3142))
+        if GetItemSlot(myHero,3142) > 0 and IsReady(GetItemSlot(myHero,3142)) and JinxMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
+        CastSpell(GetItemSlot(myHero,3142))
         end
         end
 		
