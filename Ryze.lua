@@ -124,22 +124,22 @@ OnTick(function(myHero)
     if IOW:Mode() == "LaneClear" then
 
       for _,mobs in pairs(minionManager.objects) do
-        if GetTeam(mob) == 300 then
+        if GetTeam(mobs) == 300 then
 		
-		  if IsReady(_R) and RyzeMenu.JungleClear.R:Value() and PStacks == 4 and ValidTarget(mob, 900) then
+		  if IsReady(_R) and RyzeMenu.JungleClear.R:Value() and PStacks == 4 and ValidTarget(mobs, 900) then
 		  CastSpell(_R)
 		  end
 		
-		  if IsReady(_W) and RyzeMenu.JungleClear.W:Value() and ValidTarget(mob, 600) then
-		  CastTargetSpell(mob, _W)
+		  if IsReady(_W) and RyzeMenu.JungleClear.W:Value() and ValidTarget(mobs, 600) then
+		  CastTargetSpell(mobs, _W)
 		  end
 		
-		  if IsReady(_Q) and RyzeMenu.JungleClear.Q:Value() and ValidTarget(mob, 900) then
-		  CastSkillShot(_Q,GetOrigin(mob))
+		  if IsReady(_Q) and RyzeMenu.JungleClear.Q:Value() and ValidTarget(mobs, 900) then
+		  CastSkillShot(_Q,GetOrigin(mobs))
 		  end
 		
-	          if IsReady(_E) and RyzeMenu.JungleClear.E:Value() and ValidTarget(mob, 600) then
-		  CastTargetSpell(mob, _E)
+	          if IsReady(_E) and RyzeMenu.JungleClear.E:Value() and ValidTarget(mobs, 600) then
+		  CastTargetSpell(mobs, _E)
 		  end
 		
         end
