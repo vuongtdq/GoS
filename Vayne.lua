@@ -232,7 +232,7 @@ OnRemoveBuff(function(unit,buff)
 end)
 
 function StunThisPleb(unit)
-        local EPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),2200,250,750,1,false,true)
+        local EPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),2000,250,1000,1,false,true)
         local PredPos = Vector(EPred.PredPos)
         local HeroPos = Vector(myHero)
         local maxERange = PredPos - (PredPos - HeroPos) * ( - VayneMenu.Combo.E.pushdistance:Value() / GetDistance(EPred.PredPos))
@@ -245,7 +245,7 @@ function StunThisPleb(unit)
 end
 
 function StunThisPlebV2(unit)
-        local EPred = GetPredictionForPlayer(GetMousePos(),unit,GetMoveSpeed(unit),2200,250,1100,1,false,true)
+        local EPred = GetPredictionForPlayer(GetMousePos(),unit,GetMoveSpeed(unit),2000,250,1000,1,false,true)
         local PredPos = Vector(EPred.PredPos)
         local maxERange = PredPos - (PredPos - GetMousePos()) * ( - VayneMenu.Combo.E.pushdistance:Value() / GetDistance(GetMousePos(), EPred.PredPos))
         local shootLine = Line(Point(PredPos.x, PredPos.y, PredPos.z), Point(maxERange.x, maxERange.y, maxERange.z))
