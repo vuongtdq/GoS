@@ -56,6 +56,9 @@ SpellData = {
   	        [_W] = { Name = "SyndraW", ProjectileName = "", Range = 925, Speed = math.huge, Delay = 250, Width = 190, collision = false, aoe = false, type = "circular", IsDangerous = false},
   	        [_E] = { Name = "SyndraE", ProjectileName = "", Range = 1250, Speed = 2500, Delay = 250, Width = 45, collision = false, aoe = false, type = "cone", IsDangerous = false}
        },
+   ["Thresh"] = {
+  	        [_Q] = { Name = "", ProjectileName = "", Range = 1100, Speed = 1900, Delay = 500, Width = 70, collision = true, aoe = false, type = "linear", IsDangerous = true}
+       },
    ["Viktor"] = {
   	        [_W] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 500, Width = 300, collision = false, aoe = false, type = "circular", IsDangerous = false},
   	        [_R] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 250, Width = 450, collision = false, aoe = false, type = "circular", IsDangerous = false}
@@ -139,10 +142,6 @@ Dashes = {
 
 LudensStacks = 0
 mapID = GetMapID()
-
-function IsReady(spell)
-	return CanUseSpell(myHero,spell) == READY
-end
 
 function Cast(spell, target, origin, hitchance, speed, delay, range, width, coll)
       local hitchance = hitchance or 1
