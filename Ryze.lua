@@ -27,11 +27,11 @@ RyzeMenu.Misc:Boolean("Autoignite", "Auto Ignite", true)
 RyzeMenu.Misc:Boolean("Autolvl", "Auto level", true)
 RyzeMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "Q-E-W"})
 
-RyzeMenu:Menu("LaneClear", "LaneClear")
+--[[RyzeMenu:Menu("LaneClear", "LaneClear")
 RyzeMenu.LaneClear:Boolean("Q", "Use Q", true)
 RyzeMenu.LaneClear:Boolean("W", "Use W", true)
 RyzeMenu.LaneClear:Boolean("E", "Use E", true)
-RyzeMenu.LaneClear:Boolean("R", "Use R", false)
+RyzeMenu.LaneClear:Boolean("R", "Use R", false)]]
 
 RyzeMenu:Menu("JungleClear", "JungleClear")
 RyzeMenu.JungleClear:Boolean("Q", "Use Q", true)
