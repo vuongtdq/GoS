@@ -112,8 +112,7 @@ OnProcessRecall(function(unit,recall)
 	      DelayAction(function() CastSkillShot(_R,Base) end, (recall.totalTime-recall.passedTime)- (Delay + (GetDistance(Base) * 1000 / MissileSpeed)))
     	      end
 	    end
-          end
-  
+       
         end
 end)
 
