@@ -63,7 +63,7 @@ OnTick(function(myHero)
 	    
 	local Q2Pred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),1400,250,900,55,false,true)
 
-	if IsReady(_R) and ValidTarget(target, 700) and RyzeMenu.Combo.R:Value() and PStacks == 4 then
+	if IsReady(_R) and ValidTarget(target, 700) and RyzeMenu.Combo.R:Value() and PStacks == 4 or IsEmpowered then
         CastSpell(_R)
 	end  
 	  
@@ -126,7 +126,7 @@ OnTick(function(myHero)
       for _,mobs in pairs(minionManager.objects) do
         if GetTeam(mobs) == 300 then
 		
-		  if IsReady(_R) and RyzeMenu.JungleClear.R:Value() and PStacks == 4 and ValidTarget(mobs, 900) then
+		  if IsReady(_R) and RyzeMenu.JungleClear.R:Value() and PStacks == 4 or IsEmpowered and ValidTarget(mobs, 900) then
 		  CastSpell(_R)
 		  end
 		
@@ -172,7 +172,7 @@ OnUpdateBuff(function(unit,buff)
   end
 end)
 
-OnUpdateBuff(function(unit,buff)
+OnRemoveBuff(function(unit,buff)
   if unit == myHero then
     if buff.Name == "ryzepassivestack" then 
     PStacks = 0
