@@ -213,7 +213,7 @@ end
 end)
 
 OnProcessSpell(function(unit, spell)
-  if unit == myHero and spell.name:lower():find("orianaredactcommand") then 
+  if unit == myHero and spell.name == "OrianaRedactCommand" then 
   Ball = spell.target
   end
 end)
@@ -224,8 +224,8 @@ OnCreateObj(function(Object)
   end
 end)
 
-OnUpdateBuff(function(Object,buffProc)
-  if Object == myHero and buffProc.Name == "orianaghostself" and buffProc.Count == 1 then
+OnUpdateBuff(function(unit,buff)
+  if unit == myHero and buff.Name == "orianaghostself" then
   Ball = myHero
   end
 end)
