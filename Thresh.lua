@@ -39,8 +39,7 @@ OnTick(function(myHero)
 	
     if IOW:Mode() == "Combo" then
 
-		local EPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),2000,125,400,200,false,true)
-		local EPos = GetOrigin(myHero) + (GetOrigin(myHero) - EPred.PredPos)
+		local EPos = Vector(myHero) + (Vector(myHero) - Vector(target)):normalized() * 400
 				
                 if GetCastName(myHero, _Q) ~= "threshqleap" and IsReady(_Q) and ValidTarget(target, 1100) and ThreshMenu.Combo.Q:Value() then
                 Cast(_Q,target)
@@ -48,10 +47,9 @@ OnTick(function(myHero)
                 CastSpell(_Q)
                 end
 			
-		if IsReady(_E) and EPred.HitChance == 1 and ThreshMenu.Combo.E:Value() and ValidTarget(target, 400) and GetPercentHP(myHero) >= 26 then
+		if IsReady(_E) and ThreshMenu.Combo.E:Value() and ValidTarget(target, 400) then
 		CastSkillShot(_E,EPos)
-		elseif IsReady(_E) and EPred.HitChance == 1 and ThreshMenu.Combo.E:Value() and ValidTarget(target, 400) and GetPercentHP(myHero) < 26 then
-                CastSkillShot(_E,EPred.PredPos)
+	
 		end				
            
 		if IsReady(_R) and ValidTarget(target, 450) and ThreshMenu.Combo.R:Value() and GetPercentHP(target) < 50 then
@@ -62,14 +60,13 @@ OnTick(function(myHero)
 		
 	if IOW:Mode() == "Harass" then
 
-		local EPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),2000,125,400,200,false,true)
-		local EPos = GetOrigin(myHero) + (GetOrigin(myHero) - EPred.PredPos)
+		local EPos = Vector(myHero) + (Vector(myHero) - Vector(target)):normalized() * 400
 				
                 if GetCastName(myHero, _Q) ~= "threshqleap" and IsReady(_Q) and ValidTarget(target, 1100) and ThreshMenu.Harass.Q:Value() then
                 Cast(_Q,target)
 		end
 			
-		if IsReady(_E) and EPred.HitChance == 1 and ThreshMenu.Harass.E:Value() and ValidTarget(target, 400) then
+		if IsReady(_E) and ThreshMenu.Harass.E:Value() and ValidTarget(target, 400) then
 		CastSkillShot(_E,EPos)
 		end
 	end
