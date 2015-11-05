@@ -106,13 +106,13 @@ OnProcessRecall(function(unit,recall)
 	rec.result = nil
 	Isrecalling[GetObjectName(unit)] = rec
 		
-	  if not SpellData[GetObjectName(myHero)] then return end
+	  if SpellData[GetObjectName(myHero)] then
 	    if IsReady(_R) and BaseultMenu.Enabled:Value() and Damage(unit) > GetCurrentHP(unit)+GetDmgShield(unit)+GetHPRegen(unit)*8 then
 	      if (recall.totalTime-recall.passedTime) > Delay + (GetDistance(Base) * 1000 / MissileSpeed) then
 	      DelayAction(function() CastSkillShot(_R,Base) end, (recall.totalTime-recall.passedTime)- (Delay + (GetDistance(Base) * 1000 / MissileSpeed)))
     	      end
 	    end
-       
+          end
         end
 end)
 
