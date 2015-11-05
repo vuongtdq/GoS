@@ -1,4 +1,4 @@
-if GetObjectName(GetMyHero()) ~= "ChoGath" then return end
+if GetObjectName(GetMyHero()) ~= "Chogath" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
