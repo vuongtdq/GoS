@@ -16,8 +16,8 @@ lastPos = {x = nil, y = nil, z = nil}
 PrintChat(" >> TurnAround Script loaded! <<")
 
 OnTick(function(myHero)
-  if Move = true and GetTickCount() - LastMove > 850 then
-  IOW.movementEnabled == true
+  if Move == true and GetTickCount() - LastMove > 850 then
+  IOW.movementEnabled = true
   MoveToXYZ(lastRightClick)
   Move = false
   end
