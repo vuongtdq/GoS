@@ -31,6 +31,10 @@ SpellData = {
 		[_W] = { Name = "CassiopeiaMiasma", ProjectileName = "", Range = 925, Speed = 2500, Delay = 500, Width = 90, collision = false, aoe = true, type = "circular", IsDangerous = false},
 		[_R] = { Name = "CassiopeiaPetrifyingGaze",  ProjectileName = "", Range = 825, Speed = math.huge, Delay = 600, Width = 80, collision = false, aoe = true, type = "cone", IsDangerous = true}
 	},
+  ["ChoGath"] = {
+		[_Q] = { Name = "", ProjectileName = "", Range = 950, Speed = math.huge, Delay = 600, Width = 250, collision = false, aoe = true, type = "circular", IsDangerous = true},
+		[_W] = { Name = "", ProjectileName = "", Range = 650, Speed = math.huge, Delay = 250, Width = 210, collision = false, aoe = false, type = "cone", IsDangerous = false}
+	},
   ["Ekko"] = { 
   	        [_Q] = { Name = "EkkoQ", ProjectileName = "Ekko_Base_Q_Aoe_Dilation.troy", Range = 925, Speed = 1050, Delay = 250, Width = 140, collision = false, aoe = false, type = "linear", IsDangerous = false},
   	        [_W] = { Name = "EkkoW", ProjectileName = "Ekko_Base_W_Indicator.troy", Range = 1700, Speed = math.huge, Delay = 3000, Width = 400, collision = false, aoe = true, type = "circular", IsDangerous = false}
@@ -67,20 +71,24 @@ SpellData = {
 
 CHANELLING_SPELLS = {
     ["CaitlynAceintheHole"]         = {Name = "Caitlyn",      Spellslot = _R},
-    ["Drain"]                       = {Name = "FiddleSticks", Spellslot = _W},
     ["Crowstorm"]                   = {Name = "FiddleSticks", Spellslot = _R},
+    ["Drain"]                       = {Name = "FiddleSticks", Spellslot = _W},
     ["GalioIdolOfDurand"]           = {Name = "Galio",        Spellslot = _R},
-    ["FallenOne"]                   = {Name = "Karthus",      Spellslot = _R},
+    ["ReapTheWhirlwind"]            = {Name = "Janna",        Spellslot = _R},
+    ["KarthusFallenOne"]            = {Name = "Karthus",      Spellslot = _R},
     ["KatarinaR"]                   = {Name = "Katarina",     Spellslot = _R},
     ["LucianR"]                     = {Name = "Lucian",       Spellslot = _R},
     ["AlZaharNetherGrasp"]          = {Name = "Malzahar",     Spellslot = _R},
     ["MissFortuneBulletTime"]       = {Name = "MissFortune",  Spellslot = _R},
     ["AbsoluteZero"]                = {Name = "Nunu",         Spellslot = _R},                        
-    ["Pantheon_GrandSkyfall_Jump"]  = {Name = "Pantheon",     Spellslot = _R},
+    ["PantheonRJump"]               = {Name = "Pantheon",     Spellslot = _R},
     ["ShenStandUnited"]             = {Name = "Shen",         Spellslot = _R},
+    ["Destiny"]                     = {Name = "TwistedFate",  Spellslot = _R},
     ["UrgotSwap2"]                  = {Name = "Urgot",        Spellslot = _R},
     ["VarusQ"]                      = {Name = "Varus",        Spellslot = _Q},
     ["InfiniteDuress"]              = {Name = "Warwick",      Spellslot = _R} 
+    ["XerathLocusOfPower2"]         = {Name = "Xerath",       Spellslot = _R}
+    
 }
 
 GAPCLOSER_SPELLS = {
@@ -141,7 +149,6 @@ Dashes = {
 }
 
 LudensStacks = 0
-mapID = GetMapID()
 
 function Cast(spell, target, origin, hitchance, speed, delay, range, width, coll)
       local hitchance = hitchance or 1
@@ -250,28 +257,6 @@ end
 
 function IsRecalling(unit)
    return (Recalling[GetNetworkID(unit)] or 0) > 0
-end
-
-function HaveManaForSpells(qMana, wMana, eMana, rMana, qCasts, wCasts, eCasts, rCasts)
-	local cost = 0
-        local qCasts = qCasts or 1
-        local wCasts = wCasts or 1
-        local eCasts = eCasts or 1
-        local rCasts = rCasts or 1
-
-	if qCasts > 0 then
-		cost = cost + (qMana * qCasts)
-	end
-	if wCasts > 0 then
-		cost = cost + (wMana * wCasts)
-	end
-	if eCasts > 0 then
-		cost = cost + (eMana * eCasts)
-	end
-	if rCasts > 0 then
-		cost = cost + (rMana * rCasts)
-	end
-	return (GetCurrentMana(myHero) >= cost)
 end
 
 function GetJLineFarmPosition(range, width)
