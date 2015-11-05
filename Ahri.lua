@@ -92,7 +92,7 @@ OnTick(function(myHero)
     
     if IOW:Mode() == "Combo" then
 
-        if IsReady(_E) and ValidTarget(target,975) then
+        if IsReady(_E) and ValidTarget(target,975) and AhriMenu.Combo.E:Value() then
         Cast(_E,target)
         end
 	
