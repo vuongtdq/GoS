@@ -168,6 +168,11 @@ local lastlevel = GetLevel(myHero)-1
 OnTick(function(myHero)
   local target = GetCurrentTarget()
   
+  if not CastingR then
+  IOW.movementEnabled = true
+  IOW.attacksEnabled = true
+  end
+      
   if IOW:Mode() == "Combo" then
 
       if IsReady(_Q) and KatarinaMenu.Combo.Q:Value() and ValidTarget(target, 675) and not CastingR then
@@ -185,6 +190,7 @@ OnTick(function(myHero)
       if KatarinaMenu.Combo.R:Value() and CanUseSpell(myHero, _Q) ~= READY and CanUseSpell(myHero, _W) ~= READY and CanUseSpell(myHero, _E) ~= READY and CanUseSpell(myHero, _R)  ~= ONCOOLDOWN and ValidTarget(target, 550) and GetCastLevel(myHero,_R) > 0 then
       IOW.movementEnabled = false
       IOW.attacksEnabled = false
+      CastingR = true
       CastSpell(_R)
       end
   end
