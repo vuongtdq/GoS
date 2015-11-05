@@ -86,7 +86,7 @@ CHANELLING_SPELLS = {
     ["Destiny"]                     = {Name = "TwistedFate",  Spellslot = _R},
     ["UrgotSwap2"]                  = {Name = "Urgot",        Spellslot = _R},
     ["VarusQ"]                      = {Name = "Varus",        Spellslot = _Q},
-    ["InfiniteDuress"]              = {Name = "Warwick",      Spellslot = _R} 
+    ["InfiniteDuress"]              = {Name = "Warwick",      Spellslot = _R},
     ["XerathLocusOfPower2"]         = {Name = "Xerath",       Spellslot = _R}
     
 }
