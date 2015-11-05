@@ -60,11 +60,11 @@ OriannaMenu.Drawings:Boolean("R", "Draw R Radius", true)
 OriannaMenu.Drawings:Boolean("Ball", "Draw Ball Position", true)
 
 OnDraw(function(myHero)
-if OriannaMenu.Drawings.Ball:Value() then DrawCircle(GetOrigin(Ball),150,1,128,0xffffffff) end
-if OriannaMenu.Drawings.W:Value() then DrawCircle(GetOrigin(Ball),250,1,128,0xffffffff) end
-if OriannaMenu.Drawings.R:Value() then DrawCircle(GetOrigin(Ball),400,1,128,0xffffffff) end
-if OriannaMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),825,1,128,0xff00ff00) end
-if OriannaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1000,1,128,0xff00ff00) end
+if OriannaMenu.Drawings.Ball:Value() then DrawCircle(GetOrigin(Ball),150,2,100,0xffffffff) end
+if OriannaMenu.Drawings.W:Value() then DrawCircle(GetOrigin(Ball),250,2,100,0xffffffff) end
+if OriannaMenu.Drawings.R:Value() then DrawCircle(GetOrigin(Ball),400,2,100,0xffffffff) end
+if OriannaMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),825,2,100,0xff00ff00) end
+if OriannaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1000,2,100,0xff00ff00) end
 end)
 
 OnTick(function(myHero)
@@ -166,26 +166,40 @@ OnTick(function(myHero)
 	  end
 	end
 	
-        for _,mob in pairs(minionManager.objects) do
+	if IOW:Mode() == "LaneClear" then
 		
-            if GetTeam(mob) == 300 and IOW:Mode() == "LaneClear" then
+          if IsReady(_Q) and OriannaMenu.LaneClear.Q:Value() then
+            local BestPos, BestHit = GetFarmPosition(825, 80)
+            if BestPos and BestHit > 0 then 
+            CastSkillShot(_Q,BestPos)
+            end
+	  end
+	  
+	  if IsReady(_W) and OriannaMenu.LaneClear.W:Value() and MinionsAround(GetOrigin(Ball), 250) > 2 then 
+	  CastSpell(_W)
+          end
+          
+          for _,mob in pairs(minionManager.objects) do
+            if GetTeam(mob) == 300 then
 	    
 		if IsReady(_W) and OriannaMenu.JungleClear.W:Value() and ValidTarget(mob, 1200) and GetDistance(Ball, mob) <= 250 then
 		CastSpell(_W)
 		end
 		
 		if IsReady(_Q) and OriannaMenu.JungleClear.Q:Value() and ValidTarget(mob, 825) then
-		CastSkillShot(_Q, GetOrigin(mob).x, GetOrigin(mob).y, GetOrigin(mob).z) 
+		CastSkillShot(_Q, GetOrigin(mob)) 
 		end
 		
 		if Ball ~= myHero and IsReady(_E) and OriannaMenu.JungleClear.E:Value() and ValidTarget(mob, 1000) then
-		  local pointSegment,pointLine,isOnSegment  = VectorPointProjectionOnLineSegment(myHeroPos(), GetOrigin(mob), Vector(Ball))
+		  local pointSegment,pointLine,isOnSegment  = VectorPointProjectionOnLineSegment(GetOrigin(myHero), GetOrigin(mob), GetOrigin(Ball))
                   if pointLine and GetDistance(pointSegment, mob) <= 80 then
 		  CastTargetSpell(myHero, _E)
 		  end
 		end
+		
             end
-	  
+          end
+
         end
 	
 if OriannaMenu.Misc.Autolvl:Value() then  
