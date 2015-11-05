@@ -167,11 +167,6 @@ local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
   local target = GetCurrentTarget()
-  
-  if not CastingR then
-  IOW.movementEnabled = true
-  IOW.attacksEnabled = true
-  end
       
   if IOW:Mode() == "Combo" then
 
