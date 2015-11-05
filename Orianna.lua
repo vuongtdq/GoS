@@ -59,6 +59,29 @@ OriannaMenu.Drawings:Boolean("E", "Draw E Range", true)
 OriannaMenu.Drawings:Boolean("R", "Draw R Radius", true)
 OriannaMenu.Drawings:Boolean("Ball", "Draw Ball Position", true)
 
+local InterruptMenu = MenuConfig("Interrupt (R)", "Interrupt")
+
+DelayAction(function()
+  local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
+  for i, spell in pairs(CHANELLING_SPELLS) do
+    for _,k in pairs(GetEnemyHeroes()) do
+        if spell["Name"] == GetObjectName(k) then
+        InterruptMenu:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
+        end
+    end
+  end
+end, 1)
+
+OnProcessSpell(function(unit, spell)
+    if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_R) then
+      if CHANELLING_SPELLS[spell.name] then
+        if ValidTarget(unit, 1000) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() and GetDistance(Ball,unit) <= 400 then 
+        CastSpell(_R)
+        end
+      end
+    end
+end)
+
 OnDraw(function(myHero)
 if OriannaMenu.Drawings.Ball:Value() then DrawCircle(GetOrigin(Ball),150,2,100,0xffffffff) end
 if OriannaMenu.Drawings.W:Value() then DrawCircle(GetOrigin(Ball),250,2,100,0xffffffff) end
@@ -229,9 +252,3 @@ OnUpdateBuff(function(unit,buff)
   Ball = myHero
   end
 end)
-
---[[addInterrupterCallback(function(target, spellType)
-  if IsReady(_R) and GetDistance(Ball, enemy) <= 400 and OriannaMenu.Misc.Interrupt:Value() and spellType == CHANELLING_SPELLS then
-  CastSpell(_R)
-  end
-end)]]
