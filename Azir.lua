@@ -82,7 +82,8 @@ OnTick(function(myHero)
      end
 		
      for _,Soldier in pairs(AzirSoldiers) do
-		   
+     if Soldier then	   
+     	
        if ValidTarget(target, 1500) then
        SoldierRange = GetDistance(Soldier, target)
        end
@@ -101,7 +102,8 @@ OnTick(function(myHero)
        if ValidTarget(target, 1500) and GetDistance(myHero, target) >= 550 and SoldierRange <= 400 and AzirMenu.Combo.AA:Value() then
        AttackUnit(target)
        end
-	   
+     
+     end	   
      end
          
      if IsReady(_R) and ValidTarget(target, 500) and AzirMenu.Combo.R:Value() and GetPercentHP(target) <= 50 and GetPercentMP(myHero) >= 30 then
@@ -117,7 +119,8 @@ OnTick(function(myHero)
      end	
 		
      for _,Soldier in pairs(AzirSoldiers) do
-
+     if Soldier then
+     	
        if ValidTarget(target, 1500) then
        SoldierRange = GetDistance(Soldier, target)
        end
@@ -129,7 +132,8 @@ OnTick(function(myHero)
        if ValidTarget(target, 1500) and GetDistance(myHero, target) >= 550 and SoldierRange <= 400 and AzirMenu.Harass.AA:Value() then
        AttackUnit(target)
        end
-	   
+	 
+     end
      end
 	
    end
@@ -150,6 +154,8 @@ OnTick(function(myHero)
         end
 		
         for _,Soldier in pairs(AzirSoldiers) do
+        if Soldier then
+        	
 	  if IsReady(_Q) and ValidTarget(enemy, 950) and AzirMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
 	  Cast(_Q,enemy,Soldier)
 	  end
@@ -160,6 +166,8 @@ OnTick(function(myHero)
 	    CastTargetSpell(Soldier, _E)
 	    end
 	  end
+	  
+	end
         end
 
    end
@@ -176,7 +184,7 @@ OnTick(function(myHero)
 	
 	for _,Soldier in pairs(AzirSoldiers) do
 	  local movePos = myHeroPos() + (Vector(mousePos()) - myHeroPos()):normalized()*950
-	  if movePos then
+	  if Soldier and movePos then
           CastTargetSpell(Soldier, _E)
           DelayAction(function() CastSkillShot(_Q,movePos) end, 150)
           end
@@ -196,7 +204,7 @@ OnTick(function(myHero)
      
        for _,Soldier in pairs(AzirSoldiers) do
          local movePos = myHeroPos() + (Vector(toInsec) - myHeroPos()):normalized() * 950
-         if movePos then
+         if Soldier and movePos then
          CastSkillShot(_Q, movePos.x, movePos.y, movePos.z)
          DelayAction(function() CastTargetSpell(Soldier, _E) end, 250)
 	 end
