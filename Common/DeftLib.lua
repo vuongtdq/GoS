@@ -129,6 +129,65 @@ GAPCLOSER2_SPELLS = {
     ["slashCast"]                   = {Name = "Tryndamere", Range = 650,  ProjectileSpeed = 1450, Spellslot = _E}
 }
 
+DANGEROUS_SPELLS = {
+	["Akali"]      = {Spellslot = _R},
+	["Alistar"]    = {Spellslot = _W},
+	["Amumu"]      = {Spellslot = _R},
+	["Annie"]      = {Spellslot = _R},
+	["Ashe"]       = {Spellslot = _R},
+	["Akali"]      = {Spellslot = _R},
+	["Brand"]      = {Spellslot = _R},
+	["Braum"]      = {Spellslot = _R},
+	["Caitlyn"]    = {Spellslot = _R},
+	["Cassiopeia"] = {Spellslot = _R},
+	["Chogath"]    = {Spellslot = _R},
+	["Darius"]     = {Spellslot = _R},
+	["Diana"]      = {Spellslot = _R},
+	["Draven"]     = {Spellslot = _R},
+	["Ekko"]       = {Spellslot = _R},
+	["Evelynn"]    = {Spellslot = _R},
+	["Fiora"]      = {Spellslot = _R},
+	["Fizz"]       = {Spellslot = _R},
+	["Galio"]      = {Spellslot = _R},
+	["Garen"]      = {Spellslot = _R},
+	["Gnar"]       = {Spellslot = _R},
+	["Graves"]     = {Spellslot = _R},
+	["Hecarim"]    = {Spellslot = _R},
+	["JarvanIV"]   = {Spellslot = _R},
+	["Jinx"]       = {Spellslot = _R},
+	["Katarina"]   = {Spellslot = _R},
+	["Kennen"]     = {Spellslot = _R},
+	["LeBlanc"]    = {Spellslot = _R},
+	["LeeSin"]     = {Spellslot = _R},
+	["Leona"]      = {Spellslot = _R},
+	["Lissandra"]  = {Spellslot = _R},
+	["Lux"]        = {Spellslot = _R},
+	["Malphite"]   = {Spellslot = _R},
+	["Malzahar"]   = {Spellslot = _R},
+	["Morgana"]    = {Spellslot = _R},
+	["Nautilus"]   = {Spellslot = _R},
+	["Nocturne"]   = {Spellslot = _R},
+	["Orianna"]    = {Spellslot = _R},
+	["Rammus"]     = {Spellslot = _E},
+	["Riven"]      = {Spellslot = _R},
+	["Sejuani"]    = {Spellslot = _R},
+	["Shen"]       = {Spellslot = _E},
+	["Skarner"]    = {Spellslot = _R},
+	["Sona"]       = {Spellslot = _R},
+	["Symdra"]     = {Spellslot = _R},
+	["Tristana"]   = {Spellslot = _R},
+	["Urgot"]      = {Spellslot = _R},
+	["Varus"]      = {Spellslot = _R},
+	["Veigar"]     = {Spellslot = _R},
+	["Vi"]         = {Spellslot = _R},
+	["Viktor"]     = {Spellslot = _R},
+	["Warwick"]    = {Spellslot = _R},
+	["Yasuo"]      = {Spellslot = _R},
+	["Zed"]        = {Spellslot = _R},
+	["Ziggs"]      = {Spellslot = _R},
+	["Zyra"]       = {Spellslot = _R},
+}
+
 Dashes = {
     ["Vayne"]      = {Spellslot = _Q, Range = 300, Delay = 250},
     ["Riven"]      = {Spellslot = _E, Range = 325, Delay = 250},
@@ -148,7 +207,7 @@ Dashes = {
     ["Corki"]      = {Spellslot = _W, Range = 800, Delay = 250},
 }
 
-LudensStacks = 0
+local LudensStacks = 0
 
 function Cast(spell, target, origin, hitchance, speed, delay, range, width, coll)
       local hitchance = hitchance or 1
