@@ -16,9 +16,7 @@ KatarinaMenu:Menu("Harass", "Harass")
 KatarinaMenu.Harass:Boolean("Q", "Use Q", true)
 KatarinaMenu.Harass:Boolean("W", "Use W", true)
 KatarinaMenu.Harass:Boolean("E", "Use E", true)
-KatarinaMenu.Harass:Boolean("AutoQ", "Auto Q", false)
-KatarinaMenu.Harass:Boolean("AutoW", "Auto W", true)
-
+ 
 KatarinaMenu:Menu("Killsteal", "Killsteal")
 KatarinaMenu.Killsteal:Boolean("SmartKS", "Smart KS", true)
 KatarinaMenu.Killsteal:Boolean("UseWards", "Use Wards", true)
@@ -204,14 +202,6 @@ OnTick(function(myHero)
       CastTargetSpell(target, _E)
       end
   end
-
-if KatarinaMenu.Harass.AutoQ:Value() and ValidTarget(target, 675) and not CastingR then
-CastTargetSpell(target, _Q)
-end
-
-if KatarinaMenu.Harass.AutoW:Value() and ValidTarget(target, 375) and not CastingR then
-CastSpell(_W)
-end
 
     for i,enemy in pairs(GetEnemyHeroes()) do
        if KatarinaMenu.Killsteal.SmartKS:Value() then
