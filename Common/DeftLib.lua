@@ -174,7 +174,7 @@ DANGEROUS_SPELLS = {
 	["Shen"]       = {Spellslot = _E},
 	["Skarner"]    = {Spellslot = _R},
 	["Sona"]       = {Spellslot = _R},
-	["Symdra"]     = {Spellslot = _R},
+	["Syndra"]     = {Spellslot = _R},
 	["Tristana"]   = {Spellslot = _R},
 	["Urgot"]      = {Spellslot = _R},
 	["Varus"]      = {Spellslot = _R},
