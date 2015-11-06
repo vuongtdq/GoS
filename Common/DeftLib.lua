@@ -412,7 +412,7 @@ function GetDistance2XYZ(x,z,x2,z2)
 	end	
 end
 
-OnProcessSpellComplete(function(unit,spell)
+OnProcessSpell(function(unit,spell)
 	if unit and spell and GetObjectType(unit) == Obj_AI_Hero then
 			for i,enemy in pairs(GetEnemyHeroes()) do
 				if ValidTarget(enemy,20000) then
