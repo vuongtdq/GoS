@@ -31,7 +31,7 @@ SpellData = {
 		[_W] = { Name = "CassiopeiaMiasma", ProjectileName = "", Range = 925, Speed = 2500, Delay = 500, Width = 90, collision = false, aoe = true, type = "circular", IsDangerous = false},
 		[_R] = { Name = "CassiopeiaPetrifyingGaze",  ProjectileName = "", Range = 825, Speed = math.huge, Delay = 600, Width = 80, collision = false, aoe = true, type = "cone", IsDangerous = true}
 	},
-  ["ChoGath"] = {
+  ["Chogath"] = {
 		[_Q] = { Name = "", ProjectileName = "", Range = 950, Speed = math.huge, Delay = 600, Width = 250, collision = false, aoe = true, type = "circular", IsDangerous = true},
 		[_W] = { Name = "", ProjectileName = "", Range = 650, Speed = math.huge, Delay = 250, Width = 210, collision = false, aoe = false, type = "cone", IsDangerous = false}
 	},
