@@ -226,7 +226,7 @@ end
 function GetPredictedPos(unit,delay,from)
     local delay = delay or 0
     local from = from or myHero
-    return GetPredictionForPlayer(GetOrigin(from),unit,GetMoveSpeed(unit),math.huge,delay,math.huge,1,false,false)
+    return GetPredictionForPlayer(GetOrigin(from),unit,GetMoveSpeed(unit),math.huge,delay,math.huge,1,false,false).PredPos
 end
 
 function mousePos()
