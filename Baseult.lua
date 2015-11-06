@@ -51,15 +51,12 @@ BaseultMenu:Boolean("RT", "RecallTracker", true)
 if SpellData[GetObjectName(myHero)] then 
 BaseultMenu:Boolean("Enabled", "Enabled", true)
 PrintChat("Baseult for "..GetObjectName(myHero).." loaded") 
+Delay = SpellData[GetObjectName(myHero)].Delay
+MissileSpeed = SpellData[GetObjectName(myHero)].MissileSpeed
+Damage = SpellData[GetObjectName(myHero)].Damage
 end
 	
 local Isrecalling = {}
-
-if SpellData[GetObjectName(myHero)] then
-local Delay = SpellData[GetObjectName(myHero)].Delay
-local MissileSpeed = SpellData[GetObjectName(myHero)].MissileSpeed
-local Damage = SpellData[GetObjectName(myHero)].Damage
-end
 
 OnDraw(function()
 
