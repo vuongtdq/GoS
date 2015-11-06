@@ -225,9 +225,16 @@ end
 
 function GetPredictedPos(unit,delay,from)
     if not ValidTarget(unit) then return end
-    local delay = delay or 0
+    local delay = delay or 125
     local from = from or myHero
     return GetPredictionForPlayer(GetOrigin(from),unit,GetMoveSpeed(unit),math.huge,delay,math.huge,1,false,false).PredPos
+end
+
+function IsFacing(target,range,unit) 
+    local range = range or 20000
+    local unit = unit or myHero
+    if GetDistance(unit,target) < range then return end
+    return GetDistance(GetPredictedPos(unit), target) < GetDistance(unit, target)
 end
 
 function mousePos()
@@ -353,91 +360,6 @@ function GetJFarmPosition(range, width)
   end
   return BestPos, BestHit
 end
-
---Credits to Maxxxel For IsFacing
-local lastattackposition={true,true,true}
-
-function IsFacing(targetFace,range,unit) 
-	range=range or 99999
-	unit=unit or myHero
-	targetFace=targetFace
-	if (targetFace and unit)~=nil and (ValidTarget(targetFace,range,unit)) and GetDistance(targetFace,unit)<=range then
-		local unitXYZ= GetOrigin(unit)
-		local targetFaceXYZ=GetOrigin(targetFace)
-		local lastwalkway={true,true,true}
-		local walkway = GetPredictionForPlayer(GetOrigin(unit),targetFace,GetMoveSpeed(targetFace),0,1000,2000,0,false,false)
-
-		if walkway.PredPos.x==targetFaceXYZ.x then
-
-		if lastwalkway.x~=nil then
-
-		local d1 = GetDistance(targetFace,unit)
-    		local d2 = GetDistance2XYZ(lastwalkway.x,lastwalkway.z,unitXYZ.x,unitXYZ.z)
-    		return d2 < d1
-
-
-    	elseif lastwalkway.x==nil then
-    		if lastattackposition.x~=nil and lastattackposition.name==GetObjectName(targetFace) then
-			local d1 = GetDistance(targetFace,unit)
-    			local d2 = GetDistance2XYZ(lastattackposition.x,lastattackposition.z,unitXYZ.x,unitXYZ.z)
-    			return d2 < d1
-    		end
-    	end
-    elseif walkway.PredPos.x~=targetFaceXYZ.x then
-    	lastwalkway={x=walkway.PredPos.x,y=walkway.PredPos.y,z=walkway.PredPos.z} 
-
-    	if lastwalkway.x~=nil then
-		local d1 = GetDistance(targetFace,unit)
-    		local d2 = GetDistance2XYZ(lastwalkway.x,lastwalkway.z,unitXYZ.x,unitXYZ.z)
-    		return d2 < d1
-    	end
-    end
-	end
-end
-
-function GetDistance2XYZ(x,z,x2,z2)
-	if (x and z and x2 and z2)~=nil then
-		a=x2-x
-		b=z2-z
-		if (a and b)~=nil then
-			a2=a*a
-			b2=b*b
-			if (a2 and b2)~=nil then
-				return math.sqrt(a2+b2)
-			else
-				return 99999
-			end
-		else
-			return 99999
-		end
-	end	
-end
-
-OnProcessSpell(function(unit,spell)
-	if unit and spell and GetObjectType(unit) == Obj_AI_Hero then
-			for i,enemy in pairs(GetEnemyHeroes()) do
-				if ValidTarget(enemy,20000) then
-					local targetFaceXYZ=GetOrigin(enemy)
-					if (spell.name:find("Attack")) then 
-						if spell.startPos.x == targetFaceXYZ.x and spell.startPos.y == targetFaceXYZ.y and spell.startPos.z == targetFaceXYZ.z then 
-							if spell.endPos.x ~= targetFaceXYZ.x and spell.endPos.y ~= targetFaceXYZ.y and spell.endPos.z ~= targetFaceXYZ.z then 
-								lastattackposition = {x=spell.endPos.x,y=spell.endPos.y,z=spell.endPos.z,Name=GetObjectName(enemy)}
-								break
-							else
-								break
-							end
-						else
-							break
-						end
-					else
-						break
-					end
-				else
-					break
-		        	end
-                     end
-	end
-end)
 
 -- Credits To Inferno for MEC
 local SQRT = math.sqrt
