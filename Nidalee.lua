@@ -45,7 +45,7 @@ NidaleeMenu.Drawings:Boolean("R", "Draw R Range", true)
 NidaleeMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 OnDraw(function(myHero)
-local col = AhriMenu.Drawings.color:Value()
+local col = NidaleeMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
   if IsHuman() then
     if NidaleeMenu.Drawings.Q:Value() then DrawCircle(pos,1450,2,100,col) end
