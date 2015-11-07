@@ -46,6 +46,10 @@ SpellData = {
   ["Kalista"] = {
 		[_Q] = { Name = "KalistaMysticShot", ProjectileName = "", Range = 1150, Speed = 1700, Delay = 250, Width = 50, collision = true, aoe = false, type = "linear", IsDangerous = false}
 	},
+  ["Nidalee"] = {
+		[_Q] = { Name = "", ProjectileName = "", Range = 1450, Speed = 1337, Delay = 250, Width = 37.5, collision = true, aoe = false, type = "linear", IsDangerous = true},
+		[_W] = { Name = "", ProjectileName = "", Range = 900, Speed = math.huge, Delay = 1000, Width = 50, collision = false, aoe = false, type = "circular", IsDangerous = false}
+	},
   ["Orianna"] = {
                 [_Q] = { Name = "", ProjectileName = "", Range = 825, Speed = 1200, Delay = 0, Width = 80, collision = false, aoe = false, type = "circular", IsDangerous = false}
         },
