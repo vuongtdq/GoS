@@ -165,7 +165,13 @@ local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
   local target = GetCurrentTarget()
-      
+
+  if CanUseSpell(myHero, _R) == ONCOOLDOWN then
+  CastingR = false
+  IOW.movementEnabled = true
+  IOW.attacksEnabled = true
+  end
+     
   if IOW:Mode() == "Combo" then
 
       if IsReady(_Q) and KatarinaMenu.Combo.Q:Value() and ValidTarget(target, 675) and not CastingR then
@@ -368,14 +374,6 @@ OnUpdateBuff(function(unit,buff)
   CastingR = true
   IOW.movementEnabled = false
   IOW.attacksEnabled = false
-  end
-end)
-
-OnRemoveBuff(function(unit,buff)
-  if unit == myHero and buff.Name == "katarinarsound" then
-  CastingR = false
-  IOW.movementEnabled = true
-  IOW.attacksEnabled = true
   end
 end)
 
