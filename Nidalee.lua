@@ -33,7 +33,7 @@ NidaleeMenu.Misc:Slider("mpEme", "Minimum Mana %", 25, 0, 100, 0)
 NidaleeMenu.Misc:Slider("hpEme", "Minimum HP%", 70, 0, 100, 0)
 NidaleeMenu.Misc:Boolean("Eally", "Heal Allies", true)
 NidaleeMenu.Misc:Slider("mpEally", "Minimum Mana %", 50, 0, 100, 0)
-NidaleeMenu.Misc:Slider("hpEaally", "Minimum HP %", 35, 0, 100, 0)
+NidaleeMenu.Misc:Slider("hpEally", "Minimum HP %", 35, 0, 100, 0)
 NidaleeMenu.Misc:KeyBinding("Flee", "Flee", string.byte("T"))
 NidaleeMenu.Misc:KeyBinding("WallJump", "WallJump", string.byte("G"))
 
