@@ -100,10 +100,12 @@ OnTick(function(myHero)
           end
         end
 
-        if ValidTarget(target,1500) and GetDistance(target) > 425 or QCD < GetTickCount() then
-        CastSpell(_R)
-        end
-		
+        if ValidTarget(target,1500) then
+          if GetDistance(target) > 425 or QCD < GetTickCount() then
+         CastSpell(_R)
+         end
+       end	
+
       end
 	  
     end
@@ -150,7 +152,7 @@ OnTick(function(myHero)
 	
     if not IsRecalling(myHero) and IsHuman() and NidaleeMenu.Misc.Eally:Value() and NidaleeMenu.Misc.mpEally:Value() <= GetPercentMP(myHero) then
       for k,v in pairs(GetAllyHeroes()) do
-        if ValidTarget(ally) and GetDistance(v) < 650 and GetMaxHP(v)- GetHP(v) < 5+40*GetCastLevel(myHero,_E)+0.5*GetBonusAP(myHero) and GetPercentHP(v) <= NidaleeMenu.Misc.hpEally:Value() then
+        if ValidTarget(v,650) and GetMaxHP(v)- GetHP(v) < 5+40*GetCastLevel(myHero,_E)+0.5*GetBonusAP(myHero) and GetPercentHP(v) <= NidaleeMenu.Misc.hpEally:Value() then
         CastTargetSpell(v,_E)
         end
       end
@@ -175,7 +177,7 @@ OnTick(function(myHero)
 		
         if not IsHuman() and EnemiesAround(enemy, 500) < 3 then
           if IsReady(_Q) and ValidTarget(enemy, 375) and NidaleeMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then
-          Cast(_Q, myHero:Attack(enemy))
+          CastSpell(_Q)
           end
           if IsReady(_W) and ValidTarget(enemy,525) and NidaleeMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) and GetDistance(enemy) >= 175 then
           Cast(_W,GetOrigin(enemy))
