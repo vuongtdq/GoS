@@ -124,7 +124,7 @@ OnTick(function(myHero)
 		
    end
 
-   if IOW:Mode() == "LaneClear" and GetPercentMP(myHero) >= AhriMenu.LaneClear.Mana:Value() then
+   if IOW:Mode() == "LaneClear" and GetPercentMP(myHero) >= ViktorMenu.LaneClear.Mana:Value() then
      	
          if IsReady(_E) and ViktorMenu.LaneClear.E:Value() then
            local BestPos, BestHit = GetLineFarmPosition(1225, 80)
