@@ -150,7 +150,7 @@ OnTick(function(myHero)
 	
     if not IsRecalling(myHero) and IsHuman() and NidaleeMenu.Misc.Eally:Value() and NidaleeMenu.Misc.mpEally:Value() <= GetPercentMP(myHero) then
       for k,v in pairs(GetAllyHeroes()) do
-        if GetDistance(v) < ERange and GetMaxHP(v)- GetHP(v) < 5+40*GetCastLevel(myHero,_E)+0.5*GetBonusAP(myHero) and GetPercentHP(v) <= NidaleeMenu.Misc.hpEally:Value() then
+        if GetDistance(v) < 650 and GetMaxHP(v)- GetHP(v) < 5+40*GetCastLevel(myHero,_E)+0.5*GetBonusAP(myHero) and GetPercentHP(v) <= NidaleeMenu.Misc.hpEally:Value() then
         CastTargetSpell(v,_E)
         end
       end
