@@ -27,17 +27,16 @@ RyzeMenu.Misc:Boolean("Autoignite", "Auto Ignite", true)
 RyzeMenu.Misc:Boolean("Autolvl", "Auto level", true)
 RyzeMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "Q-E-W"})
 
---[[RyzeMenu:Menu("LaneClear", "LaneClear")
+RyzeMenu:Menu("LaneClear", "LaneClear")
 RyzeMenu.LaneClear:Boolean("Q", "Use Q", true)
 RyzeMenu.LaneClear:Boolean("W", "Use W", true)
 RyzeMenu.LaneClear:Boolean("E", "Use E", true)
-RyzeMenu.LaneClear:Boolean("R", "Use R", false)]]
+RyzeMenu.LaneClear:Slider("Mana", "if Mana % is More than", 30, 0, 80, 1)
 
 RyzeMenu:Menu("JungleClear", "JungleClear")
 RyzeMenu.JungleClear:Boolean("Q", "Use Q", true)
 RyzeMenu.JungleClear:Boolean("W", "Use W", true)
 RyzeMenu.JungleClear:Boolean("E", "Use E", true)
-RyzeMenu.JungleClear:Boolean("R", "Use R", false)
 
 RyzeMenu:Menu("Drawings", "Drawings")
 RyzeMenu.Drawings:Boolean("Q", "Draw Q Range", true)
@@ -60,9 +59,7 @@ OnTick(function(myHero)
   local target = GetCurrentTarget()
   
   if IOW:Mode() == "Combo" then
-	    
-	local Q2Pred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),1400,250,900,55,false,true)
-
+  	
 	if IsReady(_R) and ValidTarget(target, 700) and RyzeMenu.Combo.R:Value() and PStacks == 4 or IsEmpowered then
         CastSpell(_R)
 	end  
@@ -75,18 +72,16 @@ OnTick(function(myHero)
         CastTargetSpell(target, _E)
 	end
 	
-	if IsReady(_Q) and Q2Pred.HitChance == 1 and PStacks > 3 or IsEmpowered and RyzeMenu.Combo.Q:Value() and ValidTarget(target, 900) then
-	CastSkillShot(_Q,Q2Pred.PredPos.x,Q2Pred.PredPos.y,Q2Pred.PredPos.z)
+	if IsReady(_Q) and PStacks > 3 or IsEmpowered and RyzeMenu.Combo.Q:Value() and ValidTarget(target, 900) then
+	Cast(_Q,target,myHero,1,1400,250,900,55,false)
         elseif IsReady(_Q) and RyzeMenu.Combo.Q:Value() and ValidTarget(target, 900) then
         Cast(_Q,target)
 	end				
 		
   end
 
-  if IOW:Mode() == "Harass" then
+  if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= RyzeMenu.Harass.Mana:Value() then
 
-	local Q2Pred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),1400,250,900,55,false,true)
-	 	  
 	if IsReady(_W) and ValidTarget(target, 600) and RyzeMenu.Harass.W:Value() then
         CastTargetSpell(target, _W)
 	end
@@ -95,8 +90,8 @@ OnTick(function(myHero)
         CastTargetSpell(target, _E)
 	end
 	
-	if IsReady(_Q) and Q2Pred.Hitchance == 1 and RyzeMenu.Harass.Q:Value() and ValidTarget(target, 900) then
-	CastSkillShot(_Q,Q2Pred.PredPos.x,Q2Pred.PredPos.y,Q2Pred.PredPos.z)
+	if IsReady(_Q) and RyzeMenu.Harass.Q:Value() and ValidTarget(target, 900) then
+	Cast(_Q,target,myHero,1,1400,250,900,55,false)
         elseif IsReady(_Q) and RyzeMenu.Harass.Q:Value() and ValidTarget(target, 900) then
 	Cast(_Q,target)
 	end
@@ -126,10 +121,6 @@ OnTick(function(myHero)
       for _,mobs in pairs(minionManager.objects) do
         if GetTeam(mobs) == 300 then
 		
-		  if IsReady(_R) and RyzeMenu.JungleClear.R:Value() and PStacks == 4 or IsEmpowered and ValidTarget(mobs, 900) then
-		  CastSpell(_R)
-		  end
-		
 		  if IsReady(_W) and RyzeMenu.JungleClear.W:Value() and ValidTarget(mobs, 600) then
 		  CastTargetSpell(mobs, _W)
 		  end
@@ -143,6 +134,23 @@ OnTick(function(myHero)
 		  end
 		
         end
+
+        if GetTeam(mobs) == MINION_ENEMY and GetPercentMP(myHero) >= RyzeMenu.Harass.Mana:Value() then
+
+		  if IsReady(_W) and RyzeMenu.LaneClear.W:Value() and ValidTarget(mobs, 600) then
+		  CastTargetSpell(mobs, _W)
+		  end
+		
+		  if IsReady(_Q) and RyzeMenu.LaneClear.Q:Value() and ValidTarget(mobs, 900) then
+		  CastSkillShot(_Q,GetOrigin(mobs))
+		  end
+		
+	          if IsReady(_E) and RyzeMenu.LaneClear.E:Value() and ValidTarget(mobs, 600) then
+		  CastTargetSpell(mobs, _E)
+		  end
+		
+        end
+
       end
       
     end
