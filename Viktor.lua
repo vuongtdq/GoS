@@ -26,6 +26,11 @@ ViktorMenu:Menu("Misc", "Misc")
 ViktorMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true)
 ViktorMenu.Misc:Boolean("Autolvl", "Auto level", true)
 ViktorMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"E-Q-W", "Q-E-W"})
+	
+ViktorMenu:Menu("LaneClear", "LaneClear")
+--ViktorMenu.LaneClear:Boolean("Q", "Use Q", true)
+ViktorMenu.LaneClear:Boolean("E", "Use E", false)
+ViktorMenu.LaneClear:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
 
 ViktorMenu:Menu("Drawings", "Drawings")
 ViktorMenu.Drawings:Boolean("Q", "Draw Q Range", true)
@@ -117,6 +122,18 @@ OnTick(function(myHero)
         Cast(_R,enemy)    
         end
 		
+   end
+
+   if IOW:Mode() == "LaneClear" and GetPercentMP(myHero) >= AhriMenu.LaneClear.Mana:Value() then
+     	
+         if IsReady(_E) and ViktorMenu.LaneClear.E:Value() then
+           local BestPos, BestHit = GetLineFarmPosition(1225, 80)
+           if BestPos and BestHit > 0 then
+           StartPos = Vector(myHero) - 525 * (Vector(myHero) - Vector(BestPos)):normalized()		   
+           CastSkillShot3(_E, StartPos, BestPos)
+           end
+	 end
+
     end
 
 if ViktorMenu.Misc.Autolvl:Value() then  
