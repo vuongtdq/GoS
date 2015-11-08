@@ -97,7 +97,7 @@ OnTick(function(myHero)
 	   
      if IsReady(_W) and ValidTarget(target,1700) and EkkoMenu.Combo.W:Value() and GetCurrentMana(myHero) < (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W))) and GetCurrentMana(myHero) >= GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) and GetCurrentHP(myHero)-GetCurrentHP(target) > 60+20*GetCastLevel(myHero,_W)+1.5*GetBonusAP(myHero) then
      Cast(_W,target)
-     elseif IsReady(_W) and ValidTarget(target,1700) and GetDistance(target) > 925 then
+     elseif IsReady(_W) and ValidTarget(target,1700) and and EkkoMenu.Combo.W:Value() and GetDistance(target) > 925 then
      Cast(_W,target)
      end
        
@@ -138,7 +138,7 @@ OnTick(function(myHero)
      Cast(_Q,target)
      end
 	   
-     if IsReady(_W) and ValidTarget(target,1700) then
+     if IsReady(_W) and ValidTarget(target,1700) and EkkoMenu.Harass.W:Value() then
      Cast(_W,target)
      end
        
