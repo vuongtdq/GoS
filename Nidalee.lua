@@ -188,6 +188,7 @@ OnTick(function(myHero)
         end
         
         if IsReady(_Q) and ValidTarget(enemy,450) and NidaleeMenu.Killsteal.Q:Value() and NidaleeMenu.Killsteal.W:Value() and NidaleeMenu.Killsteal.E:Value() and EnemiesAround(enemy, 500) < 3 and IsHuman() and GetHP2(enemy) < getdmg("QM",enemy)+getdmg("Q",enemy)+getdmg("W",enemy)+getdmg("E",enemy) then
+          distancerino = GetDistance(enemy)
           Cast(_Q, enemy)
           DelayAction(function() 
           	
@@ -213,7 +214,7 @@ OnTick(function(myHero)
             end
           end
           
-	  end, 300+GetDistance(enemy)/1300)
+	  end, 300+distancerino/1300)
 	  
         end
 		
