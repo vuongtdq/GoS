@@ -28,8 +28,8 @@ ViktorMenu.Misc:Boolean("Autolvl", "Auto level", true)
 ViktorMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"E-Q-W", "Q-E-W"})
 	
 ViktorMenu:Menu("LaneClear", "LaneClear")
---ViktorMenu.LaneClear:Boolean("Q", "Use Q", true)
-ViktorMenu.LaneClear:Boolean("E", "Use E", false)
+ViktorMenu.LaneClear:Boolean("Q", "Use Q", true)
+ViktorMenu.LaneClear:Boolean("E", "Use E", true)
 ViktorMenu.LaneClear:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
 
 ViktorMenu:Menu("Drawings", "Drawings")
@@ -126,15 +126,26 @@ OnTick(function(myHero)
 
    if IOW:Mode() == "LaneClear" and GetPercentMP(myHero) >= ViktorMenu.LaneClear.Mana:Value() then
      	
-         if IsReady(_E) and ViktorMenu.LaneClear.E:Value() then
-           local BestPos, BestHit = GetLineFarmPosition(1225, 80)
-           if BestPos and BestHit > 0 then
-           StartPos = Vector(myHero) - 525 * (Vector(myHero) - Vector(BestPos)):normalized()		   
-           CastSkillShot3(_E, StartPos, BestPos)
-           end
-	 end
+        if IsReady(_E) and ViktorMenu.LaneClear.E:Value() then
+          local BestPos, BestHit = GetLineFarmPosition(1225, 80)
+          if BestPos and BestHit > 0 then
+          StartPos = Vector(myHero) - 525 * (Vector(myHero) - Vector(BestPos)):normalized()		   
+          CastSkillShot3(_E, StartPos, BestPos)
+          end
+	end
+       
+        for i,mobs in pairs(minionManager.objects) do
+          if GetTeam(mobs) == MINION_ENEMY then
+            if IsReady(_Q) and ViktorMenu.LaneClear.Q:Value() then
+            CastTargetSpell(mobs, _Q)
+            end
+          end
+        end
+   
+   end
 
-    end
+   
+       
 
 if ViktorMenu.Misc.Autolvl:Value() then  
   if GetLevel(myHero) > lastlevel then
