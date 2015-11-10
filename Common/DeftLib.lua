@@ -212,6 +212,43 @@ Dashes = {
 }
 
 local LudensStacks = 0
+Turrets = {}
+maxTurrets = 0
+
+OnObjectLoad(function(Object)
+  if GetObjectType(Object) == Obj_AI_Turret and GetTeam(Object) ~= GetTeam(myHero) then
+  insert(Object)
+  end
+end)
+
+OnCreateObj(function(Object) 
+  if GetObjectType(Object) == Obj_AI_Turret and GetTeam(Object) ~= GetTeam(myHero) then
+  insert(Object)
+  end
+end)
+
+function IsUnderTower(unit)
+  for i,turret in pairs(Turrets) do
+    if GetTeam(GetTeam) ~= GetTeam(GetTeam) and GetDistance(unit, GetOrigin(turret)) <= 950 then
+    return true
+    end
+  end
+  return false
+end
+
+function insert(turret)
+  local function FindSpot()
+    for i=1, maxTurrets do
+      local turret = Turrets[i]
+      if not turret or not IsObjectAlive(turret) then
+      return i
+      end
+    end
+    maxTurrets = maxTurrets + 1
+    return maxTurrets
+  end
+  Turrets[FindSpot()] = turret
+end
 
 function Cast(spell, target, origin, hitchance, speed, delay, range, width, coll)
       local hitchance = hitchance or 1
