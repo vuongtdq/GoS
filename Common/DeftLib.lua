@@ -227,11 +227,10 @@ function Cast(spell, target, origin, hitchance, speed, delay, range, width, coll
       end
 end
 
-function GetPredictedPos(unit,delay,from)
+function GetPredictedPos(unit,delay)
     if not ValidTarget(unit) then return end
     local delay = delay or 125
-    local from = from or myHero
-    return GetPredictionForPlayer(GetOrigin(from),unit,GetMoveSpeed(unit),math.huge,delay,math.huge,1,false,false).PredPos
+    return GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),math.huge,delay,math.huge,1,false,false).PredPos
 end
 
 function IsFacing(target,range,unit) 
