@@ -48,7 +48,7 @@ OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_E) then
       if CHANELLING_SPELLS[spell.name] then
         if ValidTarget(unit, 650) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() then
-       -- Cast(_E,unit)
+        Cast(_E,unit)
         end
       end
     end
