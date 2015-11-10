@@ -81,26 +81,28 @@ OnTick(function(myHero)
 	
     if IOW:Mode() == "Combo" then
 
-	       if IsReady(_Q) and AlistarMenu.Combo.Q:Value() and ValidTarget(target,365) then
+	if IsReady(_Q) and AlistarMenu.Combo.Q:Value() and ValidTarget(target,365) then
         CastSpell(_Q)
         end
 		
         if IsReady(_W) and IsReady(_Q) and AlistarMenu.Combo.WQ:Value() and ValidTarget(target,650) and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) then
         CastTargetSpell(target, _W)
-		     	DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(target) - 500 ) * 0.4 + 25)
+	DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(target) - 500 ) * 0.4 + 25)
         end
+
     end
     
     if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= AlistarMenu.Harass.Mana:Value() then
 
-	       if IsReady(_Q) and AlistarMenu.Harass.Q:Value() and ValidTarget(target,365) then
+	if IsReady(_Q) and AlistarMenu.Harass.Q:Value() and ValidTarget(target,365) then
         CastSpell(_Q)
         end
 		
         if IsReady(_W) and IsReady(_Q) and AlistarMenu.Harass.WQ:Value() and ValidTarget(target,650) and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) then
         CastTargetSpell(target, _W)
-		     	DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(target) - 500 ) * 0.4 + 25)
+	DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(target) - 500 ) * 0.4 + 25)
         end
+
     end
     
     if not IsRecalling(myHero) and AlistarMenu.Misc.Eme:Value() and AlistarMenu.Misc.mpEme:Value() <= GetPercentMP(myHero) and GetMaxHP(myHero)-GetCurrentHP(myHero) > 30+30*GetCastLevel(myHero,_E)+0.2*GetBonusAP(myHero) and GetPercentHP(myHero) <= AlistarMenu.Misc.hpEme:Value() then
@@ -117,20 +119,20 @@ OnTick(function(myHero)
     
     for i,enemy in pairs(GetEnemyHeroes()) do
 		
-		    if Ignite and AlistarMenu.Misc.Autoignite:Value() then
+      if Ignite and AlistarMenu.Misc.Autoignite:Value() then
         if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 600) then
         CastTargetSpell(enemy, Ignite)
         end
       end
 		
-  	   if IsReady(_Q) and ValidTarget(enemy, 365) and AlistarMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+      if IsReady(_Q) and ValidTarget(enemy, 365) and AlistarMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
       CastSpell(_Q)
       elseif IsReady(_W) and ValidTarget(enemy, 650) and AlistarMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
       CastTargetSpell(enemy, _W)
       elseif IsReady(_W) and IsReady(_Q) and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) and ValidTarget(enemy, 650) and AlistarMenu.Killsteal.WQ:Value() and GetHP2(enemy) < getdmg("Q",enemy)+getdmg("W",enemy) then
       CastTargetSpell(enemy, _W)
       DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(enemy) - 500 ) * 0.4 + 25)
-	     end
+      end
 		
     end
   
