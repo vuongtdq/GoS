@@ -70,6 +70,10 @@ SpellData = {
    ["Viktor"] = {
   	        [_W] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 500, Width = 300, collision = false, aoe = false, type = "circular", IsDangerous = false},
   	        [_R] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 250, Width = 450, collision = false, aoe = false, type = "circular", IsDangerous = false}
+       },
+   ["Xerath"] = {
+  	        [_W] = { Name = "", ProjectileName = "", Range = GetCastRange(myHero,_W), Speed = math.huge, Delay = 700, Width = 125, collision = false, aoe = false, type = "circular", IsDangerous = false},
+  	        [_E] = { Name = "", ProjectileName = "", Range = 975, Speed = 1400, Delay = 250, Width = 60, collision = true, aoe = false, type = "linear", IsDangerous = true}
        }
 }
 
