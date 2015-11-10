@@ -247,20 +247,31 @@ end
 	
 end)
 
-local Turrets = {}
-local maxTurrets = 0
+OnObjectLoad(function(Object) 
 
-OnObjectLoad(function(Object)
-  if GetObjectType(Object) == Obj_AI_Turret and GetTeam(Object) ~= GetTeam(myHero) then
-  insert(Object)
+  if GetObjectBaseName(Object) == "Ekko" then
+  twin = Object
   end
+
+  if GetObjectBaseName(Object) == "Ekko_Base_Q_Aoe_Dilation.troy" then
+  EkkoQ = Object
+  QDuration = GetTickCount()+1565
+  DelayAction(function() EkkoQ = nil end, 1547)
+  end
+
+  if GetObjectBaseName(Object) == "Ekko_Base_Q_Mis_Return.troy" then
+  EkkoQ2 = Object
+  end
+ 
+  if GetObjectBaseName(Object) == "Ekko_Base_W_Indicator.troy" then
+  EkkoW = Object 
+  WDuration = GetTickCount()+3000
+  DelayAction(function() EkkoW = nil end, 3000)
+  end
+
 end)
 
 OnCreateObj(function(Object) 
-  
-  if GetObjectType(Object) == Obj_AI_Turret and GetTeam(Object) ~= GetTeam(myHero) then
-  insert(Object)
-  end
 
   if GetObjectBaseName(Object) == "Ekko" then
   twin = Object
@@ -295,29 +306,6 @@ OnDeleteObj(function(Object)
   end
 
 end)
-
-function IsUnderTower(unit)
-  for i,turret in pairs(Turrets) do
-    if GetTeam(GetTeam) ~= GetTeam(GetTeam) and GetDistance(unit, GetOrigin(turret)) <= 950 then
-    return true
-    end
-  end
-  return false
-end
-
-function insert(turret)
-  local function FindSpot()
-    for i=1, maxTurrets do
-      local turret = Turrets[i]
-      if not turret or not IsObjectAlive(turret) then
-      return i
-      end
-    end
-    maxTurrets = maxTurrets + 1
-    return maxTurrets
-  end
-  Turrets[FindSpot()] = turret
-end
 
 function DrawRectangleOutline(startPos, endPos, width)
 	local c1 = startPos+Vector(Vector(endPos)-startPos):perpendicular():normalized()*width/2
