@@ -107,11 +107,12 @@ local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local Qtarget = TargetSelector(1010,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
     
     if IOW:Mode() == "Combo" then
 	
-                if IsReady(_Q) and ValidTarget(target, 975) and BlitzcrankMenu.Combo.Q:Value() then
-                Cast(_Q,target)
+                if IsReady(_Q) and ValidTarget(Qtarget, 1010) and BlitzcrankMenu.Combo.Q:Value() then
+                Cast(_Q,Qtarget)
 	        end
                           
                 if GetCurrentMana(myHero) >= 200 and IsReady(_W) and IsReady(_Q) and GetDistance(target) <= 1275 and GetDistance(target) >= 975 and BlitzcrankMenu.Combo.W:Value() then
@@ -132,8 +133,8 @@ OnTick(function(myHero)
 	
 	if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= BlitzcrankMenu.Harass.Mana:Value() then
 	
-                if IsReady(_Q) and ValidTarget(target, 975) and BlitzcrankMenu.Harass.Q:Value() then
-                Cast(_Q,target)
+                if IsReady(_Q) and ValidTarget(Qtarget, 1010) and BlitzcrankMenu.Harass.Q:Value() then
+                Cast(_Q,Qtarget)
 	        end
 		
 		if IsReady(_E) and IsInDistance(target, 250) and BlitzcrankMenu.Harass.E:Value() then
