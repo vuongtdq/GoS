@@ -93,7 +93,7 @@ OnTick(function(myHero)
         end
         
 	if Ignite and SivirMenu.Misc.AutoIgnite:Value() then
-          if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 600) then
+          if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
           CastTargetSpell(enemy, Ignite)
           end
 	end
