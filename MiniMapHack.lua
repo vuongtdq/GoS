@@ -1,3 +1,5 @@
+require('Inspired')
+
 local unittraveled = 0
 local MissTimer = {}
 local MissSec = {}
@@ -19,15 +21,15 @@ OnTick(function(myHero)
         end
 end)
 
-OnDraw(function(myHero)
+OnDrawMinimap(function() 
     for i,enemy in pairs(GetEnemyHeroes()) do
-        if enemy ~= nil and IsDead(enemy) == false and IsVisible(enemy) == false then
+        if enemy ~= nil and not IsDead(enemy) and IsVisible(enemy) == false then
           if MissSec[i] == nil then
           MissSec[i] = 0
           end
           unittraveled = GetMoveSpeed(enemy)*MissSec[i]
-          if unittraveled > 50 and unittraveled < 10000 then
-          DrawCircle(GetOrigin(enemy), unittraveled,1,0,0xffffffff)
+          if unittraveled > 50 and unittraveled < 7000 then
+          DrawCircleMinimap(GetOrigin(enemy), unittraveled,1,100,ARGB(50,255,0,255))
           end
         end
     end
