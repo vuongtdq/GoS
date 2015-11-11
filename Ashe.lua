@@ -78,6 +78,8 @@ local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local Wtarget = TargetSelector(1200,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false):GetTarget()
+    local Rtarget = TargetSelector(3000,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false):GetTarget()
     
     if IOW:Mode() == "Combo" then
 	
@@ -85,12 +87,12 @@ OnTick(function(myHero)
         CastSpell(_Q)
         end
 						
-        if IsReady(_W) and ValidTarget(target, 1200) and AsheMenu.Combo.W:Value() then
-        Cast(_W,target)
+        if IsReady(_W) and ValidTarget(Wtarget, 1200) and AsheMenu.Combo.W:Value() then
+        Cast(_W,Wtarget)
         end
 						
-        if IsReady(_R) and ValidTarget(target, 2000) and GetPercentHP(target) <= 50 and AsheMenu.Combo.R:Value() then
-        Cast(_R,target)
+        if IsReady(_R) and ValidTarget(Rtarget, 2000) and GetPercentHP(Rtarget) <= 50 and AsheMenu.Combo.R:Value() then
+        Cast(_R,Rtarget)
 	end
 		
 	if GetItemSlot(myHero,3140) > 0 and IsReady(GetItemSlot(myHero,3140)) and AsheMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < AsheMenu.Combo.QSSHP:Value() then
@@ -108,15 +110,15 @@ OnTick(function(myHero)
         CastSpell(_Q)
         end
 						
-        if IsReady(_W) and ValidTarget(target, 1200) and AsheMenu.Harass.W:Value() then
-        Cast(_W,target)
+        if IsReady(_W) and ValidTarget(Wtarget, 1200) and AsheMenu.Harass.W:Value() then
+        Cast(_W,Wtarget)
 	end
 		
     end
 
     if AsheMenu.Combo.FireKey:Value() then
-      if IsReady(_R) and ValidTarget(target, 3000) then 
-      Cast(_R,target)
+      if IsReady(_R) and ValidTarget(Rtarget, 3000) then 
+      Cast(_R,Rtarget)
       end  
     end
 
