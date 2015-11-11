@@ -123,8 +123,8 @@ OnTick(function(myHero)
     end
 
       if AsheMenu.Harass.AutoW:Value() and GetPercentMP(myHero) >= AsheMenu.Harass.WMana:Value() then
-        if IsReady(_W) and ValidTarget(target, 1200) and not IsRecalling(myHero) then
-        Cast(_W,target)
+        if IsReady(_W) and ValidTarget(Wtarget, 1200) and not IsRecalling(myHero) then
+        Cast(_W,Wtarget)
 	end
       end
 
