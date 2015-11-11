@@ -144,7 +144,7 @@ OnTick(function(myHero)
         end
         
           if Ignite and VayneMenu.Misc.AutoIgnite:Value() then
-            if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*2.5 and ValidTarget(enemy, 900) then
+            if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 900) then
             CastTargetSpell(enemy, Ignite)
             end
 	  end
