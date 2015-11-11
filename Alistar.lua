@@ -78,6 +78,7 @@ local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local Wtarget = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
 	
     if IOW:Mode() == "Combo" then
 
@@ -85,9 +86,9 @@ OnTick(function(myHero)
         CastSpell(_Q)
         end
 		
-        if IsReady(_W) and IsReady(_Q) and AlistarMenu.Combo.WQ:Value() and ValidTarget(target,650) and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) then
-        CastTargetSpell(target, _W)
-	DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(target) - 500 ) * 0.4 + 25)
+        if IsReady(_W) and IsReady(_Q) and AlistarMenu.Combo.WQ:Value() and ValidTarget(Wtarget,650) and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) then
+        CastTargetSpell(Wtarget, _W)
+	DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(Wtarget) - 500 ) * 0.4 + 25)
         end
 
     end
@@ -98,9 +99,9 @@ OnTick(function(myHero)
         CastSpell(_Q)
         end
 		
-        if IsReady(_W) and IsReady(_Q) and AlistarMenu.Harass.WQ:Value() and ValidTarget(target,650) and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) then
-        CastTargetSpell(target, _W)
-	DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(target) - 500 ) * 0.4 + 25)
+        if IsReady(_W) and IsReady(_Q) and AlistarMenu.Harass.WQ:Value() and ValidTarget(Wtarget,650) and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) then
+        CastTargetSpell(Wtarget, _W)
+	DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(Wtarget) - 500 ) * 0.4 + 25)
         end
 
     end
