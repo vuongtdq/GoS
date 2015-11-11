@@ -158,10 +158,9 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			elseif spellname == "R" then apdmg = math.max(70*Rlvl+50+.3*GetBonusAP(Source)+(.1*Rlvl+.1)*(GetBonusDmg(Source)+GetBaseDamage(Source)),(70*Rlvl+50+.3*GetBonusAP(Source)+(.1*Rlvl+.1)*(GetBonusDmg(Source)+GetBaseDamage(Source)))*1.5*stagedmg3) --150% the big one. stage3: Max damage
 			end
 		elseif GetObjectName(Source) == "Darius" then
-			if spellname == "P" then apdmg = (-.75)*((-1)^GetLevel(Source)-2*GetLevel(Source)-13)+.3*(GetBonusDmg(Source)+GetBaseDamage(Source)) --xstack over 5 sec
-			elseif spellname == "Q" then addmg = math.max(35*Qlvl+35+.7*(GetBonusDmg(Source)+GetBaseDamage(Source)),(35*Qlvl+35+.7*(GetBonusDmg(Source)+GetBaseDamage(Source)))*1.5*stagedmg3) --150% Champions in the outer half. stage3: Max damage
-			elseif spellname == "W" then addmg = .2*Wlvl*(GetBonusDmg(Source)+GetBaseDamage(Source))  --(bonus)
-			elseif spellname == "R" then dmg = math.max(90*Rlvl+70+.75*(GetBonusDmg(Source)+GetBaseDamage(Source)),(90*Rlvl+70+.75*(GetBonusDmg(Source)+GetBaseDamage(Source)))*2*stagedmg3) --xstack of Hemorrhage deals an additional 20% damage. stage3: Max damage
+			if spellname == "Q" then addmg = math.max(20*Qlvl+(.1*Qlvl+.9)*(GetBonusDmg(Source)+GetBaseDamage(Source)),(20*Qlvl+(.1*Qlvl+.9)*(GetBonusDmg(Source)+GetBaseDamage(Source)))*1.5*stagedmg3) --150% Champions in the outer half. stage3: Max damage
+			elseif spellname == "W" then addmg = .4*(GetBonusDmg(Source)+GetBaseDamage(Source))  --(bonus)
+			elseif spellname == "R" then dmg = math.max(100*Rlvl+.75*(GetBonusDmg(Source)+GetBaseDamage(Source)),(100*Rlvl+.75*(GetBonusDmg(Source)+GetBaseDamage(Source)))*2*stagedmg3) --xstack of Hemorrhage deals an additional 20% damage. stage3: Max damage
 			end
 		elseif GetObjectName(Source) == "Diana" then
 			if spellname == "P" then apdmg = math.max(5*GetLevel(Source)+15,10*GetLevel(Source)-10,15*GetLevel(Source)-60,20*GetLevel(Source)-125,25*GetLevel(Source)-200)+.8*GetBonusAP(Source)  -- (bonus)
