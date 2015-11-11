@@ -88,29 +88,32 @@ end)
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local Qtarget = TargetSelector(930,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
+    local Etarget = TargetSelector(1030,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
+    local Rtarget = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
     local mousePos = GetMousePos()
     
     if IOW:Mode() == "Combo" then
 
-        if IsReady(_E) and ValidTarget(target,975) and AhriMenu.Combo.E:Value() then
-        Cast(_E,target)
+        if IsReady(_E) and ValidTarget(Etarget,975) and AhriMenu.Combo.E:Value() then
+        Cast(_E,Etarget)
         end
 	
-        if AhriMenu.Combo.RMode:Value() == 1 and AhriMenu.Combo.R:Value() and ValidTarget(target,900) then
-          local BestPos = Vector(target) - (Vector(target) - Vector(myHero)):perpendicular():normalized() * 350
+        if AhriMenu.Combo.RMode:Value() == 1 and AhriMenu.Combo.R:Value() and ValidTarget(Rtarget,900) then
+          local BestPos = Vector(Rtarget) - (Vector(Rtarget) - Vector(myHero)):perpendicular():normalized() * 350
 	  if UltOn and BestPos then
           CastSkillShot(_R,BestPos)
-	  elseif IsReady(_R) and BestPos and getdmg("Q",target)+getdmg("W",target,myHero,3)+getdmg("E",target)+getdmg("R",target) > GetCurrentHP(target)+GetMagicShield(target)+GetDmgShield(target) then
+          elseif IsReady(_R) and BestPos and getdmg("Q",Rtarget)+getdmg("W",Rtarget,myHero,3)+getdmg("E",Rtarget)+getdmg("R",Rtarget) > GetHP2(Rtarget) then
 	  CastSkillShot(_R,BestPos)
 	  end
 	end
 
-        if AhriMenu.Combo.RMode:Value() == 2 and AhriMenu.Combo.R:Value() and ValidTarget(target,900)then
+        if AhriMenu.Combo.RMode:Value() == 2 and AhriMenu.Combo.R:Value() and ValidTarget(Rtarget,900)then
           local AfterTumblePos = GetOrigin(myHero) + (Vector(mousePos) - GetOrigin(myHero)):normalized() * 550
-          local DistanceAfterTumble = GetDistance(AfterTumblePos, target)
+          local DistanceAfterTumble = GetDistance(AfterTumblePos, Rtarget)
    	  if UltOn and DistanceAfterTumble < 550 then
 	  CastSkillShot(_R,mousePos)
-          elseif IsReady(_R) and getdmg("Q",target)+getdmg("W",target,myHero,3)+getdmg("E",target)+getdmg("R",target) > GetCurrentHP(target)+GetMagicShield(target)+GetDmgShield(target) then
+          elseif IsReady(_R) and getdmg("Q",Rtarget)+getdmg("W",Rtarget,myHero,3)+getdmg("E",Rtarget)+getdmg("R",Rtarget) > GetHP2(Rtarget) then
 	  CastSkillShot(_R,mousePos) 
           end
 	end
@@ -119,8 +122,8 @@ OnTick(function(myHero)
 	CastSpell(_W)
 	end
 		
-	if IsReady(_Q) and ValidTarget(target, 880) and AhriMenu.Combo.Q:Value() then
-        Cast(_Q,target)
+	if IsReady(_Q) and ValidTarget(Qtarget, 880) and AhriMenu.Combo.Q:Value() then
+        Cast(_Q,Qtarget)
         end
 					
     end
