@@ -105,7 +105,7 @@ OnTick(function(myHero)
     for i,enemy in pairs(GetEnemyHeroes()) do
 
 	if Ignite and ViktorMenu.Misc.AutoIgnite:Value() then
-          if CanUseSpell(myHero, Ignite) == READY and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetHPRegen(enemy)*2.5 and GetDistanceSqr(GetOrigin(enemy)) < 600*600 then
+          if CanUseSpell(myHero, Ignite) == READY and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetHPRegen(enemy)*3 and GetDistanceSqr(GetOrigin(enemy)) < 600*600 then
           CastTargetSpell(enemy, Ignite)
           end
         end
