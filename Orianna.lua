@@ -241,6 +241,12 @@ OnProcessSpell(function(unit, spell)
   end
 end)
 
+OnObjectLoad(function(Object)  
+  if GetObjectBaseName(Object) == "Orianna_Base_Q_yomu_ring_green.troy" then
+  Ball = Object
+  end
+end)
+
 OnCreateObj(function(Object) 
   if GetObjectBaseName(Object) == "Orianna_Base_Q_yomu_ring_green.troy" then
   Ball = Object
