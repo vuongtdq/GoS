@@ -74,6 +74,9 @@ OnProcessSpell(function(unit, spell)
     end
 end)
 
+local target1 = TargetSelector(930,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
+local target2 = TargetSelector(1030,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
+local target3 = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
 local UltOn = false
 local lastlevel = GetLevel(myHero)-1
   
@@ -88,9 +91,9 @@ end)
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
-    local Qtarget = TargetSelector(930,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
-    local Etarget = TargetSelector(1030,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
-    local Rtarget = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
+    local Qtarget = target1:GetTarget()
+    local Etarget = target2:GetTarget()
+    local Rtarget = target3:GetTarget()
     local mousePos = GetMousePos()
     
     if IOW:Mode() == "Combo" then
