@@ -86,9 +86,9 @@ if CassiopeiaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),700,1,0,col) en
 if CassiopeiaMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),825,1,0,col) end
 end)
 
-local target1 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local target2 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local target3 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target1 = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target2 = TargetSelector(970,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target3 = TargetSelector(825,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local LastE = 0
 local lastlevel = GetLevel(myHero)-1
 
@@ -108,11 +108,11 @@ OnTick(function(myHero)
 		CastTargetSpell(target, _E)
 		end
 			
-		if IsReady(_Q) and CassiopeiaMenu.Combo.Q:Value() and ValidTarget(Qtarget, 850) then
+		if IsReady(_Q) and CassiopeiaMenu.Combo.Q:Value() and ValidTarget(Qtarget, 900) then
 		Cast(_Q,Qtarget)
 		end
 		
-		if IsReady(_W) and CassiopeiaMenu.Combo.W:Value() and ValidTarget(Wtarget, 925) and not IsPoisoned(Wtarget) then
+		if IsReady(_W) and CassiopeiaMenu.Combo.W:Value() and ValidTarget(Wtarget, 970) and not IsPoisoned(Wtarget) then
 		Cast(_W,Wtarget)
 		end
 		
@@ -124,11 +124,11 @@ OnTick(function(myHero)
 		CastTargetSpell(target, _E)
 		end
 			
-		if IsReady(_Q) and CassiopeiaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 850) then
+		if IsReady(_Q) and CassiopeiaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 900) then
 	        Cast(_Q,Qtarget)
 		end
 		
-		if IsReady(_W) and CassiopeiaMenu.Harass.W:Value() and ValidTarget(Wtarget, 925) then
+		if IsReady(_W) and CassiopeiaMenu.Harass.W:Value() and ValidTarget(Wtarget, 970) then
 		Cast(_W,Wtarget)
 		end
 		
@@ -142,11 +142,11 @@ OnTick(function(myHero)
                   end
 		end
 		
-		if IsReady(_Q) and ValidTarget(enemy, 850) and CassiopeiaMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+		if IsReady(_Q) and ValidTarget(enemy, 900) and CassiopeiaMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
 		Cast(_Q,enemy)
 		elseif IsReady(_E) and ValidTarget(enemy, 700) and CassiopeiaMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
 		CastTargetSpell(enemy, _E)
-		elseif IsReady(_W) and ValidTarget(enemy, 850) and CassiopeiaMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
+		elseif IsReady(_W) and ValidTarget(enemy, 970) and CassiopeiaMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
 		Cast(_W,enemy)
 		end
 		
