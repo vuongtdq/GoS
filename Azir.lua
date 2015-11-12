@@ -132,7 +132,7 @@ OnTick(function(myHero)
        SoldierRange = GetDistance(Soldier, target)
        end
 		   
-       if IsReady(_Q) and GetDistance(Qtarget) >= 400 and ValidTarget(Qtarget, 950) and AzirMenu.Harass.Q:Value() then
+       if IsReady(_Q) and GetDistance(Qtarget) >= 400 and ValidTarget(Qtarget, 990) and AzirMenu.Harass.Q:Value() then
        Cast(_Q,Qtarget,Soldier)
        end
 		   
