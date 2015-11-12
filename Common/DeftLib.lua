@@ -18,7 +18,7 @@ SpellData = {
         },
   ["Azir"] = {
 		[_Q] = { Name = "AzirQ", Range = 950,  Speed = 1600, Width = 80, collision = false, aoe = false, type = "linear", IsDangerous = false},
-		[_W] = { Name = "AzirW", Range = 750, Speed = math.huge, Width = 100, collision = false, aoe = false, type = "circular"},
+		[_W] = { Name = "AzirW", Range = 450, Speed = math.huge, Width = 400, collision = false, aoe = false, type = "circular"},
 		[_E] = { Name = "AzirE", Range = 1100, Speed = 1200, Delay = 250, Width = 60, collision = true, aoe = false, type = "linear", IsDangerous = false},
 		[_R] = { Name = "AzirR", Range = 520, Speed = 1300, Delay = 250, Width = 600, collision = false, aoe = true, type = "linear", IsDangerous = true}
 	},
