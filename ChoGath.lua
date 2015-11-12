@@ -105,7 +105,7 @@ OnTick(function(myHero)
 	
     if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= ChoGathMenu.Harass.Mana:Value() then
 
-        if IsReady(_Q) and ValidTarget(Qtarget,950) and ChoGathMenu.Harass.Q:Value() then
+        if IsReady(_Q) and ValidTarget(Qtarget,1075) and ChoGathMenu.Harass.Q:Value() then
         Cast(_Q,Qtarget)
         end
 	       
