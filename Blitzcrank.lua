@@ -147,7 +147,7 @@ OnTick(function(myHero)
                   end
                 end
 		
-  	        if IsReady(_Q) and ValidTarget(enemy, 975) and BlitzcrankMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+  	        if IsReady(_Q) and ValidTarget(enemy, 1010) and BlitzcrankMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
                 Cast(_Q,enemy)
                 elseif IsReady(_R) and ValidTarget(enemy, 600) and BlitzcrankMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
                 CastSpell(_R)
