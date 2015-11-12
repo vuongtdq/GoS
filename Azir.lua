@@ -69,16 +69,23 @@ if AzirMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1300,1,0,col) end
 if AzirMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),950,1,0,col) end
 end)
 
+local target1 = TargetSelector(990,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target2 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target3 = TargetSelector(500,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+
 local AzirSoldiers = {}
 local lastlevel = GetLevel(myHero)-1
   
 OnTick(function(myHero)
-   local target = GetCurrentTarget()	
+   local target = GetCurrentTarget()
+   local Qtarget = target1:GetTarget()
+   local Wtarget = target2:GetTarget()
+   local Rtarget = target3:GetTarget()
    
    if IOW:Mode() == "Combo" then
 	
-     if IsReady(_W) and ValidTarget(target,850) and AzirMenu.Combo.W:Value() then
-     Cast(_W,target)
+     if IsReady(_W) and ValidTarget(Wtarget,800) and AzirMenu.Combo.W:Value() then
+     Cast(_W,Wtarget)
      end
 		
      for _,Soldier in pairs(AzirSoldiers) do
@@ -95,27 +102,27 @@ OnTick(function(myHero)
 	 end
        end
 		   
-       if IsReady(_Q) and SoldierRange >= 400 and ValidTarget(target, 950) and AzirMenu.Combo.Q:Value() then
-       Cast(_Q,target,Soldier)
+       if IsReady(_Q) and SoldierRange >= 400 and ValidTarget(Qtarget, 990) and AzirMenu.Combo.Q:Value() then
+       Cast(_Q,Qtarget,Soldier)
        end
 		   
-       if ValidTarget(target, 1500) and GetDistance(myHero, target) >= 550 and SoldierRange <= 400 and AzirMenu.Combo.AA:Value() then
+       if ValidTarget(target, 1500) and GetDistance(target) >= 550 and SoldierRange <= 400 and AzirMenu.Combo.AA:Value() then
        AttackUnit(target)
        end
      
      end	   
      end
          
-     if IsReady(_R) and ValidTarget(target, 500) and AzirMenu.Combo.R:Value() and GetPercentHP(target) <= 50 and GetPercentMP(myHero) >= 30 then
-     Cast(_R,target)
+     if IsReady(_R) and ValidTarget(Rtarget, 500) and AzirMenu.Combo.R:Value() and GetPercentHP(Rtarget) <= 50 and GetPercentMP(myHero) >= 30 then
+     Cast(_R,Rtarget)
      end
 	
    end
 	
    if IOW:Mode() == "Harass"  then
     	
-     if IsReady(_W) and ValidTarget(target,850) and AzirMenu.Harass.W:Value() then
-     Cast(_W,target)
+     if IsReady(_W) and ValidTarget(Wtarget,850) and AzirMenu.Harass.W:Value() then
+     Cast(_W,Wtarget)
      end	
 		
      for _,Soldier in pairs(AzirSoldiers) do
@@ -125,8 +132,8 @@ OnTick(function(myHero)
        SoldierRange = GetDistance(Soldier, target)
        end
 		   
-       if IsReady(_Q) and GetDistance(target) >= 400 and ValidTarget(target, 950) and AzirMenu.Harass.Q:Value() then
-       Cast(_Q,target,Soldier)
+       if IsReady(_Q) and GetDistance(Qtarget) >= 400 and ValidTarget(Qtarget, 950) and AzirMenu.Harass.Q:Value() then
+       Cast(_Q,Qtarget,Soldier)
        end
 		   
        if ValidTarget(target, 1500) and GetDistance(myHero, target) >= 550 and SoldierRange <= 400 and AzirMenu.Harass.AA:Value() then
