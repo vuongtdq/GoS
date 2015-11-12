@@ -70,6 +70,8 @@ OnProcessSpell(function(unit, spell)
     end
 end)
 
+local target1 = TargetSelector(1075,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target2 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local lastlevel = GetLevel(myHero)-1
   
 OnDraw(function(myHero)
@@ -82,15 +84,17 @@ end)
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local Qtarget = target1:GetTarget()
+    local Wtarget = target2:GetTarget()
     
     if IOW:Mode() == "Combo" then
 
-        if IsReady(_Q) and ValidTarget(target,950) and ChoGathMenu.Combo.Q:Value() then
-        Cast(_Q,target)
+        if IsReady(_Q) and ValidTarget(Qtarget,1075) and ChoGathMenu.Combo.Q:Value() then
+        Cast(_Q,Qtarget)
         end
 	       
-	      if IsReady(_W) and ValidTarget(target,650) and ChoGathMenu.Combo.W:Value() then
-        Cast(_W,target)
+	if IsReady(_W) and ValidTarget(Wtarget,650) and ChoGathMenu.Combo.W:Value() then
+        Cast(_W,Wtarget)
         end
         
         if IsReady(_R) and ValidTarget(target,235) and ChoGathMenu.Combo.R:Value() and GetHP2(target) < getdmg("R", target) then
@@ -101,12 +105,12 @@ OnTick(function(myHero)
 	
     if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= ChoGathMenu.Harass.Mana:Value() then
 
-        if IsReady(_Q) and ValidTarget(target,950) and ChoGathMenu.Harass.Q:Value() then
-        Cast(_Q,target)
+        if IsReady(_Q) and ValidTarget(Qtarget,950) and ChoGathMenu.Harass.Q:Value() then
+        Cast(_Q,Qtarget)
         end
 	       
-	if IsReady(_W) and ValidTarget(target,650) and ChoGathMenu.Harass.W:Value() then
-        Cast(_W,target)
+	if IsReady(_W) and ValidTarget(Wtarget,650) and ChoGathMenu.Harass.W:Value() then
+        Cast(_W,Wtarget)
         end
         
     end
