@@ -105,7 +105,7 @@ OnTick(function(myHero)
     
     if IOW:Mode() == "Combo" then
 
-        if IsReady(_E) and ValidTarget(Etarget,975) and AhriMenu.Combo.E:Value() then
+        if IsReady(_E) and ValidTarget(Etarget,1030) and AhriMenu.Combo.E:Value() then
         Cast(_E,Etarget)
         end
 	
@@ -140,7 +140,7 @@ OnTick(function(myHero)
 	
     if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= AhriMenu.Harass.Mana:Value() then
 
-        if IsReady(_E) and ValidTarget(target, 975) and AhriMenu.Harass.E:Value() then
+        if IsReady(_E) and ValidTarget(target, 1030) and AhriMenu.Harass.E:Value() then
         Cast(_E,target)
         end
 				
@@ -164,9 +164,9 @@ OnTick(function(myHero)
                 
 	if IsReady(_W) and ValidTarget(enemy, 700) and AhriMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy,myHero,3) then
 	CastSpell(_W)
-	elseif IsReady(_Q) and ValidTarget(enemy, 880) and AhriMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+	elseif IsReady(_Q) and ValidTarget(enemy, 930) and AhriMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
 	Cast(_Q,enemy)
-	elseif IsReady(_E) and ValidTarget(enemy, 975) and AhriMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
+	elseif IsReady(_E) and ValidTarget(enemy, 1030) and AhriMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
 	Cast(_E,enemy)
         end
 
