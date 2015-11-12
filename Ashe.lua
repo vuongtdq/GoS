@@ -73,13 +73,15 @@ OnDraw(function(myHero)
 if AsheMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),1200,1,0,AsheMenu.Drawings.color:Value()) end
 end)
 
+local target1 = TargetSelector(1200,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
+local target2 = TargetSelector(3000,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
 local QReady = false
 local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
-    local Wtarget = TargetSelector(1200,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false):GetTarget()
-    local Rtarget = TargetSelector(3000,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false):GetTarget()
+    local Wtarget = target1:GetTarget()
+    local Rtarget = target2:GetTarget()
     
     if IOW:Mode() == "Combo" then
 	
