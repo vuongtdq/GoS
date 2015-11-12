@@ -23,7 +23,7 @@ SpellData = {
 		[_R] = { Name = "AzirR", Range = 520, Speed = 1300, Delay = 250, Width = 600, collision = false, aoe = true, type = "linear", IsDangerous = true}
 	},
   ["Blitzcrank"] = {
-		[_Q] = { Name = "RocketGrabMissile", ProjectileName = "FistGrab_mis.troy", Range = 975, Speed = 1700, Width = 70, Delay = 250, collision = true, aoe = false, type = "linear", IsDangerous = true},
+		[_Q] = { Name = "RocketGrabMissile", ProjectileName = "FistGrab_mis.troy", Range = 975, Speed = 1800, Width = 70, Delay = 250, collision = true, aoe = false, type = "linear", IsDangerous = true},
 		[_R] = { Name = "StaticField", Range = 0, Speed = math.huge, Width = 600, Delay = 250, collision = false, aoe = false, type = "circular", IsDangerous = false}
 	},
   ["Cassiopeia"] = {
