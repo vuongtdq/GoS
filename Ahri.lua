@@ -132,7 +132,7 @@ OnTick(function(myHero)
 	CastSpell(_W)
 	end
 		
-	if IsReady(_Q) and ValidTarget(Qtarget, 880) and AhriMenu.Combo.Q:Value() then
+	if IsReady(_Q) and ValidTarget(Qtarget, 930) and AhriMenu.Combo.Q:Value() then
         Cast(_Q,Qtarget)
         end
 					
@@ -148,7 +148,7 @@ OnTick(function(myHero)
 	CastSpell(_W)
 	end
 		
-	if IsReady(_Q) and ValidTarget(target, 880) and AhriMenu.Harass.Q:Value() then
+	if IsReady(_Q) and ValidTarget(target, 930) and AhriMenu.Harass.Q:Value() then
         Cast(_Q,target)
         end
 		
