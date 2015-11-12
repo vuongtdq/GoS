@@ -123,11 +123,11 @@ OnTick(function(myHero)
           end
         end
                 
-	if IsReady(_W) and ValidTarget(enemy, 235) and ChoGathMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
-	CastSpell(_W)
+	if IsReady(_R) and ValidTarget(enemy, 235) and ChoGathMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
+	CastTargetSpell(enemy, _R)
 	elseif IsReady(_W) and ValidTarget(enemy, 650) and ChoGathMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then 
 	Cast(_W,enemy)
-	elseif IsReady(_Q) and ValidTarget(enemy, 950) and ChoGathMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then
+	elseif IsReady(_Q) and ValidTarget(enemy, 1075) and ChoGathMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then
 	Cast(_Q,enemy)
         end
 
