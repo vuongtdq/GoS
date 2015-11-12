@@ -86,46 +86,34 @@ if CassiopeiaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),700,1,0,col) en
 if CassiopeiaMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),825,1,0,col) end
 end)
 
-local poisoned = {}
-
-OnUpdateBuff(function(unit,buff)
-  if GetTeam(unit) ~= GetTeam(myHero) and buff.Name:find("poison") then
-  poisoned[GetNetworkID(unit)] = buff.Count
-  end
-end)
-
-OnRemoveBuff(function(unit,buff)
-  if GetTeam(unit) ~= GetTeam(myHero) and buff.Name:find("poison") then
-  poisoned[GetNetworkID(unit)] = 0
-  end
-end)
-
-function IsPoisoned(unit)
-   return (poisoned[GetNetworkID(unit)] or 0) > 0
-end
-
-local lastlevel = GetLevel(myHero)-1
+local target1 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target2 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target3 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local LastE = 0
+local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local Qtarget = target1:GetTarget()
+    local Wtarget = target2:GetTarget()
+    local Rtarget = target3:GetTarget()
     
     if IOW:Mode() == "Combo" then
 
-		if IsReady(_R) and IsFacing(target, 825) and ValidTarget(target, 825) and CassiopeiaMenu.Combo.R:Value() and GetPercentHP(target) <= 50 and GetPercentMP(myHero) >= 30 then
-		Cast(_R,target)
+		if IsReady(_R) and IsFacing(Rtarget, 825) and ValidTarget(Rtarget, 825) and CassiopeiaMenu.Combo.R:Value() and GetPercentHP(Rtarget) <= 50 and GetPercentMP(myHero) >= 30 then
+		Cast(_R,Rtarget)
 		end
 
 	        if GetTickCount() > LastE*1000 and IsReady(_E) and IsPoisoned(target) and CassiopeiaMenu.Combo.E:Value() and ValidTarget(target, 700) then
 		CastTargetSpell(target, _E)
 		end
 			
-		if IsReady(_Q) and CassiopeiaMenu.Combo.Q:Value() and ValidTarget(target, 850) then
-		Cast(_Q,target)
+		if IsReady(_Q) and CassiopeiaMenu.Combo.Q:Value() and ValidTarget(Qtarget, 850) then
+		Cast(_Q,Qtarget)
 		end
 		
-		if IsReady(_W) and CassiopeiaMenu.Combo.W:Value() and ValidTarget(target, 925) and not IsPoisoned(target) then
-		Cast(_W,target)
+		if IsReady(_W) and CassiopeiaMenu.Combo.W:Value() and ValidTarget(Wtarget, 925) and not IsPoisoned(Wtarget) then
+		Cast(_W,Wtarget)
 		end
 		
     end
@@ -136,12 +124,12 @@ OnTick(function(myHero)
 		CastTargetSpell(target, _E)
 		end
 			
-		if IsReady(_Q) and CassiopeiaMenu.Harass.Q:Value() and ValidTarget(target, 850) then
-	        Cast(_Q,target)
+		if IsReady(_Q) and CassiopeiaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 850) then
+	        Cast(_Q,Qtarget)
 		end
 		
-		if IsReady(_W) and CassiopeiaMenu.Harass.W:Value() and ValidTarget(target, 925) then
-		Cast(_W,target)
+		if IsReady(_W) and CassiopeiaMenu.Harass.W:Value() and ValidTarget(Wtarget, 925) then
+		Cast(_W,Wtarget)
 		end
 		
     end
@@ -248,5 +236,24 @@ if CassiopeiaMenu.Misc.Autolvl:Value() then
 end
 
 end)
+
+
+local poisoned = {}
+
+OnUpdateBuff(function(unit,buff)
+  if GetTeam(unit) ~= GetTeam(myHero) and buff.Name:find("poison") then
+  poisoned[GetNetworkID(unit)] = buff.Count
+  end
+end)
+
+OnRemoveBuff(function(unit,buff)
+  if GetTeam(unit) ~= GetTeam(myHero) and buff.Name:find("poison") then
+  poisoned[GetNetworkID(unit)] = 0
+  end
+end)
+
+function IsPoisoned(unit)
+   return (poisoned[GetNetworkID(unit)] or 0) > 0
+end
 
 AddGapcloseEvent(_R, 69, false)
