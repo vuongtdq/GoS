@@ -121,7 +121,7 @@ OnTick(function(myHero)
 	
    if IOW:Mode() == "Harass"  then
     	
-     if IsReady(_W) and ValidTarget(Wtarget,850) and AzirMenu.Harass.W:Value() then
+     if IsReady(_W) and ValidTarget(Wtarget,800) and AzirMenu.Harass.W:Value() then
      Cast(_W,Wtarget)
      end	
 		
@@ -163,7 +163,7 @@ OnTick(function(myHero)
         for _,Soldier in pairs(AzirSoldiers) do
         if Soldier then
         	
-	  if IsReady(_Q) and ValidTarget(enemy, 950) and AzirMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+	  if IsReady(_Q) and ValidTarget(enemy, 990) and AzirMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
 	  Cast(_Q,enemy,Soldier)
 	  end
 
