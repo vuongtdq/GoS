@@ -74,11 +74,12 @@ if AlistarMenu.Drawings.W:Value() then DrawCircle(pos,650,1,0,col) end
 if AlistarMenu.Drawings.E:Value() then DrawCircle(pos,575,1,0,col) end
 end)
 
+local target1 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
-    local Wtarget = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
+    local Wtarget = target1:GetTarget()
 	
     if IOW:Mode() == "Combo" then
 
