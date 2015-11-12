@@ -77,17 +77,6 @@ OnProcessSpell(function(unit, spell)
     end
 end)
 
-OnUpdateBuff(function(unit,buff)
-        if buff.Name == "rocketgrab2" and GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) then
-	    SuccesfulGrabs = SuccesfulGrabs + 1
-	    MissedGrabs = MissedGrabs - 1
-		
-	    if BlitzcrankMenu.Combo.AutoE:Value() then
-	    CastSpell(_E)
-	    end
-	end
-end)
-
 OnDraw(function(myHero)
 local col = BlitzcrankMenu.Drawings.color:Value()	
 TotalGrabs = MissedGrabs + SuccesfulGrabs
@@ -103,11 +92,12 @@ end
 
 end)
 
+local target1 = TargetSelector(1010,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
-    local Qtarget = TargetSelector(1010,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false):GetTarget()
+    local Qtarget = target1:GetTarget()
     
     if IOW:Mode() == "Combo" then
 	
@@ -176,4 +166,15 @@ if BlitzcrankMenu.Misc.Autolvl:Value() then
   end
 end
 
+end)
+
+OnUpdateBuff(function(unit,buff)
+        if buff.Name == "rocketgrab2" and GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) then
+	    SuccesfulGrabs = SuccesfulGrabs + 1
+	    MissedGrabs = MissedGrabs - 1
+		
+	    if BlitzcrankMenu.Combo.AutoE:Value() then
+	    CastSpell(_E)
+	    end
+	end
 end)
