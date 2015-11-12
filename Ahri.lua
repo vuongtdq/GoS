@@ -45,6 +45,7 @@ AhriMenu.JungleClear:Boolean("E", "Use E", true)
 AhriMenu.JungleClear:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
 
 AhriMenu:Menu("Drawings", "Drawings")
+AhriMenu.Drawings:Boolean("Orb", "Draw Orb (Q)", true)
 AhriMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 AhriMenu.Drawings:Boolean("W", "Draw W Range", true)
 AhriMenu.Drawings:Boolean("E", "Draw E Range", true)
@@ -78,11 +79,16 @@ local target1 = TargetSelector(930,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,f
 local target2 = TargetSelector(1030,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target3 = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local UltOn = false
+local Orb = nil
 local lastlevel = GetLevel(myHero)-1
   
 OnDraw(function(myHero)
 local col = AhriMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
+if AhriMenu.Drawings.Orb:Value() and Orb then
+  DrawRectangleOutline(GetOrigin(myHero), GetOrigin(Orb), 80)
+  DrawCircle(GetOrigin(Orb),80,2,30,ARGB(255, 255, 0, 0)) 
+end
 if AhriMenu.Drawings.Q:Value() then DrawCircle(pos,880,1,0,col) end
 if AhriMenu.Drawings.W:Value() then DrawCircle(pos,700,1,0,col) end
 if AhriMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,col) end
@@ -90,6 +96,7 @@ if AhriMenu.Drawings.R:Value() then DrawCircle(pos,550,1,0,col) end
 end)
 
 OnTick(function(myHero)
+
     local target = GetCurrentTarget()
     local Qtarget = target1:GetTarget()
     local Etarget = target2:GetTarget()
@@ -227,6 +234,30 @@ if AhriMenu.Misc.Autolvl:Value() then
 end
 
 end)
+
+OnCreateObj(function(Object) 
+
+  if GetObjectBaseName(Object) == "Ahri_Base_Orb_mis.troy" then
+  Orb = Object 
+  end
+  
+  if GetObjectBaseName(Object) == "Ahri_Base_Orb_mis_02.troy" then
+  Orb = Object 
+  end
+
+end)
+
+OnDeleteObj(function(Object) 
+
+  if GetObjectBaseName(Object) == "Ahri_Base_Orb_mis.troy" then
+  Orb = nil 
+  end
+  
+  if GetObjectBaseName(Object) == "Ahri_Base_Orb_mis_02.troy" then
+  Orb = nil 
+  end
+
+end)
  
 OnUpdateBuff(function(unit,buff)
   if buff.Name == "ahritumble" then 
@@ -239,5 +270,28 @@ OnRemoveBuff(function(unit,buff)
   UltOn = false
   end
 end)
+
+function DrawRectangleOutline(startPos, endPos, width)
+	local c1 = startPos+Vector(Vector(endPos)-startPos):perpendicular():normalized()*width/2
+	local c2 = startPos+Vector(Vector(endPos)-startPos):perpendicular2():normalized()*width/2
+	local c3 = endPos+Vector(Vector(startPos)-endPos):perpendicular():normalized()*width/2
+	local c4 = endPos+Vector(Vector(startPos)-endPos):perpendicular2():normalized()*width/2
+	DrawLine3D(c1.x,c1.y,c1.z,c2.x,c2.y,c2.z,math.ceil(width/100),ARGB(255, 255, 255, 255))
+	DrawLine3D(c3.x,c3.y,c3.z,c4.x,c4.y,c4.z,math.ceil(width/100),ARGB(255, 255, 255, 255))
+	local c1 = startPos+Vector(Vector(endPos)-startPos):perpendicular():normalized()*width
+	local c2 = startPos+Vector(Vector(endPos)-startPos):perpendicular2():normalized()*width
+	local c3 = endPos+Vector(Vector(startPos)-endPos):perpendicular():normalized()*width
+	local c4 = endPos+Vector(Vector(startPos)-endPos):perpendicular2():normalized()*width
+	DrawLine3D(c1.x,c1.y,c1.z,c2.x,c2.y,c2.z,math.ceil(width/100),ARGB(255, 255, 255, 255))
+	DrawLine3D(c2.x,c2.y,c2.z,c3.x,c3.y,c3.z,math.ceil(width/100),ARGB(255, 255, 255, 255))
+	DrawLine3D(c3.x,c3.y,c3.z,c4.x,c4.y,c4.z,math.ceil(width/100),ARGB(255, 255, 255, 255))
+	DrawLine3D(c1.x,c1.y,c1.z,c4.x,c4.y,c4.z,math.ceil(width/100),ARGB(255, 255, 255, 255))
+end
+
+function DrawLine3D(x,y,z,a,b,c,width,col)
+	local p1 = WorldToScreen(0, Vector(x,y,z))
+	local p2 = WorldToScreen(0, Vector(a,b,c))
+	DrawLine(p1.x, p1.y, p2.x, p2.y, width, col)
+end
 
 AddGapcloseEvent(_E, 666, false)
