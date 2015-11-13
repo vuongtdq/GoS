@@ -269,6 +269,10 @@ function Cast(spell, target, origin, hitchance, speed, delay, range, width, coll
       end
 end
 
+function NotLasthitable(unit)
+    return PredictHealth(unit, 1000*GetWindUp(myHero) + 1000*math.sqrt(GetDistanceSqr(GetOrigin(unit), GetOrigin(myHero))) / GetProjectileSpeed(myHero)) < 1 
+end
+
 function GetPredictedPos(unit,delay)
     if not ValidTarget(unit) then return end
     local delay = delay or 125
