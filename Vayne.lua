@@ -7,7 +7,6 @@ if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua -
 local VayneMenu = MenuConfig("Vayne", "Vayne")
 VayneMenu:Menu("Combo", "Combo")
 VayneMenu.Combo:Menu("Q", "Tumble (Q)")
-VayneMenu.Combo.Q:DropDown("Mode", "Mode", 1, {"Reset", "Normal"})
 VayneMenu.Combo.Q:Boolean("Enabled", "Enabled", true)
 VayneMenu.Combo.Q:Boolean("KeepInvis", "Don't AA While Stealthed", true)
 VayneMenu.Combo.Q:Slider("KeepInvisdis", "Only if Distance <", 230, 0, 550, 1)
@@ -30,7 +29,6 @@ VayneMenu.Combo:Slider("myHP", "if HP % <", 50, 0, 100, 1)
 VayneMenu.Combo:Slider("targetHP", "if Target HP % >", 20, 0, 100, 1)
 VayneMenu.Combo:Boolean("QSS", "Use QSS", true)
 VayneMenu.Combo:Slider("QSSHP", "if My Health % <", 75, 0, 100, 1)
-
 
 VayneMenu:Menu("Misc", "Misc")
 VayneMenu.Misc:Menu("EMenu", "AutoStun")
@@ -69,6 +67,16 @@ DelayAction(function()
   end
 		
 end, 1)
+ 
+OnProcessSpell(function(unit, spell)
+      if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_E) then
+        if CHANELLING_SPELLS[spell.name] then
+          if IsInDistance(unit, 615) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() then 
+          CastTargetSpell(unit, _E)
+          end
+        end
+      end
+end)
   
 OnDraw(function(myHero)
 local col = VayneMenu.Drawings.color:Value()
@@ -80,21 +88,27 @@ DrawCircle(12060, 51, 4806,80,0,0,0xffffffff)
 end
 end)
 
+IOW:AddCallback(AFTER_ATTACK, function(target, mode)
+  if mode == "Combo" and target ~= nil and VayneMenu.Combo.Q.Enabled:Value() and IsReady(_Q) then
+    local AfterTumblePos = GetOrigin(myHero) + (Vector(GetMousePos()) - GetOrigin(myHero)):normalized() * 300
+    local DistanceAfterTumble = GetDistance(AfterTumblePos, target)
+						  
+    if DistanceAfterTumble < 800 and DistanceAfterTumble > 200 then
+    CastSkillShot(_Q,GetMousePos())
+    end
+  
+    if GetDistance(target) > 630 and DistanceAfterTumble < 630 then
+    CastSkillShot(_Q,GetMousePos())
+    end
+  end
+end)
+
 local IsStealthed = false
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
 
     if IOW:Mode() == "Combo" then
-
-	if VayneMenu.Combo.Q.Mode:Value() == 2 and ValidTarget(target, 900) and VayneMenu.Combo.Q.Enabled:Value() then
-          local AfterTumblePos = GetOrigin(myHero) + (Vector(GetMousePos()) - GetOrigin(myHero)):normalized() * 300
-          local DistanceAfterTumble = GetDistance(AfterTumblePos, target)
-  
-          if GetDistance(target) > 630 and DistanceAfterTumble < 630 then
-          CastSkillShot(_Q,GetMousePos())
-          end
-        end
 
 	if GetItemSlot(myHero,3140) > 0 and IsReady(GetItemSlot(myHero,3140)) and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
         CastSpell(GetItemSlot(myHero,3140))
@@ -108,15 +122,15 @@ OnTick(function(myHero)
         StunThisPleb(target)
         end
 
-        if IsReady(_R) and ValidTarget(target, VayneMenu.Combo.R.Renemyrange:Value()) and 100*GetCurrentHP(target)/GetMaxHP(target) <= VayneMenu.Combo.R.Rifthp:Value() and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) <= VayneMenu.Combo.R.Rifhp:Value() and EnemiesAround(myHeroPos(), VayneMenu.Combo.R.Renemyrange:Value()) >= VayneMenu.Combo.R.Rminenemy:Value() and AlliesAround(myHeroPos(), VayneMenu.Combo.R.Rallyrange:Value()) >= VayneMenu.Combo.R.Rminally:Value() then
+        if IsReady(_R) and ValidTarget(target, VayneMenu.Combo.R.Renemyrange:Value()) and GetPercentHP(target) <= VayneMenu.Combo.R.Rifthp:Value() and GetPercentHP(myHero) <= VayneMenu.Combo.R.Rifhp:Value() and EnemiesAround(GetOrigin(myHero), VayneMenu.Combo.R.Renemyrange:Value()) >= VayneMenu.Combo.R.Rminenemy:Value() and AlliesAround(GetOrigin(myHero), VayneMenu.Combo.R.Rallyrange:Value()) >= VayneMenu.Combo.R.Rminally:Value() then
         CastSpell(_R)
 	end
 		
-        if IsStealthed and ValidTarget(target, 550) and GetDistance(target) > VayneMenu.Combo.Q.KeepInvisdis:Value() then
+        if IsStealthed and target ~= nil and GetDistance(target) > VayneMenu.Combo.Q.KeepInvisdis:Value() then
 	IOW.attacksEnabled = true
 	elseif not IsStealthed then
 	IOW.attacksEnabled = true
-	elseif IsStealthed and VayneMenu.Combo.Q.KeepInvis:Value() and ValidTarget(target, VayneMenu.Combo.Q.KeepInvisdis:Value()) and GetDistance(myHero, target) < VayneMenu.Combo.Q.KeepInvisdis:Value() then 
+	elseif IsStealthed and VayneMenu.Combo.Q.KeepInvis:Value() and target ~= nil and GetDistance(target) < VayneMenu.Combo.Q.KeepInvisdis:Value() then 
 	IOW.attacksEnabled = false
 	end
 	
@@ -177,45 +191,6 @@ if VayneMenu.Misc.Autolvl:Value() then
    end
 DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
 end
-
-end)
-
-OnProcessSpell(function(unit, spell)
-        if unit == myHero and spell.name:lower():find("attack") and IOW:Mode() == "Combo" and IsReady(_Q) then 
-	        DelayAction(function() 
-	        	for i,enemy in pairs(GetEnemyHeroes()) do
-                           if enemy and VayneMenu.Combo.Q.Mode:Value() == 1 and VayneMenu.Combo.Q.Enabled:Value()then
-                                local AfterTumblePos = GetOrigin(myHero) + (Vector(GetMousePos()) - GetOrigin(myHero)):normalized() * 300
-                                local DistanceAfterTumble = GetDistance(AfterTumblePos, enemy)
-						  
-                                if DistanceAfterTumble < 800 and DistanceAfterTumble > 200 then
-                                CastSkillShot(_Q,GetMousePos())
-                                end
-  
-                                if GetDistance(myHero, enemy) > 630 and DistanceAfterTumble < 630 then
-                                CastSkillShot(_Q,GetMousePos())
-                                end
-                            end
-                           
-                            if enemy and VayneMenu.Combo.Q.Mode:Value() == 2 and VayneMenu.Combo.Q.Enabled:Value() then
-                                local AfterTumblePos = GetOrigin(myHero) + (Vector(GetMousePos()) - GetOrigin(myHero)):normalized() * 300
-                                local DistanceAfterTumble = GetDistance(AfterTumblePos, enemy)
-  
-                                if DistanceAfterTumble < 800 and DistanceAfterTumble > 200 then
-                                CastSkillShot(_Q,GetMousePos())
-                                end
-                            end
-                        end
-                end, GetWindUp(myHero)*1000)	
-      end
-  
-      if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_E) then
-        if CHANELLING_SPELLS[spell.name] then
-          if IsInDistance(unit, 615) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() then 
-          CastTargetSpell(unit, _E)
-          end
-        end
-      end
 
 end)
 
