@@ -231,9 +231,10 @@ OnCreateObj(function(Object)
   end
 end)
 
-function IsUnderTower(unit)
+function IsUnderTower(unit,team)
+  local team = team or MINION_ENEMY
   for i,turret in pairs(Turrets) do
-    if GetTeam(GetTeam) ~= GetTeam(GetTeam) and GetDistance(unit, GetOrigin(turret)) <= 950 then
+    if GetTeam(turret) == GetTeam(team) and GetDistance(unit, GetOrigin(turret)) <= 950 then
     return true
     end
   end
@@ -279,6 +280,18 @@ function IsFacing(target,range,unit)
     local unit = unit or myHero
     if GetDistance(unit,target) < range then return end
     return GetDistance(GetPredictedPos(unit), target) < GetDistance(unit, target)
+end
+
+function IsMe(unit)
+    return unit == GetMyHero()
+end
+
+function IsAlly(unit)
+    return GetTeam(unit) == GetTeam(myHero)
+end
+
+function IsEnemy(unit)
+    return GetTeam(unit) ~= GetTeam(myHero)
 end
 
 function mousePos()
