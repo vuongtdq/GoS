@@ -7,6 +7,7 @@ if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua -
 local VayneMenu = MenuConfig("Vayne", "Vayne")
 VayneMenu:Menu("Combo", "Combo")
 VayneMenu.Combo:Menu("Q", "Tumble (Q)")
+VayneMenu.Combo.Q:DropDown("Mode", "Mode", 1, {"Reset", "Normal"})
 VayneMenu.Combo.Q:Boolean("Enabled", "Enabled", true)
 VayneMenu.Combo.Q:Boolean("KeepInvis", "Don't AA While Stealthed", true)
 VayneMenu.Combo.Q:Slider("KeepInvisdis", "Only if Distance <", 230, 0, 550, 1)
@@ -109,6 +110,15 @@ OnTick(function(myHero)
     local target = GetCurrentTarget()
 
     if IOW:Mode() == "Combo" then
+        
+        if VayneMenu.Combo.Q.Mode:Value() == 2 and target ~= nil and VayneMenu.Combo.Q.Enabled:Value() then
+          local AfterTumblePos = GetOrigin(myHero) + (Vector(GetMousePos()) - GetOrigin(myHero)):normalized() * 300
+          local DistanceAfterTumble = GetDistance(AfterTumblePos, target)
+  
+          if GetDistance(target) > 630 and DistanceAfterTumble < 630 then
+          CastSkillShot(_Q,GetMousePos())
+          end
+        end
 
 	if GetItemSlot(myHero,3140) > 0 and IsReady(GetItemSlot(myHero,3140)) and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
         CastSpell(GetItemSlot(myHero,3140))
