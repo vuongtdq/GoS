@@ -96,45 +96,45 @@ OnTick(function(myHero)
 	end
 	
 	if RivenMenu.Misc.Flee:Value() then
-    MoveToXYZ(mousePos)
-    if IsReady(_E) then
-    CastSkillShot(_E, mousePos)
-    end
-    if not IsReady(_E) and IsReady(_Q) and EDelay + 350 < GetTickCount() then
-    CastSkillShot(_Q, mousePos)
-    end
-  end
+          MoveToXYZ(mousePos)
+          if IsReady(_E) then
+          CastSkillShot(_E, mousePos)
+          end
+          if not IsReady(_E) and IsReady(_Q) and EDelay + 350 < GetTickCount() then
+          CastSkillShot(_Q, mousePos)
+          end
+        end
 	
 	if RivenMenu.Misc.WallJump:Value() then
-    local movePos1  = GetOrigin(myHero) + (Vector(mousePos) - GetOrigin(myHero)):normalized() * 75
-    local movePos2 =  GetOrigin(myHero) + (Vector(mousePos) - GetOrigin(myHero)):normalized() * 450
-    if QCast < 2 and CanUseSpell(myHero, _Q) ~= ONCOOLDOWN then
-    CastSkillShot(_Q, mousePos)
-    end
-    if not MapPosition:inWall(movePos1) then
-      MoveToXYZ(mousePos)
-    else
-      if not MapPosition:inWall(movePos2) and CanUseSpell(myHero, _Q) ~= ONCOOLDOWN then
-      CastSkillShot(_Q, movePos2)
-      end
-    end
+          local movePos1  = GetOrigin(myHero) + (Vector(mousePos) - GetOrigin(myHero)):normalized() * 75
+          local movePos2 =  GetOrigin(myHero) + (Vector(mousePos) - GetOrigin(myHero)):normalized() * 450
+          if QCast < 2 and CanUseSpell(myHero, _Q) ~= ONCOOLDOWN then
+          CastSkillShot(_Q, mousePos)
+          end
+          if not MapPosition:inWall(movePos1) then
+            MoveToXYZ(mousePos)
+          else
+            if not MapPosition:inWall(movePos2) and CanUseSpell(myHero, _Q) ~= ONCOOLDOWN then
+            CastSkillShot(_Q, movePos2)
+            end
+          end
 	end
 	
 	for i,enemy in pairs(GetEnemyHeroes()) do
     	
 	  if Ignite and RivenMenu.Misc.Autoignite:Value() then
-      if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
-      CastTargetSpell(enemy, Ignite)
-      end
-    end
+            if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
+            CastTargetSpell(enemy, Ignite)
+            end
+          end
                 
-  	if IsReady(_W) and ValidTarget(enemy, 260) and RivenMenu.Killsteal.W:Value() and GetHP(enemy) < getdmg("W",enemy) then
-  	CastSpell(_W)
+  	  if IsReady(_W) and ValidTarget(enemy, 260) and RivenMenu.Killsteal.W:Value() and GetHP(enemy) < getdmg("W",enemy) then
+  	  CastSpell(_W)
 	  elseif IsReady(_R) and GetCastName(myHero, _R) ~= "RivenFengShuiEngine" and ValidTarget(enemy, 1100) and RivenMenu.Killsteal.R:Value() and GetHP(enemy) < getdmg("R",enemy) then
 	  Cast(_R,enemy)
-    end
+          end
 
-  end
+        end
 	
 if RivenMenu.Misc.Autolvl:Value() then  
   if GetLevel(myHero) > lastlevel then
@@ -162,61 +162,64 @@ OnProcessSpell(function(unit,spell)
   
     if spell.name == "RivenFeint" then
     EDelay = GetTickCount()
-	  end
+    end
 	
-  	local target = IOW:GetTarget()
+    local target = IOW:GetTarget()
 	
-  	if spell.name:lower():find("attack") then
-  	DelayAction(function()
-	    if IOW:Mode() == "Combo" and ValidTarget(target) then
-	      if GetItemSlot(myHero, 3074) > 0 and IsReady(GetItemSlot(myHero, 3074)) and RivenMenu.Combo.H:Value() then
-	    	CastSpell(GetItemSlot(myHero, 3074))
-	    	elseif GetItemSlot(myHero, 3077) > 0 and IsReady(GetItemSlot(myHero, 3077)) and RivenMenu.Combo.H:Value() then
-	    	CastSpell(GetItemSlot(myHero, 3077))
-	    	elseif IsReady(_Q) and RivenMenu.Combo.Q:Value() then
-		    CastSkillShot(_Q, GetOrigin(target))
-	     	elseif IsReady(_W) and RivenMenu.Combo.W:Value() then
-	 	    CastSpell(_W)
-		    end
-	   end
+    if spell.name:lower():find("attack") then
+    DelayAction(function()
+    	
+      if IOW:Mode() == "Combo" and ValidTarget(target) then
+        if GetItemSlot(myHero, 3074) > 0 and IsReady(GetItemSlot(myHero, 3074)) and RivenMenu.Combo.H:Value() then
+	CastSpell(GetItemSlot(myHero, 3074))
+	elseif GetItemSlot(myHero, 3077) > 0 and IsReady(GetItemSlot(myHero, 3077)) and RivenMenu.Combo.H:Value() then
+	CastSpell(GetItemSlot(myHero, 3077))
+	elseif IsReady(_Q) and RivenMenu.Combo.Q:Value() then
+	CastSkillShot(_Q, GetOrigin(target))
+	elseif IsReady(_W) and RivenMenu.Combo.W:Value() then
+	CastSpell(_W)
+	end
+      end
 	   
-	   if IOW:Mode() == "Harass" and ValidTarget(target) then
-	     if GetItemSlot(myHero, 3074) > 0 and IsReady(GetItemSlot(myHero, 3074)) and RivenMenu.Harass.H:Value() then
-		   CastSpell(GetItemSlot(myHero, 3074))
-		   elseif GetItemSlot(myHero, 3077) > 0 and IsReady(GetItemSlot(myHero, 3077)) and RivenMenu.Harass.H:Value() then
-	   	 CastSpell(GetItemSlot(myHero, 3077))
-		   elseif IsReady(_Q) and RivenMenu.Harass.Q:Value() then
-		   CastSkillShot(_Q, GetOrigin(target)) 
-		   elseif IsReady(_W) and RivenMenu.Harass.W:Value() then
-		   CastSpell(_W)
-		   end
-	   end
-	end, GetWindUp(myHero)*1000 )
+      if IOW:Mode() == "Harass" and ValidTarget(target) then
+        if GetItemSlot(myHero, 3074) > 0 and IsReady(GetItemSlot(myHero, 3074)) and RivenMenu.Harass.H:Value() then
+	CastSpell(GetItemSlot(myHero, 3074))
+	elseif GetItemSlot(myHero, 3077) > 0 and IsReady(GetItemSlot(myHero, 3077)) and RivenMenu.Harass.H:Value() then
+	CastSpell(GetItemSlot(myHero, 3077))
+	elseif IsReady(_Q) and RivenMenu.Harass.Q:Value() then
+	CastSkillShot(_Q, GetOrigin(target)) 
+	elseif IsReady(_W) and RivenMenu.Harass.W:Value() then
+	CastSpell(_W)
 	end
+      end
+
+    end, GetWindUp(myHero)*1000 )
+    end
 	
-	if spell.name == "RivenMartyr" then
-	DelayAction(function()
-	  if IOW:Mode() == "Combo" and ValidTarget(target) then
-	    if IsReady(_Q) and RivenMenu.Combo.Q:Value() then
-		  CastSkillShot(_Q, GetOrigin(target)) 
-	  	end
-	  end
+    if spell.name == "RivenMartyr" then
+    DelayAction(function()
+      if IOW:Mode() == "Combo" and ValidTarget(target) then
+        if IsReady(_Q) and RivenMenu.Combo.Q:Value() then
+	CastSkillShot(_Q, GetOrigin(target)) 
+	end
+      end
 	  
-	  if IOW:Mode() == "Harass" and ValidTarget(target) then
-	    if IsReady(_Q) and RivenMenu.Harass.Q:Value() then
-		  CastSkillShot(_Q, GetOrigin(target)) 
-		  end
-	  end
-	end, spell.windUpTime*1000 )
+      if IOW:Mode() == "Harass" and ValidTarget(target) then
+        if IsReady(_Q) and RivenMenu.Harass.Q:Value() then
+	CastSkillShot(_Q, GetOrigin(target)) 
 	end
+      end
+
+    end, spell.windUpTime*1000 )
+    end
 	
-	if spell.name == "RivenTriCleave" then
-	IOW:ResetAA()
-	end
+    if spell.name == "RivenTriCleave" then
+    IOW:ResetAA()
+    end
 	
-	if spell.name == "ItemTiamatCleave" then
-  IOW:ResetAA()
-	DelayAction(function()
+    if spell.name == "ItemTiamatCleave" then
+    IOW:ResetAA()
+    DelayAction(function()
 	  if IOW:Mode() == "Combo" and ValidTarget(target) then
 	    if IsReady(_Q) and RivenMenu.Combo.Q:Value() then
 		  CastSkillShot(_Q, GetOrigin(target)) 
