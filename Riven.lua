@@ -1,5 +1,3 @@
-require('Dev')
-
 if GetObjectName(GetMyHero()) ~= "Riven" then return end
 
 if not pcall( require, "MapPositionGOS" ) then PrintChat("You are missing Walls Library - Go download it and save it Common!") return end
