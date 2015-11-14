@@ -84,25 +84,32 @@ if EkkoMenu.Drawings.OP:Value() then
 end
 end)
 
+
+local target1 = TargetSelector(995,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target2 = TargetSelector(1900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
    local target = GetCurrentTarget()	
-   
+   local Qtarget = target1:GetTarget()
+   local Wtarget = target2:GetTarget()
+    
    if IOW:Mode() == "Combo" then
 	
-     if IsReady(_Q) and ValidTarget(target,925) and EkkoMenu.Combo.Q:Value() then
-     Cast(_Q,target)
+     if IsReady(_Q) and ValidTarget(Qtarget,995) and EkkoMenu.Combo.Q:Value() then
+     Cast(_Q,Qtarget)
      end
 	   
-     if IsReady(_W) and ValidTarget(target,1700) and EkkoMenu.Combo.W:Value() and GetCurrentMana(myHero) < (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W))) and GetCurrentMana(myHero) >= GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) and GetCurrentHP(myHero)-GetCurrentHP(target) > 60+20*GetCastLevel(myHero,_W)+1.5*GetBonusAP(myHero) then
-     Cast(_W,target)
-     elseif IsReady(_W) and ValidTarget(target,1700) and and EkkoMenu.Combo.W:Value() and GetDistance(target) > 925 then
-     Cast(_W,target)
+     if IsReady(_W) and ValidTarget(Wtarget,1900) and EkkoMenu.Combo.W:Value() then
+       if GetCurrentMana(myHero) < (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W))) and GetCurrentMana(myHero) >= GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) and GetCurrentHP(myHero)-GetCurrentHP(Wtarget) > 60+20*GetCastLevel(myHero,_W)+1.5*GetBonusAP(myHero) then
+       Cast(_W,Wtarget)
+       elseif GetDistance(Wtarget) > 925 then
+       Cast(_W,Wtarget)
+       end
      end
-       
+     
      if IsReady(_E) and ValidTarget(target,800) and GetDistance(target) > (GetRange(myHero)+GetHitBox(myHero)) and EkkoMenu.Combo.E:Value() then
-       local BestPos = Vector(target) - (Vector(target) - Vector(myHero)):perpendicular():normalized() * 400
+       local BestPos = Vector(target) - (Vector(target) - Vector(myHero)):perpendicular():normalized() * 350
        if BestPos then 
        CastSkillShot(_E,BestPos)
        else
@@ -134,12 +141,12 @@ OnTick(function(myHero)
 
    if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= EkkoMenu.Harass.Mana:Value() then
 	
-     if IsReady(_Q) and ValidTarget(target,925) and EkkoMenu.Harass.Q:Value() then
-     Cast(_Q,target)
+     if IsReady(_Q) and ValidTarget(Qtarget,995) and EkkoMenu.Harass.Q:Value() then
+     Cast(_Q,Qtarget)
      end
 	   
-     if IsReady(_W) and ValidTarget(target,1700) and EkkoMenu.Harass.W:Value() then
-     Cast(_W,target)
+     if IsReady(_W) and ValidTarget(Wtarget,1900) and EkkoMenu.Harass.W:Value() then
+     Cast(_W,Wtarget)
      end
        
      if IsReady(_E) and ValidTarget(target,800) and GetDistance(target) < (GetRange(myHero)+GetHitBox(myHero)*2) and EkkoMenu.Harass.E:Value() then
@@ -179,7 +186,7 @@ OnTick(function(myHero)
        end
      end
                 
-     if IsReady(_Q) and ValidTarget(enemy, 925) and EkkoMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy,myHero,3) then 
+     if IsReady(_Q) and ValidTarget(enemy, 995) and EkkoMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy,myHero,3) then 
      Cast(_Q,enemy)
      elseif IsReady(_E) and ValidTarget(enemy, 800) and EkkoMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
      CastSkillShot(_E,GetOrigin(enemy))
