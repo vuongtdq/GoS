@@ -273,6 +273,18 @@ function NotLasthitable(unit)
     return PredictHealth(unit, 1000*GetWindUp(myHero) + 1000*math.sqrt(GetDistanceSqr(GetOrigin(unit), GetOrigin(myHero))) / GetProjectileSpeed(myHero)) < 1 
 end
 
+function EnemiesAround2(pos, range, time)
+  local c = 0
+  local time = time or 250
+  if pos == nil then return 0 end
+  for k,v in pairs(GetEnemyHeroes()) do 
+    if v and ValidTarget(v) and GetDistanceSqr(pos,GetPredictedPos(v, time)) < range*range then
+      c = c + 1
+    end
+  end
+  return c
+end
+
 function GetPredictedPos(unit,delay)
     if not ValidTarget(unit) then return end
     local delay = delay or 125
