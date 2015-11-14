@@ -119,20 +119,20 @@ OnTick(function(myHero)
 	   
      if IsReady(_R) and IsDead(target) and EkkoMenu.Combo.R:Value() then
        for _,turret in pairs(Turrets) do
-         if GetCurrentHP(myHero) < IOW:GetDmg(turret, myHero) and IsUnderTower(myHero) then
+         if GetHP(myHero) < IOW:GetDmg(turret, myHero) and IsUnderTower(myHero) then
 	 CastSpell(_R)
 	 end
        end
      end
 	   
-     if twin and EkkoMenu.Combo.R:Value() then
-       if IsReady(_R) and IsReady(_Q) and IsReady(_E) and ValidTarget(target,20000) and GetDistance(twin, target) <= 400 and GetCurrentMana(myHero) >= (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_E,GetCastLevel(myHero,_E)) + GetCastMana(myHero,_R,GetCastLevel(myHero,_R))) and GetHP2(target) < getdmg("Q",target)+getdmg("E",target)+getdmg("R",target)+IOW:GetDmg(myHero, target) then
+     if twin and EnemiesAround2(GetOrigin(twin),400) >= 1 and EkkoMenu.Combo.R:Value() then
+       if IsReady(_R) and IsReady(_Q) and IsReady(_E) and ValidTarget(target,20000) and GetCurrentMana(myHero) >= (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_E,GetCastLevel(myHero,_E)) + GetCastMana(myHero,_R,GetCastLevel(myHero,_R))) and GetHP2(target) < getdmg("Q",target)+getdmg("E",target)+getdmg("R",target)+IOW:GetDmg(myHero, target) then
        CastSpell(_R)
-       elseif IsReady(_R) and IsReady(_Q) and ValidTarget(target,20000) and GetDistance(twin, target) <= 400 and GetCurrentMana(myHero) >= (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_R,GetCastLevel(myHero,_R))) and GetHP2(target) < getdmg("Q",target)+getdmg("R",target)+IOW:GetDmg(myHero, target) then
+       elseif IsReady(_R) and IsReady(_Q) and ValidTarget(target,20000) and GetCurrentMana(myHero) >= (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_R,GetCastLevel(myHero,_R))) and GetHP2(target) < getdmg("Q",target)+getdmg("R",target)+IOW:GetDmg(myHero, target) then
        CastSpell(_R)
-       elseif IsReady(_R) and IsReady(_E) and ValidTarget(target,20000) and GetDistance(twin, target) <= 400 and GetCurrentMana(myHero) >= (GetCastMana(myHero,_E,GetCastLevel(myHero,_E)) + GetCastMana(myHero,_R,GetCastLevel(myHero,_R))) and GetHP2(target) < getdmg("E",target)+getdmg("R",target)+IOW:GetDmg(myHero, target) then
+       elseif IsReady(_R) and IsReady(_E) and ValidTarget(target,20000) and GetCurrentMana(myHero) >= (GetCastMana(myHero,_E,GetCastLevel(myHero,_E)) + GetCastMana(myHero,_R,GetCastLevel(myHero,_R))) and GetHP2(target) < getdmg("E",target)+getdmg("R",target)+IOW:GetDmg(myHero, target) then
        CastSpell(_R)
-       elseif IsReady(_R) and ValidTarget(target,20000) and GetDistance(target) >= 800 and GetDistance(twin, target) <= 400 and GetHP2(target) <= getdmg("R",target)+IOW:GetDmg(myHero, target) then
+       elseif IsReady(_R) and ValidTarget(target,20000) and GetHP2(target) <= getdmg("R",target)+IOW:GetDmg(myHero, target) then
        CastSpell(_R)
        end
      end
@@ -150,7 +150,7 @@ OnTick(function(myHero)
      end
        
      if IsReady(_E) and ValidTarget(target,800) and GetDistance(target) < (GetRange(myHero)+GetHitBox(myHero)*2) and EkkoMenu.Harass.E:Value() then
-       local BestPos = Vector(target) - (Vector(target) - Vector(myHero)):perpendicular():normalized() * 400
+       local BestPos = Vector(target) - (Vector(target) - Vector(myHero)):perpendicular():normalized() * 350
        if BestPos then 
        CastSkillShot(_E,BestPos)
        else
@@ -161,7 +161,7 @@ OnTick(function(myHero)
    end	   
 	 
    if twin and IsReady(_R) and EkkoMenu.Misc.AutoUlt.Enabled:Value() then
-     if EnemiesAround(GetOrigin(twin), 400) >= EkkoMenu.Misc.AutoUlt.hit:Value() then
+     if EnemiesAround2(GetOrigin(twin), 400) >= EkkoMenu.Misc.AutoUlt.hit:Value() then
      CastSpell(_R)
      end
    end
@@ -177,7 +177,7 @@ OnTick(function(myHero)
      end
 		
      if IsReady(_R) and EkkoMenu.Misc.AutoUlt.Enabled:Value() then
-       if ValidTarget(enemy, 20000) and twin and GetDistance(twin, enemy) <= 400 and GetHP2(enemy) < getdmg("R",enemy) then 
+       if ValidTarget(enemy, 20000) and twin and GetDistance(twin, GetPredictedPos(enemy,250)) <= 400 and GetHP2(enemy) < getdmg("R",enemy) then 
        KillableEnemies = KillableEnemies + 1
        end
 		  
