@@ -191,9 +191,9 @@ OnTick(function(myHero)
 			
 	if KalistaMenu.Ult.AutoR:Value() then 
             for i,enemy in pairs(GetEnemyHeroes()) do 
-	      if IsReady(_R) and soulboundhero and GetPercentHP(soulboundhero) <= KalistaMenu.Ult.AutoRHP:Value() and ValidTarget(soulboundhero, 1450) and GetDistance(soulboundhero, enemy) <= 1000 then
+	      if IsReady(_R) and soulboundhero and GetPercentHP(soulboundhero) <= KalistaMenu.Ult.AutoRHP:Value() and IsObjectAlive(soulboundhero) and GetDistance(soulboundhero) <= 1450) and GetDistance(soulboundhero, enemy) <= 1000 then
+              PrintChat("Rescuing low health "..GetObjectName(soulboundhero).."")
               CastSpell(_R)
-	      PrintChat("Rescuing low health "..GetObjectName(soulboundhero).."")
 	      end
 	    end
 	end
