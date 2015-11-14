@@ -164,26 +164,26 @@ OnProcessSpell(function(unit,spell)
     DelayAction(function()
     	
       if IOW:Mode() == "Combo" and ValidTarget(target) then
-        if GetItemSlot(myHero, 3074) > 0 and IsReady(GetItemSlot(myHero, 3074)) and RivenMenu.Combo.H:Value() then
+      	if IsReady(_W) and RivenMenu.Combo.W:Value() then
+	CastSpell(_W)
+        elseif GetItemSlot(myHero, 3074) > 0 and IsReady(GetItemSlot(myHero, 3074)) and RivenMenu.Combo.H:Value() then
 	CastSpell(GetItemSlot(myHero, 3074))
 	elseif GetItemSlot(myHero, 3077) > 0 and IsReady(GetItemSlot(myHero, 3077)) and RivenMenu.Combo.H:Value() then
 	CastSpell(GetItemSlot(myHero, 3077))
 	elseif IsReady(_Q) and RivenMenu.Combo.Q:Value() then
 	CastSkillShot(_Q, GetOrigin(target))
-	elseif IsReady(_W) and RivenMenu.Combo.W:Value() then
-	CastSpell(_W)
 	end
       end
 	   
       if IOW:Mode() == "Harass" and ValidTarget(target) then
-        if GetItemSlot(myHero, 3074) > 0 and IsReady(GetItemSlot(myHero, 3074)) and RivenMenu.Harass.H:Value() then
+      	if IsReady(_W) and RivenMenu.Harass.W:Value() then
+	CastSpell(_W)
+        elseif GetItemSlot(myHero, 3074) > 0 and IsReady(GetItemSlot(myHero, 3074)) and RivenMenu.Harass.H:Value() then
 	CastSpell(GetItemSlot(myHero, 3074))
 	elseif GetItemSlot(myHero, 3077) > 0 and IsReady(GetItemSlot(myHero, 3077)) and RivenMenu.Harass.H:Value() then
 	CastSpell(GetItemSlot(myHero, 3077))
 	elseif IsReady(_Q) and RivenMenu.Harass.Q:Value() then
 	CastSkillShot(_Q, GetOrigin(target)) 
-	elseif IsReady(_W) and RivenMenu.Harass.W:Value() then
-	CastSpell(_W)
 	end
       end
 
