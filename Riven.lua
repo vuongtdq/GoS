@@ -60,10 +60,6 @@ local lastlevel = GetLevel(myHero)-1
 OnDraw(function(myHero)
 local col = RivenMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
-if RivenMenu.Misc.WallJump:Value() then
-local movePos = pos + (Vector(mousePos) - pos):normalized() * 450
-DrawCircle(movePos,150,2,50,ARGB(255, 255, 255, 0))
-end
 if RivenMenu.Drawings.Q:Value() then DrawCircle(pos,275,1,50,col) end
 if RivenMenu.Drawings.W:Value() then DrawCircle(pos,260,1,50,col) end
 if RivenMenu.Drawings.E:Value() then DrawCircle(pos,250,1,50,col) end
@@ -218,53 +214,53 @@ OnProcessSpell(function(unit,spell)
     if spell.name == "ItemTiamatCleave" then
     IOW:ResetAA()
     DelayAction(function()
+      if IOW:Mode() == "Combo" and ValidTarget(target) then
+        if IsReady(_Q) and RivenMenu.Combo.Q:Value() then
+	CastSkillShot(_Q, GetOrigin(target)) 
+	end
+      end
+	  
+      if IOW:Mode() == "Harass" and ValidTarget(target) then
+        if IsReady(_Q) and RivenMenu.Harass.Q:Value() then
+	CastSkillShot(_Q, GetOrigin(target)) 
+	end
+      end
+    end, spell.windUpTime*1000 )
+    end
+	
+    if spell.name == "RivenFengShuiEngine" then
+    IOW:ResetAA()
+    DelayAction(function()
 	  if IOW:Mode() == "Combo" and ValidTarget(target) then
 	    if IsReady(_Q) and RivenMenu.Combo.Q:Value() then
-		  CastSkillShot(_Q, GetOrigin(target)) 
+	    CastSkillShot(_Q, GetOrigin(target)) 
 	    end
 	  end
 	  
 	  if IOW:Mode() == "Harass" and ValidTarget(target) then
 	    if IsReady(_Q) and RivenMenu.Harass.Q:Value() then
-		  CastSkillShot(_Q, GetOrigin(target)) 
-	  	end
+	    CastSkillShot(_Q, GetOrigin(target)) 
+	    end
 	  end
-	end, spell.windUpTime*1000 )
-	end
+    end, spell.windUpTime*1000 )
+    end
 	
-	if spell.name == "RivenFengShuiEngine" then
-  IOW:ResetAA()
-  DelayAction(function()
-	  if IOW:Mode() == "Combo" and ValidTarget(target) then
-	    if IsReady(_Q) and RivenMenu.Combo.Q:Value() then
-	  	CastSkillShot(_Q, GetOrigin(target)) 
-	  	end
-	  end
+    if spell.name == "rivenizunablade" then
+    IOW:ResetAA()
+    DelayAction(function()
+      if IOW:Mode() == "Combo" and ValidTarget(target) then
+        if IsReady(_Q) and RivenMenu.Combo.Q:Value() then
+        CastSkillShot(_Q, GetOrigin(target)) 
+        end
+      end
 	  
-	  if IOW:Mode() == "Harass" and ValidTarget(target) then
-	    if IsReady(_Q) and RivenMenu.Harass.Q:Value() then
-	  	CastSkillShot(_Q, GetOrigin(target)) 
-		  end
-	  end
-	end, spell.windUpTime*1000 )
-  end
-	
-  if spell.name == "rivenizunablade" then
-  IOW:ResetAA()
-  DelayAction(function()
-	  if IOW:Mode() == "Combo" and ValidTarget(target) then
-	    if IsReady(_Q) and RivenMenu.Combo.Q:Value() then
-	  	CastSkillShot(_Q, GetOrigin(target)) 
-		  end
-	  end
-	  
-	  if IOW:Mode() == "Harass" and ValidTarget(target) then
-	    if IsReady(_Q) and RivenMenu.Harass.Q:Value() then
-	  	CastSkillShot(_Q, GetOrigin(target)) 
-		  end
-	  end
-	end, spell.windUpTime*1000 )
+      if IOW:Mode() == "Harass" and ValidTarget(target) then
+        if IsReady(_Q) and RivenMenu.Harass.Q:Value() then
+        CastSkillShot(_Q, GetOrigin(target)) 
 	end
+      end
+    end, spell.windUpTime*1000 )
+    end
 	
   end 
 end)
