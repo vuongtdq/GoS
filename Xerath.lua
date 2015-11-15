@@ -30,7 +30,6 @@ XerathMenu:Menu("Misc", "Misc")
 XerathMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true)
 XerathMenu.Misc:Boolean("Autolvl", "Auto level", true)
 XerathMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "Q-E-W"})
-XerathMenu.Misc:Boolean("Interrupt", "Interrupt Spells (E)", true)
 
 XerathMenu:Menu("LaneClear", "LaneClear")
 XerathMenu.LaneClear:Boolean("Q", "Use Q", true)
