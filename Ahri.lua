@@ -54,14 +54,14 @@ AhriMenu.Drawings:Boolean("E", "Draw E Range", true)
 AhriMenu.Drawings:Boolean("R", "Draw R Range", true)
 AhriMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
-local InterruptMenu = MenuConfig("Interrupt (E)", "Interrupt")
+AhriMenu:Menu("Interrupt", "Interrupt (E)")
 
 DelayAction(function()
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
   for i, spell in pairs(CHANELLING_SPELLS) do
     for _,k in pairs(GetEnemyHeroes()) do
         if spell["Name"] == GetObjectName(k) then
-        InterruptMenu:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
+        AhriMenu.Interrupt:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
         end
     end
   end
@@ -296,4 +296,4 @@ function DrawLine3D(x,y,z,a,b,c,width,col)
 	DrawLine(p1.x, p1.y, p2.x, p2.y, width, col)
 end
 
-AddGapcloseEvent(_E, 666, false)
+AddGapcloseEvent(_E, 666, false, AhriMenu)
