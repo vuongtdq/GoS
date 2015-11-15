@@ -78,7 +78,7 @@ SpellData = {
    	        [_Q] = { Name = "", ProjectileName = "", Range = 750, Speed = math.huge, Delay = 600, Width = 100, collision = false, aoe = false, type = "linear", IsDangerous = false},
   	        [_W] = { Name = "", ProjectileName = "", Range = 1150, Speed = math.huge, Delay = 650, Width = 200, collision = false, aoe = false, type = "circular", IsDangerous = false},
   	        [_E] = { Name = "", ProjectileName = "", Range = 975, Speed = 1200, Delay = 0, Width = 60, collision = true, aoe = false, type = "linear", IsDangerous = true},
-                [_R] = { Name = "", ProjectileName = "", Range = GetCastRange(myHero,_E), Speed = math.huge, Delay = 500, Width = 180, collision = false, aoe = false, type = "circular", IsDangerous = true}
+                [_R] = { Name = "", ProjectileName = "", Range = GetCastRange(myHero,_R), Speed = math.huge, Delay = 500, Width = 180, collision = false, aoe = false, type = "circular", IsDangerous = true}
        }
 }
 
