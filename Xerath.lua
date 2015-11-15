@@ -67,6 +67,10 @@ local QCharged = false
 local minrange = 750
 local chargedrange = 750
 local chargedTime = GetTickCount()
+local RCast = 0
+local Rdelay1 = 0
+local Rdelay2 = 0
+local Rdelay3 = 0
 local shouldCastR = false
 
 OnDraw(function(myHero)
