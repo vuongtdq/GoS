@@ -9,6 +9,12 @@ XerathMenu:Menu("Combo", "Combo")
 XerathMenu.Combo:Boolean("Q", "Use Q", true)
 XerathMenu.Combo:Boolean("W", "Use W", true)
 XerathMenu.Combo:Boolean("E", "Use E", true)
+XerathMenu.Combo:KeyBinding("R", "Use R", string.byte("R"))
+XerathMenu.Combo:KeyBinding("RT", "Tab Click R", string.byte("T"), true)
+XerathMenu.Combo:Boolean("delay", "Use Delays", true)
+XerathMenu.Combo:Slider("delay1", "Delay on First R", 150, 0, 1000, 1)
+XerathMenu.Combo:Slider("delay2", "Delay on Second R", 200, 0, 1000, 1)
+XerathMenu.Combo:Slider("delay3", "Delay on Third R", 75, 0, 1000, 1)
 
 XerathMenu:Menu("Harass", "Harass")
 XerathMenu.Harass:Boolean("Q", "Use Q", true)
@@ -61,6 +67,7 @@ local QCharged = false
 local minrange = 750
 local chargedrange = 750
 local chargedTime = GetTickCount()
+local shouldCastR = false
 
 OnDraw(function(myHero)
 local col = XerathMenu.Drawings.color:Value()
@@ -169,14 +176,20 @@ end
 
 end)
 
+OnUpdateBuff(function(unit,buff)
+  if unit == myHero and (buff.Name == "XerathLocusOfPower2" or buff.Name == "xerathrshots") then
+  IsChanneled = true
+  end
+end)
+
 OnRemoveBuff(function(unit,buff)
   if unit == myHero then
   
-    if buff.name == "XerathArcanopulseChargeUp"  then
+    if buff.Name == "XerathArcanopulseChargeUp"  then
     QCharged = false
     end
 
-    if buff.name == "xerathqlaunchsound" then
+    if buff.Name == "xerathqlaunchsound" then
     QCharged = false
     end
 	
@@ -185,7 +198,33 @@ end)
 
 OnProcessSpell(function(unit,spell)
   if unit == myHero then
-  
+    
+    if spell.name == "xerathlocuspulse" then
+      lastR = GetTickCount()
+      if shouldCastR and RCast == 1 then
+      shouldCastR = false 
+      end
+
+      RCast = RCast + 1
+
+      if RCast == 2 then
+      local delay = (XerathMenu.Combo.delay:Value() and XerathMenu.Combo.delay2:Value()) or 0
+      Rdelay2 = GetTickCount() + (delay)
+      elseif RCast == 3 then
+      local delay = (XerathMenu.Combo.delay:Value() and XerathMenu.Combo.delay3:Value()) or 0
+      Rdelay3 = GetTickCount() + (delay)
+      end
+
+    end
+
+    if spell.name:lower():find("xerathlocusofpower2") then
+    IsChanneled = true
+    RCast = 1
+    lastR = GetTickCount()
+    local delay = (XerathMenu.Combo.delay:Value() and XerathMenu.Combo.delay1:Value()) or 0
+    Rdelay1 = GetTickCount() + (delay)
+    end
+	
     if spell.name:lower():find("xeratharcanopulse2") and QCharged then
     QCharged = false
     end
