@@ -1,5 +1,9 @@
 if GetObjectName(GetMyHero()) ~= "Xerath" then return end
 
+if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
+if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
+
 local XerathMenu = MenuConfig("Xerath", "Xerath")
 XerathMenu:Menu("Combo", "Combo")
 XerathMenu.Combo:Boolean("Q", "Use Q", true)
@@ -30,6 +34,7 @@ XerathMenu.Drawings:Boolean("Qmax", "Draw Q Max Range", true)
 XerathMenu.Drawings:Boolean("W", "Draw W Range", true)
 XerathMenu.Drawings:Boolean("E", "Draw E Range", true)
 XerathMenu.Drawings:Boolean("R", "Draw R Range", true)
+XerathMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 local InterruptMenu = MenuConfig("Interrupt (E)", "Interrupt")
 
@@ -54,93 +59,138 @@ OnProcessSpell(function(unit, spell)
     end
 end)
 
+local QCharged = false
+local minrange = 750
+local chargedrange = 750
+local chargedTime = GetTickCount()
+local lastlevel = GetLevel(myHero)-1
+
+OnCreateObj(function(Object)
+	if GetObjectBaseName(Object) == "Xerath_Base_Q_cas_charge.troy" and GetDistance(Object) <= 50 then
+		QCharged = true
+	end
+end)
+
+OnDeleteObj(function(Object)
+	if GetObjectBaseName(Object) == "Xerath_Base_Q_cas_charge.troy" and GetDistance(Object) <= 50 then
+		QCharged = false
+	end
+end)
+
 OnDraw(function(myHero)
 local col = XerathMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
-if XerathMenu.Drawings.Qmin:Value() then DrawCircle(pos,750,1,0,col) end
+print(chargedTime)
+if XerathMenu.Drawings.Qmin:Value() then DrawCircle(pos,chargedrange,1,0,col) end
 if XerathMenu.Drawings.Qmax:Value() then DrawCircle(pos,1500,1,0,col) end
 if XerathMenu.Drawings.W:Value() then DrawCircle(pos,GetCastRange(myHero,_W),1,0,col) end
 if XerathMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,col) end
 if XerathMenu.Drawings.R:Value() then DrawCircle(pos,GetCastRange(myHero,_R),1,0,col) end
 end)
 
-local lastlevel = GetLevel(myHero)-1
+OnRemoveBuff(function(unit,buff)
+  if unit == myHero then
+  
+    if buff.name == "XerathArcanopulseChargeUp"  then
+    QCharged = false
+	end
+	if buff.name == "xerathqlaunchsound" then
+	QCharged = false
+	end
+	
+  end
+end)
+
+OnProcessSpell(function(unit,spell)
+  if unit == myHero then
+  
+    if spell.name:lower():find("xeratharcanopulse2") and QCharged then
+	QCharged = false
+	end
+
+	if spell.name == "XerathArcanopulseChargeUp" then
+	QCharged = true
+	chargedTime = GetTickCount()
+	end
+	
+  end
+end)
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
     local mousePos = GetMousePos()
-    
-    if IOW:Mode() == "Combo" then
-
-    local WPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),math.huge,700,GetCastRange(myHero,_W),125,false,true)
-    local EPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),1400,250,975,60,true,true)
 	
-    if CanUseSpell(myHero, _E) == READY and EPred.HitChance == 1 and XerathMenu.Combo.E:Value() and ValidTarget(target, 975) then
-    CastSkillShot(_E,EPred.PredPos)
+	if not QCharged and chargedrange ~= minrange then
+		chargedrange = minrange
+	end
+	
+	if QCharged and chargedTime + ((1500 + 3000) + 1000) < GetTickCount() then
+		QCharged = false
+		chargedrange = minrange
+	end
+	
+	if QCharged then
+		chargedrange = math.floor((math.min(minrange + (1500 - minrange) * ((GetTickCount() - chargedTime) / 1500), 1500)))
+	end
+	
+    if IOW:Mode() == "Combo" then
+    
+	local QPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),math.huge,600,chargedrange,100,false,true)
+	
+    if IsReady(_E) and XerathMenu.Combo.E:Value() and ValidTarget(target, 975) then
+    Cast(_E,target)
     end
 	
-	
-    if CanUseSpell(myHero, _W) == READY and WPred.HitChance == 1 and XerathMenu.Combo.W:Value() and ValidTarget(target, GetCastRange(myHero,_W)) then
-    CastSkillShot(_W,WPred.PredPos)
+    if IsReady(_W) and XerathMenu.Combo.W:Value() and ValidTarget(target, GetCastRange(myHero,_W)) then
+    Cast(_W,target)
     end		
 
-    if CanUseSpell(myHero, _Q) == READY and ValidTarget(target, 1500) and XerathMenu.Combo.Q:Value() then
-      CastSkillShot(_Q, mousePos)
-      for i=250, 1500, 250 do
-        DelayAction(function()
-              local Qrange = 750 + math.min(700, i/2)
-              local QPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),math.huge,600,Qrange,100,false,true)
-              if QPred.HitChance == 1 then
-                CastSkillShot2(_Q, QPred.PredPos)
-              end
-          end, i)
-      end	
-    end        
+    if IsReady(_Q) and ValidTarget(target, 1500) and XerathMenu.Combo.Q:Value() then
+    CastSkillShot(_Q, mousePos)
+	end
+	
+	if QCharged and QPred.HitChance == 1 and XerathMenu.Combo.Q:Value() then
+	  DelayAction(function()
+      CastSkillShot2(_Q, QPred.PredPos)
+	  end, 1)
+    end	        
+	
     end
 
     if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= XerathMenu.Harass.Mana:Value() then
-    
-	local WPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),math.huge,700,GetCastRange(myHero,_W),125,false,true)
-	local EPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),1400,250,975,60,true,true)
 	
-    if CanUseSpell(myHero, _Q) == READY and ValidTarget(target, 1500) and XerathMenu.Harass.Q:Value() then
-      CastSkillShot(_Q, mousePos)
-      for i=250, 1500, 250 do
-        DelayAction(function()
-              local Qrange = 700 + math.min(700, i/2)
-              local QPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),math.huge,600,Qrange,100,false,true)
-              if QPred.HitChance == 1 then
-                CastSkillShot2(_Q, QPred.PredPos)
-              end
-          end, i)
-      end
-    end
+    if IsReady(_Q) and ValidTarget(target, 1500) and XerathMenu.Harass.Q:Value() then
+    CastSkillShot(_Q, mousePos)
+	end
+	
+	if QCharged and QPred.HitChance == 1 and XerathMenu.Harass.Q:Value() then
+	  DelayAction(function()
+      CastSkillShot2(_Q, QPred.PredPos)
+	  end, 1)
+    end	 
 
-    
-    if CanUseSpell(myHero, _E) == READY and EPred.HitChance == 1 and XerathMenu.Harass.E:Value() and ValidTarget(target, 975) then
-    CastSkillShot(_E,EPred.PredPos)
+    if IsReady(_E) and XerathMenu.Harass.E:Value() and ValidTarget(target, 975) then
+    Cast(_E,target)
     end
 	
-    if CanUseSpell(myHero, _W) == READY and WPred.HitChance == 1 and XerathMenu.Harass.W:Value() and ValidTarget(target, GetCastRange(myHero,_W)) then
-    CastSkillShot(_W,WPred.PredPos)
+    if IsReady(_W) and XerathMenu.Harass.W:Value() and ValidTarget(target, GetCastRange(myHero,_W)) then
+    Cast(_W,target)
     end	
 	
     end
 
     for i,enemy in pairs(GetEnemyHeroes()) do
-       local WPred = GetPredictionForPlayer(myHeroPos(),enemy,GetMoveSpeed(enemy),math.huge,700,GetCastRange(myHero,_W),125,false,true)
-       local EPred = GetPredictionForPlayer(myHeroPos(),enemy,GetMoveSpeed(enemy),1400,250,975,60,true,true)
-	   
+
         if Ignite and XerathMenu.Misc.AutoIgnite:Value() then
-          if CanUseSpell(myHero, Ignite) == READY and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
+          if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
           CastTargetSpell(enemy, Ignite)
           end
         end
                 
-       if CanUseSpell(myHero, _W) == READY and ValidTarget(enemy,GetCastRange(myHero,_W)) and XerathMenu.Killsteal.W:Value() and WPred.HitChance == 1 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 30*GetCastLevel(myHero,_Q)+ 30 + 0.6*GetBonusAP(myHero)) then
-       CastSkillShot(_W,WPred.PredPos)
-       elseif CanUseSpell(myHero, _E) == READY and ValidTarget(enemy, 975) and XerathMenu.Killsteal.E:Value() and EPred.HitChance == 1 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 30*GetCastLevel(myHero,_E)+ 50 + 0.45*GetBonusAP(myHero)) then  
-       CastSkillShot(_E,EPred.PredPos)
+       if IsReady(_W) and ValidTarget(enemy,GetCastRange(myHero,_W)) and XerathMenu.Killsteal.W:Value() and WPred.HitChance == 1 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 30*GetCastLevel(myHero,_Q)+ 30 + 0.6*GetBonusAP(myHero)) then
+       Cast(_W,target)
+       elseif IsReady(_E) and ValidTarget(enemy, 975) and XerathMenu.Killsteal.E:Value() and EPred.HitChance == 1 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 30*GetCastLevel(myHero,_E)+ 50 + 0.45*GetBonusAP(myHero)) then  
+       Cast(_E,target)
        end
     end
     
@@ -156,11 +206,4 @@ end
 
 end)
 
---[[addInterrupterCallback(function(target, spellType)
-  local EPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),1400,250,975,60,true,true)
-  if IsInDistance(target, 975) and CanUseSpell(myHero, _E) == READY and EPred.HitChance == 1 and XerathMenu.Misc.Interrupt:Value() and spellType == CHANELLING_SPELLS then
-  CastSkillShot(_E,EPred.PredPos.x,EPred.PredPos.y,EPred.PredPos.z)
-  end
-end)]]
-
-AddGapcloseEvent(_E, 975, false)
+AddGapcloseEvent(_E, 666, false)
