@@ -160,9 +160,10 @@ OnTick(function(myHero)
       end
       if RCast == 1 and Rdelay1 <= GetTickCount() then
       Cast(_R, Rtarget)
-      elseif RCast == and Rdelay2 <= GetTickCount() then
-      Cast(_R, Rtarget) then
-      CastSpell(_R)
+      elseif RCast == 2 and Rdelay2 <= GetTickCount() then
+      Cast(_R, Rtarget)
+      elseif RCast == 3 and Rdelay3 <= GetTickCount() then
+      Cast(_R, Rtarget)
       end
     end
     
@@ -172,7 +173,7 @@ OnTick(function(myHero)
       end 
       if RCast == 1 and Rdelay1 <= GetTickCount() then
       Cast(_R, Rtarget)
-      elseif RCast == and Rdelay2 <= GetTickCount() then
+      elseif RCast == 2 and Rdelay2 <= GetTickCount() then
       Cast(_R, Rtarget)
       elseif RCast == 3 and Rdelay3 <= GetTickCount() then
       Cast(_R, Rtarget)
