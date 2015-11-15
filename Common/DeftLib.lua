@@ -54,7 +54,7 @@ SpellData = {
                 [_Q] = { Name = "", ProjectileName = "", Range = 825, Speed = 1200, Delay = 0, Width = 80, collision = false, aoe = false, type = "circular", IsDangerous = false}
         },
   ["Riven"] = {
-                [_Q] = { Name = "", ProjectileName = "", Range = 1100, Speed = 1600, Delay = 250, Width = 200, collision = false, aoe = false, type = "circular", IsDangerous = false}
+                [_R] = { Name = "", ProjectileName = "", Range = 1100, Speed = 1600, Delay = 250, Width = 200, collision = false, aoe = false, type = "circular", IsDangerous = false}
         },
   ["Ryze"] = {
   	        [_Q] = { Name = "Overload", ProjectileName = "Overload_mis.troy", Range = 900, Speed = 1400, Delay = 250, Width = 55, collision = true, aoe = false, type = "linear", IsDangerous = false}
