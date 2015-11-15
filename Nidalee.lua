@@ -100,10 +100,12 @@ OnTick(function(myHero)
         end
 
         if ValidTarget(target,1500) then
-          if (GetDistance(target) > 425) or QCD < GetTickCount() then
-         CastSpell(_R)
-         end
-       end	
+          if GetDistance(target) > 425 then
+          CastSpell(_R)
+          elseif QCD < GetTickCount() then
+          CastSpell(_R)
+          end
+        end	
 
       end
 	  
