@@ -50,6 +50,7 @@ XerathMenu.Drawings:Boolean("Qmax", "Draw Q Max Range", true)
 XerathMenu.Drawings:Boolean("W", "Draw W Range", true)
 XerathMenu.Drawings:Boolean("E", "Draw E Range", true)
 XerathMenu.Drawings:Boolean("R", "Draw R Range", true)
+XerathMenu.Drawings:Boolean("RT", "Draw R Target", true)
 XerathMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 XerathMenu:Menu("Interrupt (E)", "Interrupt")
@@ -75,6 +76,7 @@ OnProcessSpell(function(unit, spell)
     end
 end)
 
+local IsChanneled = false
 local QCharged = false
 local minrange = 750
 local chargedrange = 750
@@ -84,15 +86,22 @@ local Rdelay1 = 0
 local Rdelay2 = 0
 local Rdelay3 = 0
 local shouldCastR = false
+local target1 = TargetSelector(1550,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target2 = TargetSelector(1250,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target3 = TargetSelector(1005,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target4 = TargetSelector(GetCastRange(myHero,_R),TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local lastlevel = GetLevel(myHero)-1
 
 OnDraw(function(myHero)
 local col = XerathMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
+local Rtarget = target4:GetTarget()
 if XerathMenu.Drawings.Qmin:Value() then DrawCircle(pos,750,1,0,col) end
 if XerathMenu.Drawings.Qmax:Value() then DrawCircle(pos,1500,1,0,col) end
 if XerathMenu.Drawings.W:Value() then DrawCircle(pos,1150,1,0,col) end
 if XerathMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,col) end
 if XerathMenu.Drawings.R:Value() then DrawCircle(pos,GetCastRange(myHero,_R),1,0,col) end
+if XerathMenu.Drawings.RT:Value() and ValidTarget(Rtarget) then DrawCircle(GetOrigin(Rtarget),50,1,0,ARGB(255,255,0,0)) end
 if QCharged and chargedTime + ((1500 + 3000) + 1000) < GetTickCount() then
   QCharged = false
   chargedrange = minrange
@@ -102,19 +111,25 @@ if QCharged then
 end
 end)
 
-local target1 = TargetSelector(1550,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local target2 = TargetSelector(1250,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local target3 = TargetSelector(1005,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local lastlevel = GetLevel(myHero)-1
-
 OnTick(function(myHero)
     local mousePos = GetMousePos()
     local Qtarget = target1:GetTarget()
     local Wtarget = target2:GetTarget()
     local Etarget = target3:GetTarget()
+    local Rtarget = target4:GetTarget()
 	
     if not QCharged and chargedrange ~= minrange then
     chargedrange = minrange
+    end
+
+    if CanUseSpell(myHero,_R) == ONCOOLDOWN then
+    IsChanneled = false
+    end
+
+    if not IsChanneled then
+    IOW.movementEnabled = true
+    IOW.attacksEnabled = true
+    XerathMenu.Combo.RT:Toggle(false)
     end
 
     if IOW:Mode() == "Combo" then
@@ -137,6 +152,31 @@ OnTick(function(myHero)
         end
       end
       
+    end
+    
+    if XerathMenu.Combo.R:Value() and ValidTarget(Rtarget, GetCastRange(myHero,_R)) then
+      if not IsChanneled and RCast == 0 and IsReady(_R) then
+      CastSpell(_R)
+      end
+      if RCast == 1 and Rdelay1 <= GetTickCount() then
+      Cast(_R, Rtarget)
+      elseif RCast == and Rdelay2 <= GetTickCount() then
+      Cast(_R, Rtarget) then
+      CastSpell(_R)
+      end
+    end
+    
+    if XerathMenu.Combo.RT:Value() and ValidTarget(Rtarget, GetCastRange(myHero,_R)) then
+      if not IsChanneled and RCast == 0 and IsReady(_R) and GetHP2(RTarget) < getdmg("R",RTarget)*3 then
+      CastSpell(_R)
+      end 
+      if RCast == 1 and Rdelay1 <= GetTickCount() then
+      Cast(_R, Rtarget)
+      elseif RCast == and Rdelay2 <= GetTickCount() then
+      Cast(_R, Rtarget)
+      elseif RCast == 3 and Rdelay3 <= GetTickCount() then
+      Cast(_R, Rtarget)
+      end
     end
 
     if IOW:Mode() == "Harass" then
@@ -247,6 +287,8 @@ end)
 
 OnUpdateBuff(function(unit,buff)
   if unit == myHero and (buff.Name == "XerathLocusOfPower2" or buff.Name == "xerathrshots") then
+  IOW.movementEnabled = false
+  IOW.attacksEnabled = false
   IsChanneled = true
   end
 end)
@@ -287,6 +329,8 @@ OnProcessSpell(function(unit,spell)
     end
 
     if spell.name:lower():find("xerathlocusofpower2") then
+    IOW.movementEnabled = false
+    IOW.attacksEnabled = false
     IsChanneled = true
     RCast = 1
     lastR = GetTickCount()
