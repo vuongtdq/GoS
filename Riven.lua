@@ -26,6 +26,7 @@ RivenMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then RivenMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) end
 RivenMenu.Misc:Boolean("Autolvl", "Auto level", true)
 RivenMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-E-W", "Q-W-E", "E-Q-W"})
+RivenMenu.Misc:DropDown("cancel", "Cancel Animation", 1, {"Dance", "Taunt", "Laugh", "Joke", "Off"})
 RivenMenu.Misc:KeyBinding("Flee", "Flee", string.byte("T"))
 RivenMenu.Misc:KeyBinding("WallJump", "WallJump", string.byte("G"))
 RivenMenu.Misc:Boolean("AutoW", "Auto W", true)
@@ -54,7 +55,7 @@ DelayAction(function()
 end, 1)
 
 local QCast = 0
-local EDelay = 0
+local lastE = 0
 local lastlevel = GetLevel(myHero)-1
 
 OnDraw(function(myHero)
@@ -94,7 +95,7 @@ OnTick(function(myHero)
           if IsReady(_E) then
           CastSkillShot(_E, mousePos)
           end
-          if not IsReady(_E) and IsReady(_Q) and EDelay + 350 < GetTickCount() then
+          if not IsReady(_E) and IsReady(_Q) and lastE + 350 < GetTickCount() then
           CastSkillShot(_Q, mousePos)
           end
         end
@@ -155,7 +156,7 @@ OnProcessSpell(function(unit,spell)
   if unit == myHero then
   
     if spell.name == "RivenFeint" then
-    EDelay = GetTickCount()
+    lastE = GetTickCount()
     end
 	
     local target = IOW:GetTarget()
@@ -263,6 +264,16 @@ OnProcessSpell(function(unit,spell)
     end
 	
   end 
+end)
+
+OnProcessSpellComplete(function(unit,spell)
+  if unit == myHero and spell.name == "RivenTriCleave" then 
+    local Emotes = {EMOTE_DANCE, EMOTE_TAUNT, EMOTE_LAUGH, EMOTE_JOKE}
+    if RivenMenu.Misc.cancel:Value() ~= 5 then
+    CastEmote(Emotes[RivenMenu.Misc.cancel:Value()])
+    MoveToXYZ(mousePos)
+    end
+  end
 end)
 
 OnUpdateBuff(function(unit,buff)
