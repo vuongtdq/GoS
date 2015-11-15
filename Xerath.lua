@@ -32,6 +32,17 @@ XerathMenu.Misc:Boolean("Autolvl", "Auto level", true)
 XerathMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "Q-E-W"})
 XerathMenu.Misc:Boolean("Interrupt", "Interrupt Spells (E)", true)
 
+XerathMenu:Menu("LaneClear", "LaneClear")
+XerathMenu.LaneClear:Boolean("Q", "Use Q", true)
+XerathMenu.LaneClear:Boolean("W", "Use W", false)
+XerathMenu.LaneClear:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
+
+XerathMenu:Menu("JungleClear", "JungleClear")
+XerathMenu.JungleClear:Boolean("Q", "Use Q", true)
+XerathMenu.JungleClear:Boolean("W", "Use W", true)
+XerathMenu.JungleClear:Boolean("E", "Use E", true)
+XerathMenu.JungleClear:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
+
 XerathMenu:Menu("Drawings", "Drawings")
 XerathMenu.Drawings:Boolean("Qmin", "Draw Q Min Range", true)
 XerathMenu.Drawings:Boolean("Qmax", "Draw Q Max Range", true)
@@ -149,6 +160,35 @@ OnTick(function(myHero)
           Cast(_E,Etarget)
           end
 	end
+      end
+
+    end
+
+    if IOW:Mode() == "LaneClear" then
+		
+      if QCharged then
+        local BestPos, BestHit = GetLineFarmPosition(1500, 100)
+	if chargedrange <= 1500 and GetDistanceSqr(BestPos) < math.pow(chargedrange - 100, 2) and BestPos and BestHit > 2 then
+        DelayAction(function() CastSkillShot2(_Q, BestPos) end, 1)
+	end
+      end
+		
+      if GetPercentMP(myHero) >= XerathMenu.LaneClear.Mana:Value() then
+       	
+        if IsReady(_Q) and XerathMenu.LaneClear.Q:Value() then
+	  local BestPos, BestHit = GetLineFarmPosition(1500, 100)
+	  if BestPos and BestHit > 2 then
+	  CastSkillShot(_Q, mousePos) 
+          end
+        end
+		 
+        if IsReady(_W) and XerathMenu.LaneClear.W:Value() then
+          local BestPos, BestHit = GetFarmPosition(1150, 200)
+          if BestPos and BestHit > 2 then 
+          CastSkillShot(_W, BestPos)
+          end
+	end
+        
       end
 
     end
