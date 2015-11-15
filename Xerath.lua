@@ -25,8 +25,6 @@ XerathMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true)
 XerathMenu.Misc:Boolean("Autolvl", "Auto level", true)
 XerathMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "Q-E-W"})
 XerathMenu.Misc:Boolean("Interrupt", "Interrupt Spells (E)", true)
---XerathMenu.Misc:Boolean("AutoR", "Auto R Killable", true)
---XerathMenu.Misc:Key("AutoRKey", "R Killable(hold)", string.byte("T"))
 
 XerathMenu:Menu("Drawings", "Drawings")
 XerathMenu.Drawings:Boolean("Qmin", "Draw Q Min Range", true)
@@ -63,134 +61,99 @@ local QCharged = false
 local minrange = 750
 local chargedrange = 750
 local chargedTime = GetTickCount()
-local lastlevel = GetLevel(myHero)-1
-
-OnCreateObj(function(Object)
-	if GetObjectBaseName(Object) == "Xerath_Base_Q_cas_charge.troy" and GetDistance(Object) <= 50 then
-		QCharged = true
-	end
-end)
-
-OnDeleteObj(function(Object)
-	if GetObjectBaseName(Object) == "Xerath_Base_Q_cas_charge.troy" and GetDistance(Object) <= 50 then
-		QCharged = false
-	end
-end)
 
 OnDraw(function(myHero)
 local col = XerathMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
-print(chargedTime)
-if XerathMenu.Drawings.Qmin:Value() then DrawCircle(pos,chargedrange,1,0,col) end
+if XerathMenu.Drawings.Qmin:Value() then DrawCircle(pos,750,1,0,col) end
 if XerathMenu.Drawings.Qmax:Value() then DrawCircle(pos,1500,1,0,col) end
-if XerathMenu.Drawings.W:Value() then DrawCircle(pos,GetCastRange(myHero,_W),1,0,col) end
+if XerathMenu.Drawings.W:Value() then DrawCircle(pos,1150,1,0,col) end
 if XerathMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,col) end
 if XerathMenu.Drawings.R:Value() then DrawCircle(pos,GetCastRange(myHero,_R),1,0,col) end
+if QCharged and chargedTime + ((1500 + 3000) + 1000) < GetTickCount() then
+  QCharged = false
+  chargedrange = minrange
+end	
+if QCharged then
+  chargedrange = math.floor((math.min(minrange + (1500 - minrange) * ((GetTickCount() - chargedTime) / 1500), 1500)))
+end
 end)
 
-OnRemoveBuff(function(unit,buff)
-  if unit == myHero then
-  
-    if buff.name == "XerathArcanopulseChargeUp"  then
-    QCharged = false
-	end
-	if buff.name == "xerathqlaunchsound" then
-	QCharged = false
-	end
-	
-  end
-end)
-
-OnProcessSpell(function(unit,spell)
-  if unit == myHero then
-  
-    if spell.name:lower():find("xeratharcanopulse2") and QCharged then
-	QCharged = false
-	end
-
-	if spell.name == "XerathArcanopulseChargeUp" then
-	QCharged = true
-	chargedTime = GetTickCount()
-	end
-	
-  end
-end)
+local target1 = TargetSelector(1550,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target2 = TargetSelector(1250,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target3 = TargetSelector(1005,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
-    local target = GetCurrentTarget()
     local mousePos = GetMousePos()
+    local Qtarget = target1:GetTarget()
+    local Wtarget = target2:GetTarget()
+    local Etarget = target3:GetTarget()
 	
-	if not QCharged and chargedrange ~= minrange then
-		chargedrange = minrange
-	end
-	
-	if QCharged and chargedTime + ((1500 + 3000) + 1000) < GetTickCount() then
-		QCharged = false
-		chargedrange = minrange
-	end
-	
-	if QCharged then
-		chargedrange = math.floor((math.min(minrange + (1500 - minrange) * ((GetTickCount() - chargedTime) / 1500), 1500)))
-	end
-	
+    if not QCharged and chargedrange ~= minrange then
+    chargedrange = minrange
+    end
+
     if IOW:Mode() == "Combo" then
-    
-	local QPred = GetPredictionForPlayer(myHeroPos(),target,GetMoveSpeed(target),math.huge,600,chargedrange,100,false,true)
 	
-    if IsReady(_E) and XerathMenu.Combo.E:Value() and ValidTarget(target, 975) then
-    Cast(_E,target)
-    end
-	
-    if IsReady(_W) and XerathMenu.Combo.W:Value() and ValidTarget(target, GetCastRange(myHero,_W)) then
-    Cast(_W,target)
-    end		
+      if QCharged and XerathMenu.Combo.Q:Value() then
+        DelayAction(function()
+        Cast2(_Q, Qtarget, chargedrange)
+	end, 1)
+      elseif IsReady(_Q) and ValidTarget(Qtarget, 1550) and XerathMenu.Combo.Q:Value() then
+      CastSkillShot(_Q, mousePos)
+      end
+  
+      if not QCharged then
+      	if IsReady(_W) and XerathMenu.Combo.W:Value() and ValidTarget(Wtarget, 1250) then
+        Cast(_W,Wtarget)
+        end
 
-    if IsReady(_Q) and ValidTarget(target, 1500) and XerathMenu.Combo.Q:Value() then
-    CastSkillShot(_Q, mousePos)
+        if IsReady(_E) and XerathMenu.Combo.E:Value() and ValidTarget(Etarget, 1005) then
+        Cast(_E,Etarget)
+        end
+      end
+      
+    end
+
+    if IOW:Mode() == "Harass" then
+	  
+      if QCharged and XerathMenu.Harass.Q:Value() then
+        DelayAction(function()
+        Cast2(_Q, Qtarget, chargedrange)
+	end, 1)
+      end
+	  
+      if GetPercentMP(myHero) >= XerathMenu.Harass.Mana:Value() then
+        if IsReady(_Q) and ValidTarget(Qtarget, 1550) and XerathMenu.Harass.Q:Value() then
+        CastSkillShot(_Q, mousePos)
 	end
 	
-	if QCharged and QPred.HitChance == 1 and XerathMenu.Combo.Q:Value() then
-	  DelayAction(function()
-      CastSkillShot2(_Q, QPred.PredPos)
-	  end, 1)
-    end	        
-	
-    end
-
-    if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= XerathMenu.Harass.Mana:Value() then
-	
-    if IsReady(_Q) and ValidTarget(target, 1500) and XerathMenu.Harass.Q:Value() then
-    CastSkillShot(_Q, mousePos)
+	if not QCharged then
+          if IsReady(_W) and XerathMenu.Harass.W:Value() and ValidTarget(Wtarget, 1250) then
+          Cast(_W,Wtarget)
+          end
+  
+          if IsReady(_E) and XerathMenu.Harass.E:Value() and ValidTarget(Etarget, 1005) then
+          Cast(_E,Etarget)
+          end
 	end
-	
-	if QCharged and QPred.HitChance == 1 and XerathMenu.Harass.Q:Value() then
-	  DelayAction(function()
-      CastSkillShot2(_Q, QPred.PredPos)
-	  end, 1)
-    end	 
+      end
 
-    if IsReady(_E) and XerathMenu.Harass.E:Value() and ValidTarget(target, 975) then
-    Cast(_E,target)
-    end
-	
-    if IsReady(_W) and XerathMenu.Harass.W:Value() and ValidTarget(target, GetCastRange(myHero,_W)) then
-    Cast(_W,target)
-    end	
-	
     end
 
     for i,enemy in pairs(GetEnemyHeroes()) do
 
         if Ignite and XerathMenu.Misc.AutoIgnite:Value() then
-          if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
+          if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
           CastTargetSpell(enemy, Ignite)
           end
         end
                 
-       if IsReady(_W) and ValidTarget(enemy,GetCastRange(myHero,_W)) and XerathMenu.Killsteal.W:Value() and WPred.HitChance == 1 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 30*GetCastLevel(myHero,_Q)+ 30 + 0.6*GetBonusAP(myHero)) then
-       Cast(_W,target)
-       elseif IsReady(_E) and ValidTarget(enemy, 975) and XerathMenu.Killsteal.E:Value() and EPred.HitChance == 1 and GetCurrentHP(enemy)+GetMagicShield(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 0, 30*GetCastLevel(myHero,_E)+ 50 + 0.45*GetBonusAP(myHero)) then  
-       Cast(_E,target)
+       if IsReady(_W) and ValidTarget(enemy, 1250) and XerathMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
+       Cast(_W,enemy)
+       elseif IsReady(_E) and ValidTarget(enemy, 1005) and XerathMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then  
+       Cast(_E,enemy)
        end
     end
     
@@ -204,6 +167,47 @@ if XerathMenu.Misc.Autolvl:Value() then
   end
 end
 
+end)
+
+OnRemoveBuff(function(unit,buff)
+  if unit == myHero then
+  
+    if buff.name == "XerathArcanopulseChargeUp"  then
+    QCharged = false
+    end
+
+    if buff.name == "xerathqlaunchsound" then
+    QCharged = false
+    end
+	
+  end
+end)
+
+OnProcessSpell(function(unit,spell)
+  if unit == myHero then
+  
+    if spell.name:lower():find("xeratharcanopulse2") and QCharged then
+    QCharged = false
+    end
+
+    if spell.name == "XerathArcanopulseChargeUp" then
+    QCharged = true
+    chargedTime = GetTickCount()
+    end
+	
+  end
+end)
+
+OnCreateObj(function(Object)
+  if GetObjectBaseName(Object) == "Xerath_Base_Q_cas_charge.troy" and GetDistance(Object) <= 50 then
+  QCharged = true
+  end
+end)
+
+OnDeleteObj(function(Object)
+  if GetObjectBaseName(Object) == "Xerath_Base_Q_cas_charge.troy" and GetDistance(Object) <= 50 then
+  QCharged = false
+  end
 end)
 
 AddGapcloseEvent(_E, 666, false)
