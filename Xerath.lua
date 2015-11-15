@@ -86,7 +86,7 @@ if QCharged and chargedTime + ((1500 + 3000) + 1000) < GetTickCount() then
   chargedrange = minrange
 end	
 if QCharged then
-  chargedrange = math.floor((math.min(minrange + (1500 - minrange) * ((GetTickCount() - chargedTime) / 1500), 1500)))
+  chargedrange = math.floor((math.min(minrange + (1500 - minrange) * ((GetTickCount() - chargedTime) / 1500) - 100, 1500)))
 end
 end)
 
@@ -107,7 +107,7 @@ OnTick(function(myHero)
 
     if IOW:Mode() == "Combo" then
 	
-      if QCharged and XerathMenu.Combo.Q:Value() then
+      if QCharged and XerathMenu.Combo.Q:Value() and ValidTarget(Qtarget, 1550) then
         DelayAction(function()
         Cast2(_Q, Qtarget, chargedrange)
 	end, 1)
@@ -129,7 +129,7 @@ OnTick(function(myHero)
 
     if IOW:Mode() == "Harass" then
 	  
-      if QCharged and XerathMenu.Harass.Q:Value() then
+      if QCharged and XerathMenu.Harass.Q:Value() and ValidTarget(Qtarget, 1550) then
         DelayAction(function()
         Cast2(_Q, Qtarget, chargedrange)
 	end, 1)
