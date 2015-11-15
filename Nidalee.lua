@@ -5,7 +5,6 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-
 local NidaleeMenu = MenuConfig("Nidalee", "Nidalee")
 NidaleeMenu:Menu("Combo", "Combo")
 NidaleeMenu.Combo:Boolean("Q", "Use Q", true)
@@ -101,7 +100,7 @@ OnTick(function(myHero)
         end
 
         if ValidTarget(target,1500) then
-          if GetDistance(target) > 425 or QCD < GetTickCount() then
+          if (GetDistance(target) > 425) or QCD < GetTickCount() then
          CastSpell(_R)
          end
        end	
