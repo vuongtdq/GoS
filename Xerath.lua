@@ -164,6 +164,21 @@ OnTick(function(myHero)
 
     end
 
+    for i,enemy in pairs(GetEnemyHeroes()) do
+
+        if Ignite and XerathMenu.Misc.AutoIgnite:Value() then
+          if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
+          CastTargetSpell(enemy, Ignite)
+          end
+        end
+                
+       if IsReady(_W) and ValidTarget(enemy, 1250) and XerathMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
+       Cast(_W,enemy)
+       elseif IsReady(_E) and ValidTarget(enemy, 1005) and XerathMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then  
+       Cast(_E,enemy)
+       end
+    end
+    
     if IOW:Mode() == "LaneClear" then
 		
       if QCharged then
@@ -193,20 +208,29 @@ OnTick(function(myHero)
 
     end
 
-    for i,enemy in pairs(GetEnemyHeroes()) do
+    for i,mobs in pairs(minionManager.objects) do
+        if IOW:Mode() == "LaneClear" and GetTeam(mobs) == 300 then
+          if QCharged and XerathMenu.JungleClear.Q:Value() and ValidTarget(mobs, 1500) then
+            DelayAction(function()
+            CastSkillShot2(_Q, GetOrigin(mobs))
+ 	    end, 1)
+          end
 
-        if Ignite and XerathMenu.Misc.AutoIgnite:Value() then
-          if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
-          CastTargetSpell(enemy, Ignite)
+          if GetPercentMP(myHero) >= XerathMenu.JungleClear.Mana:Value() then
+            if IsReady(_Q) and XerathMenu.JungleClear.Q:Value() and ValidTarget(mobs, 1500) then
+            CastSkillShot(_Q,mousePos)
+	    end
+		
+	    if IsReady(_W) and XerathMenu.JungleClear.W:Value() and ValidTarget(mobs, 1150) then
+	    CastSpell(_W,GetOrigin(mobs))
+	    end
+		
+	    if IsReady(_E) and XerathMenu.JungleClear.E:Value() and ValidTarget(mobs, 975) then
+	    CastSkillShot(_E,GetOrigin(mobs))
+            end
           end
         end
-                
-       if IsReady(_W) and ValidTarget(enemy, 1250) and XerathMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
-       Cast(_W,enemy)
-       elseif IsReady(_E) and ValidTarget(enemy, 1005) and XerathMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then  
-       Cast(_E,enemy)
-       end
-    end
+    end       
     
 if XerathMenu.Misc.Autolvl:Value() then
   if GetLevel(myHero) > lastlevel then
