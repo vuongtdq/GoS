@@ -75,8 +75,9 @@ SpellData = {
   	        [_R] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 250, Width = 450, collision = false, aoe = false, type = "circular", IsDangerous = false}
        },
    ["Xerath"] = {
-  	        [_W] = { Name = "", ProjectileName = "", Range = GetCastRange(myHero,_W), Speed = math.huge, Delay = 700, Width = 125, collision = false, aoe = false, type = "circular", IsDangerous = false},
-  	        [_E] = { Name = "", ProjectileName = "", Range = 975, Speed = 1400, Delay = 250, Width = 60, collision = true, aoe = false, type = "linear", IsDangerous = true}
+   	        [_Q] = { Name = "", ProjectileName = "", Range = 750, Speed = math.huge, Delay = 600, Width = 100, collision = false, aoe = false, type = "linear", IsDangerous = false},
+  	        [_W] = { Name = "", ProjectileName = "", Range = 1150, Speed = math.huge, Delay = 650, Width = 200, collision = false, aoe = false, type = "circular", IsDangerous = false},
+  	        [_E] = { Name = "", ProjectileName = "", Range = 975, Speed = 1200, Delay = 0, Width = 60, collision = true, aoe = false, type = "linear", IsDangerous = true}
        }
 }
 
@@ -269,6 +270,20 @@ function Cast(spell, target, origin, hitchance, speed, delay, range, width, coll
       local Predicted = GetPredictionForPlayer(origin,target,GetMoveSpeed(target), speed, delay, range, width, coll, true)
       if Predicted.HitChance >= hitchance then
       CastSkillShot(spell, Predicted.PredPos)
+      end
+end
+
+function Cast2(spell, target, range, origin, hitchance, speed, delay, width, coll)
+      local hitchance = hitchance or 1
+      local origin = GetOrigin(origin) or GetOrigin(myHero)
+      local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
+      local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
+      local range = range or SpellData[GetObjectName(myHero)][spell].Range
+      local width = width or SpellData[GetObjectName(myHero)][spell].Width
+      local coll = coll or  SpellData[GetObjectName(myHero)][spell].collision
+      local Predicted = GetPredictionForPlayer(origin,target,GetMoveSpeed(target), speed, delay, range, width, coll, true)
+      if Predicted.HitChance >= hitchance then
+      CastSkillShot2(spell, Predicted.PredPos)
       end
 end
 
