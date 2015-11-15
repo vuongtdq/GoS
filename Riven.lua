@@ -73,14 +73,22 @@ OnTick(function(myHero)
 	local target = GetCurrentTarget()
 	
 	if IOW:Mode() == "Combo" then
-	  if IsReady(_Q) and IsReady(_E) and RivenMenu.Combo.Q:Value() and RivenMenu.Combo.E:Value() and ValidTarget(target, 525) and GetDistance(target) > GetRange(myHero)+GetHitBox(myHero)*3 then
+	  if IsReady(_E) and RivenMenu.Combo.E:Value() and ValidTarget(target, 440) and GetDistance(target) > GetRange(myHero)+GetHitBox(myHero) then
+	  CastSkillShot(_E, GetOrigin(target))
+	  end
+	  
+	  if IsReady(_Q) and IsReady(_E) and RivenMenu.Combo.Q:Value() and RivenMenu.Combo.E:Value() and ValidTarget(target, 715) and GetDistance(target) > GetRange(myHero)+GetHitBox(target) then
 	  CastSkillShot(_E, GetOrigin(target))
 	  DelayAction(function() CastSkillShot(_Q, GetOrigin(target)) end, 267)
 	  end
 	end
 	
 	if IOW:Mode() == "Harass" then
-	  if IsReady(_Q) and IsReady(_E) and RivenMenu.Harass.Q:Value() and RivenMenu.Harass.E:Value() and ValidTarget(target, 525) and GetDistance(target) > GetRange(myHero)+GetHitBox(myHero)*3 then
+	  if IsReady(_E) and RivenMenu.Harass.E:Value() and ValidTarget(target, 440) and GetDistance(target) > GetRange(myHero)+GetHitBox(myHero) then
+	  CastSkillShot(_E, GetOrigin(target))
+	  end
+	  
+	  if IsReady(_Q) and IsReady(_E) and RivenMenu.Harass.Q:Value() and RivenMenu.Harass.E:Value() and ValidTarget(target, 715) and GetDistance(target) > GetRange(myHero)+GetHitBox(myHero)*3 then
 	  CastSkillShot(_E, GetOrigin(target))
 	  DelayAction(function() CastSkillShot(_Q, GetOrigin(target)) end, 267)
 	  end
