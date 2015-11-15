@@ -4,6 +4,8 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
+AutoUpdate("/D3ftsu/GoS/blob/master/Alistar.lua","/D3ftsu/GoS/blob/master/Alistar.version","Alistar.lua",1)
+
 local AlistarMenu = MenuConfig("Alistar", "Alistar")
 AlistarMenu:Menu("Combo", "Combo")
 AlistarMenu.Combo:Boolean("Q", "Use Q", true)
@@ -38,17 +40,17 @@ AlistarMenu.Drawings:Boolean("W", "Draw W Range", true)
 AlistarMenu.Drawings:Boolean("E", "Draw E Range", true)
 AlistarMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
-local InterruptMenu = MenuConfig("Interrupt", "Interrupt")
-InterruptMenu:Menu("SupportedSpells", "Supported Spells")
-InterruptMenu.SupportedSpells:Boolean("Q", "Use Q", true)
-InterruptMenu.SupportedSpells:Boolean("W", "Use W", true)
+AlistarMenu:Menu("Interrupt", "Interrupt")
+AlistarMenu.Interrupt:Menu("SupportedSpells", "Supported Spells")
+AlistarMenu.Interrupt.SupportedSpells:Boolean("Q", "Use Q", true)
+AlistarMenu.Interrupt.SupportedSpells:Boolean("W", "Use W", true)
 
 DelayAction(function()
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
   for i, spell in pairs(CHANELLING_SPELLS) do
     for _,k in pairs(GetEnemyHeroes()) do
         if spell["Name"] == GetObjectName(k) then
-        InterruptMenu:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
+        AlistarMenu.Interrupt:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
         end
     end
   end
@@ -151,5 +153,5 @@ end
 	
 end)
 
-AddGapcloseEvent(_Q, 365, false)
-AddGapcloseEvent(_W, 650, true)
+AddGapcloseEvent(_Q, 365, false, AlistarMenu)
+AddGapcloseEvent(_W, 650, true, AlistarMenu)
