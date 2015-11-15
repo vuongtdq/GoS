@@ -279,7 +279,6 @@ OnProcessSpellComplete(function(unit,spell)
     local Emotes = {EMOTE_DANCE, EMOTE_TAUNT, EMOTE_LAUGH, EMOTE_JOKE}
     if RivenMenu.Misc.cancel:Value() ~= 5 then
     CastEmote(Emotes[RivenMenu.Misc.cancel:Value()])
-    MoveToXYZ(mousePos)
     end
   end
 end)
