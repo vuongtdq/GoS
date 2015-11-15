@@ -53,7 +53,7 @@ XerathMenu.Drawings:Boolean("R", "Draw R Range", true)
 XerathMenu.Drawings:Boolean("RT", "Draw R Target", true)
 XerathMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
-XerathMenu:Menu("Interrupt (E)", "Interrupt")
+XerathMenu:Menu("Interrupt", "Interrupt (E)")
 
 DelayAction(function()
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
