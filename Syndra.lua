@@ -214,11 +214,6 @@ OnTick(function(myHero)
 	   CastSkillShot(_W,GetOrigin(mobs))
 	   end
          end
-         for _,Ball in pairs(Balls) do
-           if GetDistance(Ball) <= 925 then
-           CastSkillShot(_W,GetOrigin(Ball))
-           end
-         end
        end
        
       end
@@ -234,12 +229,6 @@ OnTick(function(myHero)
          end
 	  
 	 if IsReady(_W) and GetCastName(myHero, _W) == "SyndraW" and ValidTarget(mobs, 925) and SyndraMenu.JungleClear.W:Value() then
-           for _,Ball in pairs(Balls) do
-             if GetDistance(Ball) <= 925 then
-             CastSkillShot(_W,GetOrigin(Ball))
-             end
-           end	  
-
 	   if GetDistance(mobs) <= 925 then
 	   CastSkillShot(_W,GetOrigin(mobs))
 	   end
