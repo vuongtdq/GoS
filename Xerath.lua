@@ -51,6 +51,7 @@ XerathMenu.Drawings:Boolean("W", "Draw W Range", true)
 XerathMenu.Drawings:Boolean("E", "Draw E Range", true)
 XerathMenu.Drawings:Boolean("R", "Draw R Range", true)
 XerathMenu.Drawings:Boolean("RT", "Draw R Target", true)
+XerathMenu.Drawings:Boolean("Rdmg", "Draw R Damage", true)
 XerathMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 XerathMenu:Menu("Interrupt", "Interrupt (E)")
@@ -81,6 +82,7 @@ local QCharged = false
 local minrange = 750
 local chargedrange = 750
 local chargedTime = GetTickCount()
+local rRange = {0,3200, 4400, 5600}
 local RCast = 0
 local Rdelay1 = 0
 local Rdelay2 = 0
@@ -89,7 +91,7 @@ local shouldCastR = false
 local target1 = TargetSelector(1550,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(1250,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target3 = TargetSelector(1005,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local target4 = TargetSelector(GetCastRange(myHero,_R),TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target4 = TargetSelector(rRange[GetCastLevel(myHero,_R)],TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local lastlevel = GetLevel(myHero)-1
 
 OnDraw(function(myHero)
@@ -100,14 +102,23 @@ if XerathMenu.Drawings.Qmin:Value() then DrawCircle(pos,750,1,0,col) end
 if XerathMenu.Drawings.Qmax:Value() then DrawCircle(pos,1500,1,0,col) end
 if XerathMenu.Drawings.W:Value() then DrawCircle(pos,1150,1,0,col) end
 if XerathMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,col) end
-if XerathMenu.Drawings.R:Value() then DrawCircle(pos,GetCastRange(myHero,_R),1,0,col) end
+if XerathMenu.Drawings.R:Value() then DrawCircle(pos,rRange[GetCastLevel(myHero,_R)],1,0,col) end
 if XerathMenu.Drawings.RT:Value() and ValidTarget(Rtarget) then DrawCircle(GetOrigin(Rtarget),50,1,0,ARGB(255,255,0,0)) end
-if QCharged and chargedTime + ((1500 + 3000) + 1000) < GetTickCount() then
-  QCharged = false
-  chargedrange = minrange
-end	
-if QCharged then
-  chargedrange = math.floor((math.min(minrange + (1500 - minrange) * ((GetTickCount() - chargedTime) / 1500) - 100, 1500)))
+for i,enemy in pairs(GetEnemyHeroes()) do do
+  if ValidTarget(enemy) and XerathMenu.Drawings.Rdmg:Value() then
+    local barPos = GetHPBarPos(enemy)
+    if barPos.x > 0 and barPos.y > 0 then
+      local offset = 103 * (GetCurrentHP(enemy)/GetMaxHP(enemy))
+      if getdmg("R",enemy)*3 > 0 and IsReady(_R) then
+      local off = 103*(getdmg("R",enemy)*3/GetMaxHP(enemy))
+      DrawLine(barPos.x+1+offset-off, barPos.y-1, barPos.x+1+offset, barPos.y-1, 5, 0xDFFFE258)
+      DrawLine(barPos.x+1+offset-off, barPos.y-1, barPos.x+1+offset-off, barPos.y+10-10, 1, 0xDF8866F4)
+      DrawText("R", 11, barPos.x+1+offset-off, barPos.y-5-10, 0xDF55F855)
+      DrawText(""..getdmg("R",enemy), 10, barPos.x+4+offset-off, barPos.y+5-10, 0xDFFF5858)
+      offset = offset - off
+      end
+    end
+  end
 end
 end)
 
@@ -122,6 +133,15 @@ OnTick(function(myHero)
     chargedrange = minrange
     end
 
+    if QCharged and chargedTime + ((1500 + 3000) + 1000) < GetTickCount() then
+    QCharged = false
+    chargedrange = minrange
+    end	
+
+    if QCharged then
+    chargedrange = math.floor((math.min(minrange + (1500 - minrange) * ((GetTickCount() - chargedTime) / 1500) - 100, 1500)))
+    end
+
     if CanUseSpell(myHero,_R) == ONCOOLDOWN then
     IsChanneled = false
     end
@@ -130,6 +150,14 @@ OnTick(function(myHero)
     IOW.movementEnabled = true
     IOW.attacksEnabled = true
     XerathMenu.Combo.RT:Toggle(false)
+    end
+
+    if RCast == 1 and Rdelay1 <= GetTickCount() then
+      Cast(_R, Rtarget)
+      elseif RCast == 2 and Rdelay2 <= GetTickCount() then
+      Cast(_R, Rtarget)
+      elseif RCast == 3 and Rdelay3 <= GetTickCount() then
+      Cast(_R, Rtarget)
     end
 
     if IOW:Mode() == "Combo" then
@@ -154,30 +182,16 @@ OnTick(function(myHero)
       
     end
     
-    if XerathMenu.Combo.R:Value() and ValidTarget(Rtarget, GetCastRange(myHero,_R)) then
+    if XerathMenu.Combo.R:Value() and ValidTarget(Rtarget, rRange[GetCastLevel(myHero,_R)]) then
       if not IsChanneled and RCast == 0 and IsReady(_R) then
       CastSpell(_R)
       end
-      if RCast == 1 and Rdelay1 <= GetTickCount() then
-      Cast(_R, Rtarget)
-      elseif RCast == 2 and Rdelay2 <= GetTickCount() then
-      Cast(_R, Rtarget)
-      elseif RCast == 3 and Rdelay3 <= GetTickCount() then
-      Cast(_R, Rtarget)
-      end
     end
     
-    if XerathMenu.Combo.RT:Value() and ValidTarget(Rtarget, GetCastRange(myHero,_R)) then
+    if XerathMenu.Combo.RT:Value() and ValidTarget(Rtarget, rRange[GetCastLevel(myHero,_R)]) then
       if not IsChanneled and RCast == 0 and IsReady(_R) and GetHP2(RTarget) < getdmg("R",RTarget)*3 then
       CastSpell(_R)
       end 
-      if RCast == 1 and Rdelay1 <= GetTickCount() then
-      Cast(_R, Rtarget)
-      elseif RCast == 2 and Rdelay2 <= GetTickCount() then
-      Cast(_R, Rtarget)
-      elseif RCast == 3 and Rdelay3 <= GetTickCount() then
-      Cast(_R, Rtarget)
-      end
     end
 
     if IOW:Mode() == "Harass" then
