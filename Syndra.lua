@@ -95,7 +95,7 @@ OnTick(function(myHero)
         end
         
         if IsReady(_Q) and IsReady(_E) and SyndraMenu.Combo.EQ:Value() then
-        Cast(_Q,target,myHero,1,1600,0,1280,60,false)
+        CastSkillShot(_Q, GetOrigin(target))
         DelayAction(function() Cast(_E,target,myHero,1,1600,0,1280,60,false) end, 250)
         end
 
