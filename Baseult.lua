@@ -104,6 +104,9 @@ OnProcessRecall(function(unit,recall)
 	Isrecalling[GetObjectName(unit)] = rec
 		
 	  if SpellData[GetObjectName(myHero)] then
+	    if GetObjectName(myHero) == "Jinx" then
+	    MissileSpeed = GetDistance(Base) > 1350 and (2295000 + (GetDistance(Base) - 1350) * 2200) / GetDistance(Base) or 1700
+	    end
 	    if IsReady(_R) and BaseultMenu.Enabled:Value() and Damage(unit) > GetCurrentHP(unit)+GetDmgShield(unit)+GetHPRegen(unit)*8 then
 	      if (recall.totalTime-recall.passedTime) > Delay + (GetDistance(Base) * 1000 / MissileSpeed) then
 	      DelayAction(function() CastSkillShot(_R,Base) end, (recall.totalTime-recall.passedTime)- (Delay + (GetDistance(Base) * 1000 / MissileSpeed)))
