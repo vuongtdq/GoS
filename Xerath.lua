@@ -104,11 +104,11 @@ if XerathMenu.Drawings.W:Value() then DrawCircle(pos,1150,1,0,col) end
 if XerathMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,col) end
 if XerathMenu.Drawings.R:Value() then DrawCircle(pos,rRange[GetCastLevel(myHero,_R)],1,0,col) end
 if XerathMenu.Drawings.RT:Value() and ValidTarget(Rtarget) then DrawCircle(GetOrigin(Rtarget),50,1,0,ARGB(255,255,0,0)) end
-for i,enemy in pairs(GetEnemyHeroes()) do do
+for i,enemy in pairs(GetEnemyHeroes()) do
   if ValidTarget(enemy) and XerathMenu.Drawings.Rdmg:Value() then
     local barPos = GetHPBarPos(enemy)
     if barPos.x > 0 and barPos.y > 0 then
-      local offset = 103 * (GetCurrentHP(enemy)/GetMaxHP(enemy))
+      local offset = 103 * (GetHP2(enemy)/GetMaxHP(enemy))
       if getdmg("R",enemy)*3 > 0 and IsReady(_R) then
       local off = 103*(getdmg("R",enemy)*3/GetMaxHP(enemy))
       DrawLine(barPos.x+1+offset-off, barPos.y-1, barPos.x+1+offset, barPos.y-1, 5, 0xDFFFE258)
