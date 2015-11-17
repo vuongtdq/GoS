@@ -116,13 +116,13 @@ OnTick(function(myHero)
         Cast(_W,target)
         elseif IsReady(_W) and GetCastName(myHero, _W) == "SyndraW" and ValidTarget(target, 925) and SyndraMenu.Combo.W:Value() then
           for _,Ball in pairs(Balls) do
-            if GetDistance(myHero, Ball) <= 925 then
-            CastTargetSpell(Ball, _W)
+            if GetDistance(Ball) <= 925 then
+            CastSkillShot(_W,GetOrigin(Ball))
             end
           end	  
           for i,mobs in pairs(minionManager.objects) do
 	    if GetDistance(mobs) <= 925 then
-	    CastTargetSpell(mobs,_W)
+	    CastSkillShot(_W,GetOrigin(mobs))
 	    end
 	  end
 	end
@@ -153,13 +153,13 @@ OnTick(function(myHero)
         Cast(_W,target)
         elseif IsReady(_W) and GetCastName(myHero, _W) == "SyndraW" and ValidTarget(target, 925) and SyndraMenu.Harass.W:Value() then
           for _,Ball in pairs(Balls) do
-            if GetDistance(myHero, Ball) <= 925 then
-            CastTargetSpell(Ball, _W)
+            if GetDistance(Ball) <= 925 then
+            CastSkillShot(_W,GetOrigin(Ball))
             end
           end	  
           for i,mobs in pairs(minionManager.objects) do
 	    if GetDistance(mobs) <= 925 then
-	    CastTargetSpell(mobs,_W)
+	    CastSkillShot(_W,GetOrigin(mobs))
 	    end
 	  end
         end
@@ -211,12 +211,12 @@ OnTick(function(myHero)
        elseif IsReady(_W) and GetCastName(myHero, _W) == "SyndraW" and SyndraMenu.LaneClear.W:Value() then
          for _,mobs in pairs(minionManager.objects) do
 	   if GetDistance(mobs) <= 925 then
-	   CastTargetSpell(mobs,_W)
+	   CastSkillShot(_W,GetOrigin(mobs))
 	   end
          end
          for _,Ball in pairs(Balls) do
-           if GetDistance(myHero, Ball) <= 925 then
-           CastTargetSpell(Ball, _W)
+           if GetDistance(Ball) <= 925 then
+           CastSkillShot(_W,GetOrigin(Ball))
            end
          end
        end
@@ -235,13 +235,13 @@ OnTick(function(myHero)
 	  
 	 if IsReady(_W) and GetCastName(myHero, _W) == "SyndraW" and ValidTarget(mobs, 925) and SyndraMenu.JungleClear.W:Value() then
            for _,Ball in pairs(Balls) do
-             if GetDistance(myHero, Ball) <= 925 then
-             CastTargetSpell(Ball, _W)
+             if GetDistance(Ball) <= 925 then
+             CastSkillShot(_W,GetOrigin(Ball))
              end
            end	  
 
 	   if GetDistance(mobs) <= 925 then
-	   CastTargetSpell(mobs,_W)
+	   CastSkillShot(_W,GetOrigin(mobs))
 	   end
          end
                
