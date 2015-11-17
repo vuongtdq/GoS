@@ -30,6 +30,9 @@ RyzeMenu.Misc:Slider("PStacks", "=> Max Stacks To Maintain", 2, 0, 4, 1)
 RyzeMenu.Misc:Boolean("Autolvl", "Auto level", true)
 RyzeMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "Q-E-W"})
 
+RyzeMenu:Menu("Lasthit", "Lasthit")
+RyzeMenu.Lasthit:Boolean("Q", "Use Q", true)
+
 RyzeMenu:Menu("LaneClear", "LaneClear")
 RyzeMenu.LaneClear:Boolean("Q", "Use Q", true)
 RyzeMenu.LaneClear:Boolean("W", "Use W", true)
@@ -162,6 +165,13 @@ OnTick(function(myHero)
 		
 	end
 	
+    if IOW:Mode() == "Lasthit" then
+      local OPIEOP = ClosestMinion(GetOrigin(myHero), MINION_ENEMY)
+      if IsReady(_Q) and RyzeMenu.Lasthit.Q:Value() and ValidTarget(OPIEOP, 900) and GetCurrentHP(OPIEOP)-GetDamagePrediction(OPIEOP, 250+GetDistance(OPIEOP)/1700) < getdmg("Q",OPIEOP) and GetCurrentHP(OPIEOP)-GetDamagePrediction(OPIEOP, 250+GetDistance(OPIEOP)/1700) > 0 then
+      CastSkillShot(_Q,GetOrigin(mobs))
+      end
+    end
+    
     if IOW:Mode() == "LaneClear" then
 
       for _,mobs in pairs(minionManager.objects) do
