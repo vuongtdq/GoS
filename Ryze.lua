@@ -23,7 +23,10 @@ RyzeMenu.Killsteal:Boolean("W", "Killsteal with W", true)
 RyzeMenu.Killsteal:Boolean("E", "Killsteal with E", true)
 
 RyzeMenu:Menu("Misc", "Misc")
-RyzeMenu.Misc:Boolean("Autoignite", "Auto Ignite", true)
+if Ignite ~= nil then RyzeMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) end
+RyzeMenu.Misc:Boolean("Seraph", "Use Seraph", true)
+RyzeMenu.Misc:KeyBinding("Passive", "Auto Stack Passive (toggle)", string.byte("N"), true)
+RyzeMenu.Misc:Slider("PStacks", "=> Max Stacks To Maintain", 2, 0, 4, 1)
 RyzeMenu.Misc:Boolean("Autolvl", "Auto level", true)
 RyzeMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "Q-E-W"})
 
@@ -40,60 +43,103 @@ RyzeMenu.JungleClear:Boolean("E", "Use E", true)
 
 RyzeMenu:Menu("Drawings", "Drawings")
 RyzeMenu.Drawings:Boolean("Q", "Draw Q Range", true)
-RyzeMenu.Drawings:Boolean("W", "Draw W Range", true)
-RyzeMenu.Drawings:Boolean("E", "Draw E Range", true)
+RyzeMenu.Drawings:Boolean("WE", "Draw W+E Range", true)
 RyzeMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 OnDraw(function(myHero)
+local pos = GetOrigin(myHero)
 local col = RyzeMenu.Drawings.color:Value()
-if RyzeMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),900,1,0,col) end
-if RyzeMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),600,1,0,col) end
-if RyzeMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),600,1,0,col) end
+if RyzeMenu.Drawings.Q:Value() then DrawCircle(pos,900,1,0,col) end
+if RyzeMenu.Drawings.WE:Value() then DrawCircle(pos,600,1,0,col) end
 end)
 
 local PStacks = 0
 local IsEmpowered = false
+local target1 = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target2 = TargetSelector(600,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+
 local lastlevel = GetLevel(myHero)-1
 	
 OnTick(function(myHero)
-  local target = GetCurrentTarget()
+  local slot = GetItemSlot(myHero,3040)
+  local Qtarget = target1:GetTarget()
+  local Wtarget = target2:GetTarget()
   
+  if RyzeMenu.Misc.Passive:Value() and PStacks < RyzeMenu.Misc.PStacks:Value() then
+    local timeRemaining = PassiveEndTime - GetGameTimer()
+    if timeRemaining < 0.5 then
+    CastSkillShot(_Q,GetMousePos())
+    end
+  end
+  
+  if IsReady(slot) and RyzeMenu.Misc.Seraph:Value() then
+  local threshold = math.huge
+    do
+      local totalHP = 0
+      local totalDamage = 0
+      for _, enemy in pairs(GetEnemyHeroes()) do
+        if ValitTarget(enemy,600) then
+        totalHP = totalHP + GetHP(enemy)
+        totalDamage = totalDamage + GetBonusAP(enemy) + (GetBaseDamage(enemy)+GetBonusDmg(enemy)) * GetAttackSpeed(enemy)
+        end
+      end
+      threshold = totalHP / totalDamage
+    end
+    local shield = 150 + GetCurrentMana(myHero) * 0.2
+    local HP = GetHP(myHero)
+    local damage = GetBonusAP(myHero) * (1 + (GetBonusAP(myHero)/100)) + (GetBaseDamage(myHero)+GetBonusDmg(myHero)) * GetAttackSpeed(myHero)
+    if threshold > HP / damage and (threshold < (HP + shield) / damage) then
+    CastSpell(slot)
+    end
+  end
+        
   if IOW:Mode() == "Combo" then
-  	
-	if IsReady(_R) and ValidTarget(target, 700) and RyzeMenu.Combo.R:Value() and PStacks == 4 or IsEmpowered then
-        CastSpell(_R)
-	end  
+	
+        local qcost, wcost, ecost = 40, GetCastLevel(myHero,_W) * 10 + 50, GetCastLevel(myHero,_E) * 10 + 50
+        if RyzeMenu.Combo.R:Value() and GetCurrentMana(myHero) > qcost + wcost + ecost then
+          if GetHP(Wtarget) > getdmg("Q",Wtarget)+getdmg("W",Wtarget)+getdmg("E",Wtarget) then
+          CastSpell(_R)
+          else
+            for _, enemy in pairs(GetEnemyHeroes()) do
+              if GetNetworkID(enemy) ~= GetNetworkID(Wtarget) and ValidTarget(enemy,950) then
+              CastSpell(_R)
+              end
+            end
+          end
+        end
 	  
-	if IsReady(_W) and ValidTarget(target, 600) and RyzeMenu.Combo.W:Value() then
-        CastTargetSpell(target, _W)
+	if IsReady(_W) and ValidTarget(Wtarget, 600) and RyzeMenu.Combo.W:Value() then
+        CastTargetSpell(Wtarget, _W)
 	end
 		
-        if IsReady(_E) and ValidTarget(target, 600) and RyzeMenu.Combo.E:Value() then
-        CastTargetSpell(target, _E)
+        if IsReady(_E) and ValidTarget(Wtarget, 600) and RyzeMenu.Combo.E:Value() then
+        CastTargetSpell(Wtarget, _E)
 	end
 	
-	if IsReady(_Q) and PStacks > 3 or IsEmpowered and RyzeMenu.Combo.Q:Value() and ValidTarget(target, 900) then
-	Cast(_Q,target,myHero,1,1400,250,900,55,false)
-        elseif IsReady(_Q) and RyzeMenu.Combo.Q:Value() and ValidTarget(target, 900) then
-        Cast(_Q,target)
+	if IsReady(_Q) and RyzeMenu.Combo.Q:Value() and ValidTarget(Qtarget, 900) then
+	  if PStacks > 3 then
+  	  Cast(_Q,Qtarget,myHero,1,1700,250,900,55,false)
+  	  elseif IsEmpowered then
+	  Cast(_Q,Qtarget,myHero,1,1700,250,900,55,false)
+          else
+          Cast(_Q,Qtarget)
+          end
 	end				
 		
   end
 
   if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= RyzeMenu.Harass.Mana:Value() then
 
-	if IsReady(_W) and ValidTarget(target, 600) and RyzeMenu.Harass.W:Value() then
-        CastTargetSpell(target, _W)
+	if IsReady(_W) and ValidTarget(Wtarget, 600) and RyzeMenu.Harass.W:Value() then
+        CastTargetSpell(Wtarget, _W)
 	end
       
-	if IsReady(_E) and ValidTarget(target, 600) and RyzeMenu.Harass.E:Value() then
-        CastTargetSpell(target, _E)
+	if IsReady(_E) and ValidTarget(Wtarget, 600) and RyzeMenu.Harass.E:Value() then
+        CastTargetSpell(Wtarget, _E)
 	end
-	
-	if IsReady(_Q) and RyzeMenu.Harass.Q:Value() and ValidTarget(target, 900) then
-	Cast(_Q,target,myHero,1,1400,250,900,55,false)
-        elseif IsReady(_Q) and RyzeMenu.Harass.Q:Value() and ValidTarget(target, 900) then
-	Cast(_Q,target)
+
+        if IsReady(_Q) and RyzeMenu.Harass.Q:Value() and ValidTarget(Qtarget, 900) then
+	Cast(_Q,Qtarget)
 	end
 	
   end 
@@ -172,6 +218,7 @@ OnUpdateBuff(function(unit,buff)
   if unit == myHero then
     if buff.Name == "ryzepassivestack" then 
     PStacks = buff.Count
+    PassiveEndTime = buff.ExpireTime
     end
 
     if buff.Name == "ryzepassivecharged" then 
