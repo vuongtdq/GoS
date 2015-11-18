@@ -99,7 +99,7 @@ OnTick(function(myHero)
   if IOW:Mode() == "Combo" then
 	
         local qcost, wcost, ecost = 40, GetCastLevel(myHero,_W) * 10 + 50, GetCastLevel(myHero,_E) * 10 + 50
-        if RyzeMenu.Combo.R:Value() and GetCurrentMana(myHero) > qcost + wcost + ecost then
+        if RyzeMenu.Combo.R:Value() and ValidTarget(Wtarget, 600) and GetCurrentMana(myHero) > qcost + wcost + ecost then
           if GetHP(Wtarget) > getdmg("Q",Wtarget)+getdmg("W",Wtarget)+getdmg("E",Wtarget) then
           CastSpell(_R)
           else
