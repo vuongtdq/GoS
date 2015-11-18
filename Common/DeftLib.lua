@@ -2,83 +2,83 @@ myHero = GetMyHero()
 
 SpellData = {
   ["Aatrox"] = {
-		[_Q]  = { Name = "AatroxQ", ProjectileName = "AatroxQ.troy", Range = 650, Speed = 2000, Delay = 600, Width = 250, collision = false, type = "circular", IsDangerous = true},
-		[_E]  = { Name = "AatroxE", ProjectileName = "AatroxBladeofTorment_mis.troy" , Range = 1075, Speed = 1250, Delay = 250, Width = 35, collision = false, type = "linear", IsDangerous = false},
+		[_Q]  = { Name = "AatroxQ", ProjectileName = "AatroxQ.troy", Range = 650, Speed = 2000, Delay = 0.6, Width = 250, collision = false, type = "circular", IsDangerous = true},
+		[_E]  = { Name = "AatroxE", ProjectileName = "AatroxBladeofTorment_mis.troy" , Range = 1075, Speed = 1250, Delay = 0.25, Width = 35, collision = false, type = "linear", IsDangerous = false},
 	},
   ["Ahri"] = {
-		[_Q]  = { Name = "AhriOrbofDeception", ProjectileName = "Ahri_Orb_mis.troy", Range = 880, Speed = 2500, Delay = 250, Width = 100, collision = false, aoe = false, type = "linear", IsDangerous = false},
- 	        [-1]  = { Name = "AhriOrbofDeceptionherpityderp", ProjectileName = "Ahri_Orb_mis_02.troy", Range = 1000, Speed = 900, Delay = 250, Width = 100, collision = false, aoe = false, type = "linear", IsDangerous = false},
-		[_E]  = { Name = "AhriSeduce", ProjectileName = "Ahri_Charm_mis.troy", Range = 1000, Speed = 1550, Delay = 250,  Width = 60, collision = true, aoe = false, type = "linear", IsDangerous = true},
+		[_Q]  = { Name = "AhriOrbofDeception", ProjectileName = "Ahri_Orb_mis.troy", Range = 880, Speed = 2500, Delay = 0.25, Width = 100, collision = false, aoe = false, type = "linear", IsDangerous = false},
+ 	        [-1]  = { Name = "AhriOrbofDeceptionherpityderp", ProjectileName = "Ahri_Orb_mis_02.troy", Range = 1000, Speed = 900, Delay = 0.25, Width = 100, collision = false, aoe = false, type = "linear", IsDangerous = false},
+		[_E]  = { Name = "AhriSeduce", ProjectileName = "Ahri_Charm_mis.troy", Range = 1000, Speed = 1550, Delay = 0.25,  Width = 60, collision = true, aoe = false, type = "linear", IsDangerous = true},
 	},
   ["Ashe"] = {
 		[_Q]  = { Name = "FrostShot", Range = 600},
-		[_W]  = { Name = "Volley", ProjectileName = "", Range = 1250, Speed = 1500, Delay = 250, Width = 60, collision = true, aoe = false, type = "cone", IsDangerous = false},
-		[_E]  = { Name = GetCastName(myHero,_E), Range = 20000, Speed = 1500, Delay = 500, Width = 1400, collision = false, aoe = false, type = "linear", IsDangerous = false},
-		[_R]  = { Name = "EnchantedCrystalArrow", ProjectileName = "Ashe_Base_R_mis.troy", Range = 20000, Speed = 1600, Delay = 500, Width = 100, collision = false, aoe = false, type = "linear", IsDangerous = true}
+		[_W]  = { Name = "Volley", ProjectileName = "", Range = 1250, Speed = 1500, Delay = 0.25, Width = 60, collision = true, aoe = false, type = "cone", IsDangerous = false},
+		[_E]  = { Name = GetCastName(myHero,_E), Range = 20000, Speed = 1500, Delay = 0.5, Width = 1400, collision = false, aoe = false, type = "linear", IsDangerous = false},
+		[_R]  = { Name = "EnchantedCrystalArrow", ProjectileName = "Ashe_Base_R_mis.troy", Range = 20000, Speed = 1600, Delay = 0.5, Width = 100, collision = false, aoe = false, type = "linear", IsDangerous = true}
         },
   ["Azir"] = {
-		[_Q] = { Name = "AzirQ", Range = 950,  Speed = 1600, Width = 80, collision = false, aoe = false, type = "linear", IsDangerous = false},
+		[_Q] = { Name = "AzirQ", Range = 950, Speed = 1600, Width = 80, collision = false, aoe = false, type = "linear", IsDangerous = false},
 		[_W] = { Name = "AzirW", Range = 450, Speed = math.huge, Width = 400, collision = false, aoe = false, type = "circular"},
-		[_E] = { Name = "AzirE", Range = 1100, Speed = 1200, Delay = 250, Width = 60, collision = true, aoe = false, type = "linear", IsDangerous = false},
-		[_R] = { Name = "AzirR", Range = 520, Speed = 1300, Delay = 250, Width = 600, collision = false, aoe = true, type = "linear", IsDangerous = true}
+		[_E] = { Name = "AzirE", Range = 1100, Speed = 1200, Delay = 0.25, Width = 60, collision = true, aoe = false, type = "linear", IsDangerous = false},
+		[_R] = { Name = "AzirR", Range = 520, Speed = 1300, Delay = 0.25, Width = 600, collision = false, aoe = true, type = "linear", IsDangerous = true}
 	},
   ["Blitzcrank"] = {
-		[_Q] = { Name = "RocketGrabMissile", ProjectileName = "FistGrab_mis.troy", Range = 975, Speed = 1750, Width = 70, Delay = 250, collision = true, aoe = false, type = "linear", IsDangerous = true},
-		[_R] = { Name = "StaticField", Range = 0, Speed = math.huge, Width = 600, Delay = 250, collision = false, aoe = false, type = "circular", IsDangerous = false}
+		[_Q] = { Name = "RocketGrabMissile", ProjectileName = "FistGrab_mis.troy", Range = 975, Speed = 1750, Width = 70, Delay = 0.25, collision = true, aoe = false, type = "linear", IsDangerous = true},
+		[_R] = { Name = "StaticField", Range = 0, Speed = math.huge, Width = 600, Delay = 0.25, collision = false, aoe = false, type = "circular", IsDangerous = false}
 	},
   ["Cassiopeia"] = {
-		[_Q] = { Name = "CassiopeiaNoxiousBlast", ProjectileName = "CassNoxiousSnakePlane_green.troy", Range = 850, Speed = math.huge, Delay = 750, Width = 100, collision = false, aoe = true, type = "circular", IsDangerous = false},
-		[_W] = { Name = "CassiopeiaMiasma", ProjectileName = "", Range = 925, Speed = 2500, Delay = 500, Width = 90, collision = false, aoe = true, type = "circular", IsDangerous = false},
-		[_R] = { Name = "CassiopeiaPetrifyingGaze",  ProjectileName = "", Range = 825, Speed = math.huge, Delay = 600, Width = 80, collision = false, aoe = true, type = "cone", IsDangerous = true}
+		[_Q] = { Name = "CassiopeiaNoxiousBlast", ProjectileName = "CassNoxiousSnakePlane_green.troy", Range = 850, Speed = math.huge, Delay = 0.75, Width = 100, collision = false, aoe = true, type = "circular", IsDangerous = false},
+		[_W] = { Name = "CassiopeiaMiasma", ProjectileName = "", Range = 925, Speed = 2500, Delay = 0.25, Width = 90, collision = false, aoe = true, type = "circular", IsDangerous = false},
+		[_R] = { Name = "CassiopeiaPetrifyingGaze",  ProjectileName = "", Range = 825, Speed = math.huge, Delay = 0.6, Width = 80, collision = false, aoe = true, type = "cone", IsDangerous = true}
 	},
   ["Chogath"] = {
-		[_Q] = { Name = "", ProjectileName = "", Range = 950, Speed = math.huge, Delay = 600, Width = 250, collision = false, aoe = true, type = "circular", IsDangerous = true},
-		[_W] = { Name = "", ProjectileName = "", Range = 650, Speed = math.huge, Delay = 250, Width = 210, collision = false, aoe = false, type = "cone", IsDangerous = false}
+		[_Q] = { Name = "", ProjectileName = "", Range = 950, Speed = math.huge, Delay = 0.6, Width = 250, collision = false, aoe = true, type = "circular", IsDangerous = true},
+		[_W] = { Name = "", ProjectileName = "", Range = 650, Speed = math.huge, Delay = 0.25, Width = 210, collision = false, aoe = false, type = "cone", IsDangerous = false}
 	},
   ["Ekko"] = { 
-  	        [_Q] = { Name = "EkkoQ", ProjectileName = "Ekko_Base_Q_Aoe_Dilation.troy", Range = 925, Speed = 1050, Delay = 250, Width = 140, collision = false, aoe = false, type = "linear", IsDangerous = false},
-  	        [_W] = { Name = "EkkoW", ProjectileName = "Ekko_Base_W_Indicator.troy", Range = 1700, Speed = math.huge, Delay = 3000, Width = 400, collision = false, aoe = true, type = "circular", IsDangerous = false}
+  	        [_Q] = { Name = "EkkoQ", ProjectileName = "Ekko_Base_Q_Aoe_Dilation.troy", Range = 925, Speed = 1050, Delay = 0.25, Width = 140, collision = false, aoe = false, type = "linear", IsDangerous = false},
+  	        [_W] = { Name = "EkkoW", ProjectileName = "Ekko_Base_W_Indicator.troy", Range = 1700, Speed = math.huge, Delay = 3, Width = 400, collision = false, aoe = true, type = "circular", IsDangerous = false}
         },
   ["Jinx"] = {
-		[_W] = { Name = "JinxW", ProjectileName = "Jinx_W_Mis.troy", Range = 1500, Speed = 3300, Delay = 600, Width = 60, collision = true, aoe = true, type = "circular", IsDangerous = true},
-		[_R] = { Name = "JinxR",  ProjectileName = "Jinx_R_Mis.troy", Range = 20000, Speed = 1700, Delay = 600, Width = 140, collision = false, aoe = true, type = "cone", IsDangerous = true}
+		[_W] = { Name = "JinxW", ProjectileName = "Jinx_W_Mis.troy", Range = 1500, Speed = 3300, Delay = 0.6, Width = 60, collision = true, aoe = true, type = "circular", IsDangerous = true},
+		[_R] = { Name = "JinxR",  ProjectileName = "Jinx_R_Mis.troy", Range = 20000, Speed = 1700, Delay = 0.6, Width = 140, collision = false, aoe = true, type = "cone", IsDangerous = true}
 	},
   ["Kalista"] = {
-		[_Q] = { Name = "KalistaMysticShot", ProjectileName = "", Range = 1150, Speed = 1700, Delay = 250, Width = 50, collision = true, aoe = false, type = "linear", IsDangerous = false}
+		[_Q] = { Name = "KalistaMysticShot", ProjectileName = "", Range = 1150, Speed = 1700, Delay = 0.25, Width = 50, collision = true, aoe = false, type = "linear", IsDangerous = false}
 	},
   ["Nidalee"] = {
-		[_Q] = { Name = "", ProjectileName = "", Range = 1450, Speed = 1300, Delay = 250, Width = 37, collision = true, aoe = false, type = "linear", IsDangerous = true},
-		[_W] = { Name = "", ProjectileName = "", Range = 900, Speed = math.huge, Delay = 1000, Width = 50, collision = false, aoe = false, type = "circular", IsDangerous = false}
+		[_Q] = { Name = "", ProjectileName = "", Range = 1450, Speed = 1300, Delay = 0.25, Width = 37, collision = true, aoe = false, type = "linear", IsDangerous = true},
+		[_W] = { Name = "", ProjectileName = "", Range = 900, Speed = math.huge, Delay = 1, Width = 50, collision = false, aoe = false, type = "circular", IsDangerous = false}
 	},
   ["Orianna"] = {
                 [_Q] = { Name = "", ProjectileName = "", Range = 825, Speed = 1200, Delay = 0, Width = 80, collision = false, aoe = false, type = "circular", IsDangerous = false}
         },
   ["Riven"] = {
-                [_R] = { Name = "", ProjectileName = "", Range = 1100, Speed = 1600, Delay = 250, Width = 200, collision = false, aoe = false, type = "circular", IsDangerous = false}
+                [_R] = { Name = "", ProjectileName = "", Range = 1100, Speed = 1600, Delay = 0.25, Width = 200, collision = false, aoe = false, type = "circular", IsDangerous = false}
         },
   ["Ryze"] = {
-  	        [_Q] = { Name = "Overload", ProjectileName = "Overload_mis.troy", Range = 900, Speed = 1700, Delay = 250, Width = 55, collision = true, aoe = false, type = "linear", IsDangerous = false}
+  	        [_Q] = { Name = "Overload", ProjectileName = "Overload_mis.troy", Range = 900, Speed = 1700, Delay = 0.25, Width = 55, collision = true, aoe = false, type = "linear", IsDangerous = false}
         },
   ["Sivir"] = {
-  	        [_Q] = { Name = "SivirQ", ProjectileName = "Sivir_Base_Q_mis.troy", Range = 1075, Speed = 1350, Delay = 250, Width = 85, collision = false, aoe = false, type = "linear", IsDangerous = false}
+  	        [_Q] = { Name = "SivirQ", ProjectileName = "Sivir_Base_Q_mis.troy", Range = 1075, Speed = 1350, Delay = 0.25, Width = 85, collision = false, aoe = false, type = "linear", IsDangerous = false}
         },
   ["Syndra"] = {
-  	        [_Q] = { Name = "SyndraQ", ProjectileName = "Syndra_Q_cas.troy", Range = 790, Speed = math.huge, Delay = 250, Width = 125, collision = false, aoe = false, type = "circular", IsDangerous = false},
-  	        [_W] = { Name = "SyndraW", ProjectileName = "", Range = 925, Speed = math.huge, Delay = 250, Width = 190, collision = false, aoe = false, type = "circular", IsDangerous = false},
-  	        [_E] = { Name = "SyndraE", ProjectileName = "", Range = 1250, Speed = 2500, Delay = 250, Width = 45, collision = false, aoe = false, type = "cone", IsDangerous = false}
+  	        [_Q] = { Name = "SyndraQ", ProjectileName = "Syndra_Q_cas.troy", Range = 790, Speed = math.huge, Delay = 0.25, Width = 125, collision = false, aoe = false, type = "circular", IsDangerous = false},
+  	        [_W] = { Name = "SyndraW", ProjectileName = "", Range = 925, Speed = math.huge, Delay = 0.25, Width = 190, collision = false, aoe = false, type = "circular", IsDangerous = false},
+  	        [_E] = { Name = "SyndraE", ProjectileName = "", Range = 1250, Speed = 2500, Delay = 0.25, Width = 45, collision = false, aoe = false, type = "cone", IsDangerous = false}
        },
    ["Thresh"] = {
-  	        [_Q] = { Name = "", ProjectileName = "", Range = 1100, Speed = 1900, Delay = 500, Width = 70, collision = true, aoe = false, type = "linear", IsDangerous = true}
+  	        [_Q] = { Name = "", ProjectileName = "", Range = 1100, Speed = 1900, Delay = 0.5, Width = 70, collision = true, aoe = false, type = "linear", IsDangerous = true}
        },
    ["Viktor"] = {
-  	        [_W] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 500, Width = 300, collision = false, aoe = false, type = "circular", IsDangerous = false},
-  	        [_R] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 250, Width = 450, collision = false, aoe = false, type = "circular", IsDangerous = false}
+  	        [_W] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 0.5, Width = 300, collision = false, aoe = false, type = "circular", IsDangerous = false},
+  	        [_R] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 0.25, Width = 450, collision = false, aoe = false, type = "circular", IsDangerous = false}
        },
    ["Xerath"] = {
-   	        [_Q] = { Name = "", ProjectileName = "", Range = 750, Speed = math.huge, Delay = 600, Width = 100, collision = false, aoe = false, type = "linear", IsDangerous = false},
-  	        [_W] = { Name = "", ProjectileName = "", Range = 1150, Speed = math.huge, Delay = 650, Width = 200, collision = false, aoe = false, type = "circular", IsDangerous = false},
+   	        [_Q] = { Name = "", ProjectileName = "", Range = 750, Speed = math.huge, Delay = 0.6, Width = 100, collision = false, aoe = false, type = "linear", IsDangerous = false},
+  	        [_W] = { Name = "", ProjectileName = "", Range = 1150, Speed = math.huge, Delay = 0.65, Width = 200, collision = false, aoe = false, type = "circular", IsDangerous = false},
   	        [_E] = { Name = "", ProjectileName = "", Range = 975, Speed = 1200, Delay = 0, Width = 60, collision = true, aoe = false, type = "linear", IsDangerous = true},
-                [_R] = { Name = "", ProjectileName = "", Range = GetCastRange(myHero,_R), Speed = math.huge, Delay = 500, Width = 180, collision = false, aoe = false, type = "circular", IsDangerous = true}
+                [_R] = { Name = "", ProjectileName = "", Range = GetCastRange(myHero,_R), Speed = math.huge, Delay = 0.5, Width = 180, collision = false, aoe = false, type = "circular", IsDangerous = true}
        }
 }
 
@@ -261,30 +261,34 @@ function insert(turret)
 end
 
 function Cast(spell, target, origin, hitchance, speed, delay, range, width, coll)
-      local hitchance = hitchance or 1
+      local hitchance = hitchance or 3
       local origin = GetOrigin(origin) or GetOrigin(myHero)
       local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
       local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
       local range = range or SpellData[GetObjectName(myHero)][spell].Range
       local width = width or SpellData[GetObjectName(myHero)][spell].Width
       local coll = coll or  SpellData[GetObjectName(myHero)][spell].collision
-      local Predicted = GetPredictionForPlayer(origin,target,GetMoveSpeed(target), speed, delay, range, width, coll, true)
-      if Predicted.HitChance >= hitchance then
-      CastSkillShot(spell, Predicted.PredPos)
+      local type = SpellData[GetObjectName(myHero)][spell].type or "linear"
+      local Predicted = IPrediction.Prediction({range, speed, delay, width, type, coll})
+      local hit, pos = Predicted:Predict(target)
+      if hit >= hitchance then
+      CastSkillShot(spell, pos)
       end
 end
 
-function Cast2(spell, target, range, origin, hitchance, speed, delay, width, coll)
-      local hitchance = hitchance or 1
+function Cast2(spell, target, origin, hitchance, speed, delay, range, width, coll)
+      local hitchance = hitchance or 3
       local origin = GetOrigin(origin) or GetOrigin(myHero)
       local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
       local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
       local range = range or SpellData[GetObjectName(myHero)][spell].Range
       local width = width or SpellData[GetObjectName(myHero)][spell].Width
       local coll = coll or  SpellData[GetObjectName(myHero)][spell].collision
-      local Predicted = GetPredictionForPlayer(origin,target,GetMoveSpeed(target), speed, delay, range, width, coll, true)
-      if Predicted.HitChance >= hitchance then
-      CastSkillShot2(spell, Predicted.PredPos)
+      local type = SpellData[GetObjectName(myHero)][spell].type or "linear"
+      local Predicted = IPrediction.Prediction({range, speed, delay, width, type, coll})
+      local hit, pos = Predicted:Predict(target)
+      if hit >= hitchance then
+      CastSkillShot2(spell, pos)
       end
 end
 
