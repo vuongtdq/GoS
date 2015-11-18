@@ -39,10 +39,10 @@ BlitzcrankMenu.Drawings:Boolean("R", "Draw R Range", true)
 BlitzcrankMenu.Drawings:Boolean("Stats", "Draw Statistics", true)
 BlitzcrankMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 	
-local InterruptMenu = MenuConfig("Interrupt", "Interrupt")
-InterruptMenu:Menu("SupportedSpells", "Supported Spells")
-InterruptMenu.SupportedSpells:Boolean("Q", "Use Q", true)
-InterruptMenu.SupportedSpells:Boolean("R", "Use R", true)
+BlitzcrankMenu:Menu("Interrupt", "Interrupt")
+BlitzcrankMenu.Interrupt:Menu("SupportedSpells", "Supported Spells")
+BlitzcrankMenu.Interrupt.SupportedSpells:Boolean("Q", "Use Q", true)
+BlitzcrankMenu.Interrupt.SupportedSpells:Boolean("R", "Use R", true)
 
 local MissedGrabs = 0
 local SuccesfulGrabs = 0
@@ -66,9 +66,9 @@ end, 1)
 OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) then
       if CHANELLING_SPELLS[spell.name] then
-        if ValidTarget(unit, 975) and IsReady(_Q) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() and InterruptMenu.SupportedSpells.Q:Value() then
+        if ValidTarget(unit, 975) and IsReady(_Q) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and BlitzcrankMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and BlitzcrankMenu.Interrupt.SupportedSpells.Q:Value() then
         Cast(_Q,unit)
-        elseif ValidTarget(unit, 600) and IsReady(_R) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() and InterruptMenu.SupportedSpells.R:Value() then
+        elseif ValidTarget(unit, 600) and IsReady(_R) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and BlitzcrankMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and BlitzcrankMenu.Interrupt.SupportedSpells.R:Value() then
         CastSpell(_R)
         end
       end
@@ -171,12 +171,12 @@ end
 end)
 
 OnUpdateBuff(function(unit,buff)
-        if buff.Name == "rocketgrab2" and GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) then
-	    SuccesfulGrabs = SuccesfulGrabs + 1
-	    MissedGrabs = MissedGrabs - 1
+  if buff.Name == "rocketgrab2" and GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) then
+    SuccesfulGrabs = SuccesfulGrabs + 1
+    MissedGrabs = MissedGrabs - 1
 		
-	    if BlitzcrankMenu.Combo.AutoE:Value() then
-	    CastSpell(_E)
-	    end
-	end
+    if BlitzcrankMenu.Combo.AutoE:Value() then
+    CastSpell(_E)
+    end
+  end
 end)
