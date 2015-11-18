@@ -1,10 +1,11 @@
 if GetObjectName(GetMyHero()) ~= "Ahri" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
+if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",3)
 
 local AhriMenu = MenuConfig("Ahri", "Ahri")
 AhriMenu:Menu("Combo", "Combo")
@@ -107,7 +108,7 @@ OnTick(function(myHero)
     
     if IOW:Mode() == "Combo" then
 
-        if IsReady(_E) and ValidTarget(Etarget,1030) and AhriMenu.Combo.E:Value() then
+        if IsReady(_E) and AhriMenu.Combo.E:Value() then
         Cast(_E,Etarget)
         end
 	
@@ -134,7 +135,7 @@ OnTick(function(myHero)
 	CastSpell(_W)
 	end
 		
-	if IsReady(_Q) and ValidTarget(Qtarget, 930) and AhriMenu.Combo.Q:Value() then
+	if IsReady(_Q) and AhriMenu.Combo.Q:Value() then
         Cast(_Q,Qtarget)
         end
 					
@@ -142,7 +143,7 @@ OnTick(function(myHero)
 	
     if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= AhriMenu.Harass.Mana:Value() then
 
-        if IsReady(_E) and ValidTarget(target, 1030) and AhriMenu.Harass.E:Value() then
+        if IsReady(_E) and AhriMenu.Harass.E:Value() then
         Cast(_E,target)
         end
 				
@@ -150,7 +151,7 @@ OnTick(function(myHero)
 	CastSpell(_W)
 	end
 		
-	if IsReady(_Q) and ValidTarget(target, 930) and AhriMenu.Harass.Q:Value() then
+	if IsReady(_Q) and AhriMenu.Harass.Q:Value() then
         Cast(_Q,target)
         end
 		
@@ -164,11 +165,11 @@ OnTick(function(myHero)
           end
         end
                 
-	if IsReady(_W) and ValidTarget(enemy, 700) and AhriMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy,myHero,3) then
+	if IsReady(_W) and AhriMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy,myHero,3) then
 	CastSpell(_W)
-	elseif IsReady(_Q) and ValidTarget(enemy, 930) and AhriMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+	elseif IsReady(_Q) and AhriMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
 	Cast(_Q,enemy)
-	elseif IsReady(_E) and ValidTarget(enemy, 1030) and AhriMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
+	elseif IsReady(_E) and AhriMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
 	Cast(_E,enemy)
         end
 
@@ -218,7 +219,7 @@ OnTick(function(myHero)
         end
      	
 	if IOW:Mode() == "LastHit" and GetTeam(mobs) == MINION_ENEMY and GetPercentMP(myHero) >= AhriMenu.Lasthit.Mana:Value() then
-	  if IsReady(_Q) and ValidTarget(mobs, 880) and AhriMenu.Lasthit.Q:Value() and GetCurrentHP(mobs) < getdmg("Q",mobs) then
+	  if IsReady(_Q) and ValidTarget(mobs, 880) and AhriMenu.Lasthit.Q:Value() and GetCurrentHP(mobs)-GetDamagePrediction(mobs, 250+GetDistance(mobs)/2500) < getdmg("Q",mobs) and GetCurrentHP(mobs)-GetDamagePrediction(mobs, 250+GetDistance(mobs)/2500) > 0 then
           CastSkillShot(_Q, GetOrigin(mobs))
        	  end
         end
