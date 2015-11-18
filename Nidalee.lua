@@ -5,7 +5,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Nidalee.lua","/D3ftsu/GoS/master/Nidalee.version","Nidalee.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Nidalee.lua","/D3ftsu/GoS/master/Nidalee.version","Nidalee.lua",3)
 
 local NidaleeMenu = MenuConfig("Nidalee", "Nidalee")
 NidaleeMenu:Menu("Combo", "Combo")
@@ -178,37 +178,6 @@ OnTick(function(myHero)
         if IsReady(_Q) and ValidTarget(enemy, 1450) and NidaleeMenu.Killsteal.Q:Value() and not IsHuman() and GetHP2(enemy) < getdmg("QM",enemy) then
         CastSpell(_R)
         DelayAction(function() Cast(_Q, enemy) end, 0.125)
-        end
-        
-        if IsReady(_Q) and ValidTarget(enemy,450) and NidaleeMenu.Killsteal.Q:Value() and NidaleeMenu.Killsteal.W:Value() and NidaleeMenu.Killsteal.E:Value() and EnemiesAround(enemy, 500) < 3 and IsHuman() and GetHP2(enemy) < getdmg("QM",enemy)+getdmg("Q",enemy)+getdmg("W",enemy)+getdmg("E",enemy) then
-          distancerino = GetDistance(enemy)
-          Cast(_Q, enemy)
-          DelayAction(function() 
-          	
-	  if IsReady(_R) and IsHunted(enemy) and IsHuman() and ValidTarget(enemy,800) then
-          CastSpell(_R)
-          end
-	
-          if IsReady(_W) and IsHunted(enemy) and not IsHuman() and ValidTarget(enemy,800) then
-          Cast(_W,enemy)
-          end
-	
-          if not IsHuman() and ValidTarget(enemy,375) then
-            if IsReady(_E) then
-            CastSkillShot(_E,GetOrigin(enemy))
-            elseif IsReady(_Q) then
-            CastSpell(_Q)
-            end
-          end
-	
-          if IsReady(_W) and ValidTarget(enemy,575) then
-            if GetDistance(enemy) >= 225 then
-            Cast(_W,enemy)
-            end
-          end
-          
-	  end, 300+distancerino/1300)
-	  
         end
 		
     end
