@@ -68,7 +68,7 @@ OnTick(function(myHero)
   local Qtarget = target1:GetTarget()
   local Wtarget = target2:GetTarget()
   
-  if RyzeMenu.Misc.Passive:Value() and PStacks < RyzeMenu.Misc.PStacks:Value() then
+  if IOW:Mode() == "" and RyzeMenu.Misc.Passive:Value() and PStacks < RyzeMenu.Misc.PStacks:Value() then
     local timeRemaining = PassiveEndTime - GetGameTimer()
     if timeRemaining < 0.5 then
     CastSkillShot(_Q,GetMousePos())
