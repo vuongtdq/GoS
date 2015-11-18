@@ -161,29 +161,27 @@ local function GetJumpTarget()
 end
 
 local CastingR = false
+local target1 = TargetSelector(675,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target2 = TargetSelector(700,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
   local target = GetCurrentTarget()
-
-  if CanUseSpell(myHero, _R) == ONCOOLDOWN then
-  CastingR = false
-  IOW.movementEnabled = true
-  IOW.attacksEnabled = true
-  end
+  local Qtarget = target1:GetTarget()
+  local Etarget = target2:GetTarget()
      
   if IOW:Mode() == "Combo" then
 
-      if IsReady(_Q) and KatarinaMenu.Combo.Q:Value() and ValidTarget(target, 675) and not CastingR then
-      CastTargetSpell(target, _Q)
+      if IsReady(_Q) and KatarinaMenu.Combo.Q:Value() and ValidTarget(Qtarget, 675) and not CastingR then
+      CastTargetSpell(Qtarget, _Q)
       end
 	  
       if IsReady(_W) and KatarinaMenu.Combo.W:Value() and ValidTarget(target, 375) and not CastingR then
       CastSpell(_W)
       end
 	  
-      if IsReady(_E) and KatarinaMenu.Combo.E:Value() and ValidTarget(target, 700) and not CastingR then
-      CastTargetSpell(target, _E)
+      if IsReady(_E) and KatarinaMenu.Combo.E:Value() and ValidTarget(Etarget, 700) and not CastingR then
+      CastTargetSpell(Etarget, _E)
       end
 	  
       if KatarinaMenu.Combo.R:Value() and CanUseSpell(myHero, _Q) ~= READY and CanUseSpell(myHero, _W) ~= READY and CanUseSpell(myHero, _E) ~= READY and CanUseSpell(myHero, _R)  ~= ONCOOLDOWN and ValidTarget(target, 550) and GetCastLevel(myHero,_R) > 0 then
@@ -196,16 +194,16 @@ OnTick(function(myHero)
 
   if IOW:Mode() == "Harass" then
  
-      if IsReady(_Q) and KatarinaMenu.Harass.Q:Value() and ValidTarget(target, 675) then
-      CastTargetSpell(target, _Q)
+      if IsReady(_Q) and KatarinaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 675) then
+      CastTargetSpell(Qtarget, _Q)
       end
 	  
       if IsReady(_W) and KatarinaMenu.Harass.W:Value() and ValidTarget(target, 375) then
       CastSpell(_W)
       end
 	  
-      if IsReady(_E) and KatarinaMenu.Harass.E:Value() and ValidTarget(target, 700) then
-      CastTargetSpell(target, _E)
+      if IsReady(_E) and KatarinaMenu.Harass.E:Value() and ValidTarget(Etarget, 700) then
+      CastTargetSpell(Etarget, _E)
       end
   end
 
@@ -252,8 +250,6 @@ OnTick(function(myHero)
 				
 	end
      end
-
-
 
         if IOW:Mode() == "LaneClear" then
           for _,mobs in pairs(minionManager.objects) do
