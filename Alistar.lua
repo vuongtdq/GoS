@@ -9,12 +9,10 @@ AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version"
 local AlistarMenu = MenuConfig("Alistar", "Alistar")
 AlistarMenu:Menu("Combo", "Combo")
 AlistarMenu.Combo:Boolean("Q", "Use Q", true)
---AlistarMenu.Combo:Boolean("W", "Use W", true)
 AlistarMenu.Combo:Boolean("WQ", "Use W+Q Combo", true)
  
 AlistarMenu:Menu("Harass", "Harass")
 AlistarMenu.Harass:Boolean("Q", "Use Q", true)
---AlistarMenu.Harass:Boolean("W", "Use W", true)
 AlistarMenu.Harass:Boolean("E", "Use W+Q Combo", true)
 AlistarMenu.Harass:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
 
