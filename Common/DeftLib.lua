@@ -1,4 +1,6 @@
-myHero = GetMyHero()
+local myHero = GetMyHero()
+
+AutoUpdate("/D3ftsu/GoS/master/Common/Deftlib.lua","/D3ftsu/GoS/master/Common/Deftlib.version","Common\\Deftlib.lua",1)
 
 SpellData = {
   ["Aatrox"] = {
@@ -56,6 +58,10 @@ SpellData = {
   ["Riven"] = {
                 [_R] = { Name = "", ProjectileName = "", Range = 1100, Speed = 1600, Delay = 0.25, Width = 200, collision = false, aoe = false, type = "circular", IsDangerous = false}
         },
+  ["Rumble"] = {
+		[_E] = { Name = "RumbleGrenadeMissile", Range = 850, Speed = 1200, Delay = 0.25, Width = 90, collision = true, aoe = false, type = "linear", IsDangerous = false},
+		[_R] = { Name = "RumbleCarpetBomb", Range = 1700, Speed = 1200, Delay = 0.25, Width = 90, collision = false, aoe = false, type = "linear", IsDangerous = false}
+	},
   ["Ryze"] = {
   	        [_Q] = { Name = "Overload", ProjectileName = "Overload_mis.troy", Range = 900, Speed = 1700, Delay = 0.25, Width = 55, collision = true, aoe = false, type = "linear", IsDangerous = false}
         },
