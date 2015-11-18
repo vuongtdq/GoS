@@ -89,9 +89,9 @@ OnTick(function(myHero)
 		
       else
 	  
-        if IsReady(_W) and IsHunted(target) and ValidTarget(target,765) and NidaleeMenu.Combo.W:Value() then
-        CastTargetSpell(target,_W)
-	elseif IsReady(_W) and not IsHunted(target) and ValidTarget(target,765) and NidaleeMenu.Combo.W:Value() then
+        if IsReady(_W) and ValidTarget(target,765) and IsHunted(target) and NidaleeMenu.Combo.W:Value() then
+        CastSkillShot(_W,GetOrigin(target))
+	elseif IsReady(_W) and not IsHunted(target) and ValidTarget(target,400) and NidaleeMenu.Combo.W:Value() then
 	CastSkillShot(_W,GetOrigin(target))
         end
 	
