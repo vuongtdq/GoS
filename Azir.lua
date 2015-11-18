@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",2)
 
 local AzirMenu = MenuConfig("Azir", "Azir")
 AzirMenu:Menu("Combo", "Combo")
@@ -40,14 +40,14 @@ AzirMenu.Drawings:Boolean("E", "Draw E Range", true)
 AzirMenu.Drawings:Boolean("R", "Draw R Range", true)
 AzirMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
  
-local InterruptMenu = MenuConfig("Interrupt (R)", "Interrupt")
+AsheMenu:Menu("Interrupt", "Interrupt (R)")
 
 DelayAction(function()
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
   for i, spell in pairs(CHANELLING_SPELLS) do
     for _,k in pairs(GetEnemyHeroes()) do
         if spell["Name"] == GetObjectName(k) then
-        InterruptMenu:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
+        AzirMenu.Interrupt:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
         end
     end
   end
@@ -56,7 +56,7 @@ end, 1)
 OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_R) then
       if CHANELLING_SPELLS[spell.name] then
-        if ValidTarget(unit, 450) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() then 
+        if ValidTarget(unit, 450) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and AzirMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
         CastSkillShot(_R,GetOrigin(unit))
         end
       end
@@ -250,4 +250,4 @@ OnDeleteObj(function(Object)
   end
 end)
 
-AddGapcloseEvent(_R, 69, false) -- yeah 69 right
+AddGapcloseEvent(_R, 69, false, AzirMenu) -- yeah 69 right
