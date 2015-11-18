@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",2)
 
 local AlistarMenu = MenuConfig("Alistar", "Alistar")
 AlistarMenu:Menu("Combo", "Combo")
@@ -57,9 +57,9 @@ end, 1)
 OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) then
       if CHANELLING_SPELLS[spell.name] then
-        if ValidTarget(unit, 650) and IsReady(_W) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() and InterruptMenu.SupportedSpells.W:Value() then
+        if ValidTarget(unit, 650) and IsReady(_W) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and AlistarMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and AlistarMenu.Interrupt.SupportedSpells.W:Value() then
         CastTargetSpell(unit, _W)
-        elseif ValidTarget(unit, 365) and IsReady(_Q) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() and InterruptMenu.SupportedSpells.Q:Value() then
+        elseif ValidTarget(unit, 365) and IsReady(_Q) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and AlistarMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and AlistarMenu.Interrupt.SupportedSpells.Q:Value() then
         CastSpell(_Q)
         end
       end
