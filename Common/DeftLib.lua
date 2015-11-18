@@ -260,32 +260,30 @@ function insert(turret)
   Turrets[FindSpot()] = turret
 end
 
-function Cast(spell, target, origin, hitchance, speed, delay, range, width, coll)
+function Cast(spell, target, hitchance, speed, delay, range, width, coll)
       local hitchance = hitchance or 3
-      local origin = GetOrigin(origin) or GetOrigin(myHero)
       local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
       local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
       local range = range or SpellData[GetObjectName(myHero)][spell].Range
       local width = width or SpellData[GetObjectName(myHero)][spell].Width
       local coll = coll or  SpellData[GetObjectName(myHero)][spell].collision
-      local type = SpellData[GetObjectName(myHero)][spell].type or "linear"
-      local Predicted = IPrediction.Prediction({range, speed, delay, width, type, coll})
+      local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
+      local Predicted = IPrediction.Prediction({range=range, speed=speed, delay=delay, width=width, types, collision=coll})
       local hit, pos = Predicted:Predict(target)
       if hit >= hitchance then
       CastSkillShot(spell, pos)
       end
 end
 
-function Cast2(spell, target, origin, hitchance, speed, delay, range, width, coll)
+function Cast2(spell, target, hitchance, speed, delay, range, width, coll)
       local hitchance = hitchance or 3
-      local origin = GetOrigin(origin) or GetOrigin(myHero)
       local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
       local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
       local range = range or SpellData[GetObjectName(myHero)][spell].Range
       local width = width or SpellData[GetObjectName(myHero)][spell].Width
       local coll = coll or  SpellData[GetObjectName(myHero)][spell].collision
-      local type = SpellData[GetObjectName(myHero)][spell].type or "linear"
-      local Predicted = IPrediction.Prediction({range, speed, delay, width, type, coll})
+      local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
+      local Predicted = IPrediction.Prediction({range=range, speed=speed, delay=delay, width=width, types, collision=coll})
       local hit, pos = Predicted:Predict(target)
       if hit >= hitchance then
       CastSkillShot2(spell, pos)
