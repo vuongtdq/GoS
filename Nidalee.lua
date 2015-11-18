@@ -5,7 +5,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Nidalee.lua","/D3ftsu/GoS/master/Nidalee.version","Nidalee.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Nidalee.lua","/D3ftsu/GoS/master/Nidalee.version","Nidalee.lua",2)
 
 local NidaleeMenu = MenuConfig("Nidalee", "Nidalee")
 NidaleeMenu:Menu("Combo", "Combo")
@@ -49,32 +49,34 @@ OnDraw(function(myHero)
 local col = NidaleeMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
   if IsHuman() then
-    if NidaleeMenu.Drawings.Q:Value() then DrawCircle(pos,1450,2,100,col) end
-    if NidaleeMenu.Drawings.W:Value() then DrawCircle(pos,900,2,100,col) end
-    if NidaleeMenu.Drawings.E:Value() then DrawCircle(pos,650,2,100,col) end
+    if NidaleeMenu.Drawings.Q:Value() then DrawCircle(pos,1450,2,80,col) end
+    if NidaleeMenu.Drawings.W:Value() then DrawCircle(pos,900,2,80,col) end
+    if NidaleeMenu.Drawings.E:Value() then DrawCircle(pos,650,2,80,col) end
   else
-    if NidaleeMenu.Drawings.Q:Value() then DrawCircle(pos,GetRange(myHero)+GetHitBox(myHero),2,100,col) end
+    if NidaleeMenu.Drawings.Q:Value() then DrawCircle(pos,GetRange(myHero)+GetHitBox(myHero),2,80,col) end
     if NidaleeMenu.Drawings.W:Value() then
-    DrawCircle(mousePos,400,2,100,MapPosition:inWall(mousePos) and ARGB(255,255,0,0) or ARGB(255, 255, 255, 255))
-    DrawCircle(mousePos,133,2,100,MapPosition:inWall(mousePos) and ARGB(255,255,0,0) or ARGB(255, 255, 255, 255))
+    DrawCircle(mousePos,400,2,80,MapPosition:inWall(mousePos) and ARGB(255,255,0,0) or ARGB(255, 255, 255, 255))
+    DrawCircle(mousePos,133,2,80,MapPosition:inWall(mousePos) and ARGB(255,255,0,0) or ARGB(255, 255, 255, 255))
     end
-    if NidaleeMenu.Drawings.E:Value() then DrawCircle(pos,375,2,100,col) end
+    if NidaleeMenu.Drawings.E:Value() then DrawCircle(pos,375,2,80,col) end
   end
 end)
 
 local QCD = 0
+local target1 = TargetSelector(1450,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local lastlevel = GetLevel(myHero)-1
   
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local Qtarget = target1:GetTarget()
     mousePos = GetMousePos()
 	
     if IOW:Mode() == "Combo" then
 	  
       if IsHuman() then
 	    
-	if IsReady(_Q) and IsHuman() and NidaleeMenu.Combo.Q:Value() and ValidTarget(target,1450) then
-        Cast(_Q,target)
+	if IsReady(_Q) and IsHuman() and NidaleeMenu.Combo.Q:Value() and ValidTarget(Qtarget,1450) then
+        Cast(_Q,Qtarget)
         end
 		
         if IsReady(_R) and IsHunted(target) and ValidTarget(target,800) and NidaleeMenu.Combo.R:Value() then
@@ -115,8 +117,8 @@ OnTick(function(myHero)
 	
     if IOW:Mode() == "Harass" then
 	
-      if IsHuman() and GetPercentHP(myHero) >= NidaleeMenu.Harass.Mana:Value() and NidaleeMenu.Harass.Q:Value() and ValidTarget(target,1450) then
-      Cast(_Q,target)
+      if IsHuman() and GetPercentHP(myHero) >= NidaleeMenu.Harass.Mana:Value() and NidaleeMenu.Harass.Q:Value() and ValidTarget(Qtarget,1450) then
+      Cast(_Q,Qtarget)
       else
         if not IsHuman() and ValidTarget(target,375) then
           if IsReady(_E) and NidaleeMenu.Harass.E:Value() then
@@ -155,7 +157,7 @@ OnTick(function(myHero)
 	
     if not IsRecalling(myHero) and IsHuman() and NidaleeMenu.Misc.Eally:Value() and NidaleeMenu.Misc.mpEally:Value() <= GetPercentMP(myHero) then
       for k,v in pairs(GetAllyHeroes()) do
-        if IsObjectAlive(v) and GetDistance(v) <= 650 and GetMaxHP(v)- GetHP(v) < 5+40*GetCastLevel(myHero,_E)+0.5*GetBonusAP(myHero) and GetPercentHP(v) <= NidaleeMenu.Misc.hpEally:Value() then
+        if v ~= nil and not IsRecalling(v) and IsObjectAlive(v) and GetDistance(v) <= 650 and GetMaxHP(v)- GetHP(v) < 5+40*GetCastLevel(myHero,_E)+0.5*GetBonusAP(myHero) and GetPercentHP(v) <= NidaleeMenu.Misc.hpEally:Value() then
         CastTargetSpell(v,_E)
         end
       end
@@ -176,18 +178,6 @@ OnTick(function(myHero)
         if IsReady(_Q) and ValidTarget(enemy, 1450) and NidaleeMenu.Killsteal.Q:Value() and not IsHuman() and GetHP2(enemy) < getdmg("QM",enemy) then
         CastSpell(_R)
         DelayAction(function() Cast(_Q, enemy) end, 0.125)
-        end
-		
-        if not IsHuman() and EnemiesAround(enemy, 500) < 3 then
-          if IsReady(_Q) and ValidTarget(enemy, 375) and NidaleeMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then
-          CastSpell(_Q)
-          end
-          if IsReady(_W) and ValidTarget(enemy,525) and NidaleeMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) and GetDistance(enemy) >= 175 then
-          Cast(_W,GetOrigin(enemy))
-          end
-          if IsReady(_E) and ValidTarget(enemy,375) and NidaleeMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
-          Cast(_E,GetOrigin(enemy))
-          end
         end
         
         if IsReady(_Q) and ValidTarget(enemy,450) and NidaleeMenu.Killsteal.Q:Value() and NidaleeMenu.Killsteal.W:Value() and NidaleeMenu.Killsteal.E:Value() and EnemiesAround(enemy, 500) < 3 and IsHuman() and GetHP2(enemy) < getdmg("QM",enemy)+getdmg("Q",enemy)+getdmg("W",enemy)+getdmg("E",enemy) then
