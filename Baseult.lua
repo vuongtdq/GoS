@@ -1,5 +1,7 @@
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 
+AutoUpdate("/D3ftsu/GoS/master/Baseult.lua","/D3ftsu/GoS/master/Baseult.version","Baseult.lua",1)
+
 local BasePositions = {
      [SUMMONERS_RIFT] = {
 	[100] = Vector(14340, 171, 14390),
