@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",3)
 
 local AsheMenu = MenuConfig("Ashe", "Ashe")
 AsheMenu:Menu("Combo", "Combo")
@@ -76,12 +76,13 @@ if AsheMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),1200,1,0,AsheMenu.Dra
 end)
 
 local target1 = TargetSelector(1200,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
-local target2 = TargetSelector(3000,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
+local target2 = TargetSelector(2000,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
 local QReady = false
 local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local QSS = GetItemSlot(myHero,3140) > 0 and GetItemSlot(myHero,3140) or GetItemSlot(myHero,3139) > 0 and GetItemSlot(myHero,3139) or nil
     local Wtarget = target1:GetTarget()
     local Rtarget = target2:GetTarget()
     
@@ -91,21 +92,18 @@ OnTick(function(myHero)
         CastSpell(_Q)
         end
 						
-        if IsReady(_W) and ValidTarget(Wtarget, 1200) and AsheMenu.Combo.W:Value() then
+        if IsReady(_W) and AsheMenu.Combo.W:Value() then
         Cast(_W,Wtarget)
         end
 						
-        if IsReady(_R) and ValidTarget(Rtarget, 2000) and GetPercentHP(Rtarget) <= 50 and AsheMenu.Combo.R:Value() then
+        if IsReady(_R) and GetPercentHP(Rtarget) <= 50 and AsheMenu.Combo.R:Value() then
         Cast(_R,Rtarget)
 	end
 		
-	if GetItemSlot(myHero,3140) > 0 and IsReady(GetItemSlot(myHero,3140)) and AsheMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < AsheMenu.Combo.QSSHP:Value() then
-        CastSpell(GetItemSlot(myHero,3140))
+	if QSS and IsReady(QSS) and AsheMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < AsheMenu.Combo.QSSHP:Value() then
+        CastSpell(QSS)
         end
 
-        if GetItemSlot(myHero,3139) > 0 and IsReady(GetItemSlot(myHero,3139)) and AsheMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < AsheMenu.Combo.QSSHP:Value() then
-        CastSpell(GetItemSlot(myHero,3139))
-        end
     end
 
     if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= AsheMenu.Harass.Mana:Value() then 
@@ -114,22 +112,18 @@ OnTick(function(myHero)
         CastSpell(_Q)
         end
 						
-        if IsReady(_W) and ValidTarget(Wtarget, 1200) and AsheMenu.Harass.W:Value() then
+        if IsReady(_W) and AsheMenu.Harass.W:Value() then
         Cast(_W,Wtarget)
 	end
 		
     end
 
-    if AsheMenu.Combo.FireKey:Value() then
-      if IsReady(_R) and ValidTarget(Rtarget, 3000) then 
-      Cast(_R,Rtarget)
-      end  
+    if AsheMenu.Combo.FireKey:Value() and IsReady(_R) then
+    Cast(_R,Rtarget)
     end
 
-      if AsheMenu.Harass.AutoW:Value() and GetPercentMP(myHero) >= AsheMenu.Harass.WMana:Value() then
-        if IsReady(_W) and ValidTarget(Wtarget, 1200) and not IsRecalling(myHero) then
-        Cast(_W,Wtarget)
-	end
+      if AsheMenu.Harass.AutoW:Value() and IsReady(_W) and GetPercentMP(myHero) >= AsheMenu.Harass.WMana:Value() and not IsRecalling(myHero) then
+      Cast(_W,Wtarget)
       end
 
     for i,enemy in pairs(GetEnemyHeroes()) do
@@ -154,7 +148,7 @@ OnTick(function(myHero)
           end
 	end
 	
-	if IsReady(_W) and ValidTarget(enemy, 1200) and AsheMenu.Killsteal.W:Value() and GetHP(enemy) < getdmg("W",enemy) then 
+	if IsReady(_W) and AsheMenu.Killsteal.W:Value() and GetHP(enemy) < getdmg("W",enemy) then 
 	Cast(_W,enemy)
 	end
 		  
