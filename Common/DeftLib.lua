@@ -1,6 +1,6 @@
 local myHero = GetMyHero()
 
-require('IPrediction')
+if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
 
 AutoUpdate("/D3ftsu/GoS/master/Common/Deftlib.lua","/D3ftsu/GoS/master/Common/Deftlib.version","Common\\Deftlib.lua",1)
 
