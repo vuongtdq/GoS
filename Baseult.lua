@@ -42,7 +42,7 @@ local SpellData = {
         
         ["Jinx"] = {
 	Delay = 600,
-        MissileSpeed = 1700
+        MissileSpeed = 1700,
 	Damage = function(target) return CalcDamage(myHero, target, math.max(50*GetCastLevel(myHero, _R)+75+GetBonusDmg(myHero)+(0.05*GetCastLevel(myHero, _R)+0.2)*(GetMaxHP(target)-GetCurrentHP(target)))) end
         } 
 }
