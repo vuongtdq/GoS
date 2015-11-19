@@ -1,5 +1,7 @@
 local myHero = GetMyHero()
 
+require('IPrediction')
+
 AutoUpdate("/D3ftsu/GoS/master/Common/Deftlib.lua","/D3ftsu/GoS/master/Common/Deftlib.version","Common\\Deftlib.lua",1)
 
 SpellData = {
