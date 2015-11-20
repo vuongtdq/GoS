@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",4)
 
 local AsheMenu = MenuConfig("Ashe", "Ashe")
 AsheMenu:Menu("Combo", "Combo")
@@ -83,6 +83,8 @@ local lastlevel = GetLevel(myHero)-1
 OnTick(function(myHero)
     local target = GetCurrentTarget()
     local QSS = GetItemSlot(myHero,3140) > 0 and GetItemSlot(myHero,3140) or GetItemSlot(myHero,3139) > 0 and GetItemSlot(myHero,3139) or nil
+    local BRK = GetItemSlot(myHero,3153) > 0 and GetItemSlot(myHero,3153) or GetItemSlot(myHero,3144) > 0 and GetItemSlot(myHero,3144) or nil
+    local YMG = GetItemSlot(myHero,3142) > 0 and GetItemSlot(myHero,3142) or nil
     local Wtarget = target1:GetTarget()
     local Rtarget = target2:GetTarget()
     
@@ -129,16 +131,12 @@ OnTick(function(myHero)
     for i,enemy in pairs(GetEnemyHeroes()) do
 	
       if IOW:Mode() == "Combo" then	
-	if GetItemSlot(myHero,3153) > 0 and IsReady(GetItemSlot(myHero,3153)) and AsheMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < AsheMenu.Combo.myHP:Value() and GetPercentHP(enemy) > AsheMenu.Combo.targetHP:Value() then
-        CastTargetSpell(enemy, GetItemSlot(myHero,3153))
+	if BRK and IsReady(BRK) and AsheMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < AsheMenu.Combo.myHP:Value() and GetPercentHP(enemy) > AsheMenu.Combo.targetHP:Value() then
+        CastTargetSpell(enemy, BRK)
         end
 
-        if GetItemSlot(myHero,3144) > 0 and IsReady(GetItemSlot(myHero,3144)) and AsheMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < AsheMenu.Combo.myHP:Value() and GetPercentHP(enemy) > AsheMenu.Combo.targetHP:Value() then
-        CastTargetSpell(enemy, GetItemSlot(myHero,3144))
-        end
-
-        if GetItemSlot(myHero,3142) > 0 and IsReady(GetItemSlot(myHero,3142)) and AsheMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
-        CastSpell(GetItemSlot(myHero,3142))
+        if YMG and IsReady(YMG) and AsheMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
+        CastSpell(YMG)
         end	
       end
       
