@@ -81,7 +81,7 @@ OnTick(function(myHero)
       local totalHP = 0
       local totalDamage = 0
       for _, enemy in pairs(GetEnemyHeroes()) do
-        if ValitTarget(enemy,600) then
+        if ValidTarget(enemy,600) then
         totalHP = totalHP + GetHP(enemy)
         totalDamage = totalDamage + GetBonusAP(enemy) + (GetBaseDamage(enemy)+GetBonusDmg(enemy)) * GetAttackSpeed(enemy)
         end
