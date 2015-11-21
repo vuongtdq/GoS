@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",4)
 
 local AzirMenu = MenuConfig("Azir", "Azir")
 AzirMenu:Menu("Combo", "Combo")
@@ -64,11 +64,11 @@ OnProcessSpell(function(unit, spell)
 end)
 
 OnDraw(function(myHero)
-local col = AzirMenu.Drawings.color:Value()
-if AzirMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),950,1,0,col) end
-if AzirMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),450,1,0,col) end
-if AzirMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1300,1,0,col) end
-if AzirMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),950,1,0,col) end
+local pos = GetOrigin(myHero)
+if AzirMenu.Drawings.Q:Value() then DrawCircle(pos,950,1,0,GoS.Pink) end
+if AzirMenu.Drawings.W:Value() then DrawCircle(pos,450,1,0,GoS.Yellow) end
+if AzirMenu.Drawings.E:Value() then DrawCircle(pos,1300,1,0,GoS.Blue) end
+if AzirMenu.Drawings.R:Value() then DrawCircle(pos,950,1,0,GoS.Green) end
 end)
 
 local target1 = TargetSelector(990,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
@@ -236,6 +236,12 @@ if AzirMenu.Misc.Autolvl:Value() then
   end
 end
 
+end)
+
+OnObjectLoad(function(Object)
+  if GetObjectBaseName(Object) == "AzirSoldier" then
+  table.insert(AzirSoldiers, Object)
+  end
 end)
 
 OnCreateObj(function(Object) 
