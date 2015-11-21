@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",4)
+AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",5)
 
 local AsheMenu = MenuConfig("Ashe", "Ashe")
 AsheMenu:Menu("Combo", "Combo")
@@ -46,7 +46,6 @@ AsheMenu.JungleClear:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
 
 AsheMenu:Menu("Drawings", "Drawings")
 AsheMenu.Drawings:Boolean("W", "Draw W Range", true)
-AsheMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 AsheMenu:Menu("Interrupt", "Interrupt (R)")
 
@@ -72,7 +71,7 @@ OnProcessSpell(function(unit, spell)
 end)
 
 OnDraw(function(myHero)
-if AsheMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),1200,1,0,AsheMenu.Drawings.color:Value()) end
+if AsheMenu.Drawings.W:Value() then DrawCircle(GetOrigin(myHero),1200,1,0,GoS.Yellow) end
 end)
 
 local target1 = TargetSelector(1200,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
