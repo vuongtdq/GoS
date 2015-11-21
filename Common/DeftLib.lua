@@ -1,4 +1,4 @@
-DeftlibVersion = 2
+DeftlibVersion = 3
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -367,12 +367,12 @@ OnUpdateBuff(function(unit,buff)
     for i = 1, #ccstun do
       if buff.Type == ccstun[i] then
       Immobile[GetNetworkID(unit)] = buff.Count
-      DelayAction(function() Immobile[GetNetworkID(Object)] = 0 end, buff.ExpireTime-buff.StartTime)
+      DelayAction(function() Immobile[GetNetworkID(unit)] = 0 end, buff.ExpireTime-buff.StartTime)
       end
     end
   
   if buff.Type == 15 then
-  Shield[GetNetworkID(Object)] = buff.Count
+  Shield[GetNetworkID(unit)] = buff.Count
   end
 
 end)
