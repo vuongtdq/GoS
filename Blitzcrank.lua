@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",3)
 
 local BlitzcrankMenu = MenuConfig("Blitzcrank", "Blitzcrank")
 BlitzcrankMenu:Menu("Combo", "Combo")
@@ -103,13 +103,14 @@ OnTick(function(myHero)
     
     if IOW:Mode() == "Combo" then
 	
-                if IsReady(_Q) and ValidTarget(Qtarget, 1010) and BlitzcrankMenu.Combo.Q:Value() then
+                if IsReady(_Q) and BlitzcrankMenu.Combo.Q:Value() then
                 Cast(_Q,Qtarget)
 	        end
-                          
-                if GetCurrentMana(myHero) >= 200 and IsReady(_W) and IsReady(_Q) and GetDistance(target) <= 1275 and GetDistance(target) >= 975 and BlitzcrankMenu.Combo.W:Value() then
+                
+                if IsReady(_W) and ValidTarget(target, 1275) and BlitzcrankMenu.Combo.W:Value() then  
+                if GetCurrentMana(myHero) >= 200 and IsReady(_Q) and GetDistance(target) >= 975 then
                 CastSpell(_W)
-                elseif BlitzcrankMenu.Combo.W:Value() and IsReady(_W) and GetDistance(target) > 150 and GetDistance(target) <= 400 then
+                elseif GetDistance(target) <= 400 then
 		CastSpell(_W)
 		end
 			
@@ -125,7 +126,7 @@ OnTick(function(myHero)
 	
 	if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= BlitzcrankMenu.Harass.Mana:Value() then
 	
-                if IsReady(_Q) and ValidTarget(Qtarget, 1010) and BlitzcrankMenu.Harass.Q:Value() then
+                if IsReady(_Q) and BlitzcrankMenu.Harass.Q:Value() then
                 Cast(_Q,Qtarget)
 	        end
 		
@@ -149,7 +150,7 @@ OnTick(function(myHero)
                   end
                 end
 		
-  	        if IsReady(_Q) and ValidTarget(enemy, 1010) and BlitzcrankMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+  	        if IsReady(_Q) and BlitzcrankMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
                 Cast(_Q,enemy)
                 elseif IsReady(_R) and ValidTarget(enemy, 600) and BlitzcrankMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
                 CastSpell(_R)
