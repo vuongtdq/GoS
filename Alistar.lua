@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",3)
 
 local AlistarMenu = MenuConfig("Alistar", "Alistar")
 AlistarMenu:Menu("Combo", "Combo")
@@ -36,7 +36,6 @@ AlistarMenu:Menu("Drawings", "Drawings")
 AlistarMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 AlistarMenu.Drawings:Boolean("W", "Draw W Range", true)
 AlistarMenu.Drawings:Boolean("E", "Draw E Range", true)
-AlistarMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 AlistarMenu:Menu("Interrupt", "Interrupt")
 AlistarMenu.Interrupt:Menu("SupportedSpells", "Supported Spells")
@@ -67,11 +66,10 @@ OnProcessSpell(function(unit, spell)
 end)
   
 OnDraw(function(myHero)
-local col = AlistarMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
-if AlistarMenu.Drawings.Q:Value() then DrawCircle(pos,365,1,0,col) end
-if AlistarMenu.Drawings.W:Value() then DrawCircle(pos,650,1,0,col) end
-if AlistarMenu.Drawings.E:Value() then DrawCircle(pos,575,1,0,col) end
+if AlistarMenu.Drawings.Q:Value() then DrawCircle(pos,365,1,0,GoS.Pink) end
+if AlistarMenu.Drawings.W:Value() then DrawCircle(pos,650,1,0,GoS.Yellow) end
+if AlistarMenu.Drawings.E:Value() then DrawCircle(pos,575,1,0,GoS.Blue) end
 end)
 
 local target1 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
