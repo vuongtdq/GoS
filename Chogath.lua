@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Chogath.lua","/D3ftsu/GoS/master/Chogath.version","Chogath.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Chogath.lua","/D3ftsu/GoS/master/Chogath.version","Chogath.lua",2)
 
 local ChogathMenu = MenuConfig("Chogath", "Chogath")
 ChogathMenu:Menu("Combo", "Combo")
@@ -42,7 +42,6 @@ ChogathMenu:Menu("Drawings", "Drawings")
 ChogathMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 ChogathMenu.Drawings:Boolean("W", "Draw W Range", true)
 ChogathMenu.Drawings:Boolean("R", "Draw R Range", true)
-ChogathMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 ChogathMenu:Menu("Interrupt", "Interrupt")
 ChogathMenu.Interrupt:Menu("SupportedSpells", "Supported Spells")
@@ -79,9 +78,9 @@ local lastlevel = GetLevel(myHero)-1
 OnDraw(function(myHero)
 local col = ChogathMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
-if ChogathMenu.Drawings.Q:Value() then DrawCircle(pos,950,1,0,col) end
-if ChogathMenu.Drawings.W:Value() then DrawCircle(pos,650,1,0,col) end
-if ChogathMenu.Drawings.R:Value() then DrawCircle(pos,235,1,0,col) end
+if ChogathMenu.Drawings.Q:Value() then DrawCircle(pos,950,1,0,GoS.Pink) end
+if ChogathMenu.Drawings.W:Value() then DrawCircle(pos,650,1,0,GoS.Yellow) end
+if ChogathMenu.Drawings.R:Value() then DrawCircle(pos,235,1,0,GoS.Green) end
 end)
 
 OnTick(function(myHero)
@@ -91,11 +90,11 @@ OnTick(function(myHero)
     
     if IOW:Mode() == "Combo" then
 
-        if IsReady(_Q) and ValidTarget(Qtarget,1075) and ChogathMenu.Combo.Q:Value() then
+        if IsReady(_Q) and ChogathMenu.Combo.Q:Value() then
         Cast(_Q,Qtarget)
         end
 	       
-	if IsReady(_W) and ValidTarget(Wtarget,650) and ChogathMenu.Combo.W:Value() then
+	if IsReady(_W) and ChogathMenu.Combo.W:Value() then
         Cast(_W,Wtarget)
         end
         
@@ -107,11 +106,11 @@ OnTick(function(myHero)
 	
     if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= ChogathMenu.Harass.Mana:Value() then
 
-        if IsReady(_Q) and ValidTarget(Qtarget,1075) and ChogathMenu.Harass.Q:Value() then
+        if IsReady(_Q) and ChogathMenu.Harass.Q:Value() then
         Cast(_Q,Qtarget)
         end
 	       
-	if IsReady(_W) and ValidTarget(Wtarget,650) and ChogathMenu.Harass.W:Value() then
+	if IsReady(_W) and ChogathMenu.Harass.W:Value() then
         Cast(_W,Wtarget)
         end
         
@@ -127,9 +126,9 @@ OnTick(function(myHero)
                 
 	if IsReady(_R) and ValidTarget(enemy, 235) and ChogathMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
 	CastTargetSpell(enemy, _R)
-	elseif IsReady(_W) and ValidTarget(enemy, 650) and ChogathMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then 
+	elseif IsReady(_W) and ChogathMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then 
 	Cast(_W,enemy)
-	elseif IsReady(_Q) and ValidTarget(enemy, 1075) and ChogathMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then
+	elseif IsReady(_Q) and ChogathMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then
 	Cast(_Q,enemy)
         end
 
@@ -139,14 +138,14 @@ OnTick(function(myHero)
         if GetPercentMP(myHero) >= ChogathMenu.LaneClear.Mana:Value() then
        	
          if IsReady(_Q) and ChogathMenu.LaneClear.Q:Value() then
-           local BestPos, BestHit = GetFarmPosition(950, 250)
+           local BestPos, BestHit = GetFarmPosition(950, 250, MINION_ENEMY)
            if BestPos and BestHit > 0 then 
            CastSkillShot(_Q, BestPos)
            end
 	 end
 
          if IsReady(_W) and ChogathMenu.LaneClear.W:Value() then
-           local BestPos, BestHit = GetLineFarmPosition(650, 210)
+           local BestPos, BestHit = GetLineFarmPosition(650, 210, MINION_ENEMY)
            if BestPos and BestHit > 0 then 
            CastSkillShot(_W, BestPos)
            end
