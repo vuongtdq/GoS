@@ -1,4 +1,4 @@
-DeftlibVersion = 3
+DeftlibVersion = 4
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -301,9 +301,14 @@ function Cast2(spell, target, source, hitchance, speed, delay, range, width, col
       end
 end
 
+function GetPredictedPos(unit, time) 
+  local time = time or 1.25
+  return IPrediction.PredictPos(unit, time)
+end
+
 function EnemiesAround2(pos, range, time)
   local c = 0
-  local time = time or 250
+  local time = time or 2.5
   if pos == nil then return 0 end
   for k,v in pairs(GetEnemyHeroes()) do 
     if v and ValidTarget(v) and GetDistanceSqr(pos,GetPredictedPos(v, time)) < range*range then
