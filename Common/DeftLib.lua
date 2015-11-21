@@ -269,7 +269,8 @@ function insert(turret)
   Turrets[FindSpot()] = turret
 end
 
-function Cast(spell, target, hitchance, speed, delay, range, width, coll)
+function Cast(spell, target, source, hitchance, speed, delay, range, width, coll)
+      local source = source or myHero
       local hitchance = hitchance or 3
       local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
       local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
@@ -278,13 +279,14 @@ function Cast(spell, target, hitchance, speed, delay, range, width, coll)
       local coll = coll or  SpellData[GetObjectName(myHero)][spell].collision
       local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
       local Predicted = IPrediction.Prediction({range=range, speed=speed, delay=delay, width=width, types, collision=coll})
-      local hit, pos = Predicted:Predict(target)
+      local hit, pos = Predicted:Predict(target,source)
       if hit >= hitchance then
       CastSkillShot(spell, pos)
       end
 end
 
-function Cast2(spell, target, hitchance, speed, delay, range, width, coll)
+function Cast2(spell, target, source, hitchance, speed, delay, range, width, coll)
+      local source = source or myHero
       local hitchance = hitchance or 3
       local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
       local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
@@ -293,7 +295,7 @@ function Cast2(spell, target, hitchance, speed, delay, range, width, coll)
       local coll = coll or  SpellData[GetObjectName(myHero)][spell].collision
       local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
       local Predicted = IPrediction.Prediction({range=range, speed=speed, delay=delay, width=width, types, collision=coll})
-      local hit, pos = Predicted:Predict(target)
+      local hit, pos = Predicted:Predict(target,source)
       if hit >= hitchance then
       CastSkillShot2(spell, pos)
       end
