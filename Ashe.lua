@@ -162,7 +162,7 @@ OnTick(function(myHero)
       if GetPercentMP(myHero) >= AsheMenu.LaneClear.Mana:Value() then
       
         if IsReady(_W) and AsheMenu.LaneClear.W:Value() then
-          local BestPos, BestHit = GetFarmPosition(1200, 300)
+          local BestPos, BestHit = GetFarmPosition(1200, 300, MINION_ENEMY)
           if BestPos and BestHit > 0 then
 	  CastSkillShot(_W, BestPos)
   	  end
