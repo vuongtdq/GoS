@@ -86,10 +86,10 @@ if KalistaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1000,1,0,col) end
 if KalistaMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),1450,1,0,col) end
 for _,spot in pairs(WallSpots) do
   if KalistaMenu.Combo.WallJump:Value() then 
-    if GetDistance(spot) <= 7000 and GetDistance(spot, mousePos()) > 125 then                
+    if GetDistance(spot) <= 7000 and GetDistance(spot, mousePos) > 125 then                
     DrawCircle(spot.x,spot.y,spot.z,80,2,0,ARGB(255, 255, 255, 0))
     end
-    if GetDistance(spot) <= 7000 and GetDistance(spot, mousePos()) <= 125 then 
+    if GetDistance(spot) <= 7000 and GetDistance(spot, mousePos) <= 125 then 
     DrawCircle(spot.x,spot.y,spot.z,80,2,0,ARGB(255, 0, 255, 0))
     end
   end
@@ -134,6 +134,7 @@ local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local mousePos = GetMousePos()
     
     if IOW:Mode() == "Combo" then
 		
@@ -280,7 +281,7 @@ OnTick(function(myHero)
 for _,spot in pairs(WallSpots) do
   if KalistaMenu.Combo.WallJump:Value() then 
     
-    if GetDistance(spot, mousePos()) <= 125 and GetDistance(spot) > 22 then
+    if GetDistance(spot, mousePos) <= 125 and GetDistance(spot) > 22 then
     MoveToXYZ(spot.x, spot.y, spot.z)
     end
     
