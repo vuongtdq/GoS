@@ -111,7 +111,7 @@ OnTick(function(myHero)
 	
     if not IsRecalling(myHero) and AlistarMenu.Misc.Eally:Value() and AlistarMenu.Misc.mpEally:Value() <= GetPercentMP(myHero) then
       for k,v in pairs(GetAllyHeroes()) do
-        if ValidTarget(v,575) and GetMaxHP(v)- GetHP(v) < 15+15*GetCastLevel(myHero,_E)+0.1*GetBonusAP(myHero) and GetPercentHP(v) <= AlistarMenu.Misc.hpEally:Value() then
+        if v ~= nil and not IsRecalling(v) and IsObjectAlive(v) and GetDistance(v) <= 575 and GetMaxHP(v)- GetHP(v) < 15+15*GetCastLevel(myHero,_E)+0.1*GetBonusAP(myHero) and GetPercentHP(v) <= AlistarMenu.Misc.hpEally:Value() then
         CastSpell(_E)
         end
       end
