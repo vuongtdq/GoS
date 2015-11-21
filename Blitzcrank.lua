@@ -46,7 +46,7 @@ BlitzcrankMenu.Interrupt.SupportedSpells:Boolean("R", "Use R", true)
 
 local MissedGrabs = 0
 local SuccesfulGrabs = 0
-local Percent = 0
+local Percentage = ((SuccesfulGrabs*100)/TotalGrabs)
 local TotalGrabs = MissedGrabs + SuccesfulGrabs
 
 DelayAction(function()
