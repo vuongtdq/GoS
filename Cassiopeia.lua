@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",3)
 
 local CassiopeiaMenu = MenuConfig("Cassiopeia", "Cassiopeia")
 CassiopeiaMenu:Menu("Combo", "Combo")
@@ -106,15 +106,15 @@ OnTick(function(myHero)
 		Cast(_R,Rtarget)
 		end
 
-	        if GetTickCount() > LastE*1000 and IsReady(_E) and IsPoisoned(target) and CassiopeiaMenu.Combo.E:Value() and ValidTarget(target, 700) then
+	        if GetTickCount() >= LastE*1000 and IsReady(_E) and IsPoisoned(target) and CassiopeiaMenu.Combo.E:Value() and ValidTarget(target, 700) then
 		CastTargetSpell(target, _E)
 		end
 			
-		if IsReady(_Q) and CassiopeiaMenu.Combo.Q:Value() and ValidTarget(Qtarget, 900) then
+		if IsReady(_Q) and CassiopeiaMenu.Combo.Q:Value() then
 		Cast(_Q,Qtarget)
 		end
 		
-		if IsReady(_W) and CassiopeiaMenu.Combo.W:Value() and ValidTarget(Wtarget, 970) and not IsPoisoned(Wtarget) then
+		if IsReady(_W) and CassiopeiaMenu.Combo.W:Value() and not IsPoisoned(Wtarget) then
 		Cast(_W,Wtarget)
 		end
 		
@@ -126,11 +126,11 @@ OnTick(function(myHero)
 		CastTargetSpell(target, _E)
 		end
 			
-		if IsReady(_Q) and CassiopeiaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 900) then
+		if IsReady(_Q) and CassiopeiaMenu.Harass.Q:Value() then
 	        Cast(_Q,Qtarget)
 		end
 		
-		if IsReady(_W) and CassiopeiaMenu.Harass.W:Value() and ValidTarget(Wtarget, 970) then
+		if IsReady(_W) and CassiopeiaMenu.Harass.W:Value() then
 		Cast(_W,Wtarget)
 		end
 		
@@ -144,11 +144,11 @@ OnTick(function(myHero)
                   end
 		end
 		
-		if IsReady(_Q) and ValidTarget(enemy, 900) and CassiopeiaMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+		if IsReady(_Q) and CassiopeiaMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
 		Cast(_Q,enemy)
 		elseif IsReady(_E) and ValidTarget(enemy, 700) and CassiopeiaMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
 		CastTargetSpell(enemy, _E)
-		elseif IsReady(_W) and ValidTarget(enemy, 970) and CassiopeiaMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
+		elseif IsReady(_W) and CassiopeiaMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
 		Cast(_W,enemy)
 		end
 		
@@ -164,14 +164,14 @@ OnTick(function(myHero)
           if GetPercentMP(myHero) >= CassiopeiaMenu.Farm.LaneClear.Mana:Value() then
           
             if IsReady(_Q) and CassiopeiaMenu.Farm.LaneClear.Q:Value() then
-              local BestPos, BestHit = GetFarmPosition(850, 100)
+              local BestPos, BestHit = GetFarmPosition(850, 100, MINION_ENEMY)
               if BestPos and BestHit > 0 then 
               CastSkillShot(_Q,BestPos)
               end
 	    end
 	          
 	    if IsReady(_W) and CassiopeiaMenu.Farm.LaneClear.W:Value() then
-              local BestPos, BestHit = GetFarmPosition(925, 90)
+              local BestPos, BestHit = GetFarmPosition(925, 90, MINION_ENEMY)
               if BestPos and BestHit > 0 then 
               CastSkillShot(_W,BestPos)
               end
@@ -182,24 +182,24 @@ OnTick(function(myHero)
 	  if GetPercentMP(myHero) >= CassiopeiaMenu.JungleClear.Mana:Value() then
 	  
 	    if IsReady(_Q) and CassiopeiaMenu.JungleClear.Q:Value() then
-	      local BestPos, BestHit = GetJFarmPosition(850, 100)
+	      local BestPos, BestHit = GetFarmPosition(850, 100, 300)
               if BestPos and BestHit > 0 then 
               CastSkillShot(_Q,BestPos)
 	      end
 	    end
             
 	    if IsReady(_W) and CassiopeiaMenu.JungleClear.W:Value() then
-	      local BestPos, BestHit = GetJFarmPosition(925, 90)
+	      local BestPos, BestHit = GetFarmPosition(925, 90, 300)
               if BestPos and BestHit > 0 then 
               CastSkillShot(_W,BestPos)
 	      end
             end
 	
             for i,mobs in pairs(minionManager.objects) do
-              if GetTeam(mobs) == 300 and GetTickCount() > LastE*1000 and IsReady(_E) and IsPoisoned(mobs) and CassiopeiaMenu.JungleClear.E:Value() and ValidTarget(mobs, 700) then
+              if GetTeam(mobs) == 300 and GetTickCount() >= LastE*1000 and IsReady(_E) and IsPoisoned(mobs) and CassiopeiaMenu.JungleClear.E:Value() and ValidTarget(mobs, 700) then
 	      CastTargetSpell(mobs, _E)
 	      end
-              if GetTeam(mobs) == MINION_ENEMY and GetTickCount() > LastE*1000 and IsReady(_E) and IsPoisoned(mobs) and CassiopeiaMenu.Farm.LaneClear.E:Value() and ValidTarget(mobs, 700) and GetCurrentHP(mobs) < getdmg("E",mobs) then
+              if GetTeam(mobs) == MINION_ENEMY and GetTickCount() >= LastE*1000 and IsReady(_E) and IsPoisoned(mobs) and CassiopeiaMenu.Farm.LaneClear.E:Value() and ValidTarget(mobs, 700) and GetCurrentHP(mobs) < getdmg("E",mobs) then
 	      CastTargetSpell(mobs, _E)
               end
 	    end
