@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",4)
 
 local BlitzcrankMenu = MenuConfig("Blitzcrank", "Blitzcrank")
 BlitzcrankMenu:Menu("Combo", "Combo")
@@ -37,7 +37,6 @@ BlitzcrankMenu:Menu("Drawings", "Drawings")
 BlitzcrankMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 BlitzcrankMenu.Drawings:Boolean("R", "Draw R Range", true)
 BlitzcrankMenu.Drawings:Boolean("Stats", "Draw Statistics", true)
-BlitzcrankMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 	
 BlitzcrankMenu:Menu("Interrupt", "Interrupt")
 BlitzcrankMenu.Interrupt:Menu("SupportedSpells", "Supported Spells")
@@ -80,11 +79,12 @@ OnProcessSpell(function(unit, spell)
 end)
 
 OnDraw(function(myHero)
+local pos = GetOrigin(myHero)
 local col = BlitzcrankMenu.Drawings.color:Value()	
 TotalGrabs = MissedGrabs + SuccesfulGrabs
 Percentage = ((SuccesfulGrabs*100)/TotalGrabs)
-if BlitzcrankMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),975,1,0,col) end
-if BlitzcrankMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),600,1,0,col) end
+if BlitzcrankMenu.Drawings.Q:Value() then DrawCircle(pos,975,1,0,GoS.Pink) end
+if BlitzcrankMenu.Drawings.R:Value() then DrawCircle(pos,600,1,0,GoS.Green) end
 if BlitzcrankMenu.Drawings.Stats:Value() then 
 DrawText("Percentage Grab done : " .. tostring(math.ceil(Percentage)) .. "%",12,0,30,0xff00ff00)
 DrawText("Grab Done : "..tostring(SuccesfulGrabs),12,0,40,0xff00ff00)
