@@ -52,34 +52,34 @@ EkkoMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 EkkoMenu.Drawings:Boolean("W", "Draw W Range", true)
 EkkoMenu.Drawings:Boolean("E", "Draw E Range", true)
 EkkoMenu.Drawings:Boolean("OP", "OP Drawings", true)
-EkkoMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 local twin,EkkoQ,QDuration,EkkoW,WDuration = nil,nil,nil,nil,nil
  
 OnDraw(function(myHero)
+local pos = GetOrigin(myHero)
 local col = EkkoMenu.Drawings.color:Value()
-if EkkoMenu.Drawings.Q:Value() then DrawCircle(GetOrigin(myHero),925,1,0,col) end
-if EkkoMenu.Drawings.W:Value() then DrawCircle(GetOrigin(myHero),1600,1,0,col) end
-if EkkoMenu.Drawings.E:Value() then DrawCircle(GetOrigin(myHero),350,1,0,col) end
+if EkkoMenu.Drawings.Q:Value() then DrawCircle(pos,925,1,0,col) end
+if EkkoMenu.Drawings.W:Value() then DrawCircle(pos,1600,1,0,col) end
+if EkkoMenu.Drawings.E:Value() then DrawCircle(pos,350,1,0,col) end
  
 if EkkoMenu.Drawings.OP:Value() then
   if EkkoQ then
-  DrawRectangleOutline(GetOrigin(myHero), GetOrigin(EkkoQ), 90)
-  local pos = WorldToScreen(0,GetOrigin(EkkoQ))
-  DrawText((math.floor((QDuration-GetTickCount()))/1000).."s", 25, pos.x-35, pos.y-50, ARGB(255, 255, 0, 0)) 
+  DrawRectangleOutline(pos, GetOrigin(EkkoQ), 90)
+  local wts = WorldToScreen(0,GetOrigin(EkkoQ))
+  DrawText((math.floor((QDuration-GetTickCount()))/1000).."s", 25, wts.x-35, wts.y-50, ARGB(255, 255, 0, 0)) 
   end
   if EkkoQ2 then
-  DrawRectangleOutline(GetOrigin(myHero), GetOrigin(EkkoQ2), 90)
+  DrawRectangleOutline(pos, GetOrigin(EkkoQ2), 90)
   end
   if EkkoW then
   DrawCircle(GetOrigin(EkkoW),400,2,100,ARGB(255, 155, 150, 250))
-  local pos = WorldToScreen(0,GetOrigin(EkkoW))
-  DrawText((math.floor((WDuration-GetTickCount()))/1000).."s", 25, pos.x-35, pos.y-50, ARGB(255, 255, 0, 0)) 
+  local wts = WorldToScreen(0,GetOrigin(EkkoW))
+  DrawText((math.floor((WDuration-GetTickCount()))/1000).."s", 25, wts.x-35, wts.y-50, ARGB(255, 255, 0, 0)) 
   end
   if twin then
   DrawCircle(GetOrigin(twin),400,2,100,ARGB(255, 0, 255, 0)) 
   DrawCircle(GetOrigin(twin),GetHitBox(myHero),2,100,ARGB(255, 255, 0, 0)) 
-  DrawLine3D(GetOrigin(myHero).x,GetOrigin(myHero).y,GetOrigin(myHero).z,GetOrigin(twin).x,GetOrigin(twin).y,GetOrigin(twin).z,2,ARGB(255, 0, 255, 0))
+  DrawLine3D(pos.x,pos.y,pos.z,GetOrigin(twin).x,GetOrigin(twin).y,GetOrigin(twin).z,2,ARGB(255, 0, 255, 0))
   end
 end
 end)
@@ -96,11 +96,11 @@ OnTick(function(myHero)
     
    if IOW:Mode() == "Combo" then
 	
-     if IsReady(_Q) and ValidTarget(Qtarget,995) and EkkoMenu.Combo.Q:Value() then
+     if IsReady(_Q) and EkkoMenu.Combo.Q:Value() then
      Cast(_Q,Qtarget)
      end
 	   
-     if IsReady(_W) and ValidTarget(Wtarget,1900) and EkkoMenu.Combo.W:Value() then
+     if IsReady(_W) and EkkoMenu.Combo.W:Value() then
        if GetCurrentMana(myHero) < (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W))) and GetCurrentMana(myHero) >= GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) and GetCurrentHP(myHero)-GetCurrentHP(Wtarget) > 60+20*GetCastLevel(myHero,_W)+1.5*GetBonusAP(myHero) then
        Cast(_W,Wtarget)
        elseif GetDistance(Wtarget) > 925 then
@@ -141,11 +141,11 @@ OnTick(function(myHero)
 
    if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= EkkoMenu.Harass.Mana:Value() then
 	
-     if IsReady(_Q) and ValidTarget(Qtarget,995) and EkkoMenu.Harass.Q:Value() then
+     if IsReady(_Q) and EkkoMenu.Harass.Q:Value() then
      Cast(_Q,Qtarget)
      end
 	   
-     if IsReady(_W) and ValidTarget(Wtarget,1900) and EkkoMenu.Harass.W:Value() then
+     if IsReady(_W) and EkkoMenu.Harass.W:Value() then
      Cast(_W,Wtarget)
      end
        
@@ -186,7 +186,7 @@ OnTick(function(myHero)
        end
      end
                 
-     if IsReady(_Q) and ValidTarget(enemy, 995) and EkkoMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy,myHero,3) then 
+     if IsReady(_Q) and EkkoMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy,myHero,3) then 
      Cast(_Q,enemy)
      elseif IsReady(_E) and ValidTarget(enemy, 800) and EkkoMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
      CastSkillShot(_E,GetOrigin(enemy))
@@ -203,7 +203,7 @@ OnTick(function(myHero)
      if GetPercentMP(myHero) >= EkkoMenu.LaneClear.Mana:Value() then
        	
        if IsReady(_Q) and EkkoMenu.LaneClear.Q:Value() then
-         local BestPos, BestHit = GetLineFarmPosition(925, 140)
+         local BestPos, BestHit = GetLineFarmPosition(925, 140, MINION_ENEMY)
          if BestPos and BestHit > 0 then 
          CastSkillShot(_Q, BestPos)
          end
