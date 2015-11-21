@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",4)
 
 local CassiopeiaMenu = MenuConfig("Cassiopeia", "Cassiopeia")
 CassiopeiaMenu:Menu("Combo", "Combo")
@@ -51,7 +51,6 @@ CassiopeiaMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 CassiopeiaMenu.Drawings:Boolean("W", "Draw W Range", true)
 CassiopeiaMenu.Drawings:Boolean("E", "Draw E Range", true)
 CassiopeiaMenu.Drawings:Boolean("R", "Draw R Range", true)
-CassiopeiaMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 	
 CassiopeiaMenu:Menu("Interrupt", "Interrupt (R)")
 
@@ -81,11 +80,12 @@ OnProcessSpell(function(unit, spell)
 end)
 
 OnDraw(function(myHero)
+local pos = GetOrigin(myHero)
 local col = CassiopeiaMenu.Drawings.color:Value()
-if CassiopeiaMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),850,1,0,col) end
-if CassiopeiaMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),925,1,0,col) end
-if CassiopeiaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),700,1,0,col) end
-if CassiopeiaMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),825,1,0,col) end
+if CassiopeiaMenu.Drawings.Q:Value() then DrawCircle(pos,850,1,0,GoS.Pink) end
+if CassiopeiaMenu.Drawings.W:Value() then DrawCircle(pos,925,1,0,GoS.Yellow) end
+if CassiopeiaMenu.Drawings.E:Value() then DrawCircle(pos,700,1,0,GoS.Blue) end
+if CassiopeiaMenu.Drawings.R:Value() then DrawCircle(pos,825,1,0,GoS.Green) end
 end)
 
 local target1 = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
