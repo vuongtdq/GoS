@@ -1,8 +1,9 @@
-local myHero = GetMyHero()
+DeftlibVersion = 2
 
+if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Common/Deftlib.lua","/D3ftsu/GoS/master/Common/Deftlib.version","Common\\Deftlib.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Common/Deftlib.lua","/D3ftsu/GoS/master/Common/Deftlib.version","Common\\Deftlib.lua",DeftlibVersion)
 
 SpellData = {
   ["Aatrox"] = {
@@ -298,10 +299,6 @@ function Cast2(spell, target, hitchance, speed, delay, range, width, coll)
       end
 end
 
-function NotLasthitable(unit)
-    return PredictHealth(unit, 1000*GetWindUp(myHero) + 1000*math.sqrt(GetDistanceSqr(GetOrigin(unit), GetOrigin(myHero))) / GetProjectileSpeed(myHero)) < 1 
-end
-
 function EnemiesAround2(pos, range, time)
   local c = 0
   local time = time or 250
@@ -312,12 +309,6 @@ function EnemiesAround2(pos, range, time)
     end
   end
   return c
-end
-
-function GetPredictedPos(unit,delay)
-    if not ValidTarget(unit) then return end
-    local delay = delay or 125
-    return GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),math.huge,delay,math.huge,1,false,false).PredPos
 end
 
 function IsFacing(target,range,unit) 
@@ -332,15 +323,12 @@ function IsMe(unit)
 end
 
 function IsAlly(unit)
+    if unit == GetMyHero() then return end
     return GetTeam(unit) == GetTeam(myHero)
 end
 
 function IsEnemy(unit)
     return GetTeam(unit) ~= GetTeam(myHero)
-end
-
-function mousePos()
-    return GetMousePos()
 end
 
 function Ludens()
@@ -356,8 +344,8 @@ ccstun = {5,29,30,24}
 ccslow = {9,21,22,28}
 RecallTable = {"Recall", "RecallImproved", "OdinRecall"}
 
-OnUpdateBuff(function(Object,buff)
-  if Object == myHero then
+OnUpdateBuff(function(unit,buff)
+  if unit == myHero then
     if buff.Name == "itemmagicshankcharge" then 
     LudensStacks = buff.Count
     end
@@ -370,13 +358,13 @@ OnUpdateBuff(function(Object,buff)
   
     for i = 1, #RecallTable do
       if buff.Name == RecallTable[i] then 
-      Recalling[GetNetworkID(Object)] = buff.Count
+      Recalling[GetNetworkID(unit)] = buff.Count
       end
     end
 
     for i = 1, #ccstun do
       if buff.Type == ccstun[i] then
-      Immobile[GetNetworkID(Object)] = buff.Count
+      Immobile[GetNetworkID(unit)] = buff.Count
       DelayAction(function() Immobile[GetNetworkID(Object)] = 0 end, buff.ExpireTime-buff.StartTime)
       end
     end
@@ -387,8 +375,8 @@ OnUpdateBuff(function(Object,buff)
 
 end)
 
-OnRemoveBuff(function(Object,buff)
-  if Object == myHero then
+OnRemoveBuff(function(unit,buff)
+  if unit == myHero then
 
     if buff.Name == "itemmagicshankcharge" then 
     LudensStacks = 0
@@ -402,17 +390,17 @@ OnRemoveBuff(function(Object,buff)
 
   for i = 1, #RecallTable do
     if buff.Name == RecallTable[i] then 
-    Recalling[GetNetworkID(Object)] = 0
+    Recalling[GetNetworkID(unit)] = 0
     end
   end
 
   if buff.Type == 15 then
-  Shield[GetNetworkID(Object)] = 0
+  Shield[GetNetworkID(unit)] = 0
   end
 
 end)
 
-function HasShield(unit)
+function HasSpellShield(unit)
    return (Shield[GetNetworkID(unit)] or 0) > 0
 end
 
@@ -426,102 +414,4 @@ end
 
 function IsRecalling(unit)
    return (Recalling[GetNetworkID(unit)] or 0) > 0
-end
-
-function GetJLineFarmPosition(range, width)
-    local BestPos 
-    local BestHit = 0
-    local objects = minionManager.objects
-    for i, object in pairs(objects) do
-      local EndPos = Vector(myHero) + range * (Vector(object) - Vector(myHero)):normalized()
-      local hit = CountObjectsOnLineSegment(GetOrigin(myHero), EndPos, width, objects)
-      if GetTeam(object) == 300 and hit > BestHit and GetDistanceSqr(GetOrigin(object)) < range * range then
-        BestHit = hit
-        BestPos = Vector(object)
-        if BestHit == #objects then
-        break
-        end
-      end
-    end
-    return BestPos, BestHit
-end
-
-function GetJFarmPosition(range, width)
-  local BestPos 
-  local BestHit = 0
-  local objects = minionManager.objects
-    for i, object in pairs(objects) do
-    local hit = CountObjectsNearPos(Vector(object), range, width, objects)
-    if GetTeam(object) == 300 and hit > BestHit and GetDistanceSqr(Vector(object)) < range * range then
-      BestHit = hit
-      BestPos = Vector(object)
-      if BestHit == #objects then
-      break
-      end
-    end
-  end
-  return BestPos, BestHit
-end
-
--- Credits To Inferno for MEC
-local SQRT = math.sqrt
-
-function TargetDist(point, target)
-    local origin = GetOrigin(target)
-    local dx, dz = origin.x-point.x, origin.z-point.z
-    return SQRT( dx*dx + dz*dz )
-end
-
-function ExcludeFurthest(point, tbl)
-    local removalId = 1
-    for i=2, #tbl do
-        if TargetDist(point, tbl[i]) > TargetDist(point, tbl[removalId]) then
-            removalId = i
-        end
-    end
-    
-    local newTable = {}
-    for i=1, #tbl do
-        if i ~= removalId then
-            newTable[#newTable+1] = tbl[i]
-        end
-    end
-    return newTable
-end
-
-function GetMEC(aoe_radius, listOfEntities, starTarget)
-    local average = {x=0, y=0, z=0, count = 0}
-    for i=1, #listOfEntities do
-        local ori = GetOrigin(listOfEntities[i])
-        average.x = average.x + ori.x
-        average.y = average.y + ori.y
-        average.z = average.z + ori.z
-        average.count = average.count + 1
-    end
-    if starTarget then
-        local ori = GetOrigin(starTarget)
-        average.x = average.x + ori.x
-        average.y = average.y + ori.y
-        average.z = average.z + ori.z
-        average.count = average.count + 1
-    end
-    average.x = average.x / average.count
-    average.y = average.y / average.count
-    average.z = average.z / average.count
-    
-    local targetsInRange = 0
-    for i=1, #listOfEntities do
-        if TargetDist(average, listOfEntities[i]) <= aoe_radius then
-            targetsInRange = targetsInRange + 1
-        end
-    end
-    if starTarget and TargetDist(average, starTarget) <= aoe_radius then
-        targetsInRange = targetsInRange + 1
-    end
-    
-    if targetsInRange == average.count then
-        return average
-    else
-        return GetMEC(aoe_radius, ExcludeFurthest(average, listOfEntities), starTarget)
-    end
 end
