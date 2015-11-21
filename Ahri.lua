@@ -5,7 +5,7 @@ if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPredicti
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",4)
 
 local AhriMenu = MenuConfig("Ahri", "Ahri")
 AhriMenu:Menu("Combo", "Combo")
@@ -53,7 +53,6 @@ AhriMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 AhriMenu.Drawings:Boolean("W", "Draw W Range", true)
 AhriMenu.Drawings:Boolean("E", "Draw E Range", true)
 AhriMenu.Drawings:Boolean("R", "Draw R Range", true)
-AhriMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 AhriMenu:Menu("Interrupt", "Interrupt (E)")
 
@@ -86,16 +85,15 @@ local Orb = nil
 local lastlevel = GetLevel(myHero)-1
   
 OnDraw(function(myHero)
-local col = AhriMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
 if AhriMenu.Drawings.Orb:Value() and Orb then
-  DrawRectangleOutline(GetOrigin(myHero), GetOrigin(Orb), 80)
+  DrawRectangleOutline(pos, GetOrigin(Orb), 80)
   DrawCircle(GetOrigin(Orb),80,2,30,ARGB(255, 255, 0, 0)) 
 end
-if AhriMenu.Drawings.Q:Value() then DrawCircle(pos,880,1,0,col) end
-if AhriMenu.Drawings.W:Value() then DrawCircle(pos,700,1,0,col) end
-if AhriMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,col) end
-if AhriMenu.Drawings.R:Value() then DrawCircle(pos,550,1,0,col) end
+if AhriMenu.Drawings.Q:Value() then DrawCircle(pos,880,1,0,GoS.Pink) end
+if AhriMenu.Drawings.W:Value() then DrawCircle(pos,700,1,0,GoS.Yellow) end
+if AhriMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,GoS.Blue) end
+if AhriMenu.Drawings.R:Value() then DrawCircle(pos,550,1,0,GoS.Green) end
 end)
 
 OnTick(function(myHero)
