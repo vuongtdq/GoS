@@ -38,7 +38,6 @@ AzirMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 AzirMenu.Drawings:Boolean("W", "Draw W Range", true)
 AzirMenu.Drawings:Boolean("E", "Draw E Range", true)
 AzirMenu.Drawings:Boolean("R", "Draw R Range", true)
-AzirMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
  
 AzirMenu:Menu("Interrupt", "Interrupt (R)")
 
