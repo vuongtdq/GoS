@@ -272,38 +272,51 @@ function insert(turret)
   Turrets[FindSpot()] = turret
 end
 
+IPredSpells = {}
 function Cast(spell, target, source, speed, delay, range, width, hitchance, coll)
-      local source = source or myHero
-      local hitchance = hitchance or 3
-      local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
-      local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
-      local range = range or SpellData[GetObjectName(myHero)][spell].Range
-      local width = width or SpellData[GetObjectName(myHero)][spell].Width
-      local coll = coll or SpellData[GetObjectName(myHero)][spell].collision
-      local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
-      local Name = SpellData[GetObjectName(myHero)][spell].Name
-      local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll})
-      local hit, pos = Predicted:Predict(target,source)
-      if hit >= hitchance then
-      CastSkillShot(spell, pos)
-      end
+	local source = source or myHero
+	local hitchance = hitchance or 3
+	if not IPredSpells[GetObjectName(source)] then
+		IPredSpells[GetObjectName(source)] = {}
+	end
+	if not IPredSpells[GetObjectName(source)][spell] then
+		local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
+		local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
+		local range = range or SpellData[GetObjectName(myHero)][spell].Range
+		local width = width or SpellData[GetObjectName(myHero)][spell].Width
+		local coll = coll or SpellData[GetObjectName(myHero)][spell].collision
+		local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
+		local Name = SpellData[GetObjectName(myHero)][spell].Name
+		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll})
+		IPredSpells[GetObjectName(source)][spell] = Predicted
+	end
+	local hit, pos = IPredSpells[GetObjectName(source)][spell]:Predict(target,source)
+	if hit >= hitchance then
+		CastSkillShot(spell, pos)
+	end
 end
 
 function Cast2(spell, target, source, speed, delay, range, width, hitchance, coll)
-      local source = source or myHero
-      local hitchance = hitchance or 3
-      local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
-      local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
-      local range = range or SpellData[GetObjectName(myHero)][spell].Range
-      local width = width or SpellData[GetObjectName(myHero)][spell].Width
-      local coll = coll or  SpellData[GetObjectName(myHero)][spell].collision
-      local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
-      local Name = SpellData[GetObjectName(myHero)][spell].Name
-      local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll})
-      local hit, pos = Predicted:Predict(target,source)
-      if hit >= hitchance then
-      CastSkillShot2(spell, pos)
-      end
+	local source = source or myHero
+	local hitchance = hitchance or 3
+	if not IPredSpells[GetObjectName(source)] then
+		IPredSpells[GetObjectName(source)] = {}
+	end
+	if not IPredSpells[GetObjectName(source)][spell] then
+		local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
+		local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
+		local range = range or SpellData[GetObjectName(myHero)][spell].Range
+		local width = width or SpellData[GetObjectName(myHero)][spell].Width
+		local coll = coll or SpellData[GetObjectName(myHero)][spell].collision
+		local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
+		local Name = SpellData[GetObjectName(myHero)][spell].Name
+		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll})
+		IPredSpells[GetObjectName(source)][spell] = Predicted
+	end
+	local hit, pos = IPredSpells[GetObjectName(source)][spell]:Predict(target,source)
+	if hit >= hitchance then
+		CastSkillShot2(spell, pos)
+	end
 end
 
 function GetPredictedPos(unit, time) 
