@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",7)
+AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",8)
 
 local BlitzcrankMenu = MenuConfig("Blitzcrank", "Blitzcrank")
 BlitzcrankMenu:Menu("Combo", "Combo")
@@ -80,7 +80,6 @@ end)
 
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
-local col = BlitzcrankMenu.Drawings.color:Value()	
 TotalGrabs = MissedGrabs + SuccesfulGrabs
 Percentage = ((SuccesfulGrabs*100)/TotalGrabs)
 if BlitzcrankMenu.Drawings.Q:Value() then DrawCircle(pos,975,1,25,GoS.Pink) end
