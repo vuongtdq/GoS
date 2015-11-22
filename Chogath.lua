@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Chogath.lua","/D3ftsu/GoS/master/Chogath.version","Chogath.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Chogath.lua","/D3ftsu/GoS/master/Chogath.version","Chogath.lua",3)
 
 local ChogathMenu = MenuConfig("Chogath", "Chogath")
 ChogathMenu:Menu("Combo", "Combo")
@@ -78,9 +78,9 @@ local lastlevel = GetLevel(myHero)-1
 OnDraw(function(myHero)
 local col = ChogathMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
-if ChogathMenu.Drawings.Q:Value() then DrawCircle(pos,950,1,0,GoS.Pink) end
-if ChogathMenu.Drawings.W:Value() then DrawCircle(pos,650,1,0,GoS.Yellow) end
-if ChogathMenu.Drawings.R:Value() then DrawCircle(pos,235,1,0,GoS.Green) end
+if ChogathMenu.Drawings.Q:Value() then DrawCircle(pos,950,1,25,GoS.Pink) end
+if ChogathMenu.Drawings.W:Value() then DrawCircle(pos,650,1,25,GoS.Yellow) end
+if ChogathMenu.Drawings.R:Value() then DrawCircle(pos,235,1,25,GoS.Green) end
 end)
 
 OnTick(function(myHero)
@@ -126,9 +126,9 @@ OnTick(function(myHero)
                 
 	if IsReady(_R) and ValidTarget(enemy, 235) and ChogathMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
 	CastTargetSpell(enemy, _R)
-	elseif IsReady(_W) and ChogathMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then 
+	elseif IsReady(_W) and ValidTarget(enemy, 650) and ChogathMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then 
 	Cast(_W,enemy)
-	elseif IsReady(_Q) and ChogathMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then
+	elseif IsReady(_Q) and ValidTarget(enemy, 950) and ChogathMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then
 	Cast(_Q,enemy)
         end
 
