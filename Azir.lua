@@ -77,6 +77,7 @@ OnProcessSpell(function(unit, spell)
 end)
 
 local AzirSoldiers = {}
+local AzirSoldiersTimeHolder = {}
 
 OnCreateObj(function(Object) 
   if GetObjectBaseName(Object) == "AzirSoldier" then
