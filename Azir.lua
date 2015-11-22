@@ -76,6 +76,8 @@ OnProcessSpell(function(unit, spell)
     end
 end)
 
+local AzirSoldiers = {}
+
 OnCreateObj(function(Object) 
   if GetObjectBaseName(Object) == "AzirSoldier" then
   AzirSoldiers[GetNetworkID(Object)] = Object
@@ -114,8 +116,6 @@ end)
 local target1 = TargetSelector(990,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target3 = TargetSelector(500,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-
-local AzirSoldiers = {}
 local lastlevel = GetLevel(myHero)-1
   
 OnTick(function(myHero)
