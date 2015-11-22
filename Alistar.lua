@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",4)
 
 local AlistarMenu = MenuConfig("Alistar", "Alistar")
 AlistarMenu:Menu("Combo", "Combo")
@@ -67,9 +67,9 @@ end)
   
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
-if AlistarMenu.Drawings.Q:Value() then DrawCircle(pos,365,1,0,GoS.Pink) end
-if AlistarMenu.Drawings.W:Value() then DrawCircle(pos,650,1,0,GoS.Yellow) end
-if AlistarMenu.Drawings.E:Value() then DrawCircle(pos,575,1,0,GoS.Blue) end
+if AlistarMenu.Drawings.Q:Value() then DrawCircle(pos,365,1,25,GoS.Pink) end
+if AlistarMenu.Drawings.W:Value() then DrawCircle(pos,650,1,25,GoS.Yellow) end
+if AlistarMenu.Drawings.E:Value() then DrawCircle(pos,575,1,25,GoS.Blue) end
 end)
 
 local target1 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
