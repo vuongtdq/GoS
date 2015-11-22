@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",6)
+AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",7)
 
 local BlitzcrankMenu = MenuConfig("Blitzcrank", "Blitzcrank")
 BlitzcrankMenu:Menu("Combo", "Combo")
@@ -45,8 +45,8 @@ BlitzcrankMenu.Interrupt.SupportedSpells:Boolean("R", "Use R", true)
 
 local MissedGrabs = 0
 local SuccesfulGrabs = 0
-local Percentage = ((SuccesfulGrabs*100)/TotalGrabs)
 local TotalGrabs = MissedGrabs + SuccesfulGrabs
+local Percentage = ((SuccesfulGrabs*100)/TotalGrabs)
 
 DelayAction(function()
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
