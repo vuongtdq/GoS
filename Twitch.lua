@@ -2,8 +2,9 @@ if GetObjectName(GetMyHero()) ~= "Twitch" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",3)
 
 local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
 local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
@@ -62,7 +63,7 @@ if TwitchMenu.Drawings.W:Value() then DrawCircle(pos,950,1,0,GoS.Pink) end
 if TwitchMenu.Drawings.E:Value() then DrawCircle(pos,1200,1,0,GoS.Yellow) end
 if TwitchMenu.Drawings.R:Value() then DrawCircle(pos,850,1,0,GoS.Green) end
 if TwitchMenu.Drawings.Vis:Value() then
-local drawPos = WorldToScreen(1,myHero)
+local drawPos = WorldToScreen(1,GetOrigin(myHero))
   if not IsInvisible then
   DrawText("STEALTH", 25, drawPos.x, drawPos.y, ARGB(255, 0, 255, 0))
   else
@@ -80,7 +81,7 @@ if TwitchMenu.Drawings.Edmg:Value() then
   end
 
   for _,unit in pairs(minionManager.objects) do
-    if GetTeam(unit) == 300 and ValidTarget(unit, 2000) and KalistaMenu.Drawings.Edmg:Value() then
+    if GetTeam(unit) == 300 and ValidTarget(unit, 2000) then
       local drawPos = WorldToScreen(1,GetOrigin(unit))
       if Edmg(unit) > GetCurrentHP(unit) then
       DrawText("100%",20,drawPos.x,drawPos.y,0xffffffff)
