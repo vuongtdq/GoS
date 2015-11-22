@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",6)
 
 local AsheMenu = MenuConfig("Ashe", "Ashe")
 AsheMenu:Menu("Combo", "Combo")
@@ -93,7 +93,7 @@ OnTick(function(myHero)
         CastSpell(_Q)
         end
 						
-        if IsReady(_W) and AsheMenu.Combo.W:Value() then
+        if IsReady(_W) and ValidTarget(Wtarget) and AsheMenu.Combo.W:Value() then
         Cast(_W,Wtarget)
         end
 						
@@ -113,13 +113,13 @@ OnTick(function(myHero)
         CastSpell(_Q)
         end
 						
-        if IsReady(_W) and AsheMenu.Harass.W:Value() then
+        if IsReady(_W) and ValidTarget(Wtarget) and AsheMenu.Harass.W:Value() then
         Cast(_W,Wtarget)
 	end
 		
     end
 
-    if AsheMenu.Combo.FireKey:Value() and IsReady(_R) then
+    if AsheMenu.Combo.FireKey:Value() and ValidTarget(Rtarget) and IsReady(_R) then
     Cast(_R,Rtarget)
     end
 
@@ -145,11 +145,11 @@ OnTick(function(myHero)
           end
 	end
 	
-	if IsReady(_W) and AsheMenu.Killsteal.W:Value() and GetHP(enemy) < getdmg("W",enemy) then 
+	if IsReady(_W) and ValidTarget(target) and AsheMenu.Killsteal.W:Value() and GetHP(enemy) < getdmg("W",enemy) then 
 	Cast(_W,enemy)
 	end
 		  
-	if IsReady(_R) and ValidTarget(enemy, 3000) and AsheMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
+	if IsReady(_R) and ValidTarget(enemy,3000) and AsheMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
         Cast(_R,enemy)
 	end
 		
