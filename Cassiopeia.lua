@@ -81,7 +81,6 @@ end)
 
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
-local col = CassiopeiaMenu.Drawings.color:Value()
 if CassiopeiaMenu.Drawings.Q:Value() then DrawCircle(pos,850,1,0,GoS.Pink) end
 if CassiopeiaMenu.Drawings.W:Value() then DrawCircle(pos,925,1,0,GoS.Yellow) end
 if CassiopeiaMenu.Drawings.E:Value() then DrawCircle(pos,700,1,0,GoS.Blue) end
