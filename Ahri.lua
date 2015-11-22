@@ -1,11 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Ahri" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",4)
+AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",5)
 
 local AhriMenu = MenuConfig("Ahri", "Ahri")
 AhriMenu:Menu("Combo", "Combo")
@@ -81,19 +80,39 @@ local target1 = TargetSelector(930,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,f
 local target2 = TargetSelector(1030,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target3 = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local UltOn = false
-local Orb = nil
+local Missiles = {}
 local lastlevel = GetLevel(myHero)-1
+
+OnCreateObj(function(Object) 
+  if GetObjectBaseName(Object) == "missile" then
+  table.insert(Missiles,Object) 
+  end
+end)
+
+OnDeleteObj(function(Object)
+  if GetObjectBaseName(Object) == "missile" then
+    for i,rip in pairs(Missiles) do
+      if GetNetworkID(Object) == GetNetworkID(rip) then
+      table.remove(Missiles,i) 
+      end
+    end
+  end
+end)
   
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
-if AhriMenu.Drawings.Orb:Value() and Orb then
-  DrawRectangleOutline(pos, GetOrigin(Orb), 80)
-  DrawCircle(GetOrigin(Orb),80,2,30,ARGB(255, 255, 0, 0)) 
+if AhriMenu.Drawings.Orb:Value() then
+  for _,Orb in pairs(Missiles) do
+    if Orb ~= nil and GetObjectSpellOwner(Orb) == myHero and GetObjectSpellName(Orb) == "AhriOrbMissile" or GetObjectSpellName(Orb) == "AhriOrbReturn" then
+    DrawRectangleOutline(pos, GetOrigin(Orb), 80)
+    DrawCircle(GetOrigin(Orb),80,2,30,ARGB(255, 255, 0, 0)) 
+    end
+  end
 end
-if AhriMenu.Drawings.Q:Value() then DrawCircle(pos,880,1,0,GoS.Pink) end
-if AhriMenu.Drawings.W:Value() then DrawCircle(pos,700,1,0,GoS.Yellow) end
-if AhriMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,GoS.Blue) end
-if AhriMenu.Drawings.R:Value() then DrawCircle(pos,550,1,0,GoS.Green) end
+if AhriMenu.Drawings.Q:Value() then DrawCircle(pos,880,1,25,GoS.Pink) end
+if AhriMenu.Drawings.W:Value() then DrawCircle(pos,700,1,25,GoS.Yellow) end
+if AhriMenu.Drawings.E:Value() then DrawCircle(pos,975,1,25,GoS.Blue) end
+if AhriMenu.Drawings.R:Value() then DrawCircle(pos,550,1,25,GoS.Green) end
 end)
 
 OnTick(function(myHero)
@@ -163,11 +182,11 @@ OnTick(function(myHero)
           end
         end
                 
-	if IsReady(_W) and AhriMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy,myHero,3) then
+	if IsReady(_W) and ValidTarget(enemy, 930) and AhriMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy,myHero,3) then
 	CastSpell(_W)
-	elseif IsReady(_Q) and AhriMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+	elseif IsReady(_Q) and ValidTarget(enemy, 700) and AhriMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
 	Cast(_Q,enemy)
-	elseif IsReady(_E) and AhriMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
+	elseif IsReady(_E) and ValidTarget(enemy, 1030) and AhriMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
 	Cast(_E,enemy)
         end
 
@@ -179,8 +198,8 @@ OnTick(function(myHero)
         if GetPercentMP(myHero) >= AhriMenu.LaneClear.Mana:Value() then
        	
          if IsReady(_Q) and AhriMenu.LaneClear.Q:Value() then
-           local BestPos, BestHit = GetLineFarmPosition(880, 50)
-           if BestPos and BestHit > 0 then 
+           local BestPos, BestHit = GetLineFarmPosition(880, 50, MINION_ENEMY)
+           if BestPos and BestHit > 2 then 
            CastSkillShot(_Q, BestPos)
            end
 	 end
@@ -233,30 +252,6 @@ if AhriMenu.Misc.Autolvl:Value() then
     lastlevel = GetLevel(myHero)
   end
 end
-
-end)
-
-OnCreateObj(function(Object) 
-
-  if GetObjectBaseName(Object) == "Ahri_Base_Orb_mis.troy" then
-  Orb = Object 
-  end
-  
-  if GetObjectBaseName(Object) == "Ahri_Base_Orb_mis_02.troy" then
-  Orb = Object 
-  end
-
-end)
-
-OnDeleteObj(function(Object) 
-
-  if GetObjectBaseName(Object) == "Ahri_Base_Orb_mis.troy" then
-  Orb = nil 
-  end
-  
-  if GetObjectBaseName(Object) == "Ahri_Base_Orb_mis_02.troy" then
-  Orb = nil 
-  end
 
 end)
  
