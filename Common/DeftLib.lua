@@ -1,4 +1,4 @@
-DeftlibVersion = 5
+DeftlibVersion = 6
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -276,9 +276,10 @@ function Cast(spell, target, source, hitchance, speed, delay, range, width, coll
       local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
       local range = range or SpellData[GetObjectName(myHero)][spell].Range
       local width = width or SpellData[GetObjectName(myHero)][spell].Width
-      local coll = coll or  SpellData[GetObjectName(myHero)][spell].collision
+      local coll = coll or SpellData[GetObjectName(myHero)][spell].collision
       local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
-      local Predicted = IPrediction.Prediction({range=range, speed=speed, delay=delay, width=width, types, collision=coll})
+      local name = SpellData[GetObjectName(myHero)][spell].Name
+      local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll})
       local hit, pos = Predicted:Predict(target,source)
       if hit >= hitchance then
       CastSkillShot(spell, pos)
