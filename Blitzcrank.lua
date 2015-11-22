@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",6)
 
 local BlitzcrankMenu = MenuConfig("Blitzcrank", "Blitzcrank")
 BlitzcrankMenu:Menu("Combo", "Combo")
@@ -101,19 +101,20 @@ OnTick(function(myHero)
     local target = GetCurrentTarget()
     local Qtarget = target1:GetTarget()
     
-    if IOW:Mode() == "Combo" then
+       if IOW:Mode() == "Combo" then
 	
                 if IsReady(_Q) and BlitzcrankMenu.Combo.Q:Value() then
                 Cast(_Q,Qtarget)
 	        end
                 
                 if IsReady(_W) and ValidTarget(target, 1275) and BlitzcrankMenu.Combo.W:Value() then  
-                if GetCurrentMana(myHero) >= 200 and IsReady(_Q) and GetDistance(target) >= 975 then
-                CastSpell(_W)
-                elseif GetDistance(target) <= 400 then
-		CastSpell(_W)
+                  if GetCurrentMana(myHero) >= 200 and IsReady(_Q) and GetDistance(target) >= 975 then
+                  CastSpell(_W)
+                  elseif GetDistance(target) <= 400 then
+		  CastSpell(_W)
+		  end
 		end
-			
+		
                 if IsReady(_E) and IsInDistance(target, 250) and BlitzcrankMenu.Combo.E:Value() then
                 CastSpell(_E)
 		end
