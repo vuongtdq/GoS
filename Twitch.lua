@@ -176,11 +176,11 @@ OnTick(function(myHero)
 
      for i,unit in pairs(minionManager.objects) do
        if GetTeam(unit) == MINION_ENEMY then
-         if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("Siege")) and ValidTarget(unit, 1000) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
+         if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("Siege")) and ValidTarget(unit, 1200) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
          CastSpell(_E)
          end
 	  
-         if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("super")) and ValidTarget(unit, 1000) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
+         if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("super")) and ValidTarget(unit, 1200) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
          CastSpell(_E)
          end
        end
