@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",2)
 
 local XerathMenu = MenuConfig("Xerath", "Xerath")
 XerathMenu:Menu("Combo", "Combo")
@@ -52,7 +52,6 @@ XerathMenu.Drawings:Boolean("E", "Draw E Range", true)
 XerathMenu.Drawings:Boolean("R", "Draw R Range", true)
 XerathMenu.Drawings:Boolean("RT", "Draw R Target", true)
 XerathMenu.Drawings:Boolean("Rdmg", "Draw R Damage", true)
-XerathMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 XerathMenu:Menu("Interrupt", "Interrupt (E)")
 
@@ -70,7 +69,7 @@ end, 1)
 OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_E) then
       if CHANELLING_SPELLS[spell.name] then
-        if ValidTarget(unit, 650) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() then
+        if ValidTarget(unit, 650) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and XerathMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then
         Cast(_E,unit)
         end
       end
@@ -95,14 +94,13 @@ local target4 = TargetSelector(rRange[GetCastLevel(myHero,_R)],TARGET_LESS_CAST_
 local lastlevel = GetLevel(myHero)-1
 
 OnDraw(function(myHero)
-local col = XerathMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
 local Rtarget = target4:GetTarget()
-if XerathMenu.Drawings.Qmin:Value() then DrawCircle(pos,750,1,0,col) end
-if XerathMenu.Drawings.Qmax:Value() then DrawCircle(pos,1500,1,0,col) end
-if XerathMenu.Drawings.W:Value() then DrawCircle(pos,1150,1,0,col) end
-if XerathMenu.Drawings.E:Value() then DrawCircle(pos,975,1,0,col) end
-if XerathMenu.Drawings.R:Value() then DrawCircle(pos,rRange[GetCastLevel(myHero,_R)],1,0,col) end
+if XerathMenu.Drawings.Qmin:Value() then DrawCircle(pos,750,1,25,GoS.Pink) end
+if XerathMenu.Drawings.Qmax:Value() then DrawCircle(pos,1500,1,25,GoS.Red) end
+if XerathMenu.Drawings.W:Value() then DrawCircle(pos,1150,1,25,GoS.Yellow) end
+if XerathMenu.Drawings.E:Value() then DrawCircle(pos,975,1,25,GoS.Blue) end
+if XerathMenu.Drawings.R:Value() then DrawCircle(pos,rRange[GetCastLevel(myHero,_R)],1,25,GoS.Green) end
 if XerathMenu.Drawings.RT:Value() and ValidTarget(Rtarget) then DrawCircle(GetOrigin(Rtarget),50,1,0,ARGB(255,255,0,0)) end
 for i,enemy in pairs(GetEnemyHeroes()) do
   if ValidTarget(enemy) and XerathMenu.Drawings.Rdmg:Value() then
