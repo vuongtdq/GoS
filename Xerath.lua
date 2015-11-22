@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",3)
 
 local XerathMenu = MenuConfig("Xerath", "Xerath")
 XerathMenu:Menu("Combo", "Combo")
@@ -81,7 +81,7 @@ local QCharged = false
 local minrange = 750
 local chargedrange = 750
 local chargedTime = GetTickCount()
-local rRange = {0,3200, 4400, 5600}
+local rRange = {3200, 4400, 5600}
 local RCast = 0
 local Rdelay1 = 0
 local Rdelay2 = 0
@@ -90,7 +90,7 @@ local shouldCastR = false
 local target1 = TargetSelector(1550,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(1250,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target3 = TargetSelector(1005,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local target4 = TargetSelector(rRange[GetCastLevel(myHero,_R)],TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+local target4 = TargetSelector(5600,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local lastlevel = GetLevel(myHero)-1
 
 OnDraw(function(myHero)
@@ -100,7 +100,7 @@ if XerathMenu.Drawings.Qmin:Value() then DrawCircle(pos,750,1,25,GoS.Pink) end
 if XerathMenu.Drawings.Qmax:Value() then DrawCircle(pos,1500,1,25,GoS.Red) end
 if XerathMenu.Drawings.W:Value() then DrawCircle(pos,1150,1,25,GoS.Yellow) end
 if XerathMenu.Drawings.E:Value() then DrawCircle(pos,975,1,25,GoS.Blue) end
-if XerathMenu.Drawings.R:Value() then DrawCircle(pos,rRange[GetCastLevel(myHero,_R)],1,25,GoS.Green) end
+if XerathMenu.Drawings.R:Value() and GetCastLevel(myHero,_R) > 0 then DrawCircle(pos,rRange[GetCastLevel(myHero,_R)],1,25,GoS.Green) end
 if XerathMenu.Drawings.RT:Value() and ValidTarget(Rtarget) then DrawCircle(GetOrigin(Rtarget),50,1,0,ARGB(255,255,0,0)) end
 for i,enemy in pairs(GetEnemyHeroes()) do
   if ValidTarget(enemy) and XerathMenu.Drawings.Rdmg:Value() then
@@ -180,14 +180,14 @@ OnTick(function(myHero)
       
     end
     
-    if XerathMenu.Combo.R:Value() and ValidTarget(Rtarget, rRange[GetCastLevel(myHero,_R)]) then
-      if not IsChanneled and RCast == 0 and IsReady(_R) then
+    if XerathMenu.Combo.R:Value() and GetCastLevel(myHero,_R) > 0 then
+      if ValidTarget(Rtarget, rRange[GetCastLevel(myHero,_R)]) and not IsChanneled and RCast == 0 and IsReady(_R) then
       CastSpell(_R)
       end
     end
     
-    if XerathMenu.Combo.RT:Value() and ValidTarget(Rtarget, rRange[GetCastLevel(myHero,_R)]) then
-      if not IsChanneled and RCast == 0 and IsReady(_R) and GetHP2(RTarget) < getdmg("R",RTarget)*3 then
+    if XerathMenu.Combo.RT:Value() and GetCastLevel(myHero,_R) > 0 then
+      if ValidTarget(Rtarget, rRange[GetCastLevel(myHero,_R)]) and not IsChanneled and RCast == 0 and IsReady(_R) and GetHP2(RTarget) < getdmg("R",RTarget)*3 then
       CastSpell(_R)
       end 
     end
