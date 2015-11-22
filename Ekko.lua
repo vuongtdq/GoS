@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Ekko.lua","/D3ftsu/GoS/master/Ekko.version","Ekko.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Ekko.lua","/D3ftsu/GoS/master/Ekko.version","Ekko.lua",2)
 
 local EkkoMenu = MenuConfig("Ekko", "Ekko")
 EkkoMenu:Menu("Combo", "Combo")
@@ -55,27 +55,80 @@ EkkoMenu.Drawings:Boolean("W", "Draw W Range", true)
 EkkoMenu.Drawings:Boolean("E", "Draw E Range", true)
 EkkoMenu.Drawings:Boolean("OP", "OP Drawings", true)
 
-local twin,EkkoQ,QDuration,EkkoW,WDuration = nil,nil,nil,nil,nil
+local twin,EkkoQ,QDuration,EkkoW,EkkoWOrigin,WDuration = nil,nil,nil,nil,nil
+
+OnProcessSpell(function(unit, spell)
+  if unit == myHero then
+    if spell.name == "EkkoQ" then
+    QDuration = GetTickCount()+2565-GetLatency()
+    end
+
+    if spell.name == "EkkoW" then
+    WDuration = GetTickCount()+3000
+    EkkoWOrigin = spell.endPos
+    DelayAction(function() EkkoWOrigin = nil end, 3000)
+    end
+  end
+end)
  
+OnObjectLoad(function(Object) 
+
+  if GetObjectBaseName(Object) == "Ekko" then
+  twin = Object
+  end
+
+end)
+
+local Objects = {}
+
+OnCreateObj(function(Object) 
+
+  if GetObjectBaseName(Object) == "Ekko" then
+  twin = Object
+  end
+  
+  if GetObjectBaseName(Object) == "missile" then
+  table.insert(Objects,Object) 
+  end
+  
+end)
+
+OnDeleteObj(function(Object) 
+
+  if GetObjectBaseName(Object) == "missile" then
+    for i,deletedObjects in pairs(Objects) do
+      if GetNetworkID(Object) == GetNetworkID(deletedObjects) then
+      table.remove(Objects,i) 
+      end
+    end
+  end
+  
+  if GetObjectBaseName(Object) == "Ekko_Base_R_TrailEnd.troy" then
+  twin = nil
+  end
+
+end)
+
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
-local col = EkkoMenu.Drawings.color:Value()
-if EkkoMenu.Drawings.Q:Value() then DrawCircle(pos,925,1,0,col) end
-if EkkoMenu.Drawings.W:Value() then DrawCircle(pos,1600,1,0,col) end
-if EkkoMenu.Drawings.E:Value() then DrawCircle(pos,350,1,0,col) end
- 
+if EkkoMenu.Drawings.Q:Value() then DrawCircle(pos,925,1,25,GoS.Pink) end
+if EkkoMenu.Drawings.W:Value() then DrawCircle(pos,1600,1,25,GoS.Yellow) end
+if EkkoMenu.Drawings.E:Value() then DrawCircle(pos,350,1,25,GoS.Blue) end
 if EkkoMenu.Drawings.OP:Value() then
-  if EkkoQ then
-  DrawRectangleOutline(pos, GetOrigin(EkkoQ), 90)
-  local wts = WorldToScreen(0,GetOrigin(EkkoQ))
-  DrawText((math.floor((QDuration-GetTickCount()))/1000).."s", 25, wts.x-35, wts.y-50, ARGB(255, 255, 0, 0)) 
+  for _,Object in pairs(Objects) do
+    if Object ~= nil and GetObjectSpellOwner(Object) == myHero then
+      if GetObjectSpellName(Object) == "ekkoqmis" then 
+      DrawRectangleOutline(pos, GetOrigin(Object), 90)
+      local wts = WorldToScreen(0,GetOrigin(Object))
+      DrawText((math.floor((QDuration-GetTickCount()))/1000).."s", 25, wts.x-35, wts.y-50, ARGB(255, 255, 0, 0)) 
+      elseif GetObjectSpellName(Object) == "ekkoqreturn" then
+      DrawRectangleOutline(pos, GetOrigin(Object), 90)
+      end
+    end
   end
-  if EkkoQ2 then
-  DrawRectangleOutline(pos, GetOrigin(EkkoQ2), 90)
-  end
-  if EkkoW then
-  DrawCircle(GetOrigin(EkkoW),400,2,100,ARGB(255, 155, 150, 250))
-  local wts = WorldToScreen(0,GetOrigin(EkkoW))
+  if EkkoWOrigin ~= nil then
+  DrawCircle(EkkoWOrigin,400,2,100,ARGB(255, 155, 150, 250))
+  local wts = WorldToScreen(0,EkkoWOrigin)
   DrawText((math.floor((WDuration-GetTickCount()))/1000).."s", 25, wts.x-35, wts.y-50, ARGB(255, 255, 0, 0)) 
   end
   if twin then
@@ -84,8 +137,8 @@ if EkkoMenu.Drawings.OP:Value() then
   DrawLine3D(pos.x,pos.y,pos.z,GetOrigin(twin).x,GetOrigin(twin).y,GetOrigin(twin).z,2,ARGB(255, 0, 255, 0))
   end
 end
+ 
 end)
-
 
 local target1 = TargetSelector(995,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(1900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
@@ -206,7 +259,7 @@ OnTick(function(myHero)
        	
        if IsReady(_Q) and EkkoMenu.LaneClear.Q:Value() then
          local BestPos, BestHit = GetLineFarmPosition(925, 140, MINION_ENEMY)
-         if BestPos and BestHit > 0 then 
+         if BestPos and BestHit > 1 then 
          CastSkillShot(_Q, BestPos)
          end
        end
@@ -254,66 +307,6 @@ if EkkoMenu.Misc.Autolvl:Value() then
   end
 end
 	
-end)
-
-OnObjectLoad(function(Object) 
-
-  if GetObjectBaseName(Object) == "Ekko" then
-  twin = Object
-  end
-
-  if GetObjectBaseName(Object) == "Ekko_Base_Q_Aoe_Dilation.troy" then
-  EkkoQ = Object
-  QDuration = GetTickCount()+1565
-  DelayAction(function() EkkoQ = nil end, 1547)
-  end
-
-  if GetObjectBaseName(Object) == "Ekko_Base_Q_Mis_Return.troy" then
-  EkkoQ2 = Object
-  end
- 
-  if GetObjectBaseName(Object) == "Ekko_Base_W_Indicator.troy" then
-  EkkoW = Object 
-  WDuration = GetTickCount()+3000
-  DelayAction(function() EkkoW = nil end, 3000)
-  end
-
-end)
-
-OnCreateObj(function(Object) 
-
-  if GetObjectBaseName(Object) == "Ekko" then
-  twin = Object
-  end
-
-  if GetObjectBaseName(Object) == "Ekko_Base_Q_Aoe_Dilation.troy" then
-  EkkoQ = Object
-  QDuration = GetTickCount()+1565
-  DelayAction(function() EkkoQ = nil end, 1547)
-  end
-
-  if GetObjectBaseName(Object) == "Ekko_Base_Q_Mis_Return.troy" then
-  EkkoQ2 = Object
-  end
- 
-  if GetObjectBaseName(Object) == "Ekko_Base_W_Indicator.troy" then
-  EkkoW = Object 
-  WDuration = GetTickCount()+3000
-  DelayAction(function() EkkoW = nil end, 3000)
-  end
-
-end)
-
-OnDeleteObj(function(Object) 
-
-  if GetObjectBaseName(Object) == "Ekko_Base_Q_Mis_Return.troy" then
-  EkkoQ2 = nil
-  end
-  
-  if GetObjectBaseName(Object) == "Ekko_Base_R_TrailEnd.troy" then
-  twin = nil
-  end
-
 end)
 
 function DrawRectangleOutline(startPos, endPos, width)
