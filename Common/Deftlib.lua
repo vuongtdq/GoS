@@ -272,7 +272,7 @@ function insert(turret)
   Turrets[FindSpot()] = turret
 end
 
-function Cast(spell, target, source, hitchance, speed, delay, range, width, coll)
+function Cast(spell, target, source, speed, delay, range, width, hitchance, coll)
       local source = source or myHero
       local hitchance = hitchance or 3
       local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
@@ -289,7 +289,7 @@ function Cast(spell, target, source, hitchance, speed, delay, range, width, coll
       end
 end
 
-function Cast2(spell, target, source, hitchance, speed, delay, range, width, coll)
+function Cast2(spell, target, source, speed, delay, range, width, hitchance, coll)
       local source = source or myHero
       local hitchance = hitchance or 3
       local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
