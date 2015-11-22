@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",4)
 
 local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
 local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
@@ -109,7 +109,7 @@ OnTick(function(myHero)
       CastSpell(_Q)
       end
 	  
-      if IsReady(_Q) and TwitchMenu.Combo.Qlow:Value() GetPercentHP(myHero) <= TwitchMenu.Combo.Qlowhp:Value() then
+      if IsReady(_Q) and TwitchMenu.Combo.Qlow:Value() and GetPercentHP(myHero) <= TwitchMenu.Combo.Qlowhp:Value() then
       CastSpell(_Q)
       end
 	  
