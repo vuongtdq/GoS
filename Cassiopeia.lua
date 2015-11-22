@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",6)
 
 local CassiopeiaMenu = MenuConfig("Cassiopeia", "Cassiopeia")
 CassiopeiaMenu:Menu("Combo", "Combo")
@@ -215,7 +215,7 @@ OnTick(function(myHero)
 	      CastTargetSpell(mobs, _E)
 	      end
 	
-	      if CassiopeiaMenu.Misc.AutoE:Value() then
+	      if CassiopeiaMenu.Farm.AutoE:Value() then
 	        if IsReady(_E) and IsPoisoned(mobs) and ValidTarget(mobs, 700) and GetCurrentHP(mobs) < getdmg("E",mobs) and IOW:Mode() ~= "Combo" and IOW:Mode() ~= "Harass" then
 	        CastTargetSpell(mobs, _E)
 	        end
