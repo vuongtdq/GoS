@@ -1,4 +1,4 @@
-DeftlibVersion = 7
+DeftlibVersion = 8
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -305,7 +305,7 @@ end
 
 function GetPredictedPos(unit, time) 
   local time = time or 1.25
-  return IPrediction.PredictPos(unit, time)
+  return Prediction.Core.PredictPos(unit, time)
 end
 
 function EnemiesAround2(pos, range, time)
