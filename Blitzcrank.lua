@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",4)
+AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",5)
 
 local BlitzcrankMenu = MenuConfig("Blitzcrank", "Blitzcrank")
 BlitzcrankMenu:Menu("Combo", "Combo")
@@ -83,8 +83,8 @@ local pos = GetOrigin(myHero)
 local col = BlitzcrankMenu.Drawings.color:Value()	
 TotalGrabs = MissedGrabs + SuccesfulGrabs
 Percentage = ((SuccesfulGrabs*100)/TotalGrabs)
-if BlitzcrankMenu.Drawings.Q:Value() then DrawCircle(pos,975,1,0,GoS.Pink) end
-if BlitzcrankMenu.Drawings.R:Value() then DrawCircle(pos,600,1,0,GoS.Green) end
+if BlitzcrankMenu.Drawings.Q:Value() then DrawCircle(pos,975,1,25,GoS.Pink) end
+if BlitzcrankMenu.Drawings.R:Value() then DrawCircle(pos,600,1,25,GoS.Green) end
 if BlitzcrankMenu.Drawings.Stats:Value() then 
 DrawText("Percentage Grab done : " .. tostring(math.ceil(Percentage)) .. "%",12,0,30,0xff00ff00)
 DrawText("Grab Done : "..tostring(SuccesfulGrabs),12,0,40,0xff00ff00)
@@ -150,7 +150,7 @@ OnTick(function(myHero)
                   end
                 end
 		
-  	        if IsReady(_Q) and BlitzcrankMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+  	        if IsReady(_Q) and ValidTarget(enemy, 1010) and BlitzcrankMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
                 Cast(_Q,enemy)
                 elseif IsReady(_R) and ValidTarget(enemy, 600) and BlitzcrankMenu.Killsteal.R:Value() and GetHP2(enemy) < getdmg("R",enemy) then
                 CastSpell(_R)
