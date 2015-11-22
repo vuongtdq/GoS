@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",4)
+AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",5)
 
 local CassiopeiaMenu = MenuConfig("Cassiopeia", "Cassiopeia")
 CassiopeiaMenu:Menu("Combo", "Combo")
@@ -81,10 +81,10 @@ end)
 
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
-if CassiopeiaMenu.Drawings.Q:Value() then DrawCircle(pos,850,1,0,GoS.Pink) end
-if CassiopeiaMenu.Drawings.W:Value() then DrawCircle(pos,925,1,0,GoS.Yellow) end
-if CassiopeiaMenu.Drawings.E:Value() then DrawCircle(pos,700,1,0,GoS.Blue) end
-if CassiopeiaMenu.Drawings.R:Value() then DrawCircle(pos,825,1,0,GoS.Green) end
+if CassiopeiaMenu.Drawings.Q:Value() then DrawCircle(pos,850,1,25,GoS.Pink) end
+if CassiopeiaMenu.Drawings.W:Value() then DrawCircle(pos,925,1,25,GoS.Yellow) end
+if CassiopeiaMenu.Drawings.E:Value() then DrawCircle(pos,700,1,25,GoS.Blue) end
+if CassiopeiaMenu.Drawings.R:Value() then DrawCircle(pos,825,1,25,GoS.Green) end
 end)
 
 local target1 = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
@@ -143,11 +143,11 @@ OnTick(function(myHero)
                   end
 		end
 		
-		if IsReady(_Q) and CassiopeiaMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
+		if IsReady(_Q) and ValidTarget(enemy, 900) and CassiopeiaMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
 		Cast(_Q,enemy)
 		elseif IsReady(_E) and ValidTarget(enemy, 700) and CassiopeiaMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
 		CastTargetSpell(enemy, _E)
-		elseif IsReady(_W) and CassiopeiaMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
+		elseif IsReady(_W) and ValidTarget(enemy, 970) and CassiopeiaMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
 		Cast(_W,enemy)
 		end
 		
