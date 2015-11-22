@@ -3,7 +3,10 @@ if GetObjectName(GetMyHero()) ~= "Twitch" then return end
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",2)
+
+local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
+local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
 
 local TwitchMenu = MenuConfig("Twitch", "Twitch")
 TwitchMenu:Menu("Combo", "Combo")
@@ -37,11 +40,18 @@ if Ignite ~= nil then TwitchMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true)
 TwitchMenu.Misc:Boolean("Autolvl", "Auto level", true)
 TwitchMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"E-Q-W", "Q-E-W"})
 
+TwitchMenu:Menu("Farm", "Farm")
+TwitchMenu.Farm:Boolean("ECanon", "Always E Big Minions", false)
+TwitchMenu.Farm:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
+TwitchMenu.Farm:Menu("Jungle", "Jungle Clear")
+TwitchMenu.Farm.Jungle:Boolean("firstmins", "Don't E jungle first 2 minutes", true)
+TwitchMenu.Farm.Jungle:List("je", "Jungle Execute:", 3, {"OFF", "Epic Only", "Large & Epic Only", "Everything"})
+
 TwitchMenu:Menu("Drawings", "Drawings")
 TwitchMenu.Drawings:Boolean("W", "Draw W Range", true)
 TwitchMenu.Drawings:Boolean("E", "Draw E Range", true)
 TwitchMenu.Drawings:Boolean("R", "Draw R Range", true)
-TwitchMenu.Drawings:Boolean("Stacks", "Draw E Stacks", true)
+TwitchMenu.Drawings:Boolean("Edmg", "Draw E Damage %", true)
 TwitchMenu.Drawings:Boolean("Vis", "Draw Visibility", true)
 
 local IsInvisible = false
@@ -54,14 +64,36 @@ if TwitchMenu.Drawings.R:Value() then DrawCircle(pos,850,1,0,GoS.Green) end
 if TwitchMenu.Drawings.Vis:Value() then
 local drawPos = WorldToScreen(1,myHero)
   if not IsInvisible then
-  DrawText("STEALTH", drawPos.x, drawPos.y, 25, ARGB(255, 0, 255, 0))
+  DrawText("STEALTH", 25, drawPos.x, drawPos.y, ARGB(255, 0, 255, 0))
   else
-  DrawText("VISIBLE", drawPos.x, drawPos.y, 25, ARGB(255, 255, 0, 0))
+  DrawText("VISIBLE", 25, drawPos.x, drawPos.y, ARGB(255, 255, 0, 0))
+  end
+end
+if TwitchMenu.Drawings.Edmg:Value() then
+  for i,enemy in pairs(GetEnemyHeroes()) do
+    local drawPos = WorldToScreen(1,GetOrigin(enemy))
+    if Edmg(enemy) > GetCurrentHP(enemy) then
+    DrawText("100%",20,drawPos.x,drawPos.y,0xffffffff)
+    elseif Edmg(enemy) > 0 then
+    DrawText(math.floor(Edmg(enemy)/GetCurrentHP(enemy)*100).."%",20,drawPos.x,drawPos.y,0xffffffff)
+    end
+  end
+
+  for _,unit in pairs(minionManager.objects) do
+    if GetTeam(unit) == 300 and ValidTarget(unit, 2000) and KalistaMenu.Drawings.Edmg:Value() then
+      local drawPos = WorldToScreen(1,GetOrigin(unit))
+      if Edmg(unit) > GetCurrentHP(unit) then
+      DrawText("100%",20,drawPos.x,drawPos.y,0xffffffff)
+      elseif Edmg(unit) > 0 then
+      DrawText(math.floor(Edmg(unit)/GetCurrentHP(unit)*100).."%",20,drawPos.x,drawPos.y,0xffffffff)
+      end
+    end
   end
 end
 end)
 
 local target1 = TargetSelector(1075,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
+local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
@@ -75,21 +107,45 @@ OnTick(function(myHero)
       if IsReady(_Q) and TwitchMenu.Combo.Q:Value() and EnemiesAround(GetOrigin(myHero), 1000) >= TwitchMenu.Combo.QEnemies:Value() then
       CastSpell(_Q)
       end
-			
-	    if IsReady(_E) and ValidTarget(target,1200) and TwitchMenu.Combo.E:Value() then
-	      if Estacks(target) == TwitchMenu.Combo.EStacks:Value() then
-	      CastSpell(_E)
-	      elseif TwitchMenu.Combo.Erange:Value() and GetDistance(target) >= 1100 then
-	      CastSpell(_E)
-	      end
-	   end
+	  
+      if IsReady(_Q) and TwitchMenu.Combo.Qlow:Value() GetPercentHP(myHero) <= TwitchMenu.Combo.Qlowhp:Value() then
+      CastSpell(_Q)
+      end
+	  
+      if IsReady(_E) and ValidTarget(target,1200) and TwitchMenu.Combo.E:Value() then
+        if Estacks(target) == TwitchMenu.Combo.EStacks:Value() then
+	CastSpell(_E)
+	elseif TwitchMenu.Combo.Erange:Value() and GetDistance(target) >= 1100 then
+        CastSpell(_E)
+	end
+      end
 		
-	   if IsReady(_W) and TwitchMenu.Combo.W:Value() then
-     Cast(_W,Wtarget)
-     end
+      if IsReady(_W) and TwitchMenu.Combo.W:Value() then
+      Cast(_W,Wtarget)
+      end
+	 
+      if IsReady(_R) and TwitchMenu.Combo.R:Value() and ValidTarget(target, 850) and EnemiesAround(GetOrigin(target), 500) >= TwitchMenu.Combo.REnemies:Value() then
+      CastSpell(_R)
+      end
      
-     if QSS and IsReady(QSS) and TwitchMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < TwitchMenu.Combo.QSSHP:Value() then
-     CastSpell(QSS)
+      if QSS and IsReady(QSS) and TwitchMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < TwitchMenu.Combo.QSSHP:Value() then
+      CastSpell(QSS)
+      end
+					
+   end
+   
+   if IOW:Mode() == "Harass" then
+
+     if IsReady(_E) and ValidTarget(target,1200) and TwitchMenu.Harass.E:Value() then
+       if Estacks(target) == TwitchMenu.Harass.EStacks:Value() then
+       CastSpell(_E)
+       elseif TwitchMenu.Harass.Erange:Value() and GetDistance(target) >= 1100 then
+       CastSpell(_E)
+       end
+     end
+		
+     if IsReady(_W) and TwitchMenu.Harass.W:Value() then
+     Cast(_W,Wtarget)
      end
 					
    end
@@ -97,7 +153,7 @@ OnTick(function(myHero)
    for i,enemy in pairs(GetEnemyHeroes()) do
    
      if IOW:Mode() == "Combo" then	
-	     if BRK and IsReady(BRK) and TwitchMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < TwitchMenu.Combo.myHP:Value() and GetPercentHP(enemy) > TwitchMenu.Combo.targetHP:Value() then
+       if BRK and IsReady(BRK) and TwitchMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < TwitchMenu.Combo.myHP:Value() and GetPercentHP(enemy) > TwitchMenu.Combo.targetHP:Value() then
        CastTargetSpell(enemy, BRK)
        end
 
@@ -112,13 +168,58 @@ OnTick(function(myHero)
        end
      end
                 
-	   if IsReady(_W) and TwitchMenu.Killsteal.W:Value() and GetHP(enemy) < getdmg("W",enemy) then
-	   Cast(_W,enemy)
-	   elseif IsReady(_E) and TwitchMenu.Killsteal.E:Value() and GetHP(enemy) < Edmg(enemy) then
-	   CastSpell(_E)
+     if IsReady(_W) and TwitchMenu.Killsteal.W:Value() and GetHP(enemy) < getdmg("W",enemy) then
+     Cast(_W,enemy)
+     elseif IsReady(_E) and TwitchMenu.Killsteal.E:Value() and GetHP(enemy) < Edmg(enemy) then
+     CastSpell(_E)
      end
 
-   end
+     for i,unit in pairs(minionManager.objects) do
+       if GetTeam(unit) == MINION_ENEMY then
+         if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("Siege")) and ValidTarget(unit, 1000) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
+         CastSpell(_E)
+         end
+	  
+         if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("super")) and ValidTarget(unit, 1000) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
+         CastSpell(_E)
+         end
+       end
+       
+       if GetTeam(unit) == 300 and ValidTarget(unit, 1200) and IsReady(_E) and TwitchMenu.Farm.Jungle.je:Value() ~= 1 then
+    	
+         if TwitchMenu.Farm.Jungle.je:Value() == 2 then
+           for i,Epic in pairs(Epics) do
+             if GetObjectName(unit) == Epic and GetCurrentHP(unit) < Edmg(unit) then  
+             CastSpell(_E)
+             end
+           end
+         end 
+      
+         if TwitchMenu.Farm.Jungle.je:Value() == 3 then
+           for i,Mob in pairs(Mobs) do
+             if GetObjectName(unit) == Mob and GetCurrentHP(unit) < Edmg(unit) then  
+             CastSpell(_E)
+             end
+           end
+         end 
+      
+         if TwitchMenu.Farm.Jungle.je:Value() == 4 then
+           if GetCurrentHP(unit) < Edmg(unit) then  
+           CastSpell(_E)
+           end
+         end
+      
+       end
+
+if TwitchMenu.Misc.Autolvl:Value() then  
+  if GetLevel(myHero) > lastlevel then
+    if TwitchMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
+    elseif TwitchMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
+    end
+    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
+    lastlevel = GetLevel(myHero)
+  end
+end
 
 end)
 
@@ -128,11 +229,17 @@ OnUpdateBuff(function(unit,buff)
   if GetTeam(unit) ~= GetTeam(myHero) and buff.Name == "twitchdeadlyvenom" then
   Estack[GetNetworkID(unit)] = buff.Count
   end
+  if unit == myHero and buff.type == 6 then
+  IsInvisible = true
+  end
 end)
 
 OnRemoveBuff(function(unit,buff)
   if GetTeam(unit) ~= GetTeam(myHero) and buff.Name == "twitchdeadlyvenom" then
   Estack[GetNetworkID(unit)] = 0
+  end
+  if unit == myHero and buff.type == 6 then
+  IsInvisible = false
   end
 end)
 
