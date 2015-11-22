@@ -1,4 +1,4 @@
-DeftlibVersion = 8
+DeftlibVersion = 9
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -78,6 +78,9 @@ SpellData = {
        },
    ["Thresh"] = {
   	        [_Q] = { Name = "", ProjectileName = "", Range = 1100, Speed = 1900, Delay = 0.5, Width = 70, collision = true, aoe = false, type = "linear", IsDangerous = true}
+       },
+   ["Twitch"] = {
+   	        [_W] = { Name = "", ProjectileName = "", Range = 950, Speed = 1750, Delay = 0.5, Width = 275, collision = false, aoe = false, type = "circular", IsDangerous = false}
        },
    ["Viktor"] = {
   	        [_W] = { Name = "", ProjectileName = "", Range = 700, Speed = math.huge, Delay = 0.5, Width = 300, collision = false, aoe = false, type = "circular", IsDangerous = false},
