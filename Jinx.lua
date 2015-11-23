@@ -73,6 +73,7 @@ end)
 local target1 = TargetSelector(1480,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
 local target2 = TargetSelector(960,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
 local target3 = TargetSelector(4000,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
+local EPred = IPrediction.Prediction({name="JinxE", range=900, speed=1750, delay=0.7658, width=120, "linear", collision=false})
 local TimeToSwap = true
 local Minigun = false
 local lastlevel = GetLevel(myHero)-1
@@ -94,11 +95,10 @@ OnTick(function(myHero)
     end
 
     if IsReady(_E) and JinxMenu.Combo.E.ECC:Value() then
-      local hit, pos = EPred:Predict(target,myHero)
+      local hit, pos = EPred:Predict(target)
       if hit >= 4 then
-      CastSkillShot(spell, pos)
-	end
-    Cast(_E,Etarget,myHero,1750,0.7658,900,120,4)
+      CastSkillShot(_E, pos)
+      end
     end
 
     if IOW:Mode() == "Combo" then
