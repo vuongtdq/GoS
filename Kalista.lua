@@ -3,6 +3,8 @@ if GetObjectName(GetMyHero()) ~= "Kalista" then return end
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 
+AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",1)
+
 local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
 local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
 
@@ -63,7 +65,6 @@ DelayAction(function()
     if GetObjectName(k) == "Blitzcrank" then
     KalistaMenu.Ult:Boolean("Balista", "Balista Combo", true)
     end
-    -- Such OP Line 
     if GetObjectName(k) == "Skarner" then
     KalistaMenu.Ult:Boolean("Skarlista", "Skarlista Combo", true)
     end
@@ -80,25 +81,24 @@ IOW:AddCallback(AFTER_ATTACK, function(target, mode)
 end)
 
 OnDraw(function(myHero)
-local col = KalistaMenu.Drawings.color:Value()
-if KalistaMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),1150,1,0,col) end
-if KalistaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1000,1,0,col) end
-if KalistaMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),1450,1,0,col) end
+local pos = GetOrigin(myHero)
+if KalistaMenu.Drawings.Q:Value() then DrawCircle(pos,1150,1,25,GoS.Pink) end
+if KalistaMenu.Drawings.E:Value() then DrawCircle(pos,1000,1,25,GoS.Blue) end
+if KalistaMenu.Drawings.R:Value() then DrawCircle(pos,1450,1,25,GoS.Green) end
 for _,spot in pairs(WallSpots) do
   if KalistaMenu.Combo.WallJump:Value() then 
     if GetDistance(spot) <= 7000 and GetDistance(spot, mousePos) > 125 then                
-    DrawCircle(spot.x,spot.y,spot.z,80,2,0,ARGB(255, 255, 255, 0))
+    DrawCircle(spot,80,2,0,ARGB(255, 255, 255, 0))
     end
     if GetDistance(spot) <= 7000 and GetDistance(spot, mousePos) <= 125 then 
-    DrawCircle(spot.x,spot.y,spot.z,80,2,0,ARGB(255, 0, 255, 0))
+    DrawCircle(spot,80,2,0,ARGB(255, 0, 255, 0))
     end
   end
 end
 
 for i,enemy in pairs(GetEnemyHeroes()) do
   if KalistaMenu.Drawings.Edmg:Value() then
-    local targetPos = GetOrigin(enemy)
-    local drawPos = WorldToScreen(1,targetPos.x,targetPos.y,targetPos.z)
+    local drawPos = WorldToScreen(1,GetOrigin(enemy))
     if Edmg(enemy) > GetCurrentHP(enemy) then
     DrawText("100%",20,drawPos.x,drawPos.y,0xffffffff)
     elseif Edmg(enemy) > 0 then
@@ -109,8 +109,7 @@ end
 
 for _,unit in pairs(minionManager.objects) do
   if GetTeam(unit) == 300 and ValidTarget(unit, 2000) and KalistaMenu.Drawings.Edmg:Value() then
-    local mobPos = GetOrigin(unit)
-    local drawPos = WorldToScreen(1,mobPos.x,mobPos.y,mobPos.z)
+    local drawPos = WorldToScreen(1,GetOrigin(unit))
     if Edmg(unit) > GetCurrentHP(unit) then
     DrawText("100%",20,drawPos.x,drawPos.y,0xffffffff)
     elseif Edmg(unit) > 0 then
@@ -130,10 +129,15 @@ OnProcessSpell(function(unit, spell)
   end
 end)
 
+local target1 = TargetSelector(1200,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
 local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local QSS = GetItemSlot(myHero,3140) > 0 and GetItemSlot(myHero,3140) or GetItemSlot(myHero,3139) > 0 and GetItemSlot(myHero,3139) or nil
+    local BRK = GetItemSlot(myHero,3153) > 0 and GetItemSlot(myHero,3153) or GetItemSlot(myHero,3144) > 0 and GetItemSlot(myHero,3144) or nil
+    local YMG = GetItemSlot(myHero,3142) > 0 and GetItemSlot(myHero,3142) or nil
+    local Qtarget = target1:GetTarget()
     local mousePos = GetMousePos()
     
     if IOW:Mode() == "Combo" then
@@ -148,12 +152,8 @@ OnTick(function(myHero)
           end
         end
 	
-	if GetItemSlot(myHero,3140) > 0 and IsReady(GetItemSlot(myHero,3140)) and KalistaMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < KalistaMenu.Combo.QSSHP:Value() then
-        CastTargetSpell(myHero, GetItemSlot(myHero,3140))
-        end
-
-        if GetItemSlot(myHero,3139) > 0 and IsReady(GetItemSlot(myHero,3139)) and KalistaMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < KalistaMenu.Combo.QSSHP:Value() then
-        CastTargetSpell(myHero, GetItemSlot(myHero,3139))
+	if QSS and IsReady(QSS) and KalistaMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < KalistaMenu.Combo.QSSHP:Value() then
+        CastSpell(QSS)
         end
 		
    end
@@ -166,7 +166,7 @@ OnTick(function(myHero)
     
 	if KalistaMenu.Misc.E:Value() then
 	   for i,enemy in pairs(GetEnemyHeroes()) do
-                if 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > KalistaMenu.Misc.Mana:Value() and GetLevel(myHero) <= KalistaMenu.Misc.Elvl:Value() then
+                if GetPercentMP(myHero) > KalistaMenu.Misc.Mana:Value() and GetLevel(myHero) <= KalistaMenu.Misc.Elvl:Value() then
 		   if Estacks(enemy) >= KalistaMenu.Misc.minE:Value() and ValidTarget(enemy, 1100) and GetDistance(enemy) >= 1000 then
 		   CastSpell(_E)
 		   end
@@ -175,9 +175,9 @@ OnTick(function(myHero)
 	end
 	
 	if KalistaMenu.Misc.Edie:Value() then 
-	  if IsReady(_E) and GetLevel(myHero) < 6 and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < 3 then
+	  if IsReady(_E) and GetLevel(myHero) < 6 and GetPercentHP(myHero) < 3 then
 	  CastSpell(_E)
-	  elseif IsReady(_E) and GetLevel(myHero) > 5 and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < 5 then
+	  elseif IsReady(_E) and GetLevel(myHero) > 5 and GetPercentHP(myHero) < 5 then
 	  CastSpell(_E)
 	  end
 	end
@@ -201,20 +201,15 @@ OnTick(function(myHero)
 	
 	for i,enemy in pairs(GetEnemyHeroes()) do
 	
-	if IOW:Mode() == "Combo" then
-	   if GetItemSlot(myHero,3153) > 0 and IsReady(GetItemSlot(myHero,3153)) and KalistaMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < KalistaMenu.Combo.myHP:Value() and GetPercentHP(enemy) > KalistaMenu.Combo.targetHP:Value() then
-           CastTargetSpell(enemy, GetItemSlot(myHero,3153))
-           end
+	  if IOW:Mode() == "Combo" then	
+  	    if BRK and IsReady(BRK) and KalistaMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < KalistaMenu.Combo.myHP:Value() and GetPercentHP(enemy) > KalistaMenu.Combo.targetHP:Value() then
+            CastTargetSpell(enemy, BRK)
+            end
 
-           if GetItemSlot(myHero,3144) > 0 and IsReady(GetItemSlot(myHero,3153)) and KalistaMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < KalistaMenu.Combo.myHP:Value() and GetPercentHP(enemy) > KalistaMenu.Combo.targetHP:Value() then
-           CastTargetSpell(enemy, GetItemSlot(myHero,3144))
-           end
-
-           if GetItemSlot(myHero,3142) > 0 and IsReady(GetItemSlot(myHero,3153)) and KalistaMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
-           CastSpell(GetItemSlot(myHero,3142))
-           end
-		   
-        end
+            if YMG and IsReady(YMG) and KalistaMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
+            CastSpell(YMG)
+            end	
+          end
         
 	   if Ignite and KalistaMenu.Misc.AutoIgnite:Value() then
              if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
@@ -282,12 +277,12 @@ for _,spot in pairs(WallSpots) do
   if KalistaMenu.Combo.WallJump:Value() then 
     
     if GetDistance(spot, mousePos) <= 125 and GetDistance(spot) > 22 then
-    MoveToXYZ(spot.x, spot.y, spot.z)
+    MoveToXYZ(spot)
     end
     
     if GetDistance(spot) <= 22 then
     CastSkillShot(_Q, (Vector(spot)+(Vector((Vector(spot.x2, spot.y2, spot.z2)))-Vector(spot)):normalized()*100).x+110, (Vector(spot)+(Vector((Vector(spot.x2, spot.y2, spot.z2)))- Vector(spot)):normalized()* 100).y+110, (Vector(spot)+ (Vector((Vector(spot.x2, spot.y2, spot.z2)))-Vector(spot)):normalized()*100).z+110)
-    DelayAction(function() MoveToXYZ(Vector(Vector(spot.x2, spot.y2, spot.z2)).x, Vector(Vector(spot.x2, spot.y2, spot.z2)).y, Vector(Vector(spot.x2, spot.y2, spot.z2)).z) end, 5)
+    DelayAction(function() MoveToXYZ(Vector(spot.x2, spot.y2, spot.z2)) end, 5)
     end
   end
 end
