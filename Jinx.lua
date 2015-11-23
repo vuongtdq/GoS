@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",4)
+AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",5)
 
 local JinxMenu = MenuConfig("Jinx", "Jinx")
 JinxMenu:Menu("Combo", "Combo")
@@ -107,7 +107,7 @@ OnTick(function(myHero)
 	
       if IsReady(_Q) and JinxMenu.Combo.Q.useQ:Value() then
         if Minigun and TimeToSwap then 
-	  if JinxMenu.Combo.Q.Qrange:Value() and ValidTarget(target) and EnemiesAround(GetOrigin(myHero, 525.5)) == 0 then
+	  if JinxMenu.Combo.Q.Qrange:Value() and ValidTarget(target) and EnemiesAround(GetOrigin(myHero), 525) == 0 then
             if GetDistance(target) > 600 and Minigun then
             CastSpell(_Q)
 	    end
@@ -144,7 +144,7 @@ OnTick(function(myHero)
 	
       if IsReady(_Q) and JinxMenu.Harass.Q.useQ:Value() then
         if Minigun and TimeToSwap then 
-	  if JinxMenu.Harass.Q.Qrange:Value() and ValidTarget(target) and EnemiesAround(GetOrigin(myHero, 525.5)) == 0 then
+	  if JinxMenu.Harass.Q.Qrange:Value() and ValidTarget(target) and EnemiesAround(GetOrigin(myHero), 525) == 0 then
             if GetDistance(target) > 600 and Minigun then
             CastSpell(_Q)
 	    end
