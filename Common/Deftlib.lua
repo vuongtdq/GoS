@@ -1,4 +1,4 @@
-DeftlibVersion = 13
+DeftlibVersion = 14
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -290,7 +290,7 @@ function Cast(spell, target, source, speed, delay, range, width, hitchance, coll
 		local collH = collH or true
 		local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
 		local Name = SpellData[GetObjectName(myHero)][spell].Name
-		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll, collisionM=collM, collisionH=collH})
+		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, type=types, collision=coll, collisionM=collM, collisionH=collH})
 		IPredSpells[GetObjectName(source)][spell] = Predicted
 	end
 	local hit, pos = IPredSpells[GetObjectName(source)][spell]:Predict(target,source)
@@ -315,7 +315,7 @@ function Cast2(spell, target, source, speed, delay, range, width, hitchance, col
 		local collH = collH or true
 		local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
 		local Name = SpellData[GetObjectName(myHero)][spell].Name
-		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll, collisionM=collM, collisionH=collH})
+		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, type=types, collision=coll, collisionM=collM, collisionH=collH})
 		IPredSpells[GetObjectName(source)][spell] = Predicted
 	end
 	local hit, pos = IPredSpells[GetObjectName(source)][spell]:Predict(target,source)
