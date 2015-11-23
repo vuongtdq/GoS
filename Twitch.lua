@@ -169,9 +169,7 @@ OnTick(function(myHero)
        end
      end
                 
-     if IsReady(_W) and TwitchMenu.Killsteal.W:Value() and GetHP(enemy) < getdmg("W",enemy) then
-     Cast(_W,enemy)
-     elseif IsReady(_E) and TwitchMenu.Killsteal.E:Value() and GetHP(enemy) < Edmg(enemy) then
+     if IsReady(_E) and TwitchMenu.Killsteal.E:Value() and GetHP(enemy) < Edmg(enemy) then
      CastSpell(_E)
      end
 
@@ -249,5 +247,5 @@ function Estacks(unit)
 end
 
 function Edmg(unit)
-  return CalcDamage(myHero,unit,15*GetCastLevel(myHero,_E)+5+(5*GetCastLevel(myHero,_E)+10+(0.2*GetBonusAP(myHero)+0.25*GetBonusDmg(myHero)))*Estacks(unit))
+  return CalcDamage(myHero,unit,15*GetCastLevel(myHero,_E)+5+(5*GetCastLevel(myHero,_E)+10+(0.2*GetBonusAP(myHero)+0.25*GetBonusDmg(myHero))),0)*Estacks(unit)
 end
