@@ -1,4 +1,4 @@
-DeftlibVersion = 11
+DeftlibVersion = 12
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -273,7 +273,7 @@ function insert(turret)
 end
 
 IPredSpells = {}
-function Cast(spell, target, source, speed, delay, range, width, hitchance, coll)
+function Cast(spell, target, source, speed, delay, range, width, hitchance, coll, collM, collH)
 	local source = source or myHero
 	local hitchance = hitchance or 3
 	if not IPredSpells[GetObjectName(source)] then
@@ -285,9 +285,11 @@ function Cast(spell, target, source, speed, delay, range, width, hitchance, coll
 		local range = range or SpellData[GetObjectName(myHero)][spell].Range
 		local width = width or SpellData[GetObjectName(myHero)][spell].Width
 		local coll = coll or SpellData[GetObjectName(myHero)][spell].collision
+		local collM = collM or true
+		local collH = collH or true
 		local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
 		local Name = SpellData[GetObjectName(myHero)][spell].Name
-		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll})
+		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll, collisionM=collM, collisionH=collH})
 		IPredSpells[GetObjectName(source)][spell] = Predicted
 	end
 	local hit, pos = IPredSpells[GetObjectName(source)][spell]:Predict(target,source)
@@ -296,7 +298,7 @@ function Cast(spell, target, source, speed, delay, range, width, hitchance, coll
 	end
 end
 
-function Cast2(spell, target, source, speed, delay, range, width, hitchance, coll)
+function Cast2(spell, target, source, speed, delay, range, width, hitchance, coll, collM, collH)
 	local source = source or myHero
 	local hitchance = hitchance or 3
 	if not IPredSpells[GetObjectName(source)] then
@@ -308,9 +310,11 @@ function Cast2(spell, target, source, speed, delay, range, width, hitchance, col
 		local range = range or SpellData[GetObjectName(myHero)][spell].Range
 		local width = width or SpellData[GetObjectName(myHero)][spell].Width
 		local coll = coll or SpellData[GetObjectName(myHero)][spell].collision
+		local collM = collM or true
+		local collH = collH or true
 		local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
 		local Name = SpellData[GetObjectName(myHero)][spell].Name
-		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll})
+		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, types, collision=coll, collisionM=collM, collisionH=collH})
 		IPredSpells[GetObjectName(source)][spell] = Predicted
 	end
 	local hit, pos = IPredSpells[GetObjectName(source)][spell]:Predict(target,source)
