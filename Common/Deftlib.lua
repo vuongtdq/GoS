@@ -1,4 +1,4 @@
-DeftlibVersion = 12
+DeftlibVersion = 13
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -45,8 +45,9 @@ SpellData = {
   	        [_W] = { Name = "EkkoW", ProjectileName = "Ekko_Base_W_Indicator.troy", Range = 1700, Speed = math.huge, Delay = 3, Width = 400, collision = false, aoe = true, type = "circular", IsDangerous = false}
         },
   ["Jinx"] = {
-		[_W] = { Name = "JinxW", ProjectileName = "Jinx_W_Mis.troy", Range = 1500, Speed = 3300, Delay = 0.6, Width = 60, collision = true, aoe = true, type = "circular", IsDangerous = true},
-		[_R] = { Name = "JinxR",  ProjectileName = "Jinx_R_Mis.troy", Range = 20000, Speed = 1700, Delay = 0.6, Width = 140, collision = false, aoe = true, type = "cone", IsDangerous = true}
+		[_W] = { Name = "JinxW", ProjectileName = "Jinx_W_Mis.troy", Range = 1450, Speed = 3300, Delay = 0.6, Width = 60, collision = true, aoe = false, type = "circular", IsDangerous = true},
+		[_E] = { Name = "JinxE", ProjectileName = "", Range = 900, Speed = 1750, Delay = 0.6, Width = 120, collision = false, aoe = false, type = "circular", IsDangerous = true},
+		[_R] = { Name = "JinxR",  ProjectileName = "Jinx_R_Mis.troy", Range = 20000, Speed = 1700, Delay = 0.316, Width = 140, collision = false, aoe = true, type = "cone", IsDangerous = true}
 	},
   ["Kalista"] = {
 		[_Q] = { Name = "KalistaMysticShot", ProjectileName = "", Range = 1150, Speed = 1700, Delay = 0.25, Width = 50, collision = true, aoe = false, type = "linear", IsDangerous = false}
