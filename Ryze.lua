@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",2)
 
 local RyzeMenu = MenuConfig("Ryze", "Ryze")
 RyzeMenu:Menu("Combo", "Combo")
@@ -111,11 +111,11 @@ OnTick(function(myHero)
           end
         end
 	  
-	if IsReady(_W) and RyzeMenu.Combo.W:Value() then
+	if IsReady(_W) and ValidTarget(Wtarget, 600) and RyzeMenu.Combo.W:Value() then
         CastTargetSpell(Wtarget, _W)
 	end
 		
-        if IsReady(_E) and RyzeMenu.Combo.E:Value() then
+        if IsReady(_E) and ValidTarget(Wtarget, 600) and RyzeMenu.Combo.E:Value() then
         CastTargetSpell(Wtarget, _E)
 	end
 	
@@ -131,11 +131,11 @@ OnTick(function(myHero)
 
   if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= RyzeMenu.Harass.Mana:Value() then
 
-	if IsReady(_W) and RyzeMenu.Harass.W:Value() then
+	if IsReady(_W) and ValidTarget(Wtarget, 600) and RyzeMenu.Harass.W:Value() then
         CastTargetSpell(Wtarget, _W)
 	end
       
-	if IsReady(_E) and RyzeMenu.Harass.E:Value() then
+	if IsReady(_E) and ValidTarget(Wtarget, 600) and RyzeMenu.Harass.E:Value() then
         CastTargetSpell(Wtarget, _E)
 	end
 
