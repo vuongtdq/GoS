@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",6)
 
 local JinxMenu = MenuConfig("Jinx", "Jinx")
 JinxMenu:Menu("Combo", "Combo")
@@ -78,6 +78,18 @@ local TimeToSwap = true
 local Minigun = false
 local lastlevel = GetLevel(myHero)-1
 
+OnUpdateBuff(function(unit,buff)
+  if unit == myHero and buff.Name == "jinxqicon" then
+  Minigun = true
+  end
+end)
+
+OnRemoveBuff(function(unit,buff)
+  if unit == myHero and buff.Name == "jinxqicon" then
+  Minigun = false
+  end
+end)
+
 OnTick(function(myHero)
     local target = GetCurrentTarget()
     local QSS = GetItemSlot(myHero,3140) > 0 and GetItemSlot(myHero,3140) or GetItemSlot(myHero,3139) > 0 and GetItemSlot(myHero,3139) or nil
@@ -87,12 +99,6 @@ OnTick(function(myHero)
     local Etarget = target2:GetTarget()
     local Rtarget = target3:GetTarget()
     local RangeCheck = 25*GetCastLevel(myHero, _Q) + 50 + 600
-	
-    if GetRange(myHero) == 525 then
-    Minigun = true
-    else
-    Minigun = false
-    end
 
     if IsReady(_E) and JinxMenu.Combo.E.ECC:Value() then
       local hit, pos = EPred:Predict(target)
