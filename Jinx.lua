@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",3)
 
 local JinxMenu = MenuConfig("Jinx", "Jinx")
 JinxMenu:Menu("Combo", "Combo")
@@ -73,7 +73,7 @@ end)
 local target1 = TargetSelector(1480,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
 local target2 = TargetSelector(960,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
 local target3 = TargetSelector(4000,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
-local EPred = IPrediction.Prediction({name="JinxE", range=900, speed=1750, delay=0.7658, width=120, "linear", collision=false})
+local EPred = IPrediction.Prediction({name="JinxE", range=900, speed=1750, delay=0.7658, width=120, type="linear", collision=false})
 local TimeToSwap = true
 local Minigun = false
 local lastlevel = GetLevel(myHero)-1
