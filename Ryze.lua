@@ -4,6 +4,8 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
+AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",1)
+
 local RyzeMenu = MenuConfig("Ryze", "Ryze")
 RyzeMenu:Menu("Combo", "Combo")
 RyzeMenu.Combo:Boolean("Q", "Use Q", true)
@@ -47,13 +49,11 @@ RyzeMenu.JungleClear:Boolean("E", "Use E", true)
 RyzeMenu:Menu("Drawings", "Drawings")
 RyzeMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 RyzeMenu.Drawings:Boolean("WE", "Draw W+E Range", true)
-RyzeMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
-local col = RyzeMenu.Drawings.color:Value()
-if RyzeMenu.Drawings.Q:Value() then DrawCircle(pos,900,1,0,col) end
-if RyzeMenu.Drawings.WE:Value() then DrawCircle(pos,600,1,0,col) end
+if RyzeMenu.Drawings.Q:Value() then DrawCircle(pos,900,1,25,GoS.Pink) end
+if RyzeMenu.Drawings.WE:Value() then DrawCircle(pos,600,1,25,GoS.Yellow) end
 end)
 
 local PStacks = 0
@@ -111,38 +111,40 @@ OnTick(function(myHero)
           end
         end
 	  
-	if IsReady(_W) and ValidTarget(Wtarget, 600) and RyzeMenu.Combo.W:Value() then
+	if IsReady(_W) and RyzeMenu.Combo.W:Value() then
         CastTargetSpell(Wtarget, _W)
 	end
 		
-        if IsReady(_E) and ValidTarget(Wtarget, 600) and RyzeMenu.Combo.E:Value() then
+        if IsReady(_E) and RyzeMenu.Combo.E:Value() then
         CastTargetSpell(Wtarget, _E)
 	end
 	
-	if IsReady(_Q) and RyzeMenu.Combo.Q:Value() and ValidTarget(Qtarget, 900) then
-	  if PStacks > 3 then
-  	  Cast(_Q,Qtarget,myHero,1,1700,250,900,55,false)
-  	  elseif IsEmpowered then
-	  Cast(_Q,Qtarget,myHero,1,1700,250,900,55,false)
-          else
-          Cast(_Q,Qtarget)
-          end
+	if IsReady(_Q) and RyzeMenu.Combo.Q:Value() then
+	Cast(_Q,Qtarget)
+        end
+        
+        if IsReady(_Q) and RyzeMenu.Combo.Q:Value() and IsEmpowered or PStacks > 3  then
+  	Cast(_Q,Qtarget,myHero,1700,0.25,900,55,3,false)
 	end				
 		
   end
 
   if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= RyzeMenu.Harass.Mana:Value() then
 
-	if IsReady(_W) and ValidTarget(Wtarget, 600) and RyzeMenu.Harass.W:Value() then
+	if IsReady(_W) and RyzeMenu.Harass.W:Value() then
         CastTargetSpell(Wtarget, _W)
 	end
       
-	if IsReady(_E) and ValidTarget(Wtarget, 600) and RyzeMenu.Harass.E:Value() then
+	if IsReady(_E) and RyzeMenu.Harass.E:Value() then
         CastTargetSpell(Wtarget, _E)
 	end
 
-        if IsReady(_Q) and RyzeMenu.Harass.Q:Value() and ValidTarget(Qtarget, 900) then
+        if IsReady(_Q) and RyzeMenu.Harass.Q:Value() then
 	Cast(_Q,Qtarget)
+        end
+
+        if IsReady(_Q) and RyzeMenu.Harass.Q:Value() and IsEmpowered or PStacks > 3  then
+  	Cast(_Q,Qtarget,myHero,1700,0.25,900,55,3,false)
 	end
 	
   end 
