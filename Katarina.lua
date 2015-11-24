@@ -196,15 +196,15 @@ OnTick(function(myHero)
 
   if IOW:Mode() == "Harass" then
  
-      if IsReady(_Q) and KatarinaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 675) then
+      if IsReady(_Q) and KatarinaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 675) and not CastingR then
       CastTargetSpell(Qtarget, _Q)
       end
 	  
-      if IsReady(_W) and KatarinaMenu.Harass.W:Value() and ValidTarget(target, 375) then
+      if IsReady(_W) and KatarinaMenu.Harass.W:Value() and ValidTarget(target, 375) and not CastingR then
       CastSpell(_W)
       end
 	  
-      if IsReady(_E) and KatarinaMenu.Harass.E:Value() and ValidTarget(Etarget, 700) then
+      if IsReady(_E) and KatarinaMenu.Harass.E:Value() and ValidTarget(Etarget, 700) and not CastingR then
       CastTargetSpell(Etarget, _E)
       end
   end
@@ -212,34 +212,39 @@ OnTick(function(myHero)
     for i,enemy in pairs(GetEnemyHeroes()) do
        if KatarinaMenu.Killsteal.SmartKS:Value() then
 				
+		local IgniteDmg = 0
+	        if Ignite and IsReady(Ignite) then
+	        IgniteDmg = IgniteDmg + 20*GetLevel(myHero)+50
+                end
+
 		if Ignite and KatarinaMenu.Misc.Autoignite:Value() then
                   if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
                   CastTargetSpell(enemy, Ignite)
                   end
                 end
 		
-                if IsReady(_W) and GetHP2(enemy) < getdmg("W",enemy) and ValidTarget(enemy, 375) then 
+                if IsReady(_W) and GetHP2(enemy)+IgniteDmg < getdmg("W",enemy) and ValidTarget(enemy, 375) and not CastingR then 
 		CastSpell(_W)
 	        end		
 	
-		if IsReady(_Q) and GetHP2(enemy) < getdmg("Q",enemy) and ValidTarget(enemy, 675) then 
+		if IsReady(_Q) and GetHP2(enemy)+IgniteDmg < getdmg("Q",enemy) and ValidTarget(enemy, 675) and not CastingR then 
 		CastTargetSpell(enemy, _Q)
 		end	
 		
-		if IsReady(_E) and GetHP2(enemy) < getdmg("E",enemy) and ValidTarget(enemy, 700) then 
+		if IsReady(_E) and GetHP2(enemy)+IgniteDmg < getdmg("E",enemy) and ValidTarget(enemy, 700) and not CastingR then 
 		CastTargetSpell(enemy, _E)
 	        end		
 		
-		if IsReady(_Q) and IsReady(_W) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 375) then 
+		if IsReady(_Q) and IsReady(_W) and GetHP2(enemy)+IgniteDmg < getdmg("Q",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 375) then 
 		CastSpell(_W)
                 DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
 		end
 	
-	        if IsReady(_E) and IsReady(_W) and GetHP2(enemy) < getdmg("W",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 700) then 
+	        if IsReady(_E) and IsReady(_W) and GetHP2(enemy)+IgniteDmg < getdmg("W",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 700) then 
 		CastTargetSpell(enemy, _E)
 		DelayAction(function() CastSpell(_W) end, 250)
 				
-		if IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) + getdmg("E",enemy) and ValidTarget(enemy, 700) then 
+		if IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetHP2(enemy)+IgniteDmg < getdmg("Q",enemy) + getdmg("W",enemy) + getdmg("E",enemy) and ValidTarget(enemy, 700) then 
 		CastTargetSpell(enemy, _E)
 		DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
 		DelayAction(function() CastSpell(_W) end, 250)
@@ -343,8 +348,6 @@ end)
 OnProcessSpell(function(unit,spell)
   if unit == myHero and spell.name:lower():find("katarinar") then
   CastingR = true
-  IOW.movementEnabled = false
-  IOW.attacksEnabled = false
   end
 
   if unit == myHero and not spell.name:lower():find("katarina") then
@@ -370,8 +373,6 @@ end)
 OnUpdateBuff(function(unit,buff)
   if unit == myHero and buff.Name == "katarinarsound" then
   CastingR = true
-  IOW.movementEnabled = false
-  IOW.attacksEnabled = false
   end
 end)
 
