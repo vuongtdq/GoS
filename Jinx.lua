@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",8)
+AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",9)
 
 local JinxMenu = MenuConfig("Jinx", "Jinx")
 JinxMenu:Menu("Combo", "Combo")
@@ -165,10 +165,6 @@ OnTick(function(myHero)
 	
       if IsReady(_W) and JinxMenu.Harass.W.useW:Value() and ValidTarget(target, 1480) and GetDistance(target) > JinxMenu.Harass.W.Min:Value() then
       Cast(_W,Wtarget)
-      end
-
-      if IsReady(_E) and JinxMenu.Harass.E.useE:Value() then
-      Cast(_E,Etarget)
       end
 	  
       if JinxMenu.Harass.Q.noenemy:Value() and EnemiesAround(GetOrigin(myHero), RangeCheck) == 0 and not Minigun then
