@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",6)
 
 local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
 local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
@@ -174,6 +174,7 @@ OnTick(function(myHero)
      end
 
      for i,unit in pairs(minionManager.objects) do
+     	
        if GetTeam(unit) == MINION_ENEMY then
          if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("Siege")) and ValidTarget(unit, 1200) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
          CastSpell(_E)
@@ -209,6 +210,8 @@ OnTick(function(myHero)
          end
       
        end
+
+     end
 
 if TwitchMenu.Misc.Autolvl:Value() then  
   if GetLevel(myHero) > lastlevel then
