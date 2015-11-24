@@ -4,6 +4,8 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
+AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",1)
+
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
 KatarinaMenu.Combo:Boolean("Q", "Use Q", true)
@@ -50,16 +52,15 @@ KatarinaMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 KatarinaMenu.Drawings:Boolean("Text", "Draw Damage Text", true)
 
 OnDraw(function(myHero)
-local col = KatarinaMenu.Drawings.color:Value()
-if KatarinaMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),675,1,0,col) end
-if KatarinaMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),375,1,0,col) end
-if KatarinaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),700,1,0,col) end
-if KatarinaMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),550,1,0,col) end
+local pos = GetOrigin(myHero)
+if KatarinaMenu.Drawings.Q:Value() then DrawCircle(pos,675,1,25,GoS.Pink) end
+if KatarinaMenu.Drawings.W:Value() then DrawCircle(pos,375,1,25,GoS.Yellow) end
+if KatarinaMenu.Drawings.E:Value() then DrawCircle(pos,700,1,25,GoS.Blue) end
+if KatarinaMenu.Drawings.R:Value() then DrawCircle(pos,550,1,25,GoS.Green) end
   if KatarinaMenu.Drawings.Text:Value() then
     for _, enemy in pairs(GetEnemyHeroes()) do
       if ValidTarget(enemy) then
-      local enemyPos = GetOrigin(enemy)
-      local drawpos = WorldToScreen(1,enemyPos.x, enemyPos.y, enemyPos.z)
+      local drawpos = WorldToScreen(1,GetOrigin(enemy))
       local enemyText, color = GetDrawText(enemy)
       DrawText(enemyText, 20, drawpos.x, drawpos.y, color)
       end
@@ -161,10 +162,6 @@ local function GetJumpTarget()
 end
 
 local CastingR = false
-_G.SaveMove = _G.MoveToXYZ
-_G.SaveAttack = _G.AttackUnit
-_G.MoveToXYZ = function(...) if not CastingR then _G.SaveMove(...) end end
-_G.AttackUnit = function(...) if not CastingR then _G.SaveAttack(...) end end
 local target1 = TargetSelector(675,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(700,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local lastlevel = GetLevel(myHero)-1
@@ -189,6 +186,8 @@ OnTick(function(myHero)
       end
 	  
       if KatarinaMenu.Combo.R:Value() and CanUseSpell(myHero, _Q) ~= READY and CanUseSpell(myHero, _W) ~= READY and CanUseSpell(myHero, _E) ~= READY and CanUseSpell(myHero, _R)  ~= ONCOOLDOWN and ValidTarget(target, 550) and GetCastLevel(myHero,_R) > 0 then
+      IOW.movementEnabled = false
+      IOW.attacksEnabled = false
       CastingR = true
       CastSpell(_R)
       end
@@ -212,39 +211,34 @@ OnTick(function(myHero)
     for i,enemy in pairs(GetEnemyHeroes()) do
        if KatarinaMenu.Killsteal.SmartKS:Value() then
 				
-		local IgniteDmg = 0
-	        if Ignite and IsReady(Ignite) then
-	        IgniteDmg = IgniteDmg + 20*GetLevel(myHero)+50
-                end
-
 		if Ignite and KatarinaMenu.Misc.Autoignite:Value() then
                   if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
                   CastTargetSpell(enemy, Ignite)
                   end
                 end
 		
-                if IsReady(_W) and GetHP2(enemy)+IgniteDmg < getdmg("W",enemy) and ValidTarget(enemy, 375) and not CastingR then 
+                if IsReady(_W) and GetHP2(enemy) < getdmg("W",enemy) and ValidTarget(enemy, 375) and not CastingR then 
 		CastSpell(_W)
 	        end		
 	
-		if IsReady(_Q) and GetHP2(enemy)+IgniteDmg < getdmg("Q",enemy) and ValidTarget(enemy, 675) and not CastingR then 
+		if IsReady(_Q) and GetHP2(enemy) < getdmg("Q",enemy) and ValidTarget(enemy, 675) and not CastingR then 
 		CastTargetSpell(enemy, _Q)
 		end	
 		
-		if IsReady(_E) and GetHP2(enemy)+IgniteDmg < getdmg("E",enemy) and ValidTarget(enemy, 700) and not CastingR then 
+		if IsReady(_E) and GetHP2(enemy) < getdmg("E",enemy) and ValidTarget(enemy, 700) and not CastingR then 
 		CastTargetSpell(enemy, _E)
 	        end		
 		
-		if IsReady(_Q) and IsReady(_W) and GetHP2(enemy)+IgniteDmg < getdmg("Q",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 375) then 
+		if IsReady(_Q) and IsReady(_W) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 375) then 
 		CastSpell(_W)
                 DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
 		end
 	
-	        if IsReady(_E) and IsReady(_W) and GetHP2(enemy)+IgniteDmg < getdmg("W",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 700) then 
+	        if IsReady(_E) and IsReady(_W) and GetHP2(enemy) < getdmg("W",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 700) then 
 		CastTargetSpell(enemy, _E)
 		DelayAction(function() CastSpell(_W) end, 250)
 				
-		if IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetHP2(enemy)+IgniteDmg < getdmg("Q",enemy) + getdmg("W",enemy) + getdmg("E",enemy) and ValidTarget(enemy, 700) then 
+		if IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) + getdmg("E",enemy) and ValidTarget(enemy, 700) then 
 		CastTargetSpell(enemy, _E)
 		DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
 		DelayAction(function() CastSpell(_W) end, 250)
@@ -317,7 +311,7 @@ end
 
 	if KatarinaMenu.Combo.WardJumpkey:Value() then
 	wardJump(mousePos)
-	MoveToXYZ(mousePos.x, mousePos.y, mousePos.z)
+	MoveToXYZ(mousePos)
 	end
 	
 	if wardLock and (wardLock + 500) < GetTickCount()  then
@@ -348,6 +342,13 @@ end)
 OnProcessSpell(function(unit,spell)
   if unit == myHero and spell.name:lower():find("katarinar") then
   CastingR = true
+  IOW.movementEnabled = false
+  IOW.attacksEnabled = false
+  DelayAction(function()
+  CastingR = false
+  IOW.movementEnabled = true
+  IOW.attacksEnabled = true
+  end, 2500)
   end
 
   if unit == myHero and not spell.name:lower():find("katarina") then
@@ -370,9 +371,11 @@ OnDeleteObj(function(object)
   end
 end)
 
-OnUpdateBuff(function(unit,buff)
+OnRemoveBuff(function(unit,buff)
   if unit == myHero and buff.Name == "katarinarsound" then
-  CastingR = true
+  CastingR = false
+  IOW.movementEnabled = true
+  IOW.attacksEnabled = true
   end
 end)
 
