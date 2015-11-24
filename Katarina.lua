@@ -161,6 +161,10 @@ local function GetJumpTarget()
 end
 
 local CastingR = false
+_G.SaveMove = _G.MoveToXYZ
+_G.SaveAttack = _G.AttackUnit
+_G.MoveToXYZ = function(...) if not CastingR then _G.SaveMove(...) end end
+_G.AttackUnit = function(...) if not CastingR then _G.SaveAttack(...) end end
 local target1 = TargetSelector(675,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(700,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local lastlevel = GetLevel(myHero)-1
@@ -185,8 +189,6 @@ OnTick(function(myHero)
       end
 	  
       if KatarinaMenu.Combo.R:Value() and CanUseSpell(myHero, _Q) ~= READY and CanUseSpell(myHero, _W) ~= READY and CanUseSpell(myHero, _E) ~= READY and CanUseSpell(myHero, _R)  ~= ONCOOLDOWN and ValidTarget(target, 550) and GetCastLevel(myHero,_R) > 0 then
-      IOW.movementEnabled = false
-      IOW.attacksEnabled = false
       CastingR = true
       CastSpell(_R)
       end
