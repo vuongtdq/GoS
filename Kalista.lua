@@ -3,7 +3,7 @@ if GetObjectName(GetMyHero()) ~= "Kalista" then return end
 require('Inspired')
 require('DeftLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",4)
 
 local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
 local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
@@ -282,7 +282,7 @@ for _,spot in pairs(WallSpots) do
     
     if GetDistance(spot) <= 22 then
     CastSkillShot(_Q, (Vector(spot)+(Vector((Vector(spot.x2, spot.y2, spot.z2)))-Vector(spot)):normalized()*100).x+110, (Vector(spot)+(Vector((Vector(spot.x2, spot.y2, spot.z2)))- Vector(spot)):normalized()* 100).y+110, (Vector(spot)+ (Vector((Vector(spot.x2, spot.y2, spot.z2)))-Vector(spot)):normalized()*100).z+110)
-    DelayAction(function() MoveToXYZ(Vector(spot.x2, spot.y2, spot.z2)) end, 5)
+    DelayAction(function() MoveToXYZ(Vector(Vector(spot.x2, spot.y2, spot.z2)).x, Vector(Vector(spot.x2, spot.y2, spot.z2)).y, Vector(Vector(spot.x2, spot.y2, spot.z2)).z) end, 5)
     end
   end
 end
