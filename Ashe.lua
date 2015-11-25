@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Ashe" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+if not pcall( require, "DeftLib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",8)
+AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",9)
 
 local AsheMenu = MenuConfig("Ashe", "Ashe")
 AsheMenu:Menu("Combo", "Combo")
