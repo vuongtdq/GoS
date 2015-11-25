@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Blitzcrank" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+if not pcall( require, "DeftLib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",8)
+AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",9)
 
 local BlitzcrankMenu = MenuConfig("Blitzcrank", "Blitzcrank")
 BlitzcrankMenu:Menu("Combo", "Combo")
