@@ -1,7 +1,7 @@
-DeftLibVersion = 19
+DeftLibVersion = 20
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
+require('Inspired')
+require('IPrediction')
 
 AutoUpdate("/D3ftsu/GoS/master/Common/DeftLib.lua","/D3ftsu/GoS/master/Common/DeftLib.version","Common\\DeftLib.lua",DeftLibVersion)
 
