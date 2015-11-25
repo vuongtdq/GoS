@@ -4,7 +4,7 @@ if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua
 if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",2)
 
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
@@ -88,17 +88,6 @@ local wardItems = {
         { id = 2043, spellName = "VisionWard"}
 }
 
-local function IsInDistance2(r, p1, p2, fast)
-		local fast = fast or false
-		if fast then
-		local p1y = p1.z or p1.y
-		local p2y = p2.z or p2.y
-		return (p1.x + r >= p2.x) and (p1.x - r <= p2.x) and (p1y + r >= p2y) and (p1y - r <= p2y)
-		else
-    	return GetDistanceSqr(p1, p2) < r*r
-    end
-end
-
 local function calcMaxPos(pos)
 	local origin = GetOrigin(myHero)
 	local vectorx = pos.x-origin.x
@@ -108,12 +97,12 @@ local function calcMaxPos(pos)
 	return {x = origin.x + 600 * vectorx / dist ,y = origin.y + 600 * vectory / dist, z = origin.z + 600 * vectorz / dist}
 end
 
-local function ValidTarget2( object )
+local function ValidTarget2(object)
 	local objType = GetObjectType(object)
 	return (objType == Obj_AI_Hero or objType == Obj_AI_Minion) and IsVisible(object)
 end
 
-local findWardSlot = function ()
+local findWardSlot = function()
 	local slot = 0
 	for i,wardItem in pairs(wardItems) do
 	slot = GetItemSlot(myHero,wardItem.id)
@@ -125,7 +114,7 @@ local function putWard(pos0)
 	local slot = findWardSlot()
 
 	local pos = pos0
-	if not IsInDistance2(600, pos) then
+	if not IsInDistance(pos, 600) then
 	pos = calcMaxPos(pos)
 	end
 
@@ -136,7 +125,7 @@ end
 
 local spellLock = nil
 
-function wardJump( pos )
+function wardJump(pos)
 	if not spellLock and IsReady(_E) then
 		if jumpTarget then
 		CastTargetSpell(jumpTarget, _E)
@@ -150,12 +139,12 @@ end
 
 local function GetJumpTarget()
 	local pos = mousePos
-	if not IsInDistance2(600, mousePos, GetOrigin(myHero)) then
+	if not IsInDistance(mousePos, 600) then
 	pos = maxPos
 	end
-	for _,object in pairs(objectList) do
-	  if ValidTarget2(object) and IsInDistance2(200, GetOrigin(object), pos) then
-	  return object
+	for _,Object in pairs(objectList) do
+	  if ValidTarget2(Object) and IsInDistance(GetOrigin(Object), 200) then
+	  return Object
 	  end
 	end
 	return nil
@@ -357,17 +346,21 @@ OnProcessSpell(function(unit,spell)
   end
 end)
 
-OnCreateObj(function(object)
-  local objType = GetObjectType(object)
-  if objType == Obj_AI_Hero or objType == Obj_AI_Minion then
-  objectList[object] = object
+OnObjectLoad(function(Object)
+if GetObjectType(Object) == Obj_AI_Hero or GetObjectType(Object) == Obj_AI_Minion then
+  objectList[Object] = Object
   end
 end)
 
-OnDeleteObj(function(object)
-  local objType = GetObjectType(object)
-  if objType == Obj_AI_Hero or objType == Obj_AI_Minion then
-  objectList[object] = nil
+OnCreateObj(function(Object)
+  if GetObjectType(Object) == Obj_AI_Hero or GetObjectType(Object) == Obj_AI_Minion then
+  objectList[Object] = Object
+  end
+end)
+
+OnDeleteObj(function(Object)
+  if GetObjectType(Object) == Obj_AI_Hero or GetObjectType(Object) == Obj_AI_Minion then
+  objectList[Object] = nil
   end
 end)
 
