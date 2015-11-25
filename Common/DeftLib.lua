@@ -1,4 +1,4 @@
-DeftLibVersion = 18
+DeftLibVersion = 19
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -385,9 +385,9 @@ local shop
 local shopRadius = 1250
 
 function GetShop()
-    for i, object in pairs(objManager) do
-        if object and GetObjectType(Object) == "Obj_AI_Shop" and GetTeam(Object) == GetTeam(myHero) then
-            shop = Vector(object)
+    for i, Object in pairs(objManager) do
+        if Object and GetObjectType(Object) == "Obj_AI_Shop" and GetTeam(Object) == GetTeam(myHero) then
+            shop = Vector(Object)
             return shop
         end
     end
@@ -411,9 +411,9 @@ function GetFountain()
     fountainRadius = 1050
     end
     if GetShop() ~= nil then
-        for i, object in pairs(objManager) do
-            if object ~= nil and  GetObjectType(Object) == "Obj_AI_SpawnPoint" and GetDistanceSqr(shop, object) < 1000000 then
-                fountain = Vector(object)
+        for i, Object in pairs(objManager) do
+            if Object and  GetObjectType(Object) == "Obj_AI_SpawnPoint" and GetDistanceSqr(shop, Object) < 1000000 then
+                fountain = Vector(Object)
                 return fountain
             end
         end
