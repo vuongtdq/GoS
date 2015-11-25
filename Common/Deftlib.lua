@@ -1,4 +1,4 @@
-DeftlibVersion = 14
+DeftlibVersion = 15
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -365,6 +365,66 @@ end
 
 function Ludens()
     return LudensStacks == 100 and 100+0.1*GetBonusAP(myHero) or 0
+end
+
+objManager = {}
+
+OnCreateObj(function(Object)
+  if GetObjectType(Object) = "Obj_AI_Shop" then
+  table.insert(objManager,Object)
+  end
+end)
+
+local shop
+local shopRadius = 1250
+
+function GetShop()
+    for i, object in pairs(objManager) do
+        if object and GetObjectType(Object) = "Obj_AI_Shop" and GetTeam(Object) == GetTeam(myHero) then
+            shop = Vector(object)
+            return shop
+        end
+    end
+end
+
+function NearShop(distance)
+    assert(distance == nil or type(distance) == "number", "NearShop: wrong argument types (<number> or nil expected)")
+    assert(GetShop() ~= nil, "GetShop: Could not get Shop Coordinates")
+    return (GetDistanceSqr(GetShop()) < (distance or shopRadius) ^ 2), shop.x, shop.y, shop.z, (distance or shopRadius)
+end
+
+function InShop()
+    return NearShop()
+end
+
+local fountain = nil
+local fountainRadius = 750
+
+function GetFountain()
+    if mapID == SUMMONERS_RIFT then
+    fountainRadius = 1050
+    end
+    if GetShop() ~= nil then
+        for i, object in pairs(objManager) do
+            if object ~= nil and  GetObjectType(Object) = "Obj_AI_Shop" and GetDistanceSqr(shop, object) < 1000000 then
+                fountain = Vector(object)
+                return fountain
+            end
+        end
+    end
+end
+
+function NearFountain(distance)
+    distance = distance or fountainRadius or 0
+	if GetFountain() then
+		return (GetDistanceSqr(fountain) <= distance * distance), fountain.x, fountain.y, fountain.z, distance
+	else
+		return false, 0, 0, 0, 0
+	end
+end
+
+function InFountain()
+    return NearFountain()
 end
 
 Shield = {}
