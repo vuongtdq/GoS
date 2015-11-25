@@ -1,4 +1,4 @@
-DeftlibVersion = 15
+DeftlibVersion = 16
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "IPrediction" ) then PrintChat("You are missing IPrediction.lua - Go download it and save it in Common!") return end
@@ -369,8 +369,14 @@ end
 
 objManager = {}
 
+OnObjectLoad(function(Object)
+  if GetObjectType(Object) == "Obj_AI_Shop" or GetObjectType(Object) == "Obj_AI_SpawnPoint" then
+  table.insert(objManager,Object)
+  end
+end)
+
 OnCreateObj(function(Object)
-  if GetObjectType(Object) = "Obj_AI_Shop" then
+  if GetObjectType(Object) == "Obj_AI_Shop" or GetObjectType(Object) == "Obj_AI_SpawnPoint" then
   table.insert(objManager,Object)
   end
 end)
@@ -406,7 +412,7 @@ function GetFountain()
     end
     if GetShop() ~= nil then
         for i, object in pairs(objManager) do
-            if object ~= nil and  GetObjectType(Object) = "Obj_AI_Shop" and GetDistanceSqr(shop, object) < 1000000 then
+            if object ~= nil and  GetObjectType(Object) = "Obj_AI_SpawnPoint" and GetDistanceSqr(shop, object) < 1000000 then
                 fountain = Vector(object)
                 return fountain
             end
