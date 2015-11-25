@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Katarina" then return end
 
 if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+if not pcall( require, "DeftLib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",3)
 
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
