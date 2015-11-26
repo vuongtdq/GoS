@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Jinx" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "DeftLib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
-if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",10)
+AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",11)
 
 local JinxMenu = MenuConfig("Jinx", "Jinx")
 JinxMenu:Menu("Combo", "Combo")
@@ -243,3 +243,5 @@ function UltSpeed(unit)
 end
 
 AddGapcloseEvent(_E, 0, false)
+
+PrintChat(string.format("<font color='#1244EA'>Jinx:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
