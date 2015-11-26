@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Ekko" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "DeftLib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
-if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it Common!") return end
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ekko.lua","/D3ftsu/GoS/master/Ekko.version","Ekko.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Ekko.lua","/D3ftsu/GoS/master/Ekko.version","Ekko.lua",4)
 
 local EkkoMenu = MenuConfig("Ekko", "Ekko")
 EkkoMenu:Menu("Combo", "Combo")
@@ -241,7 +241,7 @@ OnTick(function(myHero)
        end
      end
                 
-     if IsReady(_Q) and EkkoMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy,myHero,3) then 
+     if IsReady(_Q) and ValidTarget(enemy, 995) and EkkoMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy,myHero,3) then 
      Cast(_Q,enemy)
      elseif IsReady(_E) and ValidTarget(enemy, 800) and EkkoMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then
      CastSkillShot(_E,GetOrigin(enemy))
@@ -331,3 +331,5 @@ function DrawLine3D(x,y,z,a,b,c,width,col)
 	local p2 = WorldToScreen(0, Vector(a,b,c))
 	DrawLine(p1.x, p1.y, p2.x, p2.y, width, col)
 end
+
+PrintChat(string.format("<font color='#1244EA'>Ekko:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
