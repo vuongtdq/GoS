@@ -1,6 +1,6 @@
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
+require('Inspired')
 
-AutoUpdate("/D3ftsu/GoS/master/Baseult.lua","/D3ftsu/GoS/master/Baseult.version","Baseult.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Baseult.lua","/D3ftsu/GoS/master/Baseult.version","Baseult.lua",2)
 
 local BasePositions = {
      [SUMMONERS_RIFT] = {
@@ -52,7 +52,7 @@ BaseultMenu:Boolean("RT", "RecallTracker", true)
 
 if SpellData[GetObjectName(myHero)] then 
 BaseultMenu:Boolean("Enabled", "Enabled", true)
-PrintChat("Baseult for "..GetObjectName(myHero).." loaded") 
+PrintChat(string.format("<font color='#1244EA'>Baseult</font> <font color='#FFFFFF'> For "..GetObjectName(myHero).." Loaded, Have Fun Getting Some Kills ! </font>"))
 Delay = SpellData[GetObjectName(myHero)].Delay
 MissileSpeed = SpellData[GetObjectName(myHero)].MissileSpeed
 Damage = SpellData[GetObjectName(myHero)].Damage
