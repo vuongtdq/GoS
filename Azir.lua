@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Azir" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
+if not pcall( require, "Inspired" ) then PrintChat("You are u Inspired.lua - Go download it and save it Common!") return end
 if not pcall( require, "DeftLib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
 if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
 
-AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",7)
+AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",8)
 
 local AzirMenu = MenuConfig("Azir", "Azir")
 AzirMenu:Menu("Combo", "Combo")
@@ -145,7 +145,7 @@ OnTick(function(myHero)
      Cast(_W,Wtarget)
      end
 	 
-     if IsReady(_E) and AzirMenu.Combo.E:Value() and ValidTarget(target, 1300) and EnemiesAround(GetOrigin(target), 666) < 2 and GetHP2(target) < (GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q) and getdmg("Q", target) or 0) + getdmg("W",target)*CountSoldiers(target)) then 
+     if IsReady(_E) and AzirMenu.Combo.E:Value() and ValidTarget(target, 1300) and EnemiesAround(GetOrigin(target), 666) < 2 and GetHP2(target) < getdmg("Q", target) + getdmg("W",target)*CountSoldiers(target) then 
        for _,Soldier in pairs(GetSoldiers()) do
          local pointSegment,pointLine,isOnSegment = VectorPointProjectionOnLineSegment(GetOrigin(myHero), GetOrigin(Soldier), GetOrigin(target))
          if isOnSegment and GetDistanceSqr(target, pointSegment) < 10000 then
