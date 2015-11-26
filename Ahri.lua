@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Ahri" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "DeftLib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
-if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",6)
+AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",7)
 
 local AhriMenu = MenuConfig("Ahri", "Ahri")
 AhriMenu:Menu("Combo", "Combo")
@@ -291,3 +291,5 @@ function DrawLine3D(x,y,z,a,b,c,width,col)
 end
 
 AddGapcloseEvent(_E, 666, false, AhriMenu)
+
+PrintChat(string.format("<font color='#1244EA'>Ahri:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>")) 
