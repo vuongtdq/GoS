@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Chogath" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "DeftLib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
-if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Chogath.lua","/D3ftsu/GoS/master/Chogath.version","Chogath.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Chogath.lua","/D3ftsu/GoS/master/Chogath.version","Chogath.lua",6)
 
 local ChogathMenu = MenuConfig("Chogath", "Chogath")
 ChogathMenu:Menu("Combo", "Combo")
@@ -182,3 +182,5 @@ end
 end)
  
 AddGapcloseEvent(_Q, 200, false, ChogathMenu)
+
+PrintChat(string.format("<font color='#1244EA'>Chogath:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
