@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",6)
 
 local RyzeMenu = MenuConfig("Ryze", "Ryze")
 RyzeMenu:Menu("Combo", "Combo")
@@ -28,7 +28,8 @@ RyzeMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then RyzeMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) end
 RyzeMenu.Misc:Boolean("Seraph", "Use Seraph", true)
 RyzeMenu.Misc:KeyBinding("Passive", "Auto Stack Passive (toggle)", string.byte("N"), true)
-RyzeMenu.Misc:Slider("PStacks", "=> Max Stacks To Maintain", 2, 0, 4, 1)
+RyzeMenu.Misc:Slider("Mana", "Minimum Mana %", 50, 0, 100, 1)
+RyzeMenu.Misc:Slider("PStacks", "Max Stacks To Maintain", 2, 0, 4, 1)
 RyzeMenu.Misc:Boolean("Autolvl", "Auto level", true)
 RyzeMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "Q-E-W"})
 
@@ -49,11 +50,21 @@ RyzeMenu.JungleClear:Boolean("E", "Use E", true)
 RyzeMenu:Menu("Drawings", "Drawings")
 RyzeMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 RyzeMenu.Drawings:Boolean("WE", "Draw W+E Range", true)
+RyzeMenu.Drawings:Boolean("Passive", "Draw AutoStack Stat", true)
 
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
 if RyzeMenu.Drawings.Q:Value() then DrawCircle(pos,900,1,25,GoS.Pink) end
 if RyzeMenu.Drawings.WE:Value() then DrawCircle(pos,600,1,25,GoS.Yellow) end
+if RyzeMenu.Drawings.Passive:Value() then
+  local drawPos = WorldToScreen(1,GetOrigin(myHero))
+  if RyzeMenu.Drawings:Toggle() then
+  DrawText("Auto Stack : ON",20,drawPos.x,drawPos.y,0xff00ff00)
+  else
+  DrawText("Auto Stack : OFF",20,drawPos.x,drawPos.y,0xffff0000)
+  end
+end
+  
 end)
 
 local PassiveEndTime = 0
@@ -69,7 +80,7 @@ OnTick(function(myHero)
   local Qtarget = target1:GetTarget()
   local Wtarget = target2:GetTarget()
   
-  if IOW:Mode() == "" and RyzeMenu.Misc.Passive:Value() and PStacks < RyzeMenu.Misc.PStacks:Value() then
+  if IOW:Mode() == "" and RyzeMenu.Misc.Passive:Value() and PStacks < RyzeMenu.Misc.PStacks:Value() and GetPercentMP(myHero) >= RyzeMenu.Misc.Mana:Value() then
     local timeRemaining = PassiveEndTime - GetGameTimer()
     if timeRemaining < 0.5 then
     CastSkillShot(_Q,GetMousePos())
