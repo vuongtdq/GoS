@@ -3,7 +3,7 @@ if GetObjectName(GetMyHero()) ~= "Kalista" then return end
 require('Inspired')
 require('DeftLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",6)
 
 local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
 local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
@@ -97,8 +97,7 @@ end
 
 for i,enemy in pairs(GetEnemyHeroes()) do
   if KalistaMenu.Drawings.Edmg:Value() then
-    local targetPos = GetOrigin(enemy)
-    local drawPos = WorldToScreen(1,targetPos.x,targetPos.y,targetPos.z)
+    local drawPos = WorldToScreen(1,GetOrigin(enemy))
     if Edmg(enemy) > GetCurrentHP(enemy) then
     DrawText("100%",20,drawPos.x,drawPos.y,0xffffffff)
     elseif Edmg(enemy) > 0 then
@@ -109,8 +108,7 @@ end
 
 for _,unit in pairs(minionManager.objects) do
   if GetTeam(unit) == 300 and ValidTarget(unit, 2000) and KalistaMenu.Drawings.Edmg:Value() then
-    local targetPos = GetOrigin(unit)
-    local drawPos = WorldToScreen(1,targetPos.x,targetPos.y,targetPos.z)
+    local drawPos = WorldToScreen(1,GetOrigin(unit))
     if Edmg(unit) > GetCurrentHP(unit) then
     DrawText("100%",20,drawPos.x,drawPos.y,0xffffffff)
     elseif Edmg(unit) > 0 then
@@ -1087,3 +1085,5 @@ WallSpots = {
         z2 = 9400
       },
 }
+
+PrintChat(string.format("<font color='#1244EA'>Kalista:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
