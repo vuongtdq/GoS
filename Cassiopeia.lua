@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Cassiopeia" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "DeftLib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
-if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",7)
+AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",8)
 
 local CassiopeiaMenu = MenuConfig("Cassiopeia", "Cassiopeia")
 CassiopeiaMenu:Menu("Combo", "Combo")
@@ -258,3 +258,5 @@ function IsPoisoned(unit)
 end
 
 AddGapcloseEvent(_R, 69, false, CassiopeiaMenu)
+
+PrintChat(string.format("<font color='#1244EA'>Cassiopeia:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
