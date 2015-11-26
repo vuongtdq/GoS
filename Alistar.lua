@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Alistar" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "DeftLib" ) then PrintChat("You are missing DeftLib.lua - Go download it and save it in Common!") return end
-if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",6)
 
 local AlistarMenu = MenuConfig("Alistar", "Alistar")
 AlistarMenu:Menu("Combo", "Combo")
@@ -151,3 +151,5 @@ end)
 
 AddGapcloseEvent(_Q, 365, false, AlistarMenu)
 AddGapcloseEvent(_W, 650, true, AlistarMenu)
+
+PrintChat(string.format("<font color='#1244EA'>Alistar:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
