@@ -1,8 +1,8 @@
 if GetObjectName(GetMyHero()) ~= "Twitch" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
-if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
 
 AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",7)
 
@@ -250,7 +250,8 @@ function Estacks(unit)
 end
 
 function Edmg(unit)
-  return CalcDamage(myHero,unit,15*GetCastLevel(myHero,_E)+5+(5*GetCastLevel(myHero,_E)+10+(0.2*GetBonusAP(myHero)+0.25*GetBonusDmg(myHero))))*Estacks(unit)
+	
+  return CalcDamage(myHero,unit,(5*GetCastLevel(myHero,_E)+10+.2*GetBonusAP(myHero)+.25*(GetBonusDmg(myHero)))*Estacks(unit))
 end
 
 PrintChat(string.format("<font color='#1244EA'>Twitch:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>")) 
