@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",7)
+AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",8)
 
 local RyzeMenu = MenuConfig("Ryze", "Ryze")
 RyzeMenu:Menu("Combo", "Combo")
@@ -135,7 +135,7 @@ OnTick(function(myHero)
 	Cast(_Q,Qtarget)
         end
         
-        if IsReady(_Q) and RyzeMenu.Combo.Q:Value() and IsEmpowered or PStacks > 3  then
+        if IsReady(_Q) and RyzeMenu.Combo.Q:Value() and IsEmpowered or (PStacks > 3)  then
   	Cast(_Q,Qtarget,myHero,1700,0.25,900,55,3,false)
 	end				
 		
@@ -155,7 +155,7 @@ OnTick(function(myHero)
 	Cast(_Q,Qtarget)
         end
 
-        if IsReady(_Q) and RyzeMenu.Harass.Q:Value() and IsEmpowered or PStacks > 3  then
+        if IsReady(_Q) and RyzeMenu.Harass.Q:Value() and IsEmpowered or (PStacks > 3)  then
   	Cast(_Q,Qtarget,myHero,1700,0.25,900,55,3,false)
 	end
 	
