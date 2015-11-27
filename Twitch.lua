@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",7)
+AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",8)
 
 local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
 local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
@@ -173,45 +173,47 @@ OnTick(function(myHero)
      CastSpell(_E)
      end
 
-     for i,unit in pairs(minionManager.objects) do
+   end
+
+   for i,unit in pairs(minionManager.objects) do
      	
-       if GetTeam(unit) == MINION_ENEMY then
-         if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("Siege")) and ValidTarget(unit, 1200) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
-         CastSpell(_E)
-         end
-	  
-         if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("super")) and ValidTarget(unit, 1200) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
-         CastSpell(_E)
-         end
+     if GetTeam(unit) == MINION_ENEMY then
+       if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("Siege")) and ValidTarget(unit, 1200) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
+       CastSpell(_E)
        end
+	  
+       if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("super")) and ValidTarget(unit, 1200) and TwitchMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > TwitchMenu.Farm.Mana:Value() then 
+       CastSpell(_E)
+       end
+     end
        
-       if GetTeam(unit) == 300 and ValidTarget(unit, 1200) and IsReady(_E) and TwitchMenu.Farm.Jungle.je:Value() ~= 1 then
+     if GetTeam(unit) == 300 and ValidTarget(unit, 1200) and IsReady(_E) and TwitchMenu.Farm.Jungle.je:Value() ~= 1 then
     	
-         if TwitchMenu.Farm.Jungle.je:Value() == 2 then
-           for i,Epic in pairs(Epics) do
-             if GetObjectName(unit) == Epic and GetCurrentHP(unit) < Edmg(unit) then  
-             CastSpell(_E)
-             end
-           end
-         end 
-      
-         if TwitchMenu.Farm.Jungle.je:Value() == 3 then
-           for i,Mob in pairs(Mobs) do
-             if GetObjectName(unit) == Mob and GetCurrentHP(unit) < Edmg(unit) then  
-             CastSpell(_E)
-             end
-           end
-         end 
-      
-         if TwitchMenu.Farm.Jungle.je:Value() == 4 then
-           if GetCurrentHP(unit) < Edmg(unit) then  
+       if TwitchMenu.Farm.Jungle.je:Value() == 2 then
+         for i,Epic in pairs(Epics) do
+           if GetObjectName(unit) == Epic and GetCurrentHP(unit) < Edmg(unit) then  
            CastSpell(_E)
            end
          end
+       end 
       
+       if TwitchMenu.Farm.Jungle.je:Value() == 3 then
+         for i,Mob in pairs(Mobs) do
+           if GetObjectName(unit) == Mob and GetCurrentHP(unit) < Edmg(unit) then  
+           CastSpell(_E)
+           end
+         end
+       end 
+      
+       if TwitchMenu.Farm.Jungle.je:Value() == 4 then
+         if GetCurrentHP(unit) < Edmg(unit) then  
+         CastSpell(_E)
+         end
        end
-
+      
      end
+
+   end
 
 if TwitchMenu.Misc.Autolvl:Value() then  
   if GetLevel(myHero) > lastlevel then
@@ -249,8 +251,7 @@ function Estacks(unit)
    return (Estack[GetNetworkID(unit)] or 0)
 end
 
-function Edmg(unit)
-	
+function Edmg(unit)	
   return CalcDamage(myHero,unit,(5*GetCastLevel(myHero,_E)+10+.2*GetBonusAP(myHero)+.25*(GetBonusDmg(myHero)))*Estacks(unit))
 end
 
