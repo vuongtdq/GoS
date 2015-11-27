@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",8)
+AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",9)
 
 local CassiopeiaMenu = MenuConfig("Cassiopeia", "Cassiopeia")
 CassiopeiaMenu:Menu("Combo", "Combo")
@@ -113,7 +113,7 @@ OnTick(function(myHero)
 		Cast(_Q,Qtarget)
 		end
 		
-		if IsReady(_W) and CassiopeiaMenu.Combo.W:Value() and not IsPoisoned(Wtarget) then
+		if IsReady(_W) and CassiopeiaMenu.Combo.W:Value() then
 		Cast(_W,Wtarget)
 		end
 		
