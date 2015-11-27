@@ -86,9 +86,33 @@ if OriannaMenu.Drawings.Q:Value() then DrawCircle(GetOrigin(myHero),825,1,25,0xf
 if OriannaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1000,2,25,0xff00ff00) end
 end)
 
+local Missiles = {}
+
+OnCreateObj(function(Object) 
+  if GetObjectBaseName(Object) == "missile" then
+  table.insert(Missiles,Object) 
+  end
+end)
+
+OnDeleteObj(function(Object)
+  if GetObjectBaseName(Object) == "missile" then
+    for i,rip in pairs(Missiles) do
+      if GetNetworkID(Object) == GetNetworkID(rip) then
+      table.remove(Missiles,i) 
+      end
+    end
+  end
+end)
+
 OnTick(function(myHero)
      local target = GetCurrentTarget()	
      
+     for _,missile in pairs(Missiles) do
+       if GetObjectSpellOwner(missile) == myHero and GetObjectSpellName(missile) == "orianaizuna" then
+       Ball = missile
+       end
+     end
+
      if IOW:Mode() == "Combo" then
      	
 	if IsReady(_R) and OriannaMenu.Combo.R.REnabled:Value() then
