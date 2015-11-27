@@ -213,7 +213,7 @@ OnTick(function(myHero)
 		
           if IsReady(_Q) and OriannaMenu.LaneClear.Q:Value() then
             local BestPos, BestHit = GetFarmPosition(825, 80)
-            if BestPos and BestHit > 0 then 
+            if BestPos and BestHit > 2 then 
             CastSkillShot(_Q,BestPos)
             end
 	  end
