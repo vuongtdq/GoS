@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",9)
+AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",10)
 
 local AzirMenu = MenuConfig("Azir", "Azir")
 AzirMenu:Menu("Combo", "Combo")
@@ -58,6 +58,10 @@ DelayAction(function()
   end
 end, 1)
 
+local AzirSoldiers = {}
+local AzirSoldiersTimeHolder = {}
+local SoldierToDash = nil
+
 OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_R) then
       if CHANELLING_SPELLS[spell.name] then
@@ -76,9 +80,6 @@ OnProcessSpell(function(unit, spell)
     end
 end)
 
-local AzirSoldiers = {}
-local AzirSoldiersTimeHolder = {}
-
 OnCreateObj(function(Object) 
   if GetObjectBaseName(Object) == "AzirSoldier" then
   AzirSoldiers[GetNetworkID(Object)] = Object
@@ -87,7 +88,7 @@ OnCreateObj(function(Object)
 end)
 
 function CountSoldiers(unit)
-  soldiers = 0
+  local soldiers = 0
   for _,soldier in pairs(AzirSoldiers) do
     if AzirSoldiersTimeHolder[GetNetworkID(soldier)] and AzirSoldiersTimeHolder[GetNetworkID(soldier)] > GetTickCount() and (not unit or GetDistance(soldier, unit) < 400) then 
     soldiers = soldiers + 1
@@ -97,7 +98,7 @@ function CountSoldiers(unit)
 end
 
 function GetSoldiers()
-  soldiers = {}
+  local soldiers = {}
   for _,soldier in pairs(AzirSoldiers) do
     if AzirSoldiersTimeHolder[GetNetworkID(soldier)] and AzirSoldiersTimeHolder[GetNetworkID(soldier)] > GetTickCount() then 
     table.insert(soldiers, soldier)
