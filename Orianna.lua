@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Orianna.lua","/D3ftsu/GoS/master/Orianna.version","Orianna.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Orianna.lua","/D3ftsu/GoS/master/Orianna.version","Orianna.lua",2)
 
 local Ball = myHero
 	
@@ -116,7 +116,7 @@ OnTick(function(myHero)
      if IOW:Mode() == "Combo" then
      	
 	if IsReady(_R) and OriannaMenu.Combo.R.REnabled:Value() then
-	  if EnemiesAround(GetOrigin(Ball), 400) >= OriannaMenu.Combo.R.Rcatch:Value() then
+	  if EnemiesAround2(GetOrigin(Ball), 400) >= OriannaMenu.Combo.R.Rcatch:Value() then
 	  CastSpell(_R)
 	  end
 	end
@@ -197,14 +197,14 @@ OnTick(function(myHero)
 	    end
 		
 		local QThrowPos = GetMEC(400,GetEnemyHeroes()) 
-		if IOW:Mode() == "Combo" and EnemiesAround(myHeroPos(), 825) >= 2 and ValidTarget(enemy, 825) and IsReady(_R) and OriannaMenu.Combo.Q:Value() then 
+		if IOW:Mode() == "Combo" and EnemiesAround2(myHeroPos(), 825) >= 2 and ValidTarget(enemy, 825) and IsReady(_R) and OriannaMenu.Combo.Q:Value() then 
                 CastSkillShot(_Q, QThrowPos.x, QThrowPos.y, QThrowPos.z)
                 end
 		
 	end
 	
 	if IsReady(_R) and OriannaMenu.Misc.AutoUlt.Enabled:Value() then
-	  if EnemiesAround(GetOrigin(Ball), 400) >= OriannaMenu.Misc.AutoUlt.catchable:Value() then
+	  if EnemiesAround2(GetOrigin(Ball), 400) >= OriannaMenu.Misc.AutoUlt.catchable:Value() then
 	  CastSpell(_R)
 	  end
 	end
