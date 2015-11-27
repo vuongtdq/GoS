@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",4)
+AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",5)
 
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
@@ -62,7 +62,7 @@ if KatarinaMenu.Drawings.R:Value() then DrawCircle(pos,550,1,25,GoS.Green) end
       if ValidTarget(enemy) then
       local drawpos = WorldToScreen(1,GetOrigin(enemy))
       local enemyText, color = GetDrawText(enemy)
-      DrawText(enemyText, 20, drawpos.x, drawpos.y, color)
+      DrawText(enemyText, 15, drawpos.x, drawpos.y, color)
       end
     end
   end
@@ -143,7 +143,7 @@ local function GetJumpTarget()
 	pos = maxPos
 	end
 	for _,Object in pairs(objectList) do
-	  if ValidTarget2(Object) and IsInDistance(GetOrigin(Object), 200) then
+	  if ValidTarget2(Object) and IsInDistance(Object, 200) then
 	  return Object
 	  end
 	end
@@ -156,6 +156,9 @@ local target2 = TargetSelector(700,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,f
 local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
+  mousePos = GetMousePos()
+  maxPos = calcMaxPos(mousePos)
+  jumpTarget = GetJumpTarget()
   local target = GetCurrentTarget()
   local Qtarget = target1:GetTarget()
   local Etarget = target2:GetTarget()
@@ -288,10 +291,6 @@ OnTick(function(myHero)
 	end
 
 end
-
-        mousePos = GetMousePos()
-	maxPos = calcMaxPos(mousePos)
-	jumpTarget = GetJumpTarget()
 
 	if not spellLock and wardLock and jumpTarget and IsReady(_E) then
 	CastTargetSpell(jumpTarget, _E)
