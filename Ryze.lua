@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",8)
+AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",9)
 
 local RyzeMenu = MenuConfig("Ryze", "Ryze")
 RyzeMenu:Menu("Combo", "Combo")
@@ -58,7 +58,7 @@ if RyzeMenu.Drawings.Q:Value() then DrawCircle(pos,900,1,25,GoS.Pink) end
 if RyzeMenu.Drawings.WE:Value() then DrawCircle(pos,600,1,25,GoS.Yellow) end
 if RyzeMenu.Drawings.Passive:Value() then
   local drawPos = WorldToScreen(1,GetOrigin(myHero))
-  if RyzeMenu.Drawings.Passive:Toggle() then
+  if RyzeMenu.Drawings.Passive:Value() then
   DrawText("Auto Stack : ON",20,drawPos.x,drawPos.y,0xff00ff00)
   else
   DrawText("Auto Stack : OFF",20,drawPos.x,drawPos.y,0xffff0000)
