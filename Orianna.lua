@@ -1,12 +1,10 @@
---[[ TODO:
--Ult Flash Combo
-]]
-
 if GetObjectName(GetMyHero()) ~= "Orianna" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
-if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
+
+AutoUpdate("/D3ftsu/GoS/master/Orianna.lua","/D3ftsu/GoS/master/Orianna.version","Orianna.lua",1)
 
 local Ball = myHero
 	
@@ -19,8 +17,6 @@ OriannaMenu.Combo:Menu("R", "Use R")
 OriannaMenu.Combo.R:Boolean("REnabled", "Enabled", true)
 OriannaMenu.Combo.R:Boolean("Rkill", "if Can Kill", true)
 OriannaMenu.Combo.R:Slider("Rcatch", "if can catch X enemies", 2, 0, 5, 1)
---OriannaMenu.Combo.R:Key("FlashR", "R Flash Combo", string.byte("G"))
---OriannaMenu.Combo.R:Slider("FlashRcatch", "if can catch X enemies", 3, 0, 5, 1)
 
 OriannaMenu:Menu("Harass", "Harass")
 OriannaMenu.Harass:Boolean("Q", "Use Q", true)
@@ -83,11 +79,11 @@ OnProcessSpell(function(unit, spell)
 end)
 
 OnDraw(function(myHero)
-if OriannaMenu.Drawings.Ball:Value() then DrawCircle(GetOrigin(Ball),150,2,100,0xffffffff) end
-if OriannaMenu.Drawings.W:Value() then DrawCircle(GetOrigin(Ball),250,2,100,0xffffffff) end
-if OriannaMenu.Drawings.R:Value() then DrawCircle(GetOrigin(Ball),400,2,100,0xffffffff) end
-if OriannaMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),825,2,100,0xff00ff00) end
-if OriannaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1000,2,100,0xff00ff00) end
+if OriannaMenu.Drawings.Ball:Value() then DrawCircle(GetOrigin(Ball),150,1,25,0xffffffff) end
+if OriannaMenu.Drawings.W:Value() then DrawCircle(GetOrigin(Ball),250,1,25,0xffffffff) end
+if OriannaMenu.Drawings.R:Value() then DrawCircle(GetOrigin(Ball),400,1,25,0xffffffff) end
+if OriannaMenu.Drawings.Q:Value() then DrawCircle(GetOrigin(myHero),825,1,25,0xff00ff00) end
+if OriannaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),1000,2,25,0xff00ff00) end
 end)
 
 OnTick(function(myHero)
@@ -258,3 +254,5 @@ OnUpdateBuff(function(unit,buff)
   Ball = myHero
   end
 end)
+
+PrintChat(string.format("<font color='#1244EA'>Orianna:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
