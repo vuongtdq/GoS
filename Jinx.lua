@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",11)
+AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",12)
 
 local JinxMenu = MenuConfig("Jinx", "Jinx")
 JinxMenu:Menu("Combo", "Combo")
@@ -100,8 +100,8 @@ OnTick(function(myHero)
     local Rtarget = target3:GetTarget()
     local RangeCheck = 25*GetCastLevel(myHero, _Q) + 50 + 600
 
-    if IsReady(_E) and JinxMenu.Combo.E.ECC:Value() then
-      local hit, pos = EPred:Predict(target)
+    if IsReady(_E) and ValidTarget(Etarget, 960) and JinxMenu.Combo.E.ECC:Value() then
+      local hit, pos = EPred:Predict(Etarget)
       if hit >= 4 then
       CastSkillShot(_E, pos)
       end
