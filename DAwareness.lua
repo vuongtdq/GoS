@@ -86,7 +86,7 @@ OnDraw(function(myHero)
   if place and GetDistance(allywaypoint,place) < 1 then place = nil end
   if place ~= nil and DAwareness.WayPoints.Allies[GetObjectName(allywaypoint).."WP"]:Value() then
   local drawPos = WorldToScreen(0,place.x,place.y,place.z)
-  DrawLine3D(GetOrigin(allywaypoint).x,GetOrigin(allywaypoint).y,GetOrigin(allywaypoint).z, place.x, place.y, place.z, 1, ARGB(255, 255, 0, 0))
+  DrawLine3D(GetOrigin(allywaypoint).x,GetOrigin(allywaypoint).y,GetOrigin(allywaypoint).z, place.x, place.y, place.z, 1, ARGB(255, 0, 255, 0))
   DrawText(""..GetObjectName(allywaypoint), 15, drawPos.x, drawPos.y-10, ARGB(155, 255, 255, 255))
   DrawText((math.floor(GetDistance(allywaypoint,place)/GetMoveSpeed(allywaypoint)*10)/10).."s", 15, drawPos.x, drawPos.y+10, ARGB(155, 255, 255, 255))
   end
@@ -102,7 +102,7 @@ OnDraw(function(myHero)
   if myplace and GetDistance(myplace) < 1 then myplace = nil end
   if myplace ~= nil and DAwareness.WayPoints.Allies[GetObjectName(myHero).."WP"]:Value() then
   local drawPos3 = WorldToScreen(0,myplace.x,myplace.y,myplace.z)
-  DrawLine3D(GetOrigin(myHero).x,GetOrigin(myHero).y,GetOrigin(myHero).z, myplace.x, myplace.y, myplace.z, 1, ARGB(255, 255, 0, 0))
+  DrawLine3D(GetOrigin(myHero).x,GetOrigin(myHero).y,GetOrigin(myHero).z, myplace.x, myplace.y, myplace.z, 1, ARGB(255, 0, 255, 0))
   DrawText(""..GetObjectName(myHero), 15, drawPos3.x, drawPos3.y-10, ARGB(155, 255, 255, 255))
   DrawText((math.floor(GetDistance(mywaypoint,myplace)/GetMoveSpeed(myHero)*10)/10).."s", 15, drawPos3.x, drawPos3.y+10, ARGB(155, 255, 255, 255))
   end
