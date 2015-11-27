@@ -1,4 +1,4 @@
-DeftLibVersion = 20
+DeftLibVersion = 21
 
 require('Inspired')
 require('IPrediction')
@@ -333,7 +333,7 @@ end
 
 function EnemiesAround2(pos, range, time)
   local c = 0
-  local time = time or 2.5
+  local time = time or 250
   if pos == nil then return 0 end
   for k,v in pairs(GetEnemyHeroes()) do 
     if v and ValidTarget(v) and GetDistanceSqr(pos,GetPredictedPos(v, time)) < range*range then
