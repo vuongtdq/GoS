@@ -5,10 +5,6 @@ DAwareness:Menu("WayPoints", "WayPoints")
 DAwareness.WayPoints:Menu("Allies", "Ally Team")
 DAwareness.WayPoints:Menu("Enemies", "Enemy Team")
 DAwareness.WayPoints.Allies:Boolean(GetObjectName(myHero).."WP", " "..GetObjectName(myHero).." ", true)
---DAwareness:Menu("CD", "Cooldown")
---DAwareness.CD:Menu("Allies", "Ally Team")
---DAwareness.CD:Menu("Enemies", "Enemy Team")
---DAwareness.CD.Allies:Boolean(GetObjectName(myHero).."CD", " "..GetObjectName(myHero).." ", true)
 DAwareness:Menu("MiniMapHack", "MiniMap Hack")
 DAwareness.MiniMapHack:Boolean("Enabled", "Enabled", true)
 
@@ -47,17 +43,15 @@ OnDrawMinimap(function()
     end
 end)
 
-DelayAction(function()
+do 
   for k,v in pairs(GetEnemyHeroes()) do
   DAwareness.WayPoints.Enemies:Boolean(GetObjectName(v).."WP", " "..GetObjectName(v).." ", true)
-  --DAwareness.CD.Enemies:Boolean(GetObjectName(v).."CD", " "..GetObjectName(v).." ", true)
   end
 
   for k,v in pairs(GetAllyHeroes()) do
   DAwareness.WayPoints.Allies:Boolean(GetObjectName(v).."WP", " "..GetObjectName(v).." ", true)
-  --DAwareness.CD.Allies:Boolean(GetObjectName(v).."CD", " "..GetObjectName(v).." ", true)
   end
-end, 1)
+end
 
 OnProcessWaypoint(function(unit,waypoint)
   for k,v in pairs(GetAllyHeroes()) do
@@ -66,7 +60,7 @@ OnProcessWaypoint(function(unit,waypoint)
       place = waypoint.position
       allywaypoint = unit
       end
-	  end
+    end
   end
   
   for k,v in pairs(GetEnemyHeroes()) do
@@ -75,7 +69,7 @@ OnProcessWaypoint(function(unit,waypoint)
       place2 = waypoint.position
       enemywaypoint = unit
       end
-	  end
+    end
   end
   
   if unit == GetMyHero() and DAwareness.WayPoints.Allies[GetObjectName(myHero).."WP"]:Value() then
