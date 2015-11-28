@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",12)
+AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",13)
 
 local AzirMenu = MenuConfig("Azir", "Azir")
 AzirMenu:Menu("Combo", "Combo")
@@ -25,6 +25,7 @@ AzirMenu:Menu("Killsteal", "Killsteal")
 AzirMenu.Killsteal:Boolean("Q", "Killsteal with Q", true)
 AzirMenu.Killsteal:Boolean("W", "Killsteal with W/AA", false)
 AzirMenu.Killsteal:Boolean("E", "Killsteal with E", true)
+AzirMenu.Killsteal:Boolean("R", "Killsteal with R", true)
 
 AzirMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then AzirMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
@@ -92,7 +93,7 @@ end)
 function CountSoldiers(unit)
   local soldiers = 0
   for _,soldier in pairs(AzirSoldiers) do
-    if not unit or ValidTarget(unit) and GetDistance(soldier, unit) < 400 then 
+    if not unit or GetDistance(soldier, unit) < 400 then 
     soldiers = soldiers + 1
     end
   end
