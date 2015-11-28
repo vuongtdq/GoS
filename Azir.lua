@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",11)
+AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",12)
 
 local AzirMenu = MenuConfig("Azir", "Azir")
 AzirMenu:Menu("Combo", "Combo")
@@ -155,7 +155,7 @@ OnTick(function(myHero)
        end	   
      end
          
-     if IsReady(_R) and AzirMenu.Combo.R:Value() and ValidTarget(Rtarget, 520) and GetHP2(Rtarget) < (GetCastMana(myHero) >= (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_R,GetCastLevel(myHero,_R))) and getdmg("R", Rtarget)+getdmg("Q", Rtarget)+getdmg("W", Rtarget)*CountSoldiers()) or 0  then
+     if IsReady(_R) and AzirMenu.Combo.R:Value() and ValidTarget(Rtarget, 520) and GetHP2(Rtarget) < (GetCurrentMana(myHero) >= (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_R,GetCastLevel(myHero,_R))) and getdmg("R", Rtarget)+getdmg("Q", Rtarget)+getdmg("W", Rtarget)*CountSoldiers()) or 0 then
      Cast(_R,Rtarget)
      end
 	
