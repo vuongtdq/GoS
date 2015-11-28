@@ -1,4 +1,4 @@
-DeftLibVersion = 23
+DeftLibVersion = 24
 
 require('Inspired')
 require('IPrediction')
@@ -294,9 +294,11 @@ function Cast(spell, target, source, speed, delay, range, width, hitchance, coll
 		local collH = collH or true
 		local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
 		local Name = SpellData[GetObjectName(myHero)][spell].Name
-                local Predicted = GetPredictionForPlayer(GetOrigin(source),target,GetMoveSpeed(target), speed, delay*1000, range, width, coll, true)
-                if Predicted.HitChance >= hc then
-                CastSkillShot(spell, Predicted.PredPos)
+		if ValidTarget(target, range+width) then
+                  local Predicted = GetPredictionForPlayer(GetOrigin(source),target,GetMoveSpeed(target), speed, delay*1000, range, width, coll, true)
+                  if Predicted.HitChance >= hc then
+                  CastSkillShot(spell, Predicted.PredPos)
+                  end
                 end
         end
 	
@@ -338,9 +340,11 @@ function Cast2(spell, target, source, speed, delay, range, width, hitchance, col
 		local collH = collH or true
 		local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
 		local Name = SpellData[GetObjectName(myHero)][spell].Name
-                local Predicted = GetPredictionForPlayer(GetOrigin(source),target,GetMoveSpeed(target), speed, delay*1000, range, width, coll, true)
-                if Predicted.HitChance >= hc then
-                CastSkillShot2(spell, Predicted.PredPos)
+                if ValidTarget(target, range+width) then
+                  local Predicted = GetPredictionForPlayer(GetOrigin(source),target,GetMoveSpeed(target), speed, delay*1000, range, width, coll, true)
+                  if Predicted.HitChance >= hc then
+                  CastSkillShot2(spell, Predicted.PredPos)
+                  end
                 end
         end
 	
