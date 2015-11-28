@@ -1,4 +1,6 @@
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
+require('Inspired')
+
+AutoUpdate("/D3ftsu/GoS/master/DAwareness.lua","/D3ftsu/GoS/master/DAwareness.version","DAwareness.lua",1)
 
 local DAwareness = MenuConfig("DAwareness", "DAwareness")
 DAwareness:Menu("WayPoints", "WayPoints")
