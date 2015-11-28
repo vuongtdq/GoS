@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",10)
+AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",11)
 
 local AzirMenu = MenuConfig("Azir", "Azir")
 AzirMenu:Menu("Combo", "Combo")
@@ -58,10 +58,6 @@ DelayAction(function()
   end
 end, 1)
 
-local AzirSoldiers = {}
-local AzirSoldiersTimeHolder = {}
-local SoldierToDash = nil
-
 OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_R) then
       if CHANELLING_SPELLS[spell.name] then
@@ -70,38 +66,34 @@ OnProcessSpell(function(unit, spell)
         end
       end
     end
-    
-    if unit == myHero and spell.name == "AzirQ" then
-      for _,soldier in pairs(AzirSoldiers) do
-        if AzirSoldiersTimeHolder[GetNetworkID(soldier)] and AzirSoldiersTimeHolder[GetNetworkID(soldier)] < math.huge and AzirSoldiersTimeHolder[GetNetworkID(soldier)] > GetTickCount() then 
-        AzirSoldiersTimeHolder[GetNetworkID(soldier)] = AzirSoldiersTimeHolder[GetNetworkID(soldier)] + 1000
-        end
-      end
-    end
+end)
+
+local AzirSoldiers = {}
+local SoldierToDash = nil
+
+OnObjectLoad(function(Object)
+  if GetObjectBaseName(Object) == "AzirSoldier" then
+  table.insert(AzirSoldiers, Object)
+  end
 end)
 
 OnCreateObj(function(Object) 
   if GetObjectBaseName(Object) == "AzirSoldier" then
-  AzirSoldiers[GetNetworkID(Object)] = Object
-  AzirSoldiersTimeHolder[GetNetworkID(Object)] = GetTickCount()+9000
+  table.insert(AzirSoldiers, Object)
+  end
+end)
+
+OnDeleteObj(function(Object) 
+  if GetObjectBaseName(Object) == "Azir_Base_P_Soldier_Ring.troy" then
+  table.remove(AzirSoldiers, 1)
   end
 end)
 
 function CountSoldiers(unit)
   local soldiers = 0
   for _,soldier in pairs(AzirSoldiers) do
-    if AzirSoldiersTimeHolder[GetNetworkID(soldier)] and AzirSoldiersTimeHolder[GetNetworkID(soldier)] > GetTickCount() and (not unit or GetDistance(soldier, unit) < 400) then 
+    if not unit or GetDistance(soldier, unit) < 400 then 
     soldiers = soldiers + 1
-    end
-  end
-  return soldiers
-end
-
-function GetSoldiers()
-  local soldiers = {}
-  for _,soldier in pairs(AzirSoldiers) do
-    if AzirSoldiersTimeHolder[GetNetworkID(soldier)] and AzirSoldiersTimeHolder[GetNetworkID(soldier)] > GetTickCount() then 
-    table.insert(soldiers, soldier)
     end
   end
   return soldiers
@@ -130,14 +122,14 @@ OnTick(function(myHero)
    if IOW:Mode() == "Combo" then
 	
      if IsReady(_Q) and IsReady(_W) and AzirMenu.Combo.Q:Value() and AzirMenu.Combo.W:Value() and ValidTarget(Qtarget, 990) and GetCurrentMana(myHero) >= (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W))) then
-       for _,Soldier in pairs(GetSoldiers()) do
+       for _,Soldier in pairs(AzirSoldiers) do
        CastSkillShot(_W, GetOrigin(Qtarget))
        DelayAction(function() Cast(_Q,Qtarget,Soldier) end, 250)
        end
      end
 	 
-     if AzirMenu.Combo.Q:Value() and CountSoldiers() > 0 then
-       for _,Soldier in pairs(GetSoldiers()) do
+     if AzirMenu.Combo.Q:Value() then
+       for _,Soldier in pairs(AzirSoldiers) do
        Cast(_Q, Qtarget, Soldier)
        end
      end
@@ -147,7 +139,7 @@ OnTick(function(myHero)
      end
 	 
      if IsReady(_E) and AzirMenu.Combo.E:Value() and ValidTarget(target, 1300) and EnemiesAround(GetOrigin(target), 666) < 2 and GetHP2(target) < getdmg("Q", target) + getdmg("W",target)*CountSoldiers(target) then 
-       for _,Soldier in pairs(GetSoldiers()) do
+       for _,Soldier in pairs(AzirSoldiers) do
          local pointSegment,pointLine,isOnSegment = VectorPointProjectionOnLineSegment(GetOrigin(myHero), GetOrigin(Soldier), GetOrigin(target))
          if isOnSegment and GetDistanceSqr(target, pointSegment) < 10000 then
 	 CastTargetSpell(Soldier, _E)
@@ -156,7 +148,7 @@ OnTick(function(myHero)
      end
 		 
      if CountSoldiers() > 0 then
-       for _,Soldier in pairs(GetSoldiers()) do  
+       for _,Soldier in pairs(AzirSoldiers) do  
          if AzirMenu.Combo.AA:Value() and ValidTarget(target, 1500) and GetDistance(target) >= 550 and GetDistance(Soldier, target) <= 400 then
          AttackUnit(target)
          end
@@ -172,14 +164,14 @@ OnTick(function(myHero)
    if IOW:Mode() == "Harass"  then
     	
      if IsReady(_Q) and IsReady(_W) and AzirMenu.Harass.Q:Value() and AzirMenu.Harass.W:Value() and ValidTarget(Qtarget, 990) and GetCurrentMana(myHero) >= (GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W))) then
-       for _,Soldier in pairs(GetSoldiers()) do
+       for _,Soldier in pairs(AzirSoldiers) do
        CastSkillShot(_W, GetOrigin(Qtarget))
        DelayAction(function() Cast(_Q,Qtarget,Soldier) end, 250)
        end
      end
 	 
      if AzirMenu.Harass.Q:Value() and CountSoldiers() > 0 then
-       for _,Soldier in pairs(GetSoldiers()) do
+       for _,Soldier in pairs(AzirSoldiers) do
        Cast(_Q, Qtarget, Soldier)
        end
      end
@@ -189,7 +181,7 @@ OnTick(function(myHero)
      end
 		 
      if CountSoldiers() > 0 then
-       for _,Soldier in pairs(GetSoldiers()) do  
+       for _,Soldier in pairs(AzirSoldiers) do  
          if AzirMenu.Harass.AA:Value() and ValidTarget(target, 1500) and GetDistance(target) >= 550 and GetDistance(Soldier, target) <= 400 then
          AttackUnit(target)
          end
@@ -222,7 +214,7 @@ OnTick(function(myHero)
         Cast(_R, enemy)
         end
 		
-        for _,Soldier in pairs(GetSoldiers()) do
+        for _,Soldier in pairs(AzirSoldiers) do
 	  if IsReady(_Q) and ValidTarget(enemy, 990) and AzirMenu.Killsteal.Q:Value() and GetHP2(enemy) < getdmg("Q",enemy) then 
           Cast(_Q,enemy,Soldier)
           elseif IsReady(_E) and ValidTarget(enemy, 1300) and EnemiesAround(GetOrigin(enemy), 666) < 2 and AzirMenu.Killsteal.E:Value() and GetHP2(enemy) < getdmg("E",enemy) then 
@@ -268,7 +260,7 @@ OnTick(function(myHero)
          end
        end
      elseif CountSoldiers() > 0 then
-       for _,Soldier in pairs(GetSoldiers()) do
+       for _,Soldier in pairs(AzirSoldiers) do
          if not SoldierToDash then
          SoldierToDash = Soldier
          elseif SoldierToDash and GetDistanceSqr(Soldier,mousePos) < GetDistanceSqr(SoldierToDash,mousePos) then
@@ -291,10 +283,10 @@ OnTick(function(myHero)
      MoveToXYZ(mousePos)
      end
      
-     if IsReady(_R) then
+     if IsReady(_R) and ValidTarget(enemy,750) then
 	 
        if CountSoldiers() > 0 then
-         for _,Soldier in pairs(GetSoldiers()) do
+         for _,Soldier in pairs(AzirSoldiers) do
            if not SoldierToDash then
            SoldierToDash = Soldier
            elseif SoldierToDash and GetDistanceSqr(Soldier,enemy) < GetDistanceSqr(SoldierToDash,enemy) then
