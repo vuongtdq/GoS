@@ -1,10 +1,11 @@
 if GetObjectName(GetMyHero()) ~= "Jinx" then return end
 
 require('Inspired')
+require('IPrediction')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",12)
+AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",13)
 
 local JinxMenu = MenuConfig("Jinx", "Jinx")
 JinxMenu:Menu("Combo", "Combo")
