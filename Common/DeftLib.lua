@@ -280,7 +280,7 @@ local PredictionMenu = MenuConfig("PredictionMenu", "PredictionMenu")
 PredictionMenu:DropDown("Pred", "Choose Prediction : ", 1, {"GoS", "IPrediction"})
 	
 IPredSpells = {}
-function Cast(spell, target, source, speed, delay, range, width, hitchance, coll, collM, collH, Prediction)
+function Cast(spell, target, source, speed, delay, range, width, hitchance, coll, collM, collH)
 	local source = source or myHero
 	local hitchance = hitchance or 3
 	if PredictionMenu.Pred:Value() == 1 then
@@ -290,6 +290,10 @@ function Cast(spell, target, source, speed, delay, range, width, hitchance, coll
 		local width = width or SpellData[GetObjectName(myHero)][spell].Width
 		local coll = coll or SpellData[GetObjectName(myHero)][spell].collision
 		local hc = hc or 1
+		local collM = collM or true
+		local collH = collH or true
+		local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
+		local Name = SpellData[GetObjectName(myHero)][spell].Name
                 local Predicted = GetPredictionForPlayer(GetOrigin(source),target,GetMoveSpeed(target), speed, delay*1000, range, width, coll, true)
                 if Predicted.HitChance >= hc then
                 CastSkillShot(spell, Predicted.PredPos)
@@ -330,6 +334,10 @@ function Cast2(spell, target, source, speed, delay, range, width, hitchance, col
 		local width = width or SpellData[GetObjectName(myHero)][spell].Width
 		local coll = coll or SpellData[GetObjectName(myHero)][spell].collision
 		local hc = hc or 1
+		local collM = collM or true
+		local collH = collH or true
+		local types = SpellData[GetObjectName(myHero)][spell].type or "linear"
+		local Name = SpellData[GetObjectName(myHero)][spell].Name
                 local Predicted = GetPredictionForPlayer(GetOrigin(source),target,GetMoveSpeed(target), speed, delay*1000, range, width, coll, true)
                 if Predicted.HitChance >= hc then
                 CastSkillShot2(spell, Predicted.PredPos)
