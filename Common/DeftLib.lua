@@ -290,7 +290,7 @@ function Cast(spell, target, source, speed, delay, range, width, hitchance, coll
 		local width = width or SpellData[GetObjectName(myHero)][spell].Width
 		local coll = coll or SpellData[GetObjectName(myHero)][spell].collision
 		local hc = hc or 1
-                local Predicted = GetPredictionForPlayer(GetOrigin(source),target,GetMoveSpeed(target), speed, delay, range, width, coll, true)
+                local Predicted = GetPredictionForPlayer(GetOrigin(source),target,GetMoveSpeed(target), speed, delay*1000, range, width, coll, true)
                 if Predicted.HitChance >= hc then
                 CastSkillShot(spell, Predicted.PredPos)
                 end
@@ -330,7 +330,7 @@ function Cast2(spell, target, source, speed, delay, range, width, hitchance, col
 		local width = width or SpellData[GetObjectName(myHero)][spell].Width
 		local coll = coll or SpellData[GetObjectName(myHero)][spell].collision
 		local hc = hc or 1
-                local Predicted = GetPredictionForPlayer(GetOrigin(source),target,GetMoveSpeed(target), speed, delay, range, width, coll, true)
+                local Predicted = GetPredictionForPlayer(GetOrigin(source),target,GetMoveSpeed(target), speed, delay*1000, range, width, coll, true)
                 if Predicted.HitChance >= hc then
                 CastSkillShot2(spell, Predicted.PredPos)
                 end
