@@ -92,7 +92,7 @@ end)
 function CountSoldiers(unit)
   local soldiers = 0
   for _,soldier in pairs(AzirSoldiers) do
-    if not unit or GetDistance(soldier, unit) < 400 then 
+    if not unit or ValidTarget(unit) and GetDistance(soldier, unit) < 400 then 
     soldiers = soldiers + 1
     end
   end
