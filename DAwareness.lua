@@ -1,6 +1,6 @@
 require('Inspired')
 
-AutoUpdate("/D3ftsu/GoS/master/DAwareness.lua","/D3ftsu/GoS/master/DAwareness.version","DAwareness.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/DAwareness.lua","/D3ftsu/GoS/master/DAwareness.version","DAwareness.lua",2)
 
 local DAwareness = MenuConfig("DAwareness", "DAwareness")
 DAwareness:Menu("WayPoints", "WayPoints")
@@ -45,7 +45,7 @@ OnDrawMinimap(function()
     end
 end)
 
-do 
+DelayAction(function()
   for k,v in pairs(GetEnemyHeroes()) do
   DAwareness.WayPoints.Enemies:Boolean(GetObjectName(v).."WP", " "..GetObjectName(v).." ", true)
   end
@@ -53,7 +53,7 @@ do
   for k,v in pairs(GetAllyHeroes()) do
   DAwareness.WayPoints.Allies:Boolean(GetObjectName(v).."WP", " "..GetObjectName(v).." ", true)
   end
-end
+end, 1)
 
 OnProcessWaypoint(function(unit,waypoint)
   for k,v in pairs(GetAllyHeroes()) do
