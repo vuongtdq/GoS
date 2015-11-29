@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",6)
 
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
@@ -88,6 +88,17 @@ local wardItems = {
         { id = 2043, spellName = "VisionWard"}
 }
 
+local function IsInDistance2(r, p1, p2, fast)
+		local fast = fast or false
+		if fast then
+		local p1y = p1.z or p1.y
+		local p2y = p2.z or p2.y
+		return (p1.x + r >= p2.x) and (p1.x - r <= p2.x) and (p1y + r >= p2y) and (p1y - r <= p2y)
+		else
+    	return GetDistanceSqr(p1, p2) < r*r
+    end
+end
+
 local function calcMaxPos(pos)
 	local origin = GetOrigin(myHero)
 	local vectorx = pos.x-origin.x
@@ -114,7 +125,7 @@ local function putWard(pos0)
 	local slot = findWardSlot()
 
 	local pos = pos0
-	if not IsInDistance(pos, 600) then
+	if not IsInDistance2(600, pos) then
 	pos = calcMaxPos(pos)
 	end
 
@@ -139,11 +150,11 @@ end
 
 local function GetJumpTarget()
 	local pos = mousePos
-	if not IsInDistance(mousePos, 600) then
+	if not IsInDistance2(600, mousePos, GetOrigin(myHero)) then
 	pos = maxPos
 	end
 	for _,Object in pairs(objectList) do
-	  if ValidTarget2(Object) and IsInDistance(Object, 200) then
+	  if ValidTarget2(Object) and IsInDistance2(200, GetOrigin(object), pos) then
 	  return Object
 	  end
 	end
