@@ -1,12 +1,10 @@
---[[ TODO:
--Laneclear/Jungleclear
--Auto E
-]]
-
 if GetObjectName(GetMyHero()) ~= "Sivir" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
+
+AutoUpdate("/D3ftsu/GoS/master/Sivir.lua","/D3ftsu/GoS/master/Sivir.version","Sivir.lua",1)
 
 local SivirMenu = MenuConfig("Sivir", "Sivir")
 SivirMenu:Menu("Combo", "Combo")
@@ -34,103 +32,124 @@ SivirMenu:Menu("Misc", "Misc")
 SivirMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true)
 SivirMenu.Misc:Boolean("Autolvl", "Auto level", true)
 SivirMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "E-Q-W"})
+	
+SivirMenu:Menu("LaneClear", "LaneClear")
+SivirMenu.LaneClear:Boolean("Q", "Use Q", true)
+--SivirMenu.LaneClear:Boolean("W", "Use W", false)
+SivirMenu.LaneClear:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
+
+SivirMenu:Menu("JungleClear", "JungleClear")
+SivirMenu.JungleClear:Boolean("Q", "Use Q", true)
+--SivirMenu.JungleClear:Boolean("W", "Use W", true)
+SivirMenu.JungleClear:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
 
 SivirMenu:Menu("Drawings", "Drawings")
 SivirMenu.Drawings:Boolean("Q", "Draw Q Range", true)
-SivirMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 OnDraw(function(myHero)
-if SivirMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),1075,1,0,0xff00ff00) end
+if SivirMenu.Drawings.Q:Value() then DrawCircle(GetOrigin(myHero),1075,1,25,GoS.Pink) end
 end)
+
+IOW:AddCallback(AFTER_ATTACK, function(target, mode)
+  if IsReady(_W) then 
+    if mode == "Combo" and target ~= nil and SivirMenu.Combo.W:Value() then
+    CastSpell(_W)
+    end
+    
+    if mode == "Combo" and target ~= nil and SivirMenu.Harass.W:Value() and GetPercentMP(myHero) >= SivirMenu.Harass.Mana:Value() then
+    CastSpell(_W)
+    end
+  end
+end)
+
+local target1 = TargetSelector(1125,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
+local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
- if IOW:Mode() == "Combo" then
-	
-	local target = GetCurrentTarget()
- 
-	if IsReady(_Q) and ValidTarget(target, 1075) and SivirMenu.Combo.Q:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= SivirMenu.Combo.QMana:Value() then
+    local target = GetCurrentTarget()
+    local QSS = GetItemSlot(myHero,3140) > 0 and GetItemSlot(myHero,3140) or GetItemSlot(myHero,3139) > 0 and GetItemSlot(myHero,3139) or nil
+    local BRK = GetItemSlot(myHero,3153) > 0 and GetItemSlot(myHero,3153) or GetItemSlot(myHero,3144) > 0 and GetItemSlot(myHero,3144) or nil
+    local YMG = GetItemSlot(myHero,3142) > 0 and GetItemSlot(myHero,3142) or nil
+    local Qtarget = target1:GetTarget()
+    
+    if IOW:Mode() == "Combo" then
+
+	if IsReady(_Q) and SivirMenu.Combo.Q:Value() and GetPercentMP(myHero) >= SivirMenu.Combo.QMana:Value() and not IOW.isWindingUp then
         Cast(_Q,target)
         end
 		
-	if GetItemSlot(myHero,3140) > 0 and SivirMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < SivirMenu.Combo.QSSHP:Value() then
-        CastTargetSpell(myHero, GetItemSlot(myHero,3140))
-        end
-
-        if GetItemSlot(myHero,3139) > 0 and SivirMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < SivirMenu.Combo.QSSHP:Value() then
-        CastTargetSpell(myHero, GetItemSlot(myHero,3139))
-        end
-		
-	if IsReady(_R) and ValidTarget(target, 600) and SivirMenu.Combo.R:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= SivirMenu.Combo.RMana:Value() and EnemiesAround(myHeroPos(), 600) >= SivirMenu.Combo.Rmin:Value() then
+	if IsReady(_R) and ValidTarget(target, 600) and SivirMenu.Combo.R:Value() and GetPercentMP(myHero) >= SivirMenu.Combo.RMana:Value() and EnemiesAround(GetOrigin(myHero), 600) >= SivirMenu.Combo.Rmin:Value() then
 	CastSpell(_R)
-	end
+        end
 
- end
+        if QSS and IsReady(QSS) and SivirMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < SivirMenu.Combo.QSSHP:Value() then
+        CastSpell(QSS)
+        end
 
- if IOW:Mode() == "Harass" and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= SivirMenu.Harass.Mana:Value() then
- 
-        local target = GetCurrentTarget()
-  
-	if IsReady(_Q) and ValidTarget(target, 1075) and SivirMenu.Harass.Q:Value() then
+    end
+
+    if IOW:Mode() == "Harass" and GetPercentMP(myHero) >= SivirMenu.Harass.Mana:Value() then
+
+	if IsReady(_Q) and SivirMenu.Harass.Q:Value() then
         Cast(_Q,target)
         end
 
- end
+    end
  
- for i,enemy in pairs(GetEnemyHeroes()) do
+    for i,enemy in pairs(GetEnemyHeroes()) do
 	
-	if IOW:Mode() == "Combo" then	
-	if GetItemSlot(myHero,3153) > 0 and SivirMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < SivirMenu.Combo.myHP:Value() and 100*GetCurrentHP(enemy)/GetMaxHP(enemy) > SivirMenu.Combo.targetHP:Value() then
-        CastTargetSpell(enemy, GetItemSlot(myHero,3153))
+      if IOW:Mode() == "Combo" then	
+	if BRK and IsReady(BRK) and SivirMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < SivirMenu.Combo.myHP:Value() and GetPercentHP(enemy) > SivirMenu.Combo.targetHP:Value() then
+        CastTargetSpell(enemy, BRK)
         end
 
-        if GetItemSlot(myHero,3144) > 0 and SivirMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and 100*GetCurrentHP(myHero)/GetMaxHP(myHero) < SivirMenu.Combo.myHP:Value() and 100*GetCurrentHP(enemy)/GetMaxHP(enemy) > SivirMenu.Combo.targetHP:Value() then
-        CastTargetSpell(enemy, GetItemSlot(myHero,3144))
-        end
-
-        if GetItemSlot(myHero,3142) > 0 and SivirMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
-        CastTargetSpell(myHero, GetItemSlot(myHero,3142))
-        end
-        end
+        if YMG and IsReady(YMG) and SivirMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
+        CastSpell(YMG)
+        end	
+      end
         
-	if Ignite and SivirMenu.Misc.AutoIgnite:Value() then
-          if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
-          CastTargetSpell(enemy, Ignite)
+      if Ignite and SivirMenu.Misc.AutoIgnite:Value() then
+        if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
+        CastTargetSpell(enemy, Ignite)
+        end
+      end
+	
+      if IsReady(_Q) and ValidTarget(enemy, 1125) and SivirMenu.Killsteal.Q:Value() and GetHP(enemy) < getdmg("Q",enemy) then 
+      Cast(_Q,enemy)
+      end
+		
+    end
+
+    if IOW:Mode() == "LaneClear" then
+ 
+      if GetPercentMP(myHero) >= SivirMenu.LaneClear.Mana:Value() then
+        if IsReady(_Q) and SivirMenu.LaneClear.Q:Value() then
+          local BestPos, BestHit = GetLineFarmPosition(1075, 85, MINION_ENEMY)
+          if BestPos and BestHit > 2 then 
+          CastSkillShot(_Q, BestPos)
           end
 	end
-	
-	if IsReady(_Q) and ValidTarget(enemy, 1075) and SivirMenu.Killsteal.Q:Value() and GetCurrentHP(enemy)+GetDmgShield(enemy) < CalcDamage(myHero, enemy, 20*GetCastLevel(myHero,_Q)+5+(0.6+0.1*GetCastLevel(myHero, _Q))*(GetBaseDamage(myHero)+GetBonusDmg(myHero)) + 0.5*GetBonusAP(myHero), 0) then 
-Cast(_Q,enemy)
+      end
+
+    end
+         
+    for i,mobs in pairs(minionManager.objects) do
+      if IOW:Mode() == "LaneClear" and GetTeam(mobs) == 300 and GetPercentMP(myHero) >= SivirMenu.JungleClear.Mana:Value() then
+        if IsReady(_Q) and SivirMenu.JungleClear.Q:Value() and ValidTarget(mobs, 1075) then
+        CastSkillShot(_Q,GetOrigin(mobs))
 	end
-		
-end
-  
+      end
+    end
+
 if SivirMenu.Misc.Autolvl:Value() then
-      if SivirMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_W, _Q, _E, _Q, _Q , _R, _Q , _W, _Q , _W, _R, _W, _W, _E, _E, _R, _E, _E}
-      elseif SivirMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_W, _Q, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-      elseif SivirMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_W, _Q, _E, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
-      end
-DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
+  if GetLevel(myHero) > lastlevel then
+    if SivirMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_W, _Q, _E, _Q, _Q , _R, _Q , _W, _Q , _W, _R, _W, _W, _E, _E, _R, _E, _E}
+    elseif SivirMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_W, _Q, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
+    elseif SivirMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_W, _Q, _E, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
+    end
+    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
+    lastlevel = GetLevel(myHero)
+  end
 end
 
-end)
-
-OnProcessSpell(function(unit, spell)
-    local target = GetCurrentTarget()
-    if unit and spell and spell.name then
-      if unit == myHero then
-        if spell.name:lower():find("attack") then 
-	        DelayAction(function() 
-
-                                 if IOW:Mode() == "Combo" and ValidTarget(target, 600) and CanUseSpell(myHero, _W) == READY and SivirMenu.Combo.W:Value() then	  
-                                 CastSpell(_W)		
- 			         end
-                                                
-                                 if IOW:Mode() == "Harass" and ValidTarget(target, 600) and CanUseSpell(myHero, _W) == READY and SivirMenu.Harass.W:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) >= SivirMenu.Harass.Mana:Value() then	  
-                                 CastSpell(_W)
-                                 end
-                       
-                end, GetWindUp(myHero)*1000)
-            end
-      end
-  end
 end)
