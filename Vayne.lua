@@ -155,11 +155,11 @@ OnTick(function(myHero)
    for i,enemy in pairs(GetEnemyHeroes()) do
         
         if IOW:Mode() == "Combo" then	
-	  if BRK and IsReady(BRK) and AsheMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < AsheMenu.Combo.myHP:Value() and GetPercentHP(enemy) > AsheMenu.Combo.targetHP:Value() then
+	  if BRK and IsReady(BRK) and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < VayneMenu.Combo.myHP:Value() and GetPercentHP(enemy) > VayneMenu.Combo.targetHP:Value() then
           CastTargetSpell(enemy, BRK)
           end
 
-          if YMG and IsReady(YMG) and AsheMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
+          if YMG and IsReady(YMG) and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
           CastSpell(YMG)
           end	
         end
