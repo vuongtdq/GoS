@@ -1,8 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Vayne" then return end
 
-if not pcall( require, "MapPositionGOS" ) then PrintChat("You are missing Walls Library - Go download it and save it Common!") return end
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
+require('MapPositionGOS')
+require('Inspired')
+require('DeftLib')
+
+AutoUpdate("/D3ftsu/GoS/master/Vayne.lua","/D3ftsu/GoS/master/Vayne.version","Vayne.lua",1)
 
 local VayneMenu = MenuConfig("Vayne", "Vayne")
 VayneMenu:Menu("Combo", "Combo")
@@ -43,7 +45,6 @@ VayneMenu.Misc:KeyBinding("WallTumble2", "WallTumble Drake", string.byte("U"))
 VayneMenu:Menu("Drawings", "Drawings")
 VayneMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 VayneMenu.Drawings:Boolean("E", "Draw E Range", true)
-VayneMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 
 if mapID == SUMMONERS_RIFT then
 VayneMenu.Drawings:Boolean("WT", "Draw WallTumble Pos", true)
@@ -80,12 +81,12 @@ OnProcessSpell(function(unit, spell)
 end)
   
 OnDraw(function(myHero)
-local col = VayneMenu.Drawings.color:Value()
-if VayneMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),GetCastRange(myHero,_Q),1,0,col) end
-if VayneMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),GetCastRange(myHero,_E),1,0,col) end
+pos = GetOrigin(myHero)
+if VayneMenu.Drawings.Q:Value() then DrawCircle(pos,GetCastRange(myHero,_Q),1,25,GoS.Pink) end
+if VayneMenu.Drawings.E:Value() then DrawCircle(pos,GetCastRange(myHero,_E),1,25,GoS.Blue) end
 if mapID == SUMMONERS_RIFT and VayneMenu.Drawings.WT:Value() then
-DrawCircle(6962, 51, 8952,80,0,0,0xffffffff)
-DrawCircle(12060, 51, 4806,80,0,0,0xffffffff)
+DrawCircle(6962, 51, 8952,80,0,25,0xffffffff)
+DrawCircle(12060, 51, 4806,80,0,25,0xffffffff)
 end
 end)
 
@@ -105,9 +106,13 @@ IOW:AddCallback(AFTER_ATTACK, function(target, mode)
 end)
 
 local IsStealthed = false
+local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local QSS = GetItemSlot(myHero,3140) > 0 and GetItemSlot(myHero,3140) or GetItemSlot(myHero,3139) > 0 and GetItemSlot(myHero,3139) or nil
+    local BRK = GetItemSlot(myHero,3153) > 0 and GetItemSlot(myHero,3153) or GetItemSlot(myHero,3144) > 0 and GetItemSlot(myHero,3144) or nil
+    local YMG = GetItemSlot(myHero,3142) > 0 and GetItemSlot(myHero,3142) or nil
 
     if IOW:Mode() == "Combo" then
         
@@ -119,14 +124,6 @@ OnTick(function(myHero)
           CastSkillShot(_Q,GetMousePos())
           end
         end
-
-	if GetItemSlot(myHero,3140) > 0 and IsReady(GetItemSlot(myHero,3140)) and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
-        CastSpell(GetItemSlot(myHero,3140))
-        end
-
-        if GetItemSlot(myHero,3139) > 0 and IsReady(GetItemSlot(myHero,3139)) and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
-        CastSpell(GetItemSlot(myHero,3139))
-        end
 		
 	if IsReady(_E) and VayneMenu.Combo.E.Enabled:Value() and ValidTarget(target, 710) then
         StunThisPleb(target)
@@ -135,6 +132,10 @@ OnTick(function(myHero)
         if IsReady(_R) and ValidTarget(target, VayneMenu.Combo.R.Renemyrange:Value()) and GetPercentHP(target) <= VayneMenu.Combo.R.Rifthp:Value() and GetPercentHP(myHero) <= VayneMenu.Combo.R.Rifhp:Value() and EnemiesAround(GetOrigin(myHero), VayneMenu.Combo.R.Renemyrange:Value()) >= VayneMenu.Combo.R.Rminenemy:Value() and AlliesAround(GetOrigin(myHero), VayneMenu.Combo.R.Rallyrange:Value()) >= VayneMenu.Combo.R.Rminally:Value() then
         CastSpell(_R)
 	end
+	
+	if QSS and IsReady(QSS) and VayneMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < VayneMenu.Combo.QSSHP:Value() then
+        CastSpell(QSS)
+        end
 		
         if IsStealthed and target ~= nil and GetDistance(target) > VayneMenu.Combo.Q.KeepInvisdis:Value() then
 	IOW.attacksEnabled = true
@@ -153,18 +154,14 @@ OnTick(function(myHero)
 
    for i,enemy in pairs(GetEnemyHeroes()) do
         
-        if IOW:Mode() == "Combo" then  
-          if GetItemSlot(myHero,3153) > 0 and IsReady(GetItemSlot(myHero,3153)) and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < VayneMenu.Combo.myHP:Value() and GetPercentHP(enemy) > VayneMenu.Combo.targetHP:Value() then
-          CastTargetSpell(enemy, GetItemSlot(myHero,3153))
+        if IOW:Mode() == "Combo" then	
+	  if BRK and IsReady(BRK) and AsheMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < AsheMenu.Combo.myHP:Value() and GetPercentHP(enemy) > AsheMenu.Combo.targetHP:Value() then
+          CastTargetSpell(enemy, BRK)
           end
 
-          if GetItemSlot(myHero,3144) > 0 and IsReady(GetItemSlot(myHero,3144)) and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < VayneMenu.Combo.myHP:Value() and GetPercentHP(enemy) > VayneMenu.Combo.targetHP:Value() then
-          CastTargetSpell(enemy, GetItemSlot(myHero,3144))
-          end
-
-          if GetItemSlot(myHero,3142) > 0 and IsReady(GetItemSlot(myHero,3142)) and VayneMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
-          CastSpell(GetItemSlot(myHero,3142))
-          end
+          if YMG and IsReady(YMG) and AsheMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
+          CastSpell(YMG)
+          end	
         end
         
           if Ignite and VayneMenu.Misc.AutoIgnite:Value() then
@@ -183,23 +180,26 @@ OnTick(function(myHero)
 
    end
 
-        if VayneMenu.Misc.WallTumble1:Value() and myHeroPos().x == 6962 and myHeroPos().z == 8952 then
+        if VayneMenu.Misc.WallTumble1:Value() and pos.x == 6962 and pos.z == 8952 then
         CastSkillShot(_Q,6667.3271484375, 51, 8794.64453125)
         elseif VayneMenu.Misc.WallTumble1:Value() then
         MoveToXYZ(6962, 51, 8952)
         end
     
-        if VayneMenu.Misc.WallTumble2:Value() and myHeroPos().x == 12060 and myHeroPos().z == 4806 then
+        if VayneMenu.Misc.WallTumble2:Value() and pos.x == 12060 and pos.z == 4806 then
         CastSkillShot(_Q,11745.198242188, 51, 4625.4379882813)
         elseif VayneMenu.Misc.WallTumble2:Value() then
         MoveToXYZ(12060, 51, 4806)
         end
 
 if VayneMenu.Misc.Autolvl:Value() then  
-   if VayneMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _W, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-   elseif VayneMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-   end
-DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
+  if GetLevel(myHero) > lastlevel then
+    if VayneMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _W, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
+    elseif VayneMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
+    end
+    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
+    lastlevel = GetLevel(myHero)
+  end
 end
 
 end)
@@ -243,3 +243,5 @@ function StunThisPlebV2(unit)
 end
 
 AddGapcloseEvent(_E, 550, true)
+
+PrintChat(string.format("<font color='#1244EA'>Vayne:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
