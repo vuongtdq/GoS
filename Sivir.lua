@@ -153,3 +153,5 @@ if SivirMenu.Misc.Autolvl:Value() then
 end
 
 end)
+
+PrintChat(string.format("<font color='#1244EA'>Sivir:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
