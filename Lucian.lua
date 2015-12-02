@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Lucian.lua","/D3ftsu/GoS/master/Lucian.version","Lucian.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Lucian.lua","/D3ftsu/GoS/master/Lucian.version","Lucian.lua",2)
 
 local LucianMenu = MenuConfig("Lucian", "Lucian")
 LucianMenu:Menu("Combo", "Combo")
@@ -22,7 +22,6 @@ LucianMenu.Combo:Slider("QSSHP", "if HP % <", 75, 0, 100, 1)
 LucianMenu:Menu("Harass", "Harass")
 LucianMenu.Harass:Boolean("Q", "Use Q", true)
 LucianMenu.Harass:Boolean("W", "Use W", true)
-LucianMenu.Harass:Boolean("AutoQ", "Auto Q", true)
 LucianMenu.Harass:Slider("Mana", "if Mana % >", 50, 0, 80, 1)
 
 LucianMenu:Menu("Killsteal", "Killsteal")
@@ -61,23 +60,19 @@ if LucianMenu.Drawings.W:Value() then DrawCircle(pos,1000,1,25,GoS.Yellow) end
 if LucianMenu.Drawings.R:Value() then DrawCircle(pos,1400,1,25,GoS.Green) end
 end)
 
-OnTick(function(myHero)
-    local target = GetCurrentTarget()
-    local mousePos = GetMousePos()
+IOW:AddCallback(AFTER_ATTACK, function(target, mode)
+  if mode == "Combo" and target ~= nil then
+    if IsReady(_Q) and LucianMenu.Combo.Q:Value() then
+    CastQ(target)
+    end
     
-    if IOW:Mode() == "Combo" and not IOW.isWindingUp then
-
-      if IsReady(_Q) and LucianMenu.Combo.Q:Value() and not CastingW and not CastingE and not CastingR and not HasPassive then
-      CastQ(target)
-      end
-	  
-	    if IsReady(_W) and LucianMenu.Combo.W:Value() and not CastingQ and not CastingE and not CastingR and not HasPassive then
-      Cast(_W, target)
-      end
-	  
-	    if IsReady(_E) and ValidTarget(target, 1000) and LucianMenu.Combo.E:Value() and not CastingQ and not CastingW and not CastingR and not HasPassive then
+    if IsReady(_W) and LucianMenu.Combo.W:Value() then
+    Cast(_W, target)
+    end
+ 
+    if IsReady(_E) and ValidTarget(target, 1000) and LucianMenu.Combo.E:Value() then
         local AfterDash = Vector(myHero) - (Vector(myHero) - Vector(mousePos)):normalized() * 425
-		    if LucianMenu.Combo.E2:Value() then
+	if LucianMenu.Combo.E2:Value() then
           local Range = (GetRange(myHero) + 65 + GetHitBox(myHero))
           if Range <= GetDistance(target) and Range > GetDistance(AfterDash, target) then 
             local Noddy = (Vector(myHero) - Vector(mousePos)):normalized()
@@ -89,43 +84,85 @@ OnTick(function(myHero)
             end
           elseif GetDistance(target) <= 700 and GetDistance(target,AfterDash) < Range-65 then
           CastSkillShot(_E, AfterDash)
-		      end
+	  end
+        elseif GetDistance(target) <= 700 and GetDistance(target,AfterDash) < Range-65 then
+        CastSkillShot(_E, AfterDash)
+        end
+      end
+    end  
+  end
+  
+  if mode == "Harass" and target ~= nil and GetPercentMP(myHero) >= LucianMenu.Harass.Mana:Value() then
+    if IsReady(_Q) and LucianMenu.Harass.Q:Value() then
+    CastQ(target)
+    end
+	  
+    if IsReady(_W) and LucianMenu.Harass.W:Value() then
+    Cast(_W, target)
+    end
+  end
+  
+end)
+
+OnTick(function(myHero)
+    local target = GetCurrentTarget()
+    local mousePos = GetMousePos()
+    
+    if IOW:Mode() == "Combo" and not IOW.isWindingUp then
+
+      if IsReady(_Q) and LucianMenu.Combo.Q:Value() and not CastingW and not CastingE and not CastingR and not HasPassive then
+      CastQ(target)
+      end
+	  
+      if IsReady(_W) and LucianMenu.Combo.W:Value() and not CastingQ and not CastingE and not CastingR and not HasPassive then
+      Cast(_W, target)
+      end
+	  
+      if IsReady(_E) and ValidTarget(target, 1000) and LucianMenu.Combo.E:Value() and not CastingQ and not CastingW and not CastingR and not HasPassive then
+        local AfterDash = Vector(myHero) - (Vector(myHero) - Vector(mousePos)):normalized() * 425
+	if LucianMenu.Combo.E2:Value() then
+          local Range = (GetRange(myHero) + 65 + GetHitBox(myHero))
+          if Range <= GetDistance(target) and Range > GetDistance(AfterDash, target) then 
+            local Noddy = (Vector(myHero) - Vector(mousePos)):normalized()
+            for i = 420, 10, -10 do
+              local CastPos = Vector(myHero) - Noddy * i
+              if Range < GetDistance(CastPos, target) then
+              CastSkillShot(_E, CastPos)
+              end
+            end
+          elseif GetDistance(target) <= 700 and GetDistance(target,AfterDash) < Range-65 then
+          CastSkillShot(_E, AfterDash)
+	  end
         elseif GetDistance(target) <= 700 and GetDistance(target,AfterDash) < Range-65 then
         CastSkillShot(_E, AfterDash)
         end
       end
     end
 	
-  	if IOW:Mode() == "Harass" and not IOW.isWindingUp and GetPercentMP(myHero) >= LucianMenu.Harass.Mana:Value() then
+    if IOW:Mode() == "Harass" and not IOW.isWindingUp and GetPercentMP(myHero) >= LucianMenu.Harass.Mana:Value() then
 
       if IsReady(_Q) and LucianMenu.Harass.Q:Value() and not CastingW and not CastingE and not CastingR and not HasPassive then
       CastQ(target)
       end
 	  
-	    if IsReady(_W) and LucianMenu.Harass.W:Value() and not CastingQ and not CastingE and not CastingR and not HasPassive then
+      if IsReady(_W) and LucianMenu.Harass.W:Value() and not CastingQ and not CastingE and not CastingR and not HasPassive then
       Cast(_W, target)
       end
 	
-	  end
-	
-  	if LucianMenu.Harass.AutoQ:Value() and GetPercentMP(myHero) >= LucianMenu.Harass.Mana:Value() and not IOW.isWindingUp then
-      if IsReady(_Q) and not CastingW and not CastingE and not CastingR and not HasPassive then
-      CastQ(target)
-      end
-  	end
+    end
   	
-  	for i,enemy in pairs(GetEnemyHeroes()) do
+    for i,enemy in pairs(GetEnemyHeroes()) do
     	
-	      if Ignite and LucianMenu.Misc.Autoignite:Value() then
+        if Ignite and LucianMenu.Misc.Autoignite:Value() then
           if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
           CastTargetSpell(enemy, Ignite)
           end
         end
           
         if IsReady(_Q) and ValidTarget(enemy, 550) and LucianMenu.Killsteal.Q:Value() and GetHP(enemy) < getdmg("Q",enemy) then 
-    	  CastTargetSpell(enemy,_Q)      
-	      elseif IsReady(_W) and ValidTarget(enemy, 1000) and LucianMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
-	      Cast(_W,enemy)
+    	CastTargetSpell(enemy,_Q)      
+	elseif IsReady(_W) and ValidTarget(enemy, 1000) and LucianMenu.Killsteal.W:Value() and GetHP2(enemy) < getdmg("W",enemy) then
+	Cast(_W,enemy)
         end
 
     end
@@ -149,37 +186,35 @@ OnProcessSpell(function(unit,spell)
   
     if spell.name == "LucianQ" then
     CastingQ = true
+    HasPassive = true
     DelayAction(function() CastingQ = false end, spell.windUpTime*1000 + 0.28 + GetLatency() / 2)
     end
     
     if spell.name == "LucianW" then
     CastingW = true
+    HasPassive = true
     DelayAction(function() CastingW = false end, spell.windUpTime*1000 + GetLatency() / 2)
     end
     
     if spell.name == "LucianE" then
     CastingE = true
+    HasPassive = true
     DelayAction(function() CastingE = false end, spell.windUpTime*1000 + GetLatency() / 2)
-	  IOW:ResetAA()
+    IOW:ResetAA()
     end
     
     if spell.name == "LucianR" then
     CastingR = true
+    HasPassive = true
     DelayAction(function() CastingR = false end, 3000)
     end
     
   end
 end)
 
-OnObjectLoad(function(Object)
-  if GetObjectBaseName(Object):lower():find("lucian_p_buf") and GetDistance(Object) < 100 then
-  HasPassive = true
-  end
-end)
-
-OnCreateObj(function(Object)
-  if GetObjectBaseName(Object):lower():find("lucian_p_buf") and GetDistance(Object) < 100 then
-  HasPassive = true
+OnRemoveBuff(function(unit, buff)
+  if unit == myHero and buff.Name == "lucianpassivebuff" then
+  HasPassive = false
   end
 end)
 
@@ -200,7 +235,9 @@ function CastQ(unit)
         if isOnSegment and GetDistance(mob) <= 500 and GetDistance(pointSegment, PredictedPos) <= 65 and not UnderTurret(GetOrigin(myHero), true) then
         CastTargetSpell(mob,_Q)
         end	  
-	  end]]
+      end]]
     end
   end
 end
+
+PrintChat(string.format("<font color='#1244EA'>Lucian:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
