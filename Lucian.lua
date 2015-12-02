@@ -228,14 +228,14 @@ function CastQ(unit)
   if ValidTarget(unit, 1100) then
     if GetDistance(unit) <= 500 then
     CastTargetSpell(unit,_Q)
-    --[[elseif LucianMenu.Combo.Q2:Value() then
+    elseif LucianMenu.Combo.Q2:Value() then
       local PredictedPos = GetPredictedPos(unit, (GetDistance(unit)/2000+0.32)*1000)
       for _,mob in pairs(minionManager.objects) do 
         local pointSegment,pointLine,isOnSegment = VectorPointProjectionOnLineSegment(GetOrigin(myHero), PredictedPos, GetOrigin(mob))
         if isOnSegment and GetDistance(mob) <= 500 and GetDistance(pointSegment, PredictedPos) <= 65 and not UnderTurret(GetOrigin(myHero), true) then
         CastTargetSpell(mob,_Q)
         end	  
-      end]]
+      end
     end
   end
 end
