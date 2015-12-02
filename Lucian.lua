@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Lucian.lua","/D3ftsu/GoS/master/Lucian.version","Lucian.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Lucian.lua","/D3ftsu/GoS/master/Lucian.version","Lucian.lua",3)
 
 local LucianMenu = MenuConfig("Lucian", "Lucian")
 LucianMenu:Menu("Combo", "Combo")
@@ -88,8 +88,7 @@ IOW:AddCallback(AFTER_ATTACK, function(target, mode)
         elseif GetDistance(target) <= 700 and GetDistance(target,AfterDash) < Range-65 then
         CastSkillShot(_E, AfterDash)
         end
-      end
-    end  
+      end 
   end
   
   if mode == "Harass" and target ~= nil and GetPercentMP(myHero) >= LucianMenu.Harass.Mana:Value() then
