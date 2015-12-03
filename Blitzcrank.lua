@@ -28,10 +28,10 @@ BlitzcrankMenu:Menu("Killsteal", "Killsteal")
 BlitzcrankMenu.Killsteal:Boolean("Q", "Killsteal with Q", true)
 BlitzcrankMenu.Killsteal:Boolean("R", "Killsteal with R", true)
 
+if Ignite ~= nil then 
 BlitzcrankMenu:Menu("Misc", "Misc")
-if Ignite ~= nil then BlitzcrankMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) end
-BlitzcrankMenu.Misc:Boolean("Autolvl", "Auto level", true)
-BlitzcrankMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-E-W", "Q-W-E", "W-Q-E"})
+BlitzcrankMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) 
+end
 
 BlitzcrankMenu:Menu("Drawings", "Drawings")
 BlitzcrankMenu.Drawings:Boolean("Q", "Draw Q Range", true)
@@ -157,17 +157,6 @@ OnTick(function(myHero)
 	        end
 		
 	end
-
-if BlitzcrankMenu.Misc.Autolvl:Value() then    
-  if GetLevel(myHero) > lastlevel then
-    if BlitzcrankMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
-    elseif BlitzcrankMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif BlitzcrankMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
 
 end)
 
