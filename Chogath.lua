@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Chogath.lua","/D3ftsu/GoS/master/Chogath.version","Chogath.lua",6)
+AutoUpdate("/D3ftsu/GoS/master/Chogath.lua","/D3ftsu/GoS/master/Chogath.version","Chogath.lua",7)
 
 local ChogathMenu = MenuConfig("Chogath", "Chogath")
 ChogathMenu:Menu("Combo", "Combo")
@@ -22,10 +22,10 @@ ChogathMenu.Killsteal:Boolean("Q", "Killsteal with Q", true)
 ChogathMenu.Killsteal:Boolean("W", "Killsteal with W", true)
 ChogathMenu.Killsteal:Boolean("R", "Killsteal with R", true)
 
+if Ignite ~= nil then
 ChogathMenu:Menu("Misc", "Misc")
-if Ignite ~= nil then ChogathMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-ChogathMenu.Misc:Boolean("Autolvl", "Auto level", true)
-ChogathMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E"})
+ChogathMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) 
+end
 
 ChogathMenu:Menu("LaneClear", "LaneClear")
 ChogathMenu.LaneClear:Boolean("Q", "Use Q", true)
@@ -73,7 +73,6 @@ end)
 
 local target1 = TargetSelector(1075,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local lastlevel = GetLevel(myHero)-1
   
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
@@ -168,16 +167,6 @@ OnTick(function(myHero)
           end
         end
     end       
-	
-if ChogathMenu.Misc.Autolvl:Value() then  
-  if GetLevel(myHero) > lastlevel then
-    if ChogathMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _W, _E, _Q, _Q , _R, _Q , _W, _Q , _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif ChogathMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _W, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
 
 end)
  
