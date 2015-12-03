@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",9)
+AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",10)
 
 local CassiopeiaMenu = MenuConfig("Cassiopeia", "Cassiopeia")
 CassiopeiaMenu:Menu("Combo", "Combo")
@@ -26,8 +26,6 @@ CassiopeiaMenu.Killsteal:Boolean("E", "Killsteal with E", true)
 CassiopeiaMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then CassiopeiaMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
 CassiopeiaMenu.Misc:Slider("E", "E Humanizer", 0, 0, 1, 0.1)
-CassiopeiaMenu.Misc:Boolean("Autolvl", "Auto level", true)
-CassiopeiaMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"E-Q-W", "Q-E-W", "W-E-Q"})
 
 CassiopeiaMenu:Menu("Farm", "Farm")
 CassiopeiaMenu.Farm:Boolean("AutoE", "Auto E if pois", true)
@@ -91,7 +89,6 @@ local target1 = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,f
 local target2 = TargetSelector(970,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target3 = TargetSelector(825,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local LastE = 0
-local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
@@ -224,17 +221,6 @@ OnTick(function(myHero)
 	    end
 	  end
 	end
-
-if CassiopeiaMenu.Misc.Autolvl:Value() then   
-  if GetLevel(myHero) > lastlevel then
-    if CassiopeiaMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _E, _E, _R, _E, _Q, _E , _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
-    elseif CassiopeiaMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _E, _Q, _E, _R, _E, _E, _W, _W, _R, _W, _W}
-    elseif CassiopeiaMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _W, _W, _R, _W, _E, _W, _E, _R, _E, _E, _Q, _Q, _R, _Q, _Q}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
 
 end)
 
