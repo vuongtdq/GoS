@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",10)
+AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",11)
 
 local AsheMenu = MenuConfig("Ashe", "Ashe")
 AsheMenu:Menu("Combo", "Combo")
@@ -29,10 +29,10 @@ AsheMenu:Menu("Killsteal", "Killsteal")
 AsheMenu.Killsteal:Boolean("W", "Killsteal with W", true)
 AsheMenu.Killsteal:Boolean("R", "Killsteal with R", false)
 
+if Ignite ~= nil then 
 AsheMenu:Menu("Misc", "Misc")
-if Ignite ~= nil then AsheMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-AsheMenu.Misc:Boolean("Autolvl", "Auto level", true) 
-AsheMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"W-Q-E", "Q-W-E"})
+AsheMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) 
+end
 
 AsheMenu:Menu("LaneClear", "LaneClear")
 AsheMenu.LaneClear:Boolean("Q", "Use Q", false)
@@ -77,7 +77,6 @@ end)
 local target1 = TargetSelector(1200,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
 local target2 = TargetSelector(2000,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
 local QReady = false
-local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
@@ -187,16 +186,6 @@ OnTick(function(myHero)
       end
       
     end
-
-if AsheMenu.Misc.Autolvl:Value() then  
-  if GetLevel(myHero) > lastlevel then
-    if AsheMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_W, _Q, _E, _W, _W, _R, _W, _Q, _W , _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-    elseif AsheMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_W, _Q, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
 
 end)
 
