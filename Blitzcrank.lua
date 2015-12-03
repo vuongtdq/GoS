@@ -94,7 +94,6 @@ end
 end)
 
 local target1 = TargetSelector(1010,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
