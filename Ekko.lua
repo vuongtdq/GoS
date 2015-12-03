@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ekko.lua","/D3ftsu/GoS/master/Ekko.version","Ekko.lua",4)
+AutoUpdate("/D3ftsu/GoS/master/Ekko.lua","/D3ftsu/GoS/master/Ekko.version","Ekko.lua",5)
 
 local EkkoMenu = MenuConfig("Ekko", "Ekko")
 EkkoMenu:Menu("Combo", "Combo")
@@ -26,8 +26,6 @@ EkkoMenu.Killsteal:Boolean("R", "Killsteal with R", true)
 
 EkkoMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then EkkoMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-EkkoMenu.Misc:Boolean("Autolvl", "Auto level", true)
-EkkoMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-E-W", "Q-W-E", "E-Q-W"})
 EkkoMenu.Misc:Menu("AutoUlt", "Auto Ult")
 EkkoMenu.Misc.AutoUlt:Boolean("Enabled", "Enabled", true)
 EkkoMenu.Misc.AutoUlt:Slider("hit", "if Can Hit X Enemies", 3, 0, 5, 1)
@@ -142,7 +140,6 @@ end)
 
 local target1 = TargetSelector(995,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(1900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
    local target = GetCurrentTarget()	
@@ -295,18 +292,7 @@ OnTick(function(myHero)
        end
      end
    end       
-	
-if EkkoMenu.Misc.Autolvl:Value() then  
-  if GetLevel(myHero) > lastlevel then
-    if EkkoMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
-    elseif EkkoMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif EkkoMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
-	
+
 end)
 
 function DrawRectangleOutline(startPos, endPos, width)
