@@ -81,7 +81,6 @@ local target2 = TargetSelector(1030,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,
 local target3 = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local UltOn = false
 local Missiles = {}
-local lastlevel = GetLevel(myHero)-1
 
 OnCreateObj(function(Object) 
   if GetObjectBaseName(Object) == "missile" then
