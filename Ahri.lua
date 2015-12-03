@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",7)
+AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",8)
 
 local AhriMenu = MenuConfig("Ahri", "Ahri")
 AhriMenu:Menu("Combo", "Combo")
@@ -25,10 +25,10 @@ AhriMenu.Killsteal:Boolean("Q", "Killsteal with Q", true)
 AhriMenu.Killsteal:Boolean("W", "Killsteal with W", true)
 AhriMenu.Killsteal:Boolean("E", "Killsteal with E", true)
 
+if Ignite ~= nil then 
 AhriMenu:Menu("Misc", "Misc")
-if Ignite ~= nil then AhriMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) end
-AhriMenu.Misc:Boolean("Autolvl", "Auto level", true)
-AhriMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-E-W", "Q-W-E", "E-Q-W"})
+AhriMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) 
+end
 
 AhriMenu:Menu("Lasthit", "Lasthit")
 AhriMenu.Lasthit:Boolean("Q", "Use Q", true)
@@ -241,17 +241,6 @@ OnTick(function(myHero)
        	  end
         end
     end       
-	
-if AhriMenu.Misc.Autolvl:Value() then  
-  if GetLevel(myHero) > lastlevel then
-    if AhriMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
-    elseif AhriMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif AhriMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
 
 end)
  
