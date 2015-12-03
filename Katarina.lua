@@ -48,22 +48,20 @@ KatarinaMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 KatarinaMenu.Drawings:Boolean("W", "Draw W Range", true)
 KatarinaMenu.Drawings:Boolean("E", "Draw E Range", true)
 KatarinaMenu.Drawings:Boolean("R", "Draw R Range", true)
-KatarinaMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
 KatarinaMenu.Drawings:Boolean("Text", "Draw Damage Text", true)
 
 OnDraw(function(myHero)
-local col = KatarinaMenu.Drawings.color:Value()
-if KatarinaMenu.Drawings.Q:Value() then DrawCircle(myHeroPos(),675,1,0,col) end
-if KatarinaMenu.Drawings.W:Value() then DrawCircle(myHeroPos(),375,1,0,col) end
-if KatarinaMenu.Drawings.E:Value() then DrawCircle(myHeroPos(),700,1,0,col) end
-if KatarinaMenu.Drawings.R:Value() then DrawCircle(myHeroPos(),550,1,0,col) end
+ local pos = GetOrigin(myHero)
+ if KatarinaMenu.Drawings.Q:Value() then DrawCircle(pos,675,1,25,GoS.Pink) end
+ if KatarinaMenu.Drawings.W:Value() then DrawCircle(pos,375,1,25,GoS.Yellow) end
+ if KatarinaMenu.Drawings.E:Value() then DrawCircle(pos,700,1,25,GoS.Blue) end
+ if KatarinaMenu.Drawings.R:Value() then DrawCircle(pos,550,1,25,GoS.Green) end
   if KatarinaMenu.Drawings.Text:Value() then
     for _, enemy in pairs(GetEnemyHeroes()) do
       if ValidTarget(enemy) then
-      local enemyPos = GetOrigin(enemy)
-      local drawpos = WorldToScreen(1,enemyPos.x, enemyPos.y, enemyPos.z)
+      local drawpos = WorldToScreen(1,GetOrigin(enemy))
       local enemyText, color = GetDrawText(enemy)
-      DrawText(enemyText, 20, drawpos.x, drawpos.y, color)
+      DrawText(enemyText, 15, drawpos.x, drawpos.y, color)
       end
     end
   end
@@ -195,15 +193,15 @@ OnTick(function(myHero)
 
   if IOW:Mode() == "Harass" then
  
-      if IsReady(_Q) and KatarinaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 675) then
+      if IsReady(_Q) and KatarinaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 675) and not CastingR then
       CastTargetSpell(Qtarget, _Q)
       end
 	  
-      if IsReady(_W) and KatarinaMenu.Harass.W:Value() and ValidTarget(target, 375) then
+      if IsReady(_W) and KatarinaMenu.Harass.W:Value() and ValidTarget(target, 375) and not CastingR then
       CastSpell(_W)
       end
 	  
-      if IsReady(_E) and KatarinaMenu.Harass.E:Value() and ValidTarget(Etarget, 700) then
+      if IsReady(_E) and KatarinaMenu.Harass.E:Value() and ValidTarget(Etarget, 700) and not CastingR then
       CastTargetSpell(Etarget, _E)
       end
   end
@@ -217,15 +215,15 @@ OnTick(function(myHero)
                   end
                 end
 		
-                if IsReady(_W) and GetHP2(enemy) < getdmg("W",enemy) and ValidTarget(enemy, 375) then 
+                if IsReady(_W) and GetHP2(enemy) < getdmg("W",enemy) and ValidTarget(enemy, 375) and not CastingR then 
 		CastSpell(_W)
 	        end		
 	
-		if IsReady(_Q) and GetHP2(enemy) < getdmg("Q",enemy) and ValidTarget(enemy, 675) then 
+		if IsReady(_Q) and GetHP2(enemy) < getdmg("Q",enemy) and ValidTarget(enemy, 675) and not CastingR then 
 		CastTargetSpell(enemy, _Q)
 		end	
 		
-		if IsReady(_E) and GetHP2(enemy) < getdmg("E",enemy) and ValidTarget(enemy, 700) then 
+		if IsReady(_E) and GetHP2(enemy) < getdmg("E",enemy) and ValidTarget(enemy, 700) and not CastingR then 
 		CastTargetSpell(enemy, _E)
 	        end		
 		
@@ -338,6 +336,13 @@ OnProcessSpell(function(unit,spell)
   if unit == myHero and not spell.name:lower():find("katarina") then
   spellObj = spell
   wardpos = spellObj.endPos
+  end
+end)
+
+OnObjectLoad(function(object)
+  local objType = GetObjectType(object)
+  if objType == Obj_AI_Hero or objType == Obj_AI_Minion then
+  objectList[object] = object
   end
 end)
 
