@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",6)
+AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",7)
 
 local AlistarMenu = MenuConfig("Alistar", "Alistar")
 AlistarMenu:Menu("Combo", "Combo")
@@ -23,8 +23,6 @@ AlistarMenu.Killsteal:Boolean("WQ", "Killsteal with W+Q", true)
 
 AlistarMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then AlistarMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) end
-AlistarMenu.Misc:Boolean("Autolvl", "Auto level", true)
-AlistarMenu.Misc:DropDown("Autolvltable", "Priority", 3, {"Q-W-E", "W-Q-E", "E-Q-W"})
 AlistarMenu.Misc:Boolean("Eme", "Self-Heal", true)
 AlistarMenu.Misc:Slider("mpEme", "Minimum Mana %", 25, 0, 100, 0)
 AlistarMenu.Misc:Slider("hpEme", "Minimum HP%", 70, 0, 100, 0)
@@ -73,7 +71,6 @@ if AlistarMenu.Drawings.E:Value() then DrawCircle(pos,575,1,25,GoS.Blue) end
 end)
 
 local target1 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
@@ -135,18 +132,7 @@ OnTick(function(myHero)
       end
 		
     end
-  
-if AlistarMenu.Misc.Autolvl:Value() then  
-  if GetLevel(myHero) > lastlevel then
-    if AlistarMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _W, _Q , _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif AlistarMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-    elseif AlistarMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
-	
+
 end)
 
 AddGapcloseEvent(_Q, 365, false, AlistarMenu)
