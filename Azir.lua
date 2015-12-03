@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",13)
+AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",14)
 
 local AzirMenu = MenuConfig("Azir", "Azir")
 AzirMenu:Menu("Combo", "Combo")
@@ -27,10 +27,10 @@ AzirMenu.Killsteal:Boolean("W", "Killsteal with W/AA", false)
 AzirMenu.Killsteal:Boolean("E", "Killsteal with E", true)
 AzirMenu.Killsteal:Boolean("R", "Killsteal with R", true)
 
+if Ignite ~= nil then
 AzirMenu:Menu("Misc", "Misc")
-if Ignite ~= nil then AzirMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-AzirMenu.Misc:Boolean("Autolvl", "Auto level", true)
-AzirMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E"})
+AzirMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) 
+end
 --AzirMenu.Misc:Menu("AutoUlt", "Auto Ult")
 --AzirMenu.Misc.AutoUlt:Boolean("Enabled", "Enabled", true)
 --AzirMenu.Misc.AutoUlt:Slider("Push", "if Can Push X Enemies", 3, 0, 5, 1)
@@ -111,7 +111,6 @@ end)
 local target1 = TargetSelector(990,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(650,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target3 = TargetSelector(500,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local lastlevel = GetLevel(myHero)-1
   
 OnTick(function(myHero)
    local mousePos = GetMousePos()
@@ -313,16 +312,6 @@ OnTick(function(myHero)
      end
 	 
    end
-	
-if AzirMenu.Misc.Autolvl:Value() then
-  if GetLevel(myHero) > lastlevel then
-    if AzirMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_W, _Q, _E, _Q, _Q , _R, _Q , _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif AzirMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_W, _Q, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
 
 end)
 
