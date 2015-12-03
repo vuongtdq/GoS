@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",10)
+AutoUpdate("/D3ftsu/GoS/master/Blitzcrank.lua","/D3ftsu/GoS/master/Blitzcrank.version","Blitzcrank.lua",11)
 
 local BlitzcrankMenu = MenuConfig("Blitzcrank", "Blitzcrank")
 BlitzcrankMenu:Menu("Combo", "Combo")
