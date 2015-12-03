@@ -23,10 +23,10 @@ KatarinaMenu:Menu("Killsteal", "Killsteal")
 KatarinaMenu.Killsteal:Boolean("SmartKS", "Smart KS", true)
 KatarinaMenu.Killsteal:Boolean("UseWards", "Use Wards", true)
 
+if Ignite ~= nil then
 KatarinaMenu:Menu("Misc", "Misc")
 KatarinaMenu.Misc:Boolean("Autoignite", "Auto Ignite", true)
-KatarinaMenu.Misc:Boolean("Autolvl", "Auto level", true)
-KatarinaMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "Q-E-W"})
+end
 
 KatarinaMenu:Menu("JungleClear", "JungleClear")
 KatarinaMenu.JungleClear:Boolean("Q", "Use Q", true)
