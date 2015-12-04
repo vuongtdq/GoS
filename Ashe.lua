@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",11)
+AutoUpdate("/D3ftsu/GoS/master/Ashe.lua","/D3ftsu/GoS/master/Ashe.version","Ashe.lua",12)
 
 local AsheMenu = MenuConfig("Ashe", "Ashe")
 AsheMenu:Menu("Combo", "Combo")
@@ -96,7 +96,7 @@ OnTick(function(myHero)
         Cast(_W,Wtarget)
         end
 						
-        if IsReady(_R) and GetPercentHP(Rtarget) <= 50 and AsheMenu.Combo.R:Value() then
+        if IsReady(_R) and ValidTarget(Rtarget, 2000) and GetPercentHP(Rtarget) <= 50 and AsheMenu.Combo.R:Value() then
         Cast(_R,Rtarget)
 	end
 		
