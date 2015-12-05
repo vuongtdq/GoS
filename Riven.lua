@@ -1,9 +1,11 @@
 if GetObjectName(GetMyHero()) ~= "Riven" then return end
 
-if not pcall( require, "MapPositionGOS" ) then PrintChat("You are missing Walls Library - Go download it and save it Common!") return end
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
-if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
+require('MapPositionGOS')
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
+
+AutoUpdate("/D3ftsu/GoS/master/Riven.lua","/D3ftsu/GoS/master/Riven.version","Riven.lua",1)
 
 local RivenMenu = MenuConfig("Riven", "Riven")
 RivenMenu:Menu("Combo", "Combo")
@@ -24,8 +26,6 @@ RivenMenu.Killsteal:Boolean("R", "Killsteal with R", true)
 
 RivenMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then RivenMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) end
-RivenMenu.Misc:Boolean("Autolvl", "Auto level", true)
-RivenMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-E-W", "Q-W-E", "E-Q-W"})
 RivenMenu.Misc:DropDown("cancel", "Cancel Animation", 1, {"Dance", "Taunt", "Laugh", "Joke", "Off"})
 RivenMenu.Misc:KeyBinding("Flee", "Flee", string.byte("T"))
 RivenMenu.Misc:KeyBinding("WallJump", "WallJump", string.byte("G"))
@@ -39,16 +39,14 @@ RivenMenu.Drawings:Boolean("E", "Draw E Range", true)
 RivenMenu.Drawings:Boolean("R", "Draw R Range", true)
 RivenMenu.Drawings:Boolean("EQ", "Draw EQ Range", true)
 
-RivenMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
-
-local InterruptMenu = MenuConfig("Interrupt (W)", "Interrupt")
+RivenMenu:Menu("Interrupt", "Interrupt (W)")
 
 DelayAction(function()
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
   for i, spell in pairs(CHANELLING_SPELLS) do
     for _,k in pairs(GetEnemyHeroes()) do
       if spell["Name"] == GetObjectName(k) then
-      InterruptMenu:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
+      RivenMenu.Interrupt:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
       end
     end
   end
@@ -56,20 +54,18 @@ end, 1)
 
 local QCast = 0
 local lastE = 0
-local lastlevel = GetLevel(myHero)-1
 
 OnDraw(function(myHero)
-local col = RivenMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
-if RivenMenu.Drawings.Q:Value() then DrawCircle(pos,275,1,50,col) end
-if RivenMenu.Drawings.W:Value() then DrawCircle(pos,260,1,50,col) end
-if RivenMenu.Drawings.E:Value() then DrawCircle(pos,250,1,50,col) end
-if RivenMenu.Drawings.R:Value() then DrawCircle(pos,1100,1,0,col) end
-if RivenMenu.Drawings.EQ:Value() then DrawCircle(pos,525,1,0,col) end
+if RivenMenu.Drawings.Q:Value() then DrawCircle(pos,275,1,25,GoS.Pink) end
+if RivenMenu.Drawings.W:Value() then DrawCircle(pos,260,1,25,GoS.Yellow) end
+if RivenMenu.Drawings.E:Value() then DrawCircle(pos,250,1,50,GoS.Blue) end
+if RivenMenu.Drawings.R:Value() then DrawCircle(pos,1100,1,0,GoS.Green) end
+if RivenMenu.Drawings.EQ:Value() then DrawCircle(pos,525,1,0,GoS.Red) end
 end)
 
 OnTick(function(myHero)
-  mousePos = GetMousePos()
+        mousePos = GetMousePos()
 	local target = GetCurrentTarget()
 	
 	if IOW:Mode() == "Combo" then
@@ -139,23 +135,12 @@ OnTick(function(myHero)
 
         end
 	
-if RivenMenu.Misc.Autolvl:Value() then  
-  if GetLevel(myHero) > lastlevel then
-    if RivenMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
-    elseif RivenMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif RivenMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
-	
 end)
 
 OnProcessSpell(function(unit,spell)
   if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_W) then
     if CHANELLING_SPELLS[spell.name] then
-      if ValidTarget(unit, 260) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() then 
+      if ValidTarget(unit, 260) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and RivenMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
       CastSpell(_W)
       end
     end
@@ -295,4 +280,6 @@ OnRemoveBuff(function(unit,buff)
   end
 end)
 
-AddGapcloseEvent(_W, 260, false)
+AddGapcloseEvent(_W, 260, false, RivenMenu)
+
+PrintChat(string.format("<font color='#1244EA'>Riven:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>")) 
