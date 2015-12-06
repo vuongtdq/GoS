@@ -3,10 +3,7 @@ if GetObjectName(GetMyHero()) ~= "Kalista" then return end
 require('Inspired')
 require('DeftLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",6)
-
-local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
-local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
+AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",7)
 
 local KalistaMenu = MenuConfig("Kalista", "Kalista")
 
@@ -35,8 +32,6 @@ KalistaMenu.Killsteal:Boolean("E", "Killsteal with E", true)
 
 KalistaMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then KalistaMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-KalistaMenu.Misc:Boolean("Autolvl", "Auto level", true)
-KalistaMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"E-Q-W", "Q-E-W", "W-Q-E", "W-E-Q"})
 KalistaMenu.Misc:Boolean("Edie", "Cast E before die", true)
 KalistaMenu.Misc:Boolean("E", "E if Target Leave Range", true)
 KalistaMenu.Misc:Slider("Elvl", "E if my level <", 12, 1, 18, 1)
@@ -120,16 +115,9 @@ end
 end)
 
 local souldboundhero = nil
-
-OnProcessSpell(function(unit, spell)
-  if unit == myHero and spell.name == "kalistapspellcast" then
-  soulboundhero = spell.target
-  PrintChat("You are now pledged to "..GetObjectName(spell.target).."")
-  end
-end)
-
+local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
+local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
 local target1 = TargetSelector(1200,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
-local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
@@ -334,6 +322,9 @@ OnUpdateBuff(function(unit,buff)
   if GetTeam(unit) ~= GetTeam(myHero) and buff.Name == "kalistaexpungemarker" then
   Estack[GetNetworkID(unit)] = buff.Count
   end
+  if GetTeam(unit) == GetTeam(myHero) and buff.Name == "kalistacoopstrikeally" then
+  soulboundhero = unit
+  end
 end)
 
 OnRemoveBuff(function(unit,buff)
@@ -355,7 +346,7 @@ function Edmg(unit)
   return dmg
 end
 
-WallSpots = {
+local WallSpots = {
       {
         x = 8260,
         y = 51,
