@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",7)
+AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",8)
 
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
@@ -169,17 +169,17 @@ OnTick(function(myHero)
   local Qtarget = target1:GetTarget()
   local Etarget = target2:GetTarget()
      
-  if IOW:Mode() == "Combo" then
+  if IOW:Mode() == "Combo" and not CastingR then
 
-      if IsReady(_Q) and KatarinaMenu.Combo.Q:Value() and ValidTarget(Qtarget, 675) and not CastingR then
+      if IsReady(_Q) and KatarinaMenu.Combo.Q:Value() and ValidTarget(Qtarget, 675) then
       CastTargetSpell(Qtarget, _Q)
       end
 	  
-      if IsReady(_W) and KatarinaMenu.Combo.W:Value() and ValidTarget(target, 375) and not CastingR then
+      if IsReady(_W) and KatarinaMenu.Combo.W:Value() and ValidTarget(target, 375) then
       CastSpell(_W)
       end
 	  
-      if IsReady(_E) and KatarinaMenu.Combo.E:Value() and ValidTarget(Etarget, 700) and not CastingR then
+      if IsReady(_E) and KatarinaMenu.Combo.E:Value() and ValidTarget(Etarget, 700) then
       CastTargetSpell(Etarget, _E)
       end
 	  
@@ -192,18 +192,19 @@ OnTick(function(myHero)
   end
 
   if IOW:Mode() == "Harass" then
- 
-      if IsReady(_Q) and KatarinaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 675) and not CastingR then
+  	
+      if IsReady(_Q) and KatarinaMenu.Harass.Q:Value() and ValidTarget(Qtarget, 675) then
       CastTargetSpell(Qtarget, _Q)
       end
 	  
-      if IsReady(_W) and KatarinaMenu.Harass.W:Value() and ValidTarget(target, 375) and not CastingR then
+      if IsReady(_W) and KatarinaMenu.Harass.W:Value() and ValidTarget(target, 375) then
       CastSpell(_W)
       end
 	  
-      if IsReady(_E) and KatarinaMenu.Harass.E:Value() and ValidTarget(Etarget, 700) and not CastingR then
+      if IsReady(_E) and KatarinaMenu.Harass.E:Value() and ValidTarget(Etarget, 700) then
       CastTargetSpell(Etarget, _E)
       end
+
   end
 
     for i,enemy in pairs(GetEnemyHeroes()) do
@@ -331,6 +332,11 @@ OnProcessSpell(function(unit,spell)
   CastingR = true
   IOW.movementEnabled = false
   IOW.attacksEnabled = false
+  DelayAction(function() 
+  CastingR = false
+  IOW.movementEnabled = true
+  IOW.attacksEnabled = true
+  end, 2500)
   end
 
   if unit == myHero and not spell.name:lower():find("katarina") then
@@ -357,14 +363,6 @@ OnDeleteObj(function(object)
   local objType = GetObjectType(object)
   if objType == Obj_AI_Hero or objType == Obj_AI_Minion then
   objectList[object] = nil
-  end
-end)
-
-OnRemoveBuff(function(unit,buff)
-  if unit == myHero and buff.Name == "katarinarsound" then
-  CastingR = false
-  IOW.movementEnabled = true
-  IOW.attacksEnabled = true
   end
 end)
 
