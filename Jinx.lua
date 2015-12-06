@@ -5,7 +5,7 @@ require('IPrediction')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",13)
+AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",14)
 
 local JinxMenu = MenuConfig("Jinx", "Jinx")
 JinxMenu:Menu("Combo", "Combo")
@@ -50,10 +50,10 @@ JinxMenu:Menu("Killsteal", "Killsteal")
 JinxMenu.Killsteal:Boolean("W", "Killsteal with W", true)
 JinxMenu.Killsteal:Boolean("R", "Killsteal with R", true)
 
+if Ignite ~= nil then 
 JinxMenu:Menu("Misc", "Misc")
-if Ignite ~= nil then JinxMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-JinxMenu.Misc:Boolean("Autolvl", "Auto level", true)
-JinxMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E"})
+JinxMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) 
+end
 	
 JinxMenu:Menu("Lasthit", "Lasthit")
 JinxMenu.Lasthit:Boolean("Farm", "Always swap to Minigun", true)
@@ -77,7 +77,6 @@ local target3 = TargetSelector(4000,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,tr
 local EPred = IPrediction.Prediction({name="JinxE", range=900, speed=1750, delay=0.7658, width=120, type="linear", collision=false})
 local TimeToSwap = true
 local Minigun = false
-local lastlevel = GetLevel(myHero)-1
 
 OnUpdateBuff(function(unit,buff)
   if unit == myHero and buff.Name == "jinxqicon" then
@@ -215,16 +214,6 @@ OnTick(function(myHero)
         end
 
    end
-
-if JinxMenu.Misc.Autolvl:Value() then
-  if GetLevel(myHero) > lastlevel then
-    if JinxMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif JinxMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_W, _Q, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
 
 end)
 
