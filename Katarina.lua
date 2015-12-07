@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",9)
+AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",10)
 
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
@@ -173,7 +173,7 @@ OnProcessSpell(function(unit,spell)
   CastingR = false
   IOW.movementEnabled = true
   IOW.attacksEnabled = true
-  end, 2500)
+  end, 2500+spell.windUpTime)
   end
 
   if unit == myHero and not spell.name:lower():find("katarina") then
