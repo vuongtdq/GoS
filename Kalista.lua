@@ -3,7 +3,7 @@ if GetObjectName(GetMyHero()) ~= "Kalista" then return end
 require('Inspired')
 require('DeftLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",7)
+AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",8)
 
 local KalistaMenu = MenuConfig("Kalista", "Kalista")
 
@@ -79,8 +79,8 @@ local pos = GetOrigin(myHero)
 if KalistaMenu.Drawings.Q:Value() then DrawCircle(pos,1150,1,25,GoS.Pink) end
 if KalistaMenu.Drawings.E:Value() then DrawCircle(pos,1000,1,25,GoS.Blue) end
 if KalistaMenu.Drawings.R:Value() then DrawCircle(pos,1450,1,25,GoS.Green) end
-for _,spot in pairs(WallSpots) do
-  if KalistaMenu.Combo.WallJump:Value() then 
+if KalistaMenu.Combo.WallJump:Value() then
+  for _,spot in pairs(WallSpots) do 
     if GetDistance(spot) <= 7000 and GetDistance(spot, mousePos) > 125 then                
     DrawCircle(spot,80,2,0,ARGB(255, 255, 255, 0))
     end
@@ -259,9 +259,9 @@ OnTick(function(myHero)
         end
       end
     end
-    
-for _,spot in pairs(WallSpots) do
-  if KalistaMenu.Combo.WallJump:Value() then 
+ 
+if KalistaMenu.Combo.WallJump:Value() then 
+  for _,spot in pairs(WallSpots) do
     
     if GetDistance(spot, mousePos) <= 125 and GetDistance(spot) > 22 then
     MoveToXYZ(spot)
@@ -346,7 +346,7 @@ function Edmg(unit)
   return dmg
 end
 
-local WallSpots = {
+WallSpots = {
       {
         x = 8260,
         y = 51,
