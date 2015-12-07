@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",8)
+AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",9)
 
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
@@ -163,6 +163,24 @@ end
 local CastingR = false
 local target1 = TargetSelector(675,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(700,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
+
+OnProcessSpell(function(unit,spell)
+  if unit == myHero and spell.name:lower():find("katarinar") then
+  CastingR = true
+  IOW.movementEnabled = false
+  IOW.attacksEnabled = false
+  DelayAction(function() 
+  CastingR = false
+  IOW.movementEnabled = true
+  IOW.attacksEnabled = true
+  end, 2500)
+  end
+
+  if unit == myHero and not spell.name:lower():find("katarina") then
+  spellObj = spell
+  wardpos = spellObj.endPos
+  end
+end)
 
 OnTick(function(myHero)
   local target = GetCurrentTarget()
@@ -325,24 +343,6 @@ end
 	spellObj = nil
 	wardpos = nil
 
-end)
-
-OnProcessSpell(function(unit,spell)
-  if unit == myHero and spell.name:lower():find("katarinar") then
-  CastingR = true
-  IOW.movementEnabled = false
-  IOW.attacksEnabled = false
-  DelayAction(function() 
-  CastingR = false
-  IOW.movementEnabled = true
-  IOW.attacksEnabled = true
-  end, 2500)
-  end
-
-  if unit == myHero and not spell.name:lower():find("katarina") then
-  spellObj = spell
-  wardpos = spellObj.endPos
-  end
 end)
 
 OnObjectLoad(function(object)
