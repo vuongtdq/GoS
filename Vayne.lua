@@ -37,23 +37,15 @@ VayneMenu:Menu("Misc", "Misc")
 VayneMenu.Misc:Menu("EMenu", "AutoStun")
 VayneMenu.Misc:Boolean("lowhp", "Peel with E when low health", true)
 if Ignite ~= nil then VayneMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-VayneMenu.Misc:KeyBinding("WallTumble1", "WallTumble Mid", string.byte("T"))
-VayneMenu.Misc:KeyBinding("WallTumble2", "WallTumble Drake", string.byte("U"))
 
 VayneMenu:Menu("Drawings", "Drawings")
 VayneMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 VayneMenu.Drawings:Boolean("E", "Draw E Range", true)
 
-if mapID == SUMMONERS_RIFT then
-VayneMenu.Drawings:Boolean("WT", "Draw WallTumble Pos", true)
-end
-
 VayneMenu:Menu("Interrupt", "Interrupt (E)")
 
 DelayAction(function()
-
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
-
   for i, spell in pairs(CHANELLING_SPELLS) do
     for _,k in pairs(GetEnemyHeroes()) do
         if spell["Name"] == GetObjectName(k) then
@@ -65,27 +57,22 @@ DelayAction(function()
   for _,k in pairs(GetEnemyHeroes()) do
   VayneMenu.Misc.EMenu:Boolean(GetObjectName(k).."Pleb", ""..GetObjectName(k).."", true)
   end
-		
 end, 1)
  
 OnProcessSpell(function(unit, spell)
-      if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_E) then
-        if CHANELLING_SPELLS[spell.name] then
-          if IsInDistance(unit, 615) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and VayneMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
-          CastTargetSpell(unit, _E)
-          end
-        end
+  if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_E) then
+    if CHANELLING_SPELLS[spell.name] then
+      if IsInDistance(unit, 615) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and VayneMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
+      CastTargetSpell(unit, _E)
       end
+    end
+  end
 end)
   
 OnDraw(function(myHero)
-pos = GetOrigin(myHero)
-if VayneMenu.Drawings.Q:Value() then DrawCircle(pos,GetCastRange(myHero,_Q),1,25,GoS.Pink) end
-if VayneMenu.Drawings.E:Value() then DrawCircle(pos,GetCastRange(myHero,_E),1,25,GoS.Blue) end
-if mapID == SUMMONERS_RIFT and VayneMenu.Drawings.WT:Value() then
-DrawCircle(6962, 51, 8952,80,0,25,0xffffffff)
-DrawCircle(12060, 51, 4806,80,0,25,0xffffffff)
-end
+  pos = GetOrigin(myHero)
+  if VayneMenu.Drawings.Q:Value() then DrawCircle(pos,GetCastRange(myHero,_Q),1,25,GoS.Pink) end
+  if VayneMenu.Drawings.E:Value() then DrawCircle(pos,GetCastRange(myHero,_E),1,25,GoS.Blue) end
 end)
 
 IOW:AddCallback(AFTER_ATTACK, function(target, mode)
@@ -172,23 +159,11 @@ OnTick(function(myHero)
         StunThisPleb(enemy)
         end
 
-        if IsReady(_E) and VayneMenu.Misc.lowhp:Value() and GetPercentHP(myHero) <= 15 and EnemiesAround(myHeroPos(), 375) >= 1 then
+        if IsReady(_E) and VayneMenu.Misc.lowhp:Value() and GetPercentHP(myHero) <= 15 and ValidTarget(enemy,375) then
         CastTargetSpell(enemy, _E)
         end
 
    end
-
-        if VayneMenu.Misc.WallTumble1:Value() and pos.x == 6962 and pos.z == 8952 then
-        CastSkillShot(_Q,6667.3271484375, 51, 8794.64453125)
-        elseif VayneMenu.Misc.WallTumble1:Value() then
-        MoveToXYZ(6962, 51, 8952)
-        end
-    
-        if VayneMenu.Misc.WallTumble2:Value() and pos.x == 12060 and pos.z == 4806 then
-        CastSkillShot(_Q,11745.198242188, 51, 4625.4379882813)
-        elseif VayneMenu.Misc.WallTumble2:Value() then
-        MoveToXYZ(12060, 51, 4806)
-        end
 
 end)
 
