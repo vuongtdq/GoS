@@ -4,7 +4,7 @@ require('MapPositionGOS')
 require('Inspired')
 require('DeftLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Vayne.lua","/D3ftsu/GoS/master/Vayne.version","Vayne.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Vayne.lua","/D3ftsu/GoS/master/Vayne.version","Vayne.lua",2)
 
 local VayneMenu = MenuConfig("Vayne", "Vayne")
 VayneMenu:Menu("Combo", "Combo")
@@ -37,8 +37,6 @@ VayneMenu:Menu("Misc", "Misc")
 VayneMenu.Misc:Menu("EMenu", "AutoStun")
 VayneMenu.Misc:Boolean("lowhp", "Peel with E when low health", true)
 if Ignite ~= nil then VayneMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-VayneMenu.Misc:Boolean("Autolvl", "Auto level", true)
-VayneMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"W-Q-E", "Q-W-E"})
 VayneMenu.Misc:KeyBinding("WallTumble1", "WallTumble Mid", string.byte("T"))
 VayneMenu.Misc:KeyBinding("WallTumble2", "WallTumble Drake", string.byte("U"))
 
@@ -50,7 +48,7 @@ if mapID == SUMMONERS_RIFT then
 VayneMenu.Drawings:Boolean("WT", "Draw WallTumble Pos", true)
 end
 
-local InterruptMenu = MenuConfig("Interrupt (E)", "Interrupt")
+VayneMenu:Menu("Interrupt", "Interrupt (E)")
 
 DelayAction(function()
 
@@ -59,7 +57,7 @@ DelayAction(function()
   for i, spell in pairs(CHANELLING_SPELLS) do
     for _,k in pairs(GetEnemyHeroes()) do
         if spell["Name"] == GetObjectName(k) then
-        InterruptMenu:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)   
+        VayneMenu.Interrupt:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)   
         end
     end
   end
@@ -73,7 +71,7 @@ end, 1)
 OnProcessSpell(function(unit, spell)
       if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_E) then
         if CHANELLING_SPELLS[spell.name] then
-          if IsInDistance(unit, 615) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() then 
+          if IsInDistance(unit, 615) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and VayneMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() then 
           CastTargetSpell(unit, _E)
           end
         end
@@ -106,7 +104,6 @@ IOW:AddCallback(AFTER_ATTACK, function(target, mode)
 end)
 
 local IsStealthed = false
-local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
@@ -129,7 +126,7 @@ OnTick(function(myHero)
         StunThisPleb(target)
         end
 
-        if IsReady(_R) and ValidTarget(target, VayneMenu.Combo.R.Renemyrange:Value()) and GetPercentHP(target) <= VayneMenu.Combo.R.Rifthp:Value() and GetPercentHP(myHero) <= VayneMenu.Combo.R.Rifhp:Value() and EnemiesAround(GetOrigin(myHero), VayneMenu.Combo.R.Renemyrange:Value()) >= VayneMenu.Combo.R.Rminenemy:Value() and AlliesAround(GetOrigin(myHero), VayneMenu.Combo.R.Rallyrange:Value()) >= VayneMenu.Combo.R.Rminally:Value() then
+        if IsReady(_R) and VayneMenu.Combo.R.Enabled:Value() and ValidTarget(target, VayneMenu.Combo.R.Renemyrange:Value()) and GetPercentHP(target) <= VayneMenu.Combo.R.Rifthp:Value() and GetPercentHP(myHero) <= VayneMenu.Combo.R.Rifhp:Value() and EnemiesAround(GetOrigin(myHero), VayneMenu.Combo.R.Renemyrange:Value()) >= VayneMenu.Combo.R.Rminenemy:Value() and AlliesAround(GetOrigin(myHero), VayneMenu.Combo.R.Rallyrange:Value()) >= VayneMenu.Combo.R.Rminally:Value() then
         CastSpell(_R)
 	end
 	
@@ -192,16 +189,6 @@ OnTick(function(myHero)
         MoveToXYZ(12060, 51, 4806)
         end
 
-if VayneMenu.Misc.Autolvl:Value() then  
-  if GetLevel(myHero) > lastlevel then
-    if VayneMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _W, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-    elseif VayneMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
-
 end)
 
 OnUpdateBuff(function(unit,buff)
@@ -217,7 +204,7 @@ OnRemoveBuff(function(unit,buff)
 end)
 
 function StunThisPleb(unit)
-        local EPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),2000,250,1000,1,false,true)
+        local EPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),2000,250,GetCastRange(myHero,_E),1,false,true)
         local PredPos = Vector(EPred.PredPos)
         local HeroPos = Vector(myHero)
         local maxERange = PredPos - (PredPos - HeroPos) * ( - VayneMenu.Combo.E.pushdistance:Value() / GetDistance(EPred.PredPos))
@@ -230,7 +217,7 @@ function StunThisPleb(unit)
 end
 
 function StunThisPlebV2(unit)
-        local EPred = GetPredictionForPlayer(GetMousePos(),unit,GetMoveSpeed(unit),2000,250,1000,1,false,true)
+        local EPred = GetPredictionForPlayer(GetMousePos(),unit,GetMoveSpeed(unit),2000,250,GetCastRange(myHero,_E),1,false,true)
         local PredPos = Vector(EPred.PredPos)
         local maxERange = PredPos - (PredPos - GetMousePos()) * ( - VayneMenu.Combo.E.pushdistance:Value() / GetDistance(GetMousePos(), EPred.PredPos))
         local shootLine = Line(Point(PredPos.x, PredPos.y, PredPos.z), Point(maxERange.x, maxERange.y, maxERange.z))
