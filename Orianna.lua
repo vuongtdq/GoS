@@ -52,7 +52,6 @@ OriannaMenu.Drawings:Boolean("E", "Draw E Range", true)
 OriannaMenu.Drawings:Boolean("R", "Draw R Radius", true)
 OriannaMenu.Drawings:Boolean("Ball", "Draw Ball Position", true)
 
-local InterruptMenu = MenuConfig("Interrupt (R)", "Interrupt")
 OriannaMenu:Menu("Interrupt", "Interrupt (R)")
 
 DelayAction(function()
