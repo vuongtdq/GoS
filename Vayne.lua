@@ -110,15 +110,16 @@ OnTick(function(myHero)
     local QSS = GetItemSlot(myHero,3140) > 0 and GetItemSlot(myHero,3140) or GetItemSlot(myHero,3139) > 0 and GetItemSlot(myHero,3139) or nil
     local BRK = GetItemSlot(myHero,3153) > 0 and GetItemSlot(myHero,3153) or GetItemSlot(myHero,3144) > 0 and GetItemSlot(myHero,3144) or nil
     local YMG = GetItemSlot(myHero,3142) > 0 and GetItemSlot(myHero,3142) or nil
+    local mousePos = GetMousePos()
 
     if IOW:Mode() == "Combo" then
         
         if VayneMenu.Combo.Q.Mode:Value() == 2 and target ~= nil and VayneMenu.Combo.Q.Enabled:Value() then
-          local AfterTumblePos = GetOrigin(myHero) + (Vector(GetMousePos()) - GetOrigin(myHero)):normalized() * 300
+          local AfterTumblePos = GetOrigin(myHero) + (Vector(mousePos) - GetOrigin(myHero)):normalized() * 300
           local DistanceAfterTumble = GetDistance(AfterTumblePos, target)
   
           if GetDistance(target) > 630 and DistanceAfterTumble < 630 then
-          CastSkillShot(_Q,GetMousePos())
+          CastSkillShot(_Q,mousePos)
           end
         end
 		
@@ -144,7 +145,7 @@ OnTick(function(myHero)
 	
    end
 
-   local ElitePleb = ClosestEnemy(GetMousePos())
+   local ElitePleb = ClosestEnemy(mousePos)
    if Flash and IsReady(Flash) and IsReady(_E) and VayneMenu.Combo.E.cf:Value() and ValidTarget(ElitePleb, 1100) then
    StunThisPlebV2(ElitePleb)
    end
@@ -229,6 +230,6 @@ function StunThisPlebV2(unit)
         end
 end
 
-AddGapcloseEvent(_E, 550, true)
+AddGapcloseEvent(_E, 550, true, VayneMenu)
 
 PrintChat(string.format("<font color='#1244EA'>Vayne:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
