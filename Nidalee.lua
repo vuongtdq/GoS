@@ -5,7 +5,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Nidalee.lua","/D3ftsu/GoS/master/Nidalee.version","Nidalee.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Nidalee.lua","/D3ftsu/GoS/master/Nidalee.version","Nidalee.lua",6)
 
 local NidaleeMenu = MenuConfig("Nidalee", "Nidalee")
 NidaleeMenu:Menu("Combo", "Combo")
@@ -27,8 +27,6 @@ NidaleeMenu.Killsteal:Boolean("R", "Killsteal with R", true)
 
 NidaleeMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then NidaleeMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-NidaleeMenu.Misc:Boolean("Autolvl", "Auto level", true)
-NidaleeMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-E-W", "Q-W-E", "E-Q-W"})
 NidaleeMenu.Misc:Boolean("Eme", "Self-Heal", true)
 NidaleeMenu.Misc:Slider("mpEme", "Minimum Mana %", 25, 0, 100, 0)
 NidaleeMenu.Misc:Slider("hpEme", "Minimum HP%", 70, 0, 100, 0)
@@ -43,28 +41,26 @@ NidaleeMenu.Drawings:Boolean("Q", "Draw Q Range", true)
 NidaleeMenu.Drawings:Boolean("W", "Draw W Range", true)
 NidaleeMenu.Drawings:Boolean("E", "Draw E Range", true)
 NidaleeMenu.Drawings:Boolean("R", "Draw R Range", true)
-NidaleeMenu.Drawings:ColorPick("color", "Color Picker", {255,255,255,0})
+NidaleeMenu.Drawings:Boolean("WJ", "Draw WallJump Helper", true)
 
 OnDraw(function(myHero)
-local col = NidaleeMenu.Drawings.color:Value()
 local pos = GetOrigin(myHero)
   if IsHuman() then
-    if NidaleeMenu.Drawings.Q:Value() then DrawCircle(pos,1450,2,80,col) end
-    if NidaleeMenu.Drawings.W:Value() then DrawCircle(pos,900,2,80,col) end
-    if NidaleeMenu.Drawings.E:Value() then DrawCircle(pos,650,2,80,col) end
+    if NidaleeMenu.Drawings.Q:Value() then DrawCircle(pos,1450,1,25,GoS.Pink) end
+    if NidaleeMenu.Drawings.W:Value() then DrawCircle(pos,900,1,25,GoS.Yellow) end
+    if NidaleeMenu.Drawings.E:Value() then DrawCircle(pos,650,1,25,GoS.Blue) end
   else
-    if NidaleeMenu.Drawings.Q:Value() then DrawCircle(pos,GetRange(myHero)+GetHitBox(myHero),2,80,col) end
-    if NidaleeMenu.Drawings.W:Value() then
-    DrawCircle(mousePos,400,2,80,MapPosition:inWall(mousePos) and ARGB(255,255,0,0) or ARGB(255, 255, 255, 255))
-    DrawCircle(mousePos,133,2,80,MapPosition:inWall(mousePos) and ARGB(255,255,0,0) or ARGB(255, 255, 255, 255))
+    if NidaleeMenu.Drawings.Q:Value() then DrawCircle(pos,GetRange(myHero)+GetHitBox(myHero),1,25,GoS.Pink) end
+    if NidaleeMenu.Drawings.WJ:Value() then
+    DrawCircle(mousePos,400,1,25,MapPosition:inWall(mousePos) and ARGB(255,255,0,0) or ARGB(255, 255, 255, 255))
+    DrawCircle(mousePos,133,1,25,MapPosition:inWall(mousePos) and ARGB(255,255,0,0) or ARGB(255, 255, 255, 255))
     end
-    if NidaleeMenu.Drawings.E:Value() then DrawCircle(pos,375,2,80,col) end
+    if NidaleeMenu.Drawings.E:Value() then DrawCircle(pos,375,1,25,GoS.Blue) end
   end
 end)
 
 local QCD = 0
 local target1 = TargetSelector(1450,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local lastlevel = GetLevel(myHero)-1
   
 OnTick(function(myHero)
     local target = GetCurrentTarget()
@@ -181,17 +177,6 @@ OnTick(function(myHero)
         end
 		
     end
-
-if NidaleeMenu.Misc.Autolvl:Value() then  
-  if GetLevel(myHero) > lastlevel then
-    if NidaleeMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
-    elseif NidaleeMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif NidaleeMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _E, _W, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
 	
 end)
 
