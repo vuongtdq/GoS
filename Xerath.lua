@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Xerath" then return end
 
-if not pcall( require, "Inspired" ) then PrintChat("You are missing Inspired.lua - Go download it and save it Common!") return end
-if not pcall( require, "Deftlib" ) then PrintChat("You are missing Deftlib.lua - Go download it and save it in Common!") return end
-if not pcall( require, "DamageLib" ) then PrintChat("You are missing DamageLib.lua - Go download it and save it in Common!") return end
+require('Inspired')
+require('DeftLib')
+require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",4)
 
 local XerathMenu = MenuConfig("Xerath", "Xerath")
 XerathMenu:Menu("Combo", "Combo")
@@ -28,10 +28,10 @@ XerathMenu:Menu("Killsteal", "Killsteal")
 XerathMenu.Killsteal:Boolean("W", "Killsteal with W", true)
 XerathMenu.Killsteal:Boolean("E", "Killsteal with E", true)
 
+if Ignite ~= nil then
 XerathMenu:Menu("Misc", "Misc")
 XerathMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true)
-XerathMenu.Misc:Boolean("Autolvl", "Auto level", true)
-XerathMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "Q-E-W"})
+end
 
 XerathMenu:Menu("LaneClear", "LaneClear")
 XerathMenu.LaneClear:Boolean("Q", "Use Q", true)
@@ -91,7 +91,6 @@ local target1 = TargetSelector(1550,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,
 local target2 = TargetSelector(1250,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target3 = TargetSelector(1005,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target4 = TargetSelector(5600,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-local lastlevel = GetLevel(myHero)-1
 
 OnDraw(function(myHero)
 local pos = GetOrigin(myHero)
@@ -285,16 +284,6 @@ OnTick(function(myHero)
           end
         end
     end       
-    
-if XerathMenu.Misc.Autolvl:Value() then
-  if GetLevel(myHero) > lastlevel then
-    if XerathMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif XerathMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _E, _Q, _E, _R, _E, _E, _W, _W, _R, _W, _W}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
 
 end)
 
@@ -364,7 +353,7 @@ OnProcessSpell(function(unit,spell)
 end)
 
 OnCreateObj(function(Object)
-  if GetObjectBaseName(Object) == "Xerath_Base_Q_cas_charge.troy" and GetDistance(Object) <= 50 then
+  if GetObjectBaseName(Object) == "Xerath_Base_Q_cas_charge.troy" and GetDistance(Object) <= 100 then
   QCharged = true
   end
 end)
