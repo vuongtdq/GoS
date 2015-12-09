@@ -104,6 +104,9 @@ end)
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
+    local QSS = GetItemSlot(myHero,3140) > 0 and GetItemSlot(myHero,3140) or GetItemSlot(myHero,3139) > 0 and GetItemSlot(myHero,3139) or nil
+    local BRK = GetItemSlot(myHero,3153) > 0 and GetItemSlot(myHero,3153) or GetItemSlot(myHero,3144) > 0 and GetItemSlot(myHero,3144) or nil
+    local YMG = GetItemSlot(myHero,3142) > 0 and GetItemSlot(myHero,3142) or nil
     local mousePos = GetMousePos()
     
     if IOW:Mode() == "Combo" and not IOW.isWindingUp then
@@ -135,6 +138,11 @@ OnTick(function(myHero)
         CastSkillShot(_E, AfterDash)
         end
       end
+      
+      if QSS and IsReady(QSS) and LucianMenu.Combo.QSS:Value() and IsImmobile(myHero) or IsSlowed(myHero) or toQSS and GetPercentHP(myHero) < LucianMenu.Combo.QSSHP:Value() then
+      CastSpell(QSS)
+      end
+
     end
 	
     if IOW:Mode() == "Harass" and not IOW.isWindingUp and GetPercentMP(myHero) >= LucianMenu.Harass.Mana:Value() then
@@ -155,6 +163,16 @@ OnTick(function(myHero)
           if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
           CastTargetSpell(enemy, Ignite)
           end
+        end
+        
+        if IOW:Mode() == "Combo" then	
+	  if BRK and IsReady(BRK) and LucianMenu.Combo.Items:Value() and ValidTarget(enemy, 550) and GetPercentHP(myHero) < LucianMenu.Combo.myHP:Value() and GetPercentHP(enemy) > LucianMenu.Combo.targetHP:Value() then
+          CastTargetSpell(enemy, BRK)
+          end
+
+          if YMG and IsReady(YMG) and LucianMenu.Combo.Items:Value() and ValidTarget(enemy, 600) then
+          CastSpell(YMG)
+          end	
         end
           
         if IsReady(_Q) and ValidTarget(enemy, 550) and LucianMenu.Killsteal.Q:Value() and GetHP(enemy) < getdmg("Q",enemy) then 
