@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Orianna.lua","/D3ftsu/GoS/master/Orianna.version","Orianna.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Orianna.lua","/D3ftsu/GoS/master/Orianna.version","Orianna.lua",3)
 
 local Ball = myHero
 	
@@ -31,9 +31,6 @@ OriannaMenu.Killsteal:Boolean("E", "Killsteal with E", false)
 
 OriannaMenu:Menu("Misc", "Misc")
 if Ignite ~= nil then OriannaMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-OriannaMenu.Misc:Boolean("Autolvl", "Auto level", true)
-OriannaMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "Q-E-W"})
-OriannaMenu.Misc:Boolean("Interrupt", "Interrupt Dangerous Spells (R)", true)
 OriannaMenu.Misc:Menu("AutoUlt", "Auto Ult")
 OriannaMenu.Misc.AutoUlt:Boolean("Enabled", "Enabled", true)
 OriannaMenu.Misc.AutoUlt:Slider("catchable", "if Can Catch X Enemies", 3, 0, 5, 1)
@@ -56,13 +53,14 @@ OriannaMenu.Drawings:Boolean("R", "Draw R Radius", true)
 OriannaMenu.Drawings:Boolean("Ball", "Draw Ball Position", true)
 
 local InterruptMenu = MenuConfig("Interrupt (R)", "Interrupt")
+OriannaMenu:Menu("Interrupt", "Interrupt (R)")
 
 DelayAction(function()
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
   for i, spell in pairs(CHANELLING_SPELLS) do
     for _,k in pairs(GetEnemyHeroes()) do
         if spell["Name"] == GetObjectName(k) then
-        InterruptMenu:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
+        OriannaMenu.Interrupt:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
         end
     end
   end
@@ -71,7 +69,7 @@ end, 1)
 OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and IsReady(_R) then
       if CHANELLING_SPELLS[spell.name] then
-        if ValidTarget(unit, 1000) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and InterruptMenu[GetObjectName(unit).."Inter"]:Value() and GetDistance(Ball,unit) <= 400 then 
+        if ValidTarget(unit, 1000) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and OriannaMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and GetDistance(Ball,unit) <= 400 then 
         CastSpell(_R)
         end
       end
@@ -244,14 +242,6 @@ OnTick(function(myHero)
           end
 
         end
-	
-if OriannaMenu.Misc.Autolvl:Value() then  
-    if OriannaMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif OriannaMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _W, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-    elseif OriannaMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _E, _Q, _E, _R, _E, _E, _W, _W, _R, _W, _W}
-    end
-DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-end
 
 end)
 
