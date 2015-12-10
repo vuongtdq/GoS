@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Sivir.lua","/D3ftsu/GoS/master/Sivir.version","Sivir.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Sivir.lua","/D3ftsu/GoS/master/Sivir.version","Sivir.lua",2)
 
 local SivirMenu = MenuConfig("Sivir", "Sivir")
 SivirMenu:Menu("Combo", "Combo")
@@ -28,10 +28,10 @@ SivirMenu.Harass:Slider("Mana", "if Mana % is More than", 30, 0, 80, 1)
 SivirMenu:Menu("Killsteal", "Killsteal")
 SivirMenu.Killsteal:Boolean("Q", "Killsteal with Q", true)
 
+if Ignite ~= nil then
 SivirMenu:Menu("Misc", "Misc")
 SivirMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true)
-SivirMenu.Misc:Boolean("Autolvl", "Auto level", true)
-SivirMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "E-Q-W"})
+end
 	
 SivirMenu:Menu("LaneClear", "LaneClear")
 SivirMenu.LaneClear:Boolean("Q", "Use Q", true)
@@ -63,7 +63,6 @@ IOW:AddCallback(AFTER_ATTACK, function(target, mode)
 end)
 
 local target1 = TargetSelector(1125,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
-local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
@@ -140,17 +139,6 @@ OnTick(function(myHero)
 	end
       end
     end
-
-if SivirMenu.Misc.Autolvl:Value() then
-  if GetLevel(myHero) > lastlevel then
-    if SivirMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_W, _Q, _E, _Q, _Q , _R, _Q , _W, _Q , _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif SivirMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_W, _Q, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-    elseif SivirMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_W, _Q, _E, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
 
 end)
 
