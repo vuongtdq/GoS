@@ -1,4 +1,4 @@
-DeftLibVersion = 25
+DeftLibVersion = 26
 
 require('Inspired')
 require('IPrediction')
@@ -115,10 +115,12 @@ CHANELLING_SPELLS = {
     ["MissFortuneBulletTime"]       = {Name = "MissFortune",  Spellslot = _R},
     ["AbsoluteZero"]                = {Name = "Nunu",         Spellslot = _R},                        
     ["PantheonRJump"]               = {Name = "Pantheon",     Spellslot = _R},
+    ["PantheonRFall"]               = {Name = "Pantheon",     Spellslot = _R},
     ["ShenStandUnited"]             = {Name = "Shen",         Spellslot = _R},
     ["Destiny"]                     = {Name = "TwistedFate",  Spellslot = _R},
     ["UrgotSwap2"]                  = {Name = "Urgot",        Spellslot = _R},
     ["VarusQ"]                      = {Name = "Varus",        Spellslot = _Q},
+    ["VelkozR"]                     = {Name = "Velkoz",       Spellslot = _R},
     ["InfiniteDuress"]              = {Name = "Warwick",      Spellslot = _R},
     ["XerathLocusOfPower2"]         = {Name = "Xerath",       Spellslot = _R}
     
@@ -303,10 +305,10 @@ function Cast(spell, target, source, speed, delay, range, width, hitchance, coll
         end
 	
 	if PredictionMenu.Pred:Value() == 2 then
-	  if not IPredSpells[GetObjectName(source)] then
-		IPredSpells[GetObjectName(source)] = {}
+	  if not IPredSpells[GetObjectName(myHero)] then
+		IPredSpells[GetObjectName(myHero)] = {}
 	  end
-	  if not IPredSpells[GetObjectName(source)][spell] then
+	  if not IPredSpells[GetObjectName(myHero)][spell] then
 		local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
 		local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
 		local range = range or SpellData[GetObjectName(myHero)][spell].Range
@@ -317,9 +319,9 @@ function Cast(spell, target, source, speed, delay, range, width, hitchance, coll
 		local types = type or SpellData[GetObjectName(myHero)][spell].type or "linear"
 		local Name = Name or SpellData[GetObjectName(myHero)][spell].Name
 		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, type=types, collision=coll, collisionM=collM, collisionH=collH})
-		IPredSpells[GetObjectName(source)][spell] = Predicted
+		IPredSpells[GetObjectName(myHero)][spell] = Predicted
 	  end
-	  local hit, pos = IPredSpells[GetObjectName(source)][spell]:Predict(target,source)
+	  local hit, pos = IPredSpells[GetObjectName(myHero)][spell]:Predict(target,source)
 	  if hit >= hitchance then
 		CastSkillShot(spell, pos)
           end
@@ -345,10 +347,10 @@ function Cast2(spell, target, source, speed, delay, range, width, hitchance, col
         end
 	
 	if PredictionMenu.Pred:Value() == 2 then
-	  if not IPredSpells[GetObjectName(source)] then
-		IPredSpells[GetObjectName(source)] = {}
+	  if not IPredSpells[GetObjectName(myHero)] then
+		IPredSpells[GetObjectName(myHero)] = {}
 	  end
-	  if not IPredSpells[GetObjectName(source)][spell] then
+	  if not IPredSpells[GetObjectName(myHero)][spell] then
 		local speed = speed or SpellData[GetObjectName(myHero)][spell].Speed or math.huge
 		local delay = delay or SpellData[GetObjectName(myHero)][spell].Delay or 0
 		local range = range or SpellData[GetObjectName(myHero)][spell].Range
@@ -359,9 +361,9 @@ function Cast2(spell, target, source, speed, delay, range, width, hitchance, col
 		local types = type or SpellData[GetObjectName(myHero)][spell].type or "linear"
 		local Name = Name or SpellData[GetObjectName(myHero)][spell].Name
 		local Predicted = IPrediction.Prediction({name=Name, range=range, speed=speed, delay=delay, width=width, type=types, collision=coll, collisionM=collM, collisionH=collH})
-		IPredSpells[GetObjectName(source)][spell] = Predicted
+		IPredSpells[GetObjectName(myHero)][spell] = Predicted
 	  end
-	  local hit, pos = IPredSpells[GetObjectName(source)][spell]:Predict(target,source)
+	  local hit, pos = IPredSpells[GetObjectName(myHero)][spell]:Predict(target,myHero)
 	  if hit >= hitchance then
 		CastSkillShot2(spell, pos)
           end
