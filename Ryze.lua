@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",9)
+AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",10)
 
 local RyzeMenu = MenuConfig("Ryze", "Ryze")
 RyzeMenu:Menu("Combo", "Combo")
@@ -30,11 +30,6 @@ RyzeMenu.Misc:Boolean("Seraph", "Use Seraph", true)
 RyzeMenu.Misc:KeyBinding("Passive", "Auto Stack Passive (toggle)", string.byte("N"), true)
 RyzeMenu.Misc:Slider("Mana", "Minimum Mana %", 50, 0, 100, 1)
 RyzeMenu.Misc:Slider("PStacks", "Max Stacks To Maintain", 2, 0, 4, 1)
-RyzeMenu.Misc:Boolean("Autolvl", "Auto level", true)
-RyzeMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"Q-W-E", "W-Q-E", "Q-E-W"})
-
-RyzeMenu:Menu("Lasthit", "Lasthit")
-RyzeMenu.Lasthit:Boolean("Q", "Use Q", true)
 
 RyzeMenu:Menu("LaneClear", "LaneClear")
 RyzeMenu.LaneClear:Boolean("Q", "Use Q", true)
@@ -72,8 +67,6 @@ local PStacks = 0
 local IsEmpowered = false
 local target1 = TargetSelector(900,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(600,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
-
-local lastlevel = GetLevel(myHero)-1
 	
 OnTick(function(myHero)
   local slot = GetItemSlot(myHero,3040)
@@ -161,7 +154,7 @@ OnTick(function(myHero)
 	
   end 
 
-	for i,enemy in pairs(GetEnemyHeroes()) do
+  for i,enemy in pairs(GetEnemyHeroes()) do
 		
 		if Ignite and RyzeMenu.Misc.Autoignite:Value() then
                   if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetHP(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
@@ -177,16 +170,9 @@ OnTick(function(myHero)
 		CastTargetSpell(enemy, _E)
 		end
 		
-	end
-	
-    if IOW:Mode() == "Lasthit" then
-      local OPIEOP = ClosestMinion(GetOrigin(myHero), MINION_ENEMY)
-      if IsReady(_Q) and RyzeMenu.Lasthit.Q:Value() and ValidTarget(OPIEOP, 900) and GetCurrentHP(OPIEOP)-GetDamagePrediction(OPIEOP, 250+GetDistance(OPIEOP)/1700) < getdmg("Q",OPIEOP) and GetCurrentHP(OPIEOP)-GetDamagePrediction(OPIEOP, 250+GetDistance(OPIEOP)/1700) > 0 then
-      CastSkillShot(_Q,GetOrigin(mobs))
-      end
-    end
+  end
     
-    if IOW:Mode() == "LaneClear" then
+  if IOW:Mode() == "LaneClear" then
 
       for _,mobs in pairs(minionManager.objects) do
         if GetTeam(mobs) == 300 then
@@ -223,18 +209,7 @@ OnTick(function(myHero)
 
       end
       
-    end
-
-if RyzeMenu.Misc.Autolvl:Value() then
-  if GetLevel(myHero) > lastlevel then
-    if RyzeMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _W, _Q, _W, _R, _W, _W, _E, _E, _R, _E, _E}
-    elseif RyzeMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _W, _E, _W, _W, _R, _W, _Q, _W, _Q, _R, _Q, _Q, _E, _E, _R, _E, _E}
-    elseif RyzeMenu.Misc.Autolvltable:Value() == 3 then leveltable = {_Q, _W, _E, _Q, _Q, _R, _Q, _E, _Q, _E, _R, _E, _E, _W, _W, _R, _W, _W}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
   end
-end
 
 end)	
 
@@ -263,6 +238,6 @@ OnRemoveBuff(function(unit,buff)
   end
 end)
 
-AddGapcloseEvent(_W, 600, true)
+AddGapcloseEvent(_W, 600, true, RyzeMenu)
 
 PrintChat(string.format("<font color='#1244EA'>Ryze:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
