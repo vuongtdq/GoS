@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",4)
+AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",5)
 
 local XerathMenu = MenuConfig("Xerath", "Xerath")
 XerathMenu:Menu("Combo", "Combo")
@@ -149,7 +149,7 @@ OnTick(function(myHero)
     XerathMenu.Combo.RT:Toggle(false)
     end
 
-    if RCast == 1 and Rdelay1 <= GetTickCount() then
+    if RCast == 1 and Rdelay1 <= GetTickCount() and ValidTarget(Rtarget) then
       Cast(_R, Rtarget)
       elseif RCast == 2 and Rdelay2 <= GetTickCount() then
       Cast(_R, Rtarget)
