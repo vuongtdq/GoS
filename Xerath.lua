@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",6)
 
 local XerathMenu = MenuConfig("Xerath", "Xerath")
 XerathMenu:Menu("Combo", "Combo")
@@ -139,22 +139,15 @@ OnTick(function(myHero)
     chargedrange = math.floor((math.min(minrange + (1500 - minrange) * ((GetTickCount() - chargedTime) / 1500) - 100, 1500)))
     end
 
-    if CanUseSpell(myHero,_R) == ONCOOLDOWN then
-    IsChanneled = false
-    end
-
-    if not IsChanneled then
-    IOW.movementEnabled = true
-    IOW.attacksEnabled = true
-    XerathMenu.Combo.RT:Toggle(false)
-    end
-
     if RCast == 1 and Rdelay1 <= GetTickCount() and ValidTarget(Rtarget) then
       Cast(_R, Rtarget)
       elseif RCast == 2 and Rdelay2 <= GetTickCount() then
       Cast(_R, Rtarget)
       elseif RCast == 3 and Rdelay3 <= GetTickCount() then
       Cast(_R, Rtarget)
+      IOW.movementEnabled = true
+      IOW.attacksEnabled = true
+      IsChanneled = false
     end
 
     if IOW:Mode() == "Combo" then
@@ -285,14 +278,6 @@ OnTick(function(myHero)
         end
     end       
 
-end)
-
-OnUpdateBuff(function(unit,buff)
-  if unit == myHero and (buff.Name == "XerathLocusOfPower2" or buff.Name == "xerathrshots") then
-  IOW.movementEnabled = false
-  IOW.attacksEnabled = false
-  IsChanneled = true
-  end
 end)
 
 OnRemoveBuff(function(unit,buff)
