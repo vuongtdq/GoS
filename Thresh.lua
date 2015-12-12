@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('IPrediction')
 
-AutoUpdate("/D3ftsu/GoS/master/Thresh.lua","/D3ftsu/GoS/master/Thresh.version","Thresh.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Thresh.lua","/D3ftsu/GoS/master/Thresh.version","Thresh.lua",3)
 
 local ThreshMenu = MenuConfig("Thresh", "Thresh")
 ThreshMenu:Menu("Combo", "Combo")
@@ -175,7 +175,7 @@ function CastE(unit)
 end
 
 function CastW()
-  if FindNearestAlly() and GetDistance(FindNearestAlly()) < 950 GetCastName(myHero,_Q) == "threshqleap" then
+  if FindNearestAlly() and GetDistance(FindNearestAlly()) < 950 and GetCastName(myHero,_Q) == "threshqleap" then
     CastSkillShot(_W, GetOrigin(FindNearestAlly()))
   end
 end
