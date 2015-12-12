@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('IPrediction')
 
-AutoUpdate("/D3ftsu/GoS/master/Thresh.lua","/D3ftsu/GoS/master/Thresh.version","Thresh.lua",1)
+AutoUpdate("/D3ftsu/GoS/master/Thresh.lua","/D3ftsu/GoS/master/Thresh.version","Thresh.lua",2)
 
 local ThreshMenu = MenuConfig("Thresh", "Thresh")
 ThreshMenu:Menu("Combo", "Combo")
@@ -57,13 +57,14 @@ OnProcessSpell(function(unit, spell)
     if CHANELLING_SPELLS[spell.name] then
       if ValidTarget(unit, 1040) and IsReady(_Q) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and ThreshMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and ThreshMenu.Interrupt.SupportedSpells.Q:Value() then
       Cast(_Q,unit)
-      elseif ValidTarget(unit, 510) and IsReady(_E) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and ThreshMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and ThreshMenu.Interrupt.SupportedSpells.E:Value() then
+      elseif ValidTarget(unit, 515) and IsReady(_E) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and ThreshMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and ThreshMenu.Interrupt.SupportedSpells.E:Value() then
       Cast(_E,unit)
       end
     end
   end
 end)
 
+local EPred = IPrediction.Prediction({name=Flay, range=515, speed=math.huge, delay=0.3, width=160, type="linear", collision=false})
 local target1 = TargetSelector(1040,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local ally1 = TargetSelector(950,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,true)
 
@@ -88,7 +89,7 @@ OnTick(function(myHero)
 	
     if IOW:Mode() == "Combo" then
 	
-      if IsReady(_E) and ThreshMenu.Combo.E:Value() and ValidTarget(target,510) then
+      if IsReady(_E) and ThreshMenu.Combo.E:Value() and ValidTarget(target,515) then
         if ThreshMenu.Combo.EMode:Value() == 1 then
         CastE(target)
 	elseif ThreshMenu.Combo.EMode:Value() == 2 then
@@ -162,7 +163,7 @@ OnTick(function(myHero)
 end)
 
 IPrediction.OnDash(function(target, pos)
-  if IsReady(_E) ValidTarget(target, 510) and GetDistance(pos) < 125 and ThreshMenu.Misc.AntiDash:Value() then
+  if IsReady(_E) and ValidTarget(target, 515) and GetDistance(pos) < 125 and ThreshMenu.Misc.AntiDash:Value() then
   local EPos = Vector(myHero) + (Vector(myHero) - Vector(pos))
   CastSkillShot(_E, EPos)
   end
@@ -225,4 +226,4 @@ function FindNearestAlly()
   return NearestAlly
 end
 
-AddGapcloseEvent(_E, 510, false, ThreshMenu)
+AddGapcloseEvent(_E, 515, false, ThreshMenu)
