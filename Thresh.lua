@@ -169,10 +169,8 @@ IPrediction.OnDash(function(target, pos)
 end, EPred)	   
 
 function CastE(unit)
-  if ValidTarget(unit,510)
   local EPos = Vector(myHero) + (Vector(myHero) - Vector(unit))
   CastSkillShot(_E,EPos)
-  end
 end
 
 function CastW()
