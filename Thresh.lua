@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('IPrediction')
 
-AutoUpdate("/D3ftsu/GoS/master/Thresh.lua","/D3ftsu/GoS/master/Thresh.version","Thresh.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Thresh.lua","/D3ftsu/GoS/master/Thresh.version","Thresh.lua",4)
 
 local ThreshMenu = MenuConfig("Thresh", "Thresh")
 ThreshMenu:Menu("Combo", "Combo")
@@ -123,7 +123,7 @@ OnTick(function(myHero)
     Cast(_Q,Qtarget)
     end
   
-    if IsReady(_W) and ThreshMenu.Misc.ThrowLantern:Value() then
+    if IsReady(_W) and ThreshMenu.Misc.Lantern:Value() then
     MoveToXYZ(GetMousePos())
     CastLantern()
     end
