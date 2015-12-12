@@ -45,23 +45,23 @@ DelayAction(function()
   local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
   for i, spell in pairs(CHANELLING_SPELLS) do
     for _,k in pairs(GetEnemyHeroes()) do
-        if spell["Name"] == GetObjectName(k) then
-        ThreshMenu.Interrupt:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
-        end
+      if spell["Name"] == GetObjectName(k) then
+      ThreshMenu.Interrupt:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
+      end
     end
   end
 end, 1)
 
 OnProcessSpell(function(unit, spell)
-    if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) then
-      if CHANELLING_SPELLS[spell.name] then
-        if ValidTarget(unit, 1040) and IsReady(_Q) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and ThreshMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and ThreshMenu.Interrupt.SupportedSpells.Q:Value() then
-        Cast(_Q,unit)
-        elseif ValidTarget(unit, 510) and IsReady(_E) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and ThreshMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and ThreshMenu.Interrupt.SupportedSpells.E:Value() then
-        Cast(_E,unit)
-        end
+  if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) then
+    if CHANELLING_SPELLS[spell.name] then
+      if ValidTarget(unit, 1040) and IsReady(_Q) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and ThreshMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and ThreshMenu.Interrupt.SupportedSpells.Q:Value() then
+      Cast(_Q,unit)
+      elseif ValidTarget(unit, 510) and IsReady(_E) and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and ThreshMenu.Interrupt[GetObjectName(unit).."Inter"]:Value() and ThreshMenu.Interrupt.SupportedSpells.E:Value() then
+      Cast(_E,unit)
       end
     end
+  end
 end)
 
 local target1 = TargetSelector(1040,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
@@ -84,33 +84,33 @@ end)
 OnTick(function(myHero)
     local target = GetCurrentTarget()
     local Qtarget = target1:GetTarget()
-	local Wtarget = ally1:GetTarget()
+    local Wtarget = ally1:GetTarget()
 	
     if IOW:Mode() == "Combo" then
 	
       if IsReady(_E) and ThreshMenu.Combo.E:Value() and ValidTarget(target,510) then
-	    if ThreshMenu.Combo.EMode:Value() == 1 then
-          CastE(target)
-		elseif ThreshMenu.Combo.EMode:Value() == 2 then
-          Cast(_E,target)
-		end
+        if ThreshMenu.Combo.EMode:Value() == 1 then
+        CastE(target)
+	elseif ThreshMenu.Combo.EMode:Value() == 2 then
+        Cast(_E,target)
+	end
       end
       
-	  if IsReady(_R) and ThreshMenu.Combo.R:Value() and EnemiesAround(GetOrigin(myHero),450) >= ThreshMenu.Combo.Rmin:Value() then
-	  CastSpell(_R)
-	  end
+      if IsReady(_R) and ThreshMenu.Combo.R:Value() and EnemiesAround(GetOrigin(myHero),450) >= ThreshMenu.Combo.Rmin:Value() then
+      CastSpell(_R)
+      end
 	  
-	  if IsReady(_W) and ThreshMenu.Combo.W:Value() then
-	    if ThreshMenu.Combo.ThrowLantern:Value() == 1 then
-          CastW()
-		elseif ThreshMenu.Combo.ThrowLantern:Value() == 2 then
-          CastW2()
-		end
+      if IsReady(_W) and ThreshMenu.Combo.W:Value() then
+        if ThreshMenu.Combo.ThrowLantern:Value() == 1 then
+        CastW()
+	elseif ThreshMenu.Combo.ThrowLantern:Value() == 2 then
+        CastW2()
+	end
       end
 	  
       if IsReady(_Q) and ThreshMenu.Combo.Q:Value() then
-	  Cast(_Q,Qtarget)
-	  end
+      Cast(_Q,Qtarget)
+      end
 	  
       if ThreshMenu.Combo.Q2:Value() then
       CastQ2()
@@ -127,19 +127,19 @@ OnTick(function(myHero)
     CastLantern()
     end
 	
-	if ThreshMenu.Misc.AutoR:Value() and IsReady(_R) and EnemiesAround(GetOrigin(myHero), 450) >= ThreshMenu.Misc.AutoRmin:Value() then
-	CastSpell(_R)
-	end
+    if ThreshMenu.Misc.AutoR:Value() and IsReady(_R) and EnemiesAround(GetOrigin(myHero), 450) >= ThreshMenu.Misc.AutoRmin:Value() then
+    CastSpell(_R)
+    end
 	
-	if IsReady(_W) then
+    if IsReady(_W) then
       if ThreshMenu.Misc.SaveAlly:Value() then
         for _,Ally in pairs(GetAllyHeroes()) do
           if IsObjectAlive(Ally) and IsReady(_W) and EnemiesAround(GetOrigin(Ally), 950) >= ThreshMenu.Misc.AroundAlly:Value() and GetDistance(Ally) <= 950 then
-   	      CastSkillShot(_W,GetOrigin(FindLowestAlly()))
+   	  CastSkillShot(_W,GetOrigin(FindLowestAlly()))
           end
         end
       end
-	  if ThreshMenu.Misc.cc:Value() then
+      if ThreshMenu.Misc.cc:Value() then
         for _,Ally in ipairs(GetAllyHeroes()) do
           if IsObjectAlive(Ally) and GetDistance(Ally) <= 950 then
             local x,y,z = IPrediction.IsUnitStunned(Ally, 950, math.huge, 0.5, 315, myHero)
@@ -151,13 +151,13 @@ OnTick(function(myHero)
       end
     end
 	
-	for i,enemy in pairs(GetEnemyHeroes()) do
-	  if Ignite and ThreshMenu.Misc.Autoignite:Value() then
+    for i,enemy in pairs(GetEnemyHeroes()) do
+      if Ignite and ThreshMenu.Misc.Autoignite:Value() then
         if IsReady(Ignite) and 20*GetLevel(myHero)+50 > GetCurrentHP(enemy)+GetDmgShield(enemy)+GetHPRegen(enemy)*3 and ValidTarget(enemy, 600) then
         CastTargetSpell(enemy, Ignite)
         end
       end
-	end
+    end
 	
 end)
 
