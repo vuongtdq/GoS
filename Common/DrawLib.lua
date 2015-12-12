@@ -97,6 +97,20 @@ function DrawCircle3D(x, y, z, radius, width, color, quality)
     DrawLines2(points, width or 1, color or 4294967295)
 end
 
+function DrawCircleNextLvl(x, y, z, radius, width, color, chordlength)
+	radius = radius or 300
+	quality = math.max(40, Round(180 / math.deg((math.asin((chordlength / (2 * radius)))))))
+	quality = 2 * math.pi / quality
+	radius = radius * .92
+	local points = {}
+		
+	for theta = 0, 2 * math.pi + quality, quality do
+		local c = WorldToScreen(1,Vector(x + radius * math.cos(theta), y, z - radius * math.sin(theta)))
+		points[#points + 1] = Vector(c.x, c.y)
+	end
+	DrawLines2(points, width or 1, color or 4294967295)	
+end
+
 function DrawLine3D(x1, y1, z1, x2, y2, z2, width, color)
     local p = WorldToScreen(1,Vector(x1, y1, z1))
     local px, py = p.x, p.y
@@ -141,4 +155,12 @@ function DrawText3D(text, x, y, z, size, color, center)
             DrawText(text, size or 12, p.x, p.y, color or 4294967295)
         end
     end
+end
+
+function Round(number)
+	if number >= 0 then 
+		return math.floor(number+.5) 
+	else 
+		return math.ceil(number-.5) 
+	end
 end
