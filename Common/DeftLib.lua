@@ -1,4 +1,4 @@
-DeftLibVersion = 26
+DeftLibVersion = 27
 
 require('Inspired')
 require('IPrediction')
@@ -85,7 +85,7 @@ SpellData = {
   	        [_E] = { Name = "SyndraE", Range = 1250, Speed = 2500, Delay = 0.25, Width = 45, collision = false, aoe = false, type = "cone", IsDangerous = false}
        },
    ["Thresh"] = {
-  	        [_Q] = { Name = "ThreshQ", Range = 1100, Speed = 1900, Delay = 0.5, Width = 70, collision = true, aoe = false, type = "linear", IsDangerous = true}
+  	        [_Q] = { Name = "ThreshQ", Range = 1000, Speed = 1200, Delay = 0.5, Width = 80, collision = true, aoe = false, type = "linear", IsDangerous = true}
        },
    ["Twitch"] = {
    	        [_W] = { Name = "TwitchVenomCask", Range = 950, Speed = 1750, Delay = 0.5, Width = 275, collision = false, aoe = false, type = "circular", IsDangerous = false}
