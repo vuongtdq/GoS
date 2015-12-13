@@ -5,7 +5,7 @@ require('IPrediction')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",14)
+AutoUpdate("/D3ftsu/GoS/master/Jinx.lua","/D3ftsu/GoS/master/Jinx.version","Jinx.lua",15)
 
 local JinxMenu = MenuConfig("Jinx", "Jinx")
 JinxMenu:Menu("Combo", "Combo")
@@ -235,3 +235,4 @@ end
 AddGapcloseEvent(_E, 0, false)
 
 PrintChat(string.format("<font color='#1244EA'>Jinx:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
