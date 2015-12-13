@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Orianna.lua","/D3ftsu/GoS/master/Orianna.version","Orianna.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Orianna.lua","/D3ftsu/GoS/master/Orianna.version","Orianna.lua",4)
 
 local Ball = myHero
 	
@@ -269,3 +269,4 @@ OnUpdateBuff(function(unit,buff)
 end)
 
 PrintChat(string.format("<font color='#1244EA'>Orianna:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
