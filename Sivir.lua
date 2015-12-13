@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Sivir.lua","/D3ftsu/GoS/master/Sivir.version","Sivir.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Sivir.lua","/D3ftsu/GoS/master/Sivir.version","Sivir.lua",3)
 
 local SivirMenu = MenuConfig("Sivir", "Sivir")
 SivirMenu:Menu("Combo", "Combo")
@@ -143,3 +143,4 @@ OnTick(function(myHero)
 end)
 
 PrintChat(string.format("<font color='#1244EA'>Sivir:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
