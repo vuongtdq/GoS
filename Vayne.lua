@@ -4,7 +4,7 @@ require('MapPositionGOS')
 require('Inspired')
 require('DeftLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Vayne.lua","/D3ftsu/GoS/master/Vayne.version","Vayne.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Vayne.lua","/D3ftsu/GoS/master/Vayne.version","Vayne.lua",3)
 
 local VayneMenu = MenuConfig("Vayne", "Vayne")
 VayneMenu:Menu("Combo", "Combo")
@@ -208,3 +208,4 @@ end
 AddGapcloseEvent(_E, 550, true, VayneMenu)
 
 PrintChat(string.format("<font color='#1244EA'>Vayne:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
