@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",7)
+AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",8)
 
 local AlistarMenu = MenuConfig("Alistar", "Alistar")
 AlistarMenu:Menu("Combo", "Combo")
