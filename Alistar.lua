@@ -139,3 +139,4 @@ AddGapcloseEvent(_Q, 365, false, AlistarMenu)
 AddGapcloseEvent(_W, 650, true, AlistarMenu)
 
 PrintChat(string.format("<font color='#1244EA'>Alistar:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
