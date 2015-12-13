@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",10)
+AutoUpdate("/D3ftsu/GoS/master/Cassiopeia.lua","/D3ftsu/GoS/master/Cassiopeia.version","Cassiopeia.lua",11)
 
 local CassiopeiaMenu = MenuConfig("Cassiopeia", "Cassiopeia")
 CassiopeiaMenu:Menu("Combo", "Combo")
@@ -246,3 +246,4 @@ end
 AddGapcloseEvent(_R, 69, false, CassiopeiaMenu)
 
 PrintChat(string.format("<font color='#1244EA'>Cassiopeia:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
