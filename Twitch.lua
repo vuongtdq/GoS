@@ -4,10 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",8)
-
-local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
-local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
+AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",9)
 
 local TwitchMenu = MenuConfig("Twitch", "Twitch")
 TwitchMenu:Menu("Combo", "Combo")
@@ -36,10 +33,10 @@ TwitchMenu.Harass:Boolean("Erange", "Use E if target is out of range", false)
 TwitchMenu:Menu("Killsteal", "Killsteal")
 TwitchMenu.Killsteal:Boolean("E", "Killsteal with E", true)
 
+if Ignite ~= nil then
 TwitchMenu:Menu("Misc", "Misc")
-if Ignite ~= nil then TwitchMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
-TwitchMenu.Misc:Boolean("Autolvl", "Auto level", true)
-TwitchMenu.Misc:DropDown("Autolvltable", "Priority", 1, {"E-Q-W", "Q-E-W"})
+TwitchMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
+end
 
 TwitchMenu:Menu("Farm", "Farm")
 TwitchMenu.Farm:Boolean("ECanon", "Always E Big Minions", false)
@@ -93,8 +90,9 @@ if TwitchMenu.Drawings.Edmg:Value() then
 end
 end)
 
+local Epics = {"SRU_Baron", "SRU_Dragon", "TT_Spiderboss"}
+local Mobs = {"SRU_Baron", "SRU_Dragon", "SRU_Red", "SRU_Blue", "SRU_Krug", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Gromp", "Sru_Crab", "TT_Spiderboss"}
 local target1 = TargetSelector(1075,TARGET_LESS_CAST_PRIORITY,DAMAGE_PHYSICAL,true,false)
-local lastlevel = GetLevel(myHero)-1
 
 OnTick(function(myHero)
     local target = GetCurrentTarget()
@@ -215,16 +213,6 @@ OnTick(function(myHero)
 
    end
 
-if TwitchMenu.Misc.Autolvl:Value() then  
-  if GetLevel(myHero) > lastlevel then
-    if TwitchMenu.Misc.Autolvltable:Value() == 1 then leveltable = {_Q, _E, _W, _E, _E, _R, _E, _Q, _E, _Q, _R, _Q, _Q, _W, _W, _R, _W, _W}
-    elseif TwitchMenu.Misc.Autolvltable:Value() == 2 then leveltable = {_Q, _E, _W, _Q, _Q , _R, _Q , _E, _Q , _E, _R, _E, _E, _W, _W, _R, _W, _W}
-    end
-    DelayAction(function() LevelSpell(leveltable[GetLevel(myHero)]) end, math.random(1000,3000))
-    lastlevel = GetLevel(myHero)
-  end
-end
-
 end)
 
 local Estack = {}
@@ -256,3 +244,4 @@ function Edmg(unit)
 end
 
 PrintChat(string.format("<font color='#1244EA'>Twitch:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>")) 
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
