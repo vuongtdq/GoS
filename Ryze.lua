@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",10)
+AutoUpdate("/D3ftsu/GoS/master/Ryze.lua","/D3ftsu/GoS/master/Ryze.version","Ryze.lua",11)
 
 local RyzeMenu = MenuConfig("Ryze", "Ryze")
 RyzeMenu:Menu("Combo", "Combo")
@@ -241,3 +241,4 @@ end)
 AddGapcloseEvent(_W, 600, true, RyzeMenu)
 
 PrintChat(string.format("<font color='#1244EA'>Ryze:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
