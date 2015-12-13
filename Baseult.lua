@@ -53,6 +53,7 @@ BaseultMenu:Boolean("RT", "RecallTracker", true)
 if SpellData[GetObjectName(myHero)] then 
 BaseultMenu:Boolean("Enabled", "Enabled", true)
 PrintChat(string.format("<font color='#1244EA'>Baseult</font> <font color='#FFFFFF'> For "..GetObjectName(myHero).." Loaded, Have Fun Getting Some Kills ! </font>"))
+PrintChat("Be Careful, Baseult Is Really Banable dear: " ..GetObjectBaseName(myHero)) 
 Delay = SpellData[GetObjectName(myHero)].Delay
 MissileSpeed = SpellData[GetObjectName(myHero)].MissileSpeed
 Damage = SpellData[GetObjectName(myHero)].Damage
@@ -133,3 +134,4 @@ function percentToRGB(percent)
 	
     return 0xFF000000+g*0xFFFF+r*0xFF
 end
+
