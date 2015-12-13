@@ -5,7 +5,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Riven.lua","/D3ftsu/GoS/master/Riven.version","Riven.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Riven.lua","/D3ftsu/GoS/master/Riven.version","Riven.lua",3)
 
 local RivenMenu = MenuConfig("Riven", "Riven")
 RivenMenu:Menu("Combo", "Combo")
@@ -283,3 +283,4 @@ end)
 AddGapcloseEvent(_W, 260, false, RivenMenu)
 
 PrintChat(string.format("<font color='#1244EA'>Riven:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>")) 
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
