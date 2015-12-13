@@ -1,6 +1,6 @@
 require('Inspired')
 
-AutoUpdate("/D3ftsu/GoS/master/Baseult.lua","/D3ftsu/GoS/master/Baseult.version","Baseult.lua",2)
+AutoUpdate("/D3ftsu/GoS/master/Baseult.lua","/D3ftsu/GoS/master/Baseult.version","Baseult.lua",3)
 
 local BasePositions = {
      [SUMMONERS_RIFT] = {
