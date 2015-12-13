@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",6)
+AutoUpdate("/D3ftsu/GoS/master/Xerath.lua","/D3ftsu/GoS/master/Xerath.version","Xerath.lua",7)
 
 local XerathMenu = MenuConfig("Xerath", "Xerath")
 XerathMenu:Menu("Combo", "Combo")
@@ -350,3 +350,6 @@ OnDeleteObj(function(Object)
 end)
 
 AddGapcloseEvent(_E, 666, false, XerathMenu)
+
+PrintChat(string.format("<font color='#1244EA'>Xerath:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
