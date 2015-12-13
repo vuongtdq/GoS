@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Lucian.lua","/D3ftsu/GoS/master/Lucian.version","Lucian.lua",4)
+AutoUpdate("/D3ftsu/GoS/master/Lucian.lua","/D3ftsu/GoS/master/Lucian.version","Lucian.lua",5)
 
 local LucianMenu = MenuConfig("Lucian", "Lucian")
 LucianMenu:Menu("Combo", "Combo")
@@ -246,3 +246,4 @@ function CastQ(unit)
 end
 
 PrintChat(string.format("<font color='#1244EA'>Lucian:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
