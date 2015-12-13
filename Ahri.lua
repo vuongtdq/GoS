@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",8)
+AutoUpdate("/D3ftsu/GoS/master/Ahri.lua","/D3ftsu/GoS/master/Ahri.version","Ahri.lua",9)
 
 local AhriMenu = MenuConfig("Ahri", "Ahri")
 AhriMenu:Menu("Combo", "Combo")
@@ -281,3 +281,4 @@ end
 AddGapcloseEvent(_E, 666, false, AhriMenu)
 
 PrintChat(string.format("<font color='#1244EA'>Ahri:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>")) 
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
