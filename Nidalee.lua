@@ -5,7 +5,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Nidalee.lua","/D3ftsu/GoS/master/Nidalee.version","Nidalee.lua",6)
+AutoUpdate("/D3ftsu/GoS/master/Nidalee.lua","/D3ftsu/GoS/master/Nidalee.version","Nidalee.lua",7)
 
 local NidaleeMenu = MenuConfig("Nidalee", "Nidalee")
 NidaleeMenu:Menu("Combo", "Combo")
