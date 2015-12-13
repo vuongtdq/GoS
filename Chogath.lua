@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Chogath.lua","/D3ftsu/GoS/master/Chogath.version","Chogath.lua",7)
+AutoUpdate("/D3ftsu/GoS/master/Chogath.lua","/D3ftsu/GoS/master/Chogath.version","Chogath.lua",8)
 
 local ChogathMenu = MenuConfig("Chogath", "Chogath")
 ChogathMenu:Menu("Combo", "Combo")
@@ -173,3 +173,4 @@ end)
 AddGapcloseEvent(_Q, 200, false, ChogathMenu)
 
 PrintChat(string.format("<font color='#1244EA'>Chogath:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
