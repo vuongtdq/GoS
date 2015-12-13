@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ekko.lua","/D3ftsu/GoS/master/Ekko.version","Ekko.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Ekko.lua","/D3ftsu/GoS/master/Ekko.version","Ekko.lua",6)
 
 local EkkoMenu = MenuConfig("Ekko", "Ekko")
 EkkoMenu:Menu("Combo", "Combo")
@@ -319,3 +319,4 @@ function DrawLine3D(x,y,z,a,b,c,width,col)
 end
 
 PrintChat(string.format("<font color='#1244EA'>Ekko:</font> <font color='#FFFFFF'> By Deftsu Loaded, Have A Good Game ! </font>"))
+PrintChat("Have Fun Using D3Carry Scripts: " ..GetObjectBaseName(myHero)) 
