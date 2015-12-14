@@ -1,6 +1,6 @@
 --[[
-	Skill Detector Library 1.17
-		by eXtragoZ
+	Skill Detector Library 1.00
+		by eXtragoZ Ported By Deftsu
 		
 	Function:
 		GetSpellType(unit, spellName)
