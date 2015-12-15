@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Lucian.lua","/D3ftsu/GoS/master/Lucian.version","Lucian.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Lucian.lua","/D3ftsu/GoS/master/Lucian.version","Lucian.lua",6)
 
 local LucianMenu = MenuConfig("Lucian", "Lucian")
 LucianMenu:Menu("Combo", "Combo")
@@ -30,7 +30,7 @@ LucianMenu.Killsteal:Boolean("W", "Killsteal with W", true)
 
 if Ignite ~= nil then 
 LucianMenu:Menu("Misc", "Misc")
-LucianMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) end
+LucianMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) 
 end
 
 --[[LucianMenu:Menu("JungleClear", "JungleClear")
