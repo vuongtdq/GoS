@@ -428,58 +428,6 @@ OnCreateObj(function(Object)
   end
 end)
 
-local shop
-local shopRadius = 1250
-
-function GetShop()
-    for i, Object in pairs(objManager) do
-        if Object and GetObjectType(Object) == "Obj_AI_Shop" and GetTeam(Object) == GetTeam(myHero) then
-            shop = Vector(Object)
-            return shop
-        end
-    end
-end
-
-function NearShop(distance)
-    assert(distance == nil or type(distance) == "number", "NearShop: wrong argument types (<number> or nil expected)")
-    assert(GetShop() ~= nil, "GetShop: Could not get Shop Coordinates")
-    return (GetDistanceSqr(GetShop()) < (distance or shopRadius) ^ 2), shop.x, shop.y, shop.z, (distance or shopRadius)
-end
-
-function InShop()
-    return NearShop()
-end
-
-local fountain = nil
-local fountainRadius = 750
-
-function GetFountain()
-    if mapID == SUMMONERS_RIFT then
-    fountainRadius = 1050
-    end
-    if GetShop() ~= nil then
-        for i, Object in pairs(objManager) do
-            if Object and  GetObjectType(Object) == "Obj_AI_SpawnPoint" and GetDistanceSqr(shop, Object) < 1000000 then
-                fountain = Vector(Object)
-                return fountain
-            end
-        end
-    end
-end
-
-function NearFountain(distance)
-    distance = distance or fountainRadius or 0
-	if GetFountain() then
-		return (GetDistanceSqr(fountain) <= distance * distance), fountain.x, fountain.y, fountain.z, distance
-	else
-		return false, 0, 0, 0, 0
-	end
-end
-
-function InFountain()
-    return NearFountain()
-end
-
 Shield = {}
 Recalling = {}
 Slowed = {}
@@ -561,64 +509,315 @@ function IsRecalling(unit)
    return (Recalling[GetNetworkID(unit)] or 0) > 0
 end
 
-local SQRT = math.sqrt
+local WINDOW_W = GetResolution().x
+local WINDOW_H = GetResolution().y
+local _DrawText, _PrintChat, _DrawLine, _DrawArrow, _DrawCircle, _DrawRectangle, _DrawLines, _DrawLines2 = DrawText, PrintChat, DrawLine, DrawArrow, DrawCircle, DrawRectangle, DrawLines, DrawLines2
 
-function TargetDist(point, target)
-    local origin = GetOrigin(target)
-    local dx, dz = origin.x-point.x, origin.z-point.z
-    return SQRT( dx*dx + dz*dz )
+function EnableOverlay()
+    _G.DrawText, _G.PrintChat, _G.DrawLine, _G.DrawArrow, _G.DrawCircle, _G.DrawRectangle, _G.DrawLines, _G.DrawLines2 = _DrawText, _PrintChat, _DrawLine, _DrawArrow, _DrawCircle, _DrawRectangle, _DrawLines, _DrawLines2
 end
 
-function ExcludeFurthest(point, tbl)
-    local removalId = 1
-    for i=2, #tbl do
-        if TargetDist(point, tbl[i]) > TargetDist(point, tbl[removalId]) then
-            removalId = i
-        end
-    end
-    
-    local newTable = {}
-    for i=1, #tbl do
-        if i ~= removalId then
-            newTable[#newTable+1] = tbl[i]
-        end
-    end
-    return newTable
+function DisableOverlay()
+    _G.DrawText, _G.PrintChat, _G.DrawLine, _G.DrawArrow, _G.DrawCircle, _G.DrawRectangle, _G.DrawLines, _G.DrawLines2 = function() end, function() end, function() end, function() end, function() end, function() end, function() end, function() end
 end
 
-function GetMEC(aoe_radius, listOfEntities, starTarget)
-    local average = {x=0, y=0, z=0, count = 0}
-    for i=1, #listOfEntities do
-        local ori = GetOrigin(listOfEntities[i])
-        average.x = average.x + ori.x
-        average.y = average.y + ori.y
-        average.z = average.z + ori.z
-        average.count = average.count + 1
+function GetTextArea2(str, size)
+  return { x = str:len() * size * 0.375, y = size * 1.25 }
+end
+
+function OnScreen(x, y) 
+    local typex = type(x)
+    if typex == "number" then 
+        return x <= WINDOW_W and x >= 0 and y >= 0 and y <= WINDOW_H
+    elseif typex == "userdata" or typex == "table" then
+        local p1, p2, p3, p4 = {x = 0,y = 0}, {x = WINDOW_W,y = 0}, {x = 0,y = WINDOW_H}, {x = WINDOW_W,y = WINDOW_H}
+        return OnScreen(x.x, x.z or x.y) or (y and OnScreen(y.x, y.z or y.y) or 
+            IsLineSegmentIntersection(x,y,p1,p2) or IsLineSegmentIntersection(x,y,p3,p4) or 
+            IsLineSegmentIntersection(x,y,p1,p3) or IsLineSegmentIntersection(x,y,p2,p4))
     end
-    if starTarget then
-        local ori = GetOrigin(starTarget)
-        average.x = average.x + ori.x
-        average.y = average.y + ori.y
-        average.z = average.z + ori.z
-        average.count = average.count + 1
+end
+
+function DrawRectangle(x, y, width, height, color, thickness)
+    local thickness = thickness or 1
+	if thickness == 0 then return end
+    x = x - 1
+    y = y - 1
+    width = width + 2
+    height = height + 2
+    local halfThick = math.floor(thickness/2)
+    DrawLine(x - halfThick, y, x + width + halfThick, y, thickness, color)
+    DrawLine(x, y + halfThick, x, y + height - halfThick, thickness, color)
+    DrawLine(x + width, y + halfThick, x + width, y + height - halfThick, thickness, color)
+    DrawLine(x - halfThick, y + height, x + width + halfThick, y + height, thickness, color)
+end
+
+function DrawLines2(t,w,c)
+  for i=1, #t-1 do
+    DrawLine(t[i].x, t[i].y, t[i+1].x, t[i+1].y, w, c)
+  end
+end
+
+function DrawLineBorder3D(x1, y1, z1, x2, y2, z2, size, color, width)
+    local o = { x = -(z2 - z1), z = x2 - x1 }
+    local len = math.sqrt(o.x ^ 2 + o.z ^ 2)
+    o.x, o.z = o.x / len * size / 2, o.z / len * size / 2
+    local points = {
+        WorldToScreen(1,Vector(x1 + o.x, y1, z1 + o.z)),
+        WorldToScreen(1,Vector(x1 - o.x, y1, z1 - o.z)),
+        WorldToScreen(1,Vector(x2 - o.x, y2, z2 - o.z)),
+        WorldToScreen(1,Vector(x2 + o.x, y2, z2 + o.z)),
+        WorldToScreen(1,Vector(x1 + o.x, y1, z1 + o.z)),
+    }
+    for i, c in ipairs(points) do points[i] = Vector(c.x, c.y) end
+    DrawLines2(points, width or 1, color or 4294967295)
+end
+
+function DrawLineBorder(x1, y1, x2, y2, size, color, width)
+    local o = { x = -(y2 - y1), y = x2 - x1 }
+    local len = math.sqrt(o.x ^ 2 + o.y ^ 2)
+    o.x, o.y = o.x / len * size / 2, o.y / len * size / 2
+    local points = {
+        Vector(x1 + o.x, y1 + o.y),
+        Vector(x1 - o.x, y1 - o.y),
+        Vector(x2 - o.x, y2 - o.y),
+        Vector(x2 + o.x, y2 + o.y),
+        Vector(x1 + o.x, y1 + o.y),
+    }
+    DrawLines2(points, width or 1, color or 4294967295)
+end
+
+function DrawCircle2D(x, y, radius, width, color, quality)
+    quality, radius = quality and 2 * math.pi / quality or 2 * math.pi / 20, radius or 50
+    local points = {}
+    for theta = 0, 2 * math.pi + quality, quality do
+        points[#points + 1] = Vector(x + radius * math.cos(theta), y - radius * math.sin(theta))
     end
-    average.x = average.x / average.count
-    average.y = average.y / average.count
-    average.z = average.z / average.count
-    
-    local targetsInRange = 0
-    for i=1, #listOfEntities do
-        if TargetDist(average, listOfEntities[i]) <= aoe_radius then
-            targetsInRange = targetsInRange + 1
+    DrawLines2(points, width or 1, color or 4294967295)
+end
+
+function DrawCircle3D(x, y, z, radius, width, color, quality)
+    radius = radius or 300
+    quality = quality and 2 * math.pi / quality or 2 * math.pi / (radius / 5)
+    local points = {}
+    for theta = 0, 2 * math.pi + quality, quality do
+        local c = WorldToScreen(1,Vector(x + radius * math.cos(theta), y, z - radius * math.sin(theta)))
+        points[#points + 1] = Vector(c.x, c.y)
+    end
+    DrawLines2(points, width or 1, color or 4294967295)
+end
+
+function DrawCircleNextLvl(x, y, z, radius, width, color, chordlength)
+	radius = radius or 300
+	quality = math.max(40, Round(180 / math.deg((math.asin((chordlength / (2 * radius)))))))
+	quality = 2 * math.pi / quality
+	radius = radius * .92
+	local points = {}
+		
+	for theta = 0, 2 * math.pi + quality, quality do
+		local c = WorldToScreen(1,Vector(x + radius * math.cos(theta), y, z - radius * math.sin(theta)))
+		points[#points + 1] = Vector(c.x, c.y)
+	end
+	DrawLines2(points, width or 1, color or 4294967295)	
+end
+
+function DrawLine3D(x1, y1, z1, x2, y2, z2, width, color)
+    local p = WorldToScreen(1,Vector(x1, y1, z1))
+    local px, py = p.x, p.y
+    local c = WorldToScreen(1,Vector(x2, y2, z2))
+    local cx, cy = c.x, c.y
+    if OnScreen({ x = px, y = py }, { x = px, y = py }) then
+        DrawLine(cx, cy, px, py, width or 1, color or 4294967295)
+    end
+end
+
+function DrawLines3D(points, width, color)
+    local l
+    for _, point in ipairs(points) do
+        local p = { x = point.x, y = point.y, z = point.z }
+        if not p.z then p.z = p.y; p.y = nil end
+        p.y = p.y or player.y
+        local c = WorldToScreen(1,Vector(p.x, p.y, p.z))
+        if l and OnScreen({ x = l.x, y = l.y }, { x = c.x, y = c.y }) then
+            DrawLine(l.x, l.y, c.x, c.y, width or 1, color or 4294967295)
         end
+        l = c
     end
-    if starTarget and TargetDist(average, starTarget) <= aoe_radius then
-        targetsInRange = targetsInRange + 1
-    end
-    
-    if targetsInRange == average.count then
-        return average
+end
+
+function DrawTextA(text, size, x, y, color, halign, valign)
+    local textArea = GetTextArea2(tostring(text) or "", size or 12)
+    halign, valign = halign and halign:lower() or "left", valign and valign:lower() or "top"
+    x = (halign == "right"  and x - textArea.x) or (halign == "center" and x - textArea.x/2) or x or 0
+    y = (valign == "bottom" and y - textArea.y) or (valign == "center" and y - textArea.y/2) or y or 0
+    DrawText(tostring(text) or "", size or 12, math.floor(x), math.floor(y), color or 4294967295)
+end
+
+function DrawText3D(text, x, y, z, size, color, center)
+    local p = WorldToScreen(1,Vector(x, y, z))
+    local textArea = GetTextArea2(text, size or 12)
+    if center then
+        if OnScreen(p.x + textArea.x / 2, p.y + textArea.y / 2) then
+            DrawText(text, size or 12, p.x - textArea.x / 2, p.y, color or 4294967295)
+        end
     else
-        return GetMEC(aoe_radius, ExcludeFurthest(average, listOfEntities), starTarget)
+        if OnScreen({ x = p.x, y = p.y }, { x = p.x + textArea.x, y = p.y + textArea.y }) then
+            DrawText(text, size or 12, p.x, p.y, color or 4294967295)
+        end
     end
+end
+
+function Round(number)
+	if number >= 0 then 
+		return math.floor(number+.5) 
+	else 
+		return math.ceil(number-.5) 
+	end
+end
+
+local spellsFile = COMMON_PATH.."missedspells.txt"
+local spellslist = {}
+local textlist = ""
+local spellexists = false
+local spelltype = "Unknown"
+
+function writeConfigsspells()
+	local file = io.open(spellsFile, "w")
+	if file then
+		textlist = "return {"
+		for i=1,#spellslist do
+			textlist = textlist.."'"..spellslist[i].."', "
+		end
+		textlist = textlist.."}"
+		if spellslist[1] ~=nil then
+			file:write(textlist)
+			file:close()
+		end
+	end
+end
+if FileExist(spellsFile) then spellslist = dofile(spellsFile) end
+
+local Others = {"Recall","recall","OdinCaptureChannel","LanternWAlly","varusemissiledummy","khazixqevo","khazixwevo","khazixeevo","khazixrevo","braumedummyvoezreal","braumedummyvonami","braumedummyvocaitlyn","braumedummyvoriven","braumedummyvodraven","braumedummyvoashe"}
+local Items = {"RegenerationPotion","FlaskOfCrystalWater","ItemCrystalFlask","ItemMiniRegenPotion","PotionOfBrilliance","PotionOfElusiveness","PotionOfGiantStrength","OracleElixirSight","OracleExtractSight","VisionWard","SightWard","sightward","ItemGhostWard","ItemMiniWard","ElixirOfRage","ElixirOfIllumination","wrigglelantern","DeathfireGrasp","HextechGunblade","shurelyascrest","IronStylus","ZhonyasHourglass","YoumusBlade","randuinsomen","RanduinsOmen","Mourning","OdinEntropicClaymore","BilgewaterCutlass","QuicksilverSash","HextechSweeper","ItemGlacialSpike","ItemMercurial","ItemWraithCollar","ItemSoTD","ItemMorellosBane","ItemPromote","ItemTiamatCleave","Muramana","ItemSeraphsEmbrace","ItemSwordOfFeastAndFamine","ItemFaithShaker","OdynsVeil","ItemHorn","ItemPoroSnack","ItemBlackfireTorch","HealthBomb","ItemDervishBlade","TrinketTotemLvl1","TrinketTotemLvl2","TrinketTotemLvl3","TrinketTotemLvl3B","TrinketSweeperLvl1","TrinketSweeperLvl2","TrinketSweeperLvl3","TrinketOrbLvl1","TrinketOrbLvl2","TrinketOrbLvl3","OdinTrinketRevive","RelicMinorSpotter","RelicSpotter","RelicGreaterLantern","RelicLantern","RelicSmallLantern","ItemFeralFlare","trinketorblvl2","trinketsweeperlvl2","trinkettotemlvl2","SpiritLantern"}
+local MSpells = {"JayceStaticField","JayceToTheSkies","JayceThunderingBlow","Takedown","Pounce","Swipe","EliseSpiderQCast","EliseSpiderW","EliseSpiderEInitial","elisespidere","elisespideredescent"}
+local PSpells = {"CaitlynHeadshotMissile","RumbleOverheatAttack","JarvanIVMartialCadenceAttack","ShenKiAttack","MasterYiDoubleStrike","sonahymnofvalorattackupgrade","sonaariaofperseveranceupgrade","sonasongofdiscordattackupgrade","NocturneUmbraBladesAttack","NautilusRavageStrikeAttack","ZiggsPassiveAttack","QuinnWEnhanced","LucianPassiveAttack","SkarnerPassiveAttack","KarthusDeathDefiedBuff"}
+
+local QSpells = {"TrundleQ","LeonaShieldOfDaybreakAttack","XenZhaoThrust","NautilusAnchorDragMissile","RocketGrabMissile","VayneTumbleAttack","VayneTumbleUltAttack","NidaleeTakedownAttack","ShyvanaDoubleAttackHit","ShyvanaDoubleAttackHitDragon","frostarrow","FrostArrow","MonkeyKingQAttack","MaokaiTrunkLineMissile","FlashFrostSpell","xeratharcanopulsedamage","xeratharcanopulsedamageextended","xeratharcanopulsedarkiron","xeratharcanopulsediextended","SpiralBladeMissile","EzrealMysticShotMissile","EzrealMysticShotPulseMissile","jayceshockblast","BrandBlazeMissile","UdyrTigerAttack","TalonNoxianDiplomacyAttack","LuluQMissile","GarenSlash2","VolibearQAttack","dravenspinningattack","karmaheavenlywavec","ZiggsQSpell","UrgotHeatseekingHomeMissile","UrgotHeatseekingLineMissile","JavelinToss","RivenTriCleave","namiqmissile","NasusQAttack","BlindMonkQOne","ThreshQInternal","threshqinternal","QuinnQMissile","LissandraQMissile","EliseHumanQ","GarenQAttack","JinxQAttack","JinxQAttack2","yasuoq","xeratharcanopulse2","VelkozQMissile","KogMawQMis","BraumQMissile","KarthusLayWasteA1","KarthusLayWasteA2","KarthusLayWasteA3","MaokaiSapling2Boom"}
+local WSpells = {"KogMawBioArcaneBarrageAttack","SivirWAttack","TwitchVenomCaskMissile","gravessmokegrenadeboom","mordekaisercreepingdeath","DrainChannel","jaycehypercharge","redcardpreattack","goldcardpreattack","bluecardpreattack","RenektonExecute","RenektonSuperExecute","EzrealEssenceFluxMissile","DariusNoxianTacticsONHAttack","UdyrTurtleAttack","talonrakemissileone","LuluWTwo","ObduracyAttack","KennenMegaProc","NautilusWideswingAttack","NautilusBackswingAttack","XerathLocusOfPower","yoricksummondecayed","Bushwhack","karmaspiritbondc","SejuaniBasicAttackW","AatroxWONHAttackLife","AatroxWONHAttackPower","JinxWMissile","GragasWAttack","braumwdummyspell","syndrawcast"}
+local ESpells = {"KogMawVoidOozeMissile","ToxicShotAttack","LeonaZenithBladeMissile","PowerFistAttack","VayneCondemnMissile","ShyvanaFireballMissile","maokaisapling2boom","VarusEMissile","CaitlynEntrapmentMissile","jayceaccelerationgate","syndrae5","JudicatorRighteousFuryAttack","UdyrBearAttack","RumbleGrenadeMissile","Slash","hecarimrampattack","ziggse2","UrgotPlasmaGrenadeBoom","SkarnerFractureMissile","YorickSummonRavenous","BlindMonkEOne","EliseHumanE","PrimalSurge","Swipe","ViEAttack","LissandraEMissile","yasuodummyspell","XerathMageSpearMissile","RengarEFinal","RengarEFinalMAX","KarthusDefileSoundDummy2"}
+local RSpells = {"Pantheon_GrandSkyfall_Fall","LuxMaliceCannonMis","infiniteduresschannel","JarvanIVCataclysmAttack","jarvanivcataclysmattack","VayneUltAttack","RumbleCarpetBombDummy","ShyvanaTransformLeap","jaycepassiverangedattack", "jaycepassivemeleeattack","jaycestancegth","MissileBarrageMissile","SprayandPrayAttack","jaxrelentlessattack","syndrarcasttime","InfernalGuardian","UdyrPhoenixAttack","FioraDanceStrike","xeratharcanebarragedi","NamiRMissile","HallucinateFull","QuinnRFinale","lissandrarenemy","SejuaniGlacialPrisonCast","yasuordummyspell","xerathlocuspulse","tempyasuormissile","PantheonRFall"}
+
+local casttype2 = {"blindmonkqtwo","blindmonkwtwo","blindmonketwo","infernalguardianguide","KennenMegaProc","sonaariaofperseveranceupgrade","redcardpreattack","fizzjumptwo","fizzjumpbuffer","gragasbarrelrolltoggle","LeblancSlideM","luxlightstriketoggle","UrgotHeatseekingHomeMissile","xeratharcanopulseextended","xeratharcanopulsedamageextended","XenZhaoThrust3","ziggswtoggle","khazixwlong","khazixelong","renektondice","SejuaniNorthernWinds","shyvanafireballdragon2","shyvanaimmolatedragon","ShyvanaDoubleAttackHitDragon","talonshadowassaulttoggle","viktorchaosstormguide","ViktorGravitonFieldAugment","zedw2","ZedR2","khazixqlong","AatroxWONHAttackLife"}
+local casttype3 = {"sonasongofdiscordattackupgrade","bluecardpreattack","LeblancSoulShackleM","UdyrPhoenixStance","RenektonSuperExecute"}
+local casttype4 = {"FrostShot","PowerFist","DariusNoxianTacticsONH","EliseR","EliseRSpider","JaxEmpowerTwo","JaxRelentlessAssault","JayceStanceHtG","jaycestancegth","jaycehypercharge","JudicatorRighteousFury","kennenlrcancel","KogMawBioArcaneBarrage","LissandraE","MordekaiserMaceOfSpades","mordekaisercotgguide","NasusQ","Takedown","NocturneParanoia","QuinnR","RengarQ","Deceive","HallucinateFull","DeathsCaressFull","SivirW","ThreshQInternal","threshqinternal","PickACard","goldcardlock","redcardlock","bluecardlock","FullAutomatic","VayneTumble","MonkeyKingDoubleAttack","YorickSpectral","ViE","VorpalSpikes","FizzSeastonePassive","GarenSlash3","HecarimRamp","leblancslidereturn","leblancslidereturnm","Obduracy","UdyrTigerStance","UdyrTurtleStance","UdyrBearStance","UrgotHeatseekingMissile","XenZhaoComboTarget","dravenspinning","dravenrdoublecast","FioraDance","LeonaShieldOfDaybreak","MaokaiDrain3","NautilusPiercingGaze","RenektonPreExecute","RivenFengShuiEngine","ShyvanaDoubleAttack","shyvanadoubleattackdragon","SyndraW","TalonNoxianDiplomacy","TalonCutthroat","talonrakemissileone","TrundleTrollSmash","VolibearQ","AatroxW","aatroxw2","AatroxWONHAttackLife","JinxQ","GarenQ","yasuoq","XerathArcanopulseChargeUp","XerathLocusOfPower2","xerathlocuspulse","velkozqsplitactivate","NetherBlade","GragasQToggle","GragasW"}
+local casttype5 = {"VarusQ","ZacE","ViQ"}
+local casttype6 = {"VelkozQMissile","KogMawQMis","RengarEFinal","RengarEFinalMAX","BraumQMissile","KarthusDefileSoundDummy2"}
+
+function getSpellType(unit, spellName)
+	spelltype = "Unknown"
+	casttype = 1
+	if unit ~= nil and GetObjectType(unit) == AIHeroClient then
+		if spellName == nil or GetCastName(unit,_Q) == nil or GetCastName(unit,_W) == nil or GetCastName(unit,_E) == nil or GetCastName(unit,_R) == nil then
+			return "Error name nil", casttype
+		end
+		if (spellName:find("BasicAttack") and spellName ~= "SejuaniBasicAttackW") or spellName:find("basicattack") or spellName:find("JayceRangedAttack") or spellName == "SonaHymnofValorAttack" or spellName == "SonaSongofDiscordAttack" or spellName == "SonaAriaofPerseveranceAttack" or spellName == "ObduracyAttack" then
+			spelltype = "BAttack"
+		elseif spellName:find("CritAttack") or spellName:find("critattack") then
+			spelltype = "CAttack"
+		elseif GetCastName(unit,_Q):find(spellName) then
+			spelltype = "Q"
+		elseif GetCastName(unit,_W):find(spellName) then
+			spelltype = "W"
+		elseif GetCastName(unit,_E):find(spellName) then
+			spelltype = "E"
+		elseif GetCastName(unit,_R):find(spellName) then
+			spelltype = "R"
+		elseif spellName:find("Summoner") or spellName:find("summoner") or spellName == "teleportcancel" then
+			spelltype = "Summoner"
+		else
+			if spelltype == "Unknown" then
+				for i=1,#Others do
+					if spellName:find(Others[i]) then
+						spelltype = "Other"
+					end
+				end
+			end
+			if spelltype == "Unknown" then
+				for i=1,#Items do
+					if spellName:find(Items[i]) then
+						spelltype = "Item"
+					end
+				end
+			end
+			if spelltype == "Unknown" then
+				for i=1,#PSpells do
+					if spellName:find(PSpells[i]) then
+						spelltype = "P"
+					end
+				end
+			end
+			if spelltype == "Unknown" then
+				for i=1,#QSpells do
+					if spellName:find(QSpells[i]) then
+						spelltype = "Q"
+					end
+				end
+			end
+			if spelltype == "Unknown" then
+				for i=1,#WSpells do
+					if spellName:find(WSpells[i]) then
+						spelltype = "W"
+					end
+				end
+			end
+			if spelltype == "Unknown" then
+				for i=1,#ESpells do
+					if spellName:find(ESpells[i]) then
+						spelltype = "E"
+					end
+				end
+			end
+			if spelltype == "Unknown" then
+				for i=1,#RSpells do
+					if spellName:find(RSpells[i]) then
+						spelltype = "R"
+					end
+				end
+			end
+		end
+		for i=1,#MSpells do
+			if spellName == MSpells[i] then
+				spelltype = spelltype.."M"
+			end
+		end
+		local spellexists = spelltype ~= "Unknown"
+		if #spellslist > 0 and not spellexists then
+			for i=1,#spellslist do
+				if spellName == spellslist[i] then
+					spellexists = true
+				end
+			end
+		end
+		if not spellexists then
+			table.insert(spellslist, spellName)
+			writeConfigsspells()
+			PrintChat("SpellType - Unknown spell: "..spellName)
+		end
+	end
+	for i=1,#casttype2 do
+		if spellName == casttype2[i] then casttype = 2 end
+	end
+	for i=1,#casttype3 do
+		if spellName == casttype3[i] then casttype = 3 end
+	end
+	for i=1,#casttype4 do
+		if spellName == casttype4[i] then casttype = 4 end
+	end
+	for i=1,#casttype5 do
+		if spellName == casttype5[i] then casttype = 5 end
+	end
+	for i=1,#casttype6 do
+		if spellName == casttype6[i] then casttype = 6 end
+	end
+
+	return spelltype, casttype
 end
