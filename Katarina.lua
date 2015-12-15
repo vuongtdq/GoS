@@ -164,7 +164,7 @@ local CastingR = false
 local target1 = TargetSelector(675,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(700,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 
-OnAnimationfunction(unit, animationName)
+OnAnimation(function(unit, animationName)
   if unit == myHero and animationName == "Spell4" then 
     CastingR = true 
     IOW.movementEnabled = false
