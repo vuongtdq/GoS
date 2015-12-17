@@ -1,3 +1,4 @@
+require('Inspired_New')
 DAIOVersion     = 1.01
 DAIOLoaded      = true
 DAIOAutoUpdate  = true  -- Change this to false if you wish to disable auto updater
@@ -47,7 +48,7 @@ end
 
 function LoadDamageLib()
   if FileExist(COMMON_PATH  .. "DamageLib.lua") then
-    if not pcall( require, "DamageLib" )
+    if not pcall( require, "DamageLib" ) then
       DelayAction(function()
       ScriptUpdate(0, true, "raw.githubusercontent.com", "/D3ftsu/GoS/master/Common/DamageLib.version", "/D3ftsu/GoS/master/Common/DamageLib.lua", COMMON_PATH .."DamageLib.lua", function() end, function() end, function() end, LoadDamageLib)
       end, 5000)
@@ -268,22 +269,22 @@ function SetupVars()
   }
 
   Dashes = {
-    ["Vayne"]      = {Spellslot = _Q, Range = 300, Delay = 250},
-    ["Riven"]      = {Spellslot = _E, Range = 325, Delay = 250},
-    ["Ezreal"]     = {Spellslot = _E, Range = 450, Delay = 250},
-    ["Caitlyn"]    = {Spellslot = _E, Range = 400, Delay = 250},
-    ["Kassadin"]   = {Spellslot = _R, Range = 700, Delay = 250},
-    ["Graves"]     = {Spellslot = _E, Range = 425, Delay = 250},
-    ["Renekton"]   = {Spellslot = _E, Range = 450, Delay = 250},
-    ["Aatrox"]     = {Spellslot = _Q, Range = 650, Delay = 250},
-    ["Gragas"]     = {Spellslot = _E, Range = 600, delay = 250},
-    ["Khazix"]     = {Spellslot = _E, Range = 600, Delay = 250},
-    ["Lucian"]     = {Spellslot = _E, Range = 425, Delay = 250},
-    ["Sejuani"]    = {Spellslot = _Q, Range = 650, Delay = 250},
-    ["Shen"]       = {Spellslot = _E, Range = 575, Delay = 250},
-    ["Tryndamere"] = {Spellslot = _E, Range = 660, Delay = 250},
-    ["Tristana"]   = {Spellslot = _W, Range = 900, Delay = 250},
-    ["Corki"]      = {Spellslot = _W, Range = 800, Delay = 250},
+        ["Vayne"]      = {Spellslot = _Q, Range = 300, Delay = 0.25},
+        ["Riven"]      = {Spellslot = _E, Range = 325, Delay = 0.25},
+        ["Ezreal"]     = {Spellslot = _E, Range = 450, Delay = 0.25},
+        ["Caitlyn"]    = {Spellslot = _E, Range = 400, Delay = 0.25},
+        ["Kassadin"]   = {Spellslot = _R, Range = 700, Delay = 0.25},
+        ["Graves"]     = {Spellslot = _E, Range = 425, Delay = 0.25},
+        ["Renekton"]   = {Spellslot = _E, Range = 450, Delay = 0.25},
+        ["Aatrox"]     = {Spellslot = _Q, Range = 650, Delay = 0.25},
+        ["Gragas"]     = {Spellslot = _E, Range = 600, delay = 0.25},
+        ["Khazix"]     = {Spellslot = _E, Range = 600, Delay = 0.25},
+        ["Lucian"]     = {Spellslot = _E, Range = 425, Delay = 0.25},
+        ["Sejuani"]    = {Spellslot = _Q, Range = 650, Delay = 0.25},
+        ["Shen"]       = {Spellslot = _E, Range = 575, Delay = 0.25},
+        ["Tryndamere"] = {Spellslot = _E, Range = 660, Delay = 0.25},
+        ["Tristana"]   = {Spellslot = _W, Range = 900, Delay = 0.25},
+        ["Corki"]      = {Spellslot = _W, Range = 800, Delay = 0.25},
   }
 end
 
@@ -292,7 +293,7 @@ function SetupPlugin()
   
   if SupportedChamp.Combo then
     table.insert(tickTable, function()
-      if IOW:Mode == "Combo" and (ValidTarget(Target) or myHero.charName == "Ryze") then
+      if IOW:Mode() == "Combo" and (ValidTarget(Target) or myHero.charName == "Ryze") then
       SupportedChamp:Combo()
       end
     end)
@@ -300,7 +301,7 @@ function SetupPlugin()
 	
   if SupportedChamp.Harass then
     table.insert(tickTable, function()
-      if IOW:Mode == "Harass" and ValidTarget(Target) then
+      if IOW:Mode() == "Harass" and ValidTarget(Target) then
       SupportedChamp:Harass()
       end
     end)
@@ -308,7 +309,7 @@ function SetupPlugin()
   
   if SupportedChamp.LaneClear then
     table.insert(tickTable, function()
-      if IOW:Mode == "LaneClear" then
+      if IOW:Mode() == "LaneClear" then
       SupportedChamp:LaneClear()
       end
     end)
@@ -316,7 +317,7 @@ function SetupPlugin()
 
   if SupportedChamp.LastHit then
     table.insert(tickTable, function() 
-	  if IOW:Mode == "LastHit" or IOW:Mode == "LaneClear" then
+	  if IOW:Mode() == "LastHit" or IOW:Mode() == "LaneClear" then
       SupportedChamp:LastHit()
       end
     end)
@@ -442,24 +443,24 @@ end
 
 function DrawRange()
   if myHero.charName == "Jayce" or myHero.charName == "Nidalee" or not mySpellData then return end
-  if MainMenu.Drawings.Q and sReady[_Q] and myHeroSpellData[0] then
-    DrawCircle3D(myHero.x, myHero.y, myHero.z, myHero.charName == "Rengar" and myHero.range+myHero.boundingRadius*2 or myHeroSpellData[0].range > 0 and myHeroSpellData[0].range or myHeroSpellData[0].width, ARGB(MainMenu.Drawings.ColorQ[1],MainMenu.Drawings.ColorQ[2],MainMenu.Drawings.ColorQ[3],MainMenu.Drawings.ColorQ[4]))
+  if MainMenu.Drawings.Q and sReady[_Q] and mySpellData[0] then
+    DrawCircle3D(myHero.x, myHero.y, myHero.z, myHero.charName == "Rengar" and myHero.range+myHero.boundingRadius*2 or mySpellData[0].range > 0 and mySpellData[0].range or mySpellData[0].width, ARGB(MainMenu.Drawings.ColorQ[1],MainMenu.Drawings.ColorQ[2],MainMenu.Drawings.ColorQ[3],MainMenu.Drawings.ColorQ[4]))
   end
   if myHero.charName ~= "Orianna" then
-    if MainMenu.Drawings.W and sReady[_W] and myHeroSpellData[1] then
-      DrawCircle3D(myHero.x, myHero.y, myHero.z, type(myHeroSpellData[1].range) == "function" and myHeroSpellData[1].range() or myHeroSpellData[1].range > 0 and myHeroSpellData[1].range or myHeroSpellData[1].width, ARGB(MainMenu.Drawings.ColorW[1],MainMenu.Drawings.ColorW[2],MainMenu.Drawings.ColorW[3],MainMenu.Drawings.ColorW[4]))
+    if MainMenu.Drawings.W and sReady[_W] and mySpellData[1] then
+      DrawCircle3D(myHero.x, myHero.y, myHero.z, type(mySpellData[1].range) == "function" and mySpellData[1].range() or mySpellData[1].range > 0 and mySpellData[1].range or mySpellData[1].width, ARGB(MainMenu.Drawings.ColorW[1],MainMenu.Drawings.ColorW[2],MainMenu.Drawings.ColorW[3],MainMenu.Drawings.ColorW[4]))
     end
-    if MainMenu.Drawings.E and sReady[_E] and myHeroSpellData[2] then
-      DrawCircle3D(myHero.x, myHero.y, myHero.z, myHeroSpellData[2].range > 0 and myHeroSpellData[2].range or myHeroSpellData[2].width, ARGB(MainMenu.Drawings.ColorE[1],MainMenu.Drawings.ColorE[2],MainMenu.Drawings.ColorE[3],MainMenu.Drawings.ColorE[4]))
+    if MainMenu.Drawings.E and sReady[_E] and mySpellData[2] then
+      DrawCircle3D(myHero.x, myHero.y, myHero.z, mySpellData[2].range > 0 and mySpellData[2].range or mySpellData[2].width, ARGB(MainMenu.Drawings.ColorE[1],MainMenu.Drawings.ColorE[2],MainMenu.Drawings.ColorE[3],MainMenu.Drawings.ColorE[4]))
     end
-    if MainMenu.Drawings.R and (sReady[_R] or myHero.charName == "Katarina") and myHeroSpellData[3] then
-      DrawCircle3D(myHero.x, myHero.y, myHero.z, type(myHeroSpellData[3].range) == "function" and myHeroSpellData[3].range() or myHeroSpellData[3].range > 0 and myHeroSpellData[3].range or myHeroSpellData[3].width, ARGB(MainMenu.Drawings.ColorR[1],MainMenu.Drawings.ColorR[2],MainMenu.Drawings.ColorR[3],MainMenu.Drawings.ColorR[4]))
+    if MainMenu.Drawings.R and (sReady[_R] or myHero.charName == "Katarina") and mySpellData[3] then
+      DrawCircle3D(myHero.x, myHero.y, myHero.z, type(mySpellData[3].range) == "function" and mySpellData[3].range() or mySpellData[3].range > 0 and mySpellData[3].range or mySpellData[3].width, ARGB(MainMenu.Drawings.ColorR[1],MainMenu.Drawings.ColorR[2],MainMenu.Drawings.ColorR[3],MainMenu.Drawings.ColorR[4]))
     end
   end
 end
   
 function DrawDmgOnHpBar(unit)
-    if not MainMenu.Drawings.DMG:Value then return end
+    if not MainMenu.Drawings.DMG:Value() then return end
     if unit and unit.valid and not unit.dead and unit.visible and unit.bTargetable then
       local kdt = killDrawTable[unit.networkID]
       for _=1, #kdt do
@@ -568,24 +569,25 @@ end
 function Cast(spell, target, source)
   if not spell or spell < 0 then return end
   local source = source or myHero
+  local ActivePred = DAIOMenu.Prediction.Pred:Value() == 1 and "GoS" or "IPrediction"
   
   if not target then
     CastSpell(spell)
-    return true,
+    return true
 	
   elseif target then
     if mySpellData[spell] and mySpellData[spell].type then
       local HitChance, CastPos = Predict(spell, source, target)
-      if HitChance >= (ActivePred = "GoS" and 1 or 3)
-      CastSpell(spell,CastPos)
-      return true,
+      if HitChance >= (ActivePred == "GoS" and 1 or 3) then
+      CastSkillShot(spell,CastPos)
+      return true
       end
     else
       CastTargetSpell(target,spell)
-      return true,
+      return true
       end
     end
-    return false,
+    return false
 end
 
 function Predict(spell, source, target, pred)
@@ -685,17 +687,17 @@ function Ahri:Combo()
       if UltOn and BestPos then
         CastSkillShot(_R,BestPos)
       elseif IsReady(_R) and BestPos and getdmg("Q",Target)+getdmg("W",Target,myHero,3)+getdmg("E",Target)+getdmg("R",Target) > GetHP2(Target) then
-	    CastSkillShot(_R,BestPos)
-	  end
+        CastSkillShot(_R,BestPos)
+      end
     elseif AhriMenu.Combo.RMode:Value() == 2 then
       local AfterTumblePos = myHero.pos + (Vector(mousePos) - myHero.pos):normalized() * 550
       local DistanceAfterTumble = GetDistance(AfterTumblePos, Target)
-   	  if UltOn and DistanceAfterTumble < 550 then
-	    CastSkillShot(_R,mousePos)
+      if UltOn and DistanceAfterTumble < 550 then
+        CastSkillShot(_R,mousePos)
       elseif IsReady(_R) and getdmg("Q",Target)+getdmg("W",Target,myHero,3)+getdmg("E",Target)+getdmg("R",Target) > GetHP2(Target) then
-	    CastSkillShot(_R,mousePos) 
+        CastSkillShot(_R,mousePos) 
       end
-	end
+    end
   end
   
   if IsReady(_W) and MainMenu.Combo.W:Value() and GetDistanceSqr(Target) < (mySpellData[1].range)^2 then
@@ -758,13 +760,13 @@ function Ahri:LaneClear()
         if BestPos and BestHit > 2 then 
           CastSkillShot(_Q, BestPos)
         end
-	  end
+      end
 
       if IsReady(_W) and MainMenu.LaneClear.W:Value() and GetDistanceSqr(minion) <= (mySpellData[1].range)^2 and minion.health < getdmg("W",minion,myHero,3) then
         Cast(_W)
       end
 
-      if IsReady(_E) and MainMenu.LaneClear.E:Value() and GetDistanceSqr(minion) <= (mySpellData[2].range)^2 and minion.health < getdmg("E",minion)
+      if IsReady(_E) and MainMenu.LaneClear.E:Value() and GetDistanceSqr(minion) <= (mySpellData[2].range)^2 and minion.health < getdmg("E",minion) then
         CastSkillShot(_E,minion.pos)
       end
 	  
@@ -776,19 +778,19 @@ function Ahri:LaneClear()
         if mobs and not mobs.dead and mobs.visible and mobs.bTargetable and mobs.team == 300 then
           if IsReady(_Q) and MainMenu.LaneClear.Q:Value() and GetDistanceSqr(mobs) <= (mySpellData[0].range)^2 then
           CastSkillShot(_Q,mobs.pos)
-	      end
+	  end
 		
-	      if IsReady(_W) and MainMenu.LaneClear.W:Value() and GetDistanceSqr(mobs) <= (mySpellData[1].range)^2 then
-	      CastSpell(_W)
-	      end
+	  if IsReady(_W) and MainMenu.LaneClear.W:Value() and GetDistanceSqr(mobs) <= (mySpellData[1].range)^2 then
+	  CastSpell(_W)
+	  end
 		
-	      if IsReady(_E) and MainMenu.LaneClear.E:Value() and GetDistanceSqr(mobs) <= (mySpellData[2].range)^2 then
-	      CastSkillShot(_E,mobs.pos)
+	  if IsReady(_E) and MainMenu.LaneClear.E:Value() and GetDistanceSqr(mobs) <= (mySpellData[2].range)^2 then
+	  CastSkillShot(_E,mobs.pos)
           end
         end
-	  end
+      end
 	  
-	end
+    end
   end
   
 end
@@ -797,7 +799,7 @@ function Ahri:LastHit()
   if GetPercentMP(myHero) < MainMenu.LaneClear.Mana:Value() then return end
   for i,minion in pairs(minionManager.objects) do
     if minion and not minion.dead and minion.visible and minion.bTargetable and minion.team == MINION_ENEMY then
-	  if IsReady(_Q) and GetDistanceSqr(minion) <= (mySpellData[0].range)^2 and MainMenu.Lasthit.Q:Value() and IOW:PredictHealth(minion, 250+GetDistance(minion)/2500) < getdmg("Q",minion) and IOW:PredictHealth(minion, 250+GetDistance(minion)/2500) > 0 then
+      if IsReady(_Q) and GetDistanceSqr(minion) <= (mySpellData[0].range)^2 and MainMenu.Lasthit.Q:Value() and IOW:PredictHealth(minion, 250+GetDistance(minion)/2500) < getdmg("Q",minion) and IOW:PredictHealth(minion, 250+GetDistance(minion)/2500) > 0 then
       CastSkillShot(_Q,minion.pos)
       end
     end
