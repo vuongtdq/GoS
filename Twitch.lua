@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",9)
+AutoUpdate("/D3ftsu/GoS/master/Twitch.lua","/D3ftsu/GoS/master/Twitch.version","Twitch.lua",10)
 
 local TwitchMenu = MenuConfig("Twitch", "Twitch")
 TwitchMenu:Menu("Combo", "Combo")
@@ -35,7 +35,7 @@ TwitchMenu.Killsteal:Boolean("E", "Killsteal with E", true)
 
 if Ignite ~= nil then
 TwitchMenu:Menu("Misc", "Misc")
-TwitchMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true) end
+TwitchMenu.Misc:Boolean("AutoIgnite", "Auto Ignite", true)
 end
 
 TwitchMenu:Menu("Farm", "Farm")
