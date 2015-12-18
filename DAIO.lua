@@ -148,27 +148,27 @@ function SetupVars()
   colors = { 0xDFFFE258, 0xDF8866F4, 0xDF55F855, 0xDFFF5858 }
 	  
   CHANELLING_SPELLS = {
-    ["CaitlynAceintheHole"]         = {Name = "Caitlyn",      Spellslot = _R},
-    ["Crowstorm"]                   = {Name = "FiddleSticks", Spellslot = _R},
-    ["Drain"]                       = {Name = "FiddleSticks", Spellslot = _W},
-    ["GalioIdolOfDurand"]           = {Name = "Galio",        Spellslot = _R},
-    ["ReapTheWhirlwind"]            = {Name = "Janna",        Spellslot = _R},
-    ["KarthusFallenOne"]            = {Name = "Karthus",      Spellslot = _R},
-    ["KatarinaR"]                   = {Name = "Katarina",     Spellslot = _R},
-    ["LucianR"]                     = {Name = "Lucian",       Spellslot = _R},
-    ["AlZaharNetherGrasp"]          = {Name = "Malzahar",     Spellslot = _R},
-    ["MissFortuneBulletTime"]       = {Name = "MissFortune",  Spellslot = _R},
-    ["AbsoluteZero"]                = {Name = "Nunu",         Spellslot = _R},                        
-    ["PantheonRJump"]               = {Name = "Pantheon",     Spellslot = _R},
-    ["PantheonRFall"]               = {Name = "Pantheon",     Spellslot = _R},
-    ["ShenStandUnited"]             = {Name = "Shen",         Spellslot = _R},
-    ["Destiny"]                     = {Name = "TwistedFate",  Spellslot = _R},
-    ["UrgotSwap2"]                  = {Name = "Urgot",        Spellslot = _R},
-    ["VarusQ"]                      = {Name = "Varus",        Spellslot = _Q},
-    ["VelkozR"]                     = {Name = "Velkoz",       Spellslot = _R},
-    ["InfiniteDuress"]              = {Name = "Warwick",      Spellslot = _R},
-    ["XerathLocusOfPower2"]         = {Name = "Xerath",       Spellslot = _R}
-    
+    ["CaitlynAceintheHole"]         = {Name = "Caitlyn",      DangerLevel = 5, Spellslot = _R},
+    ["Crowstorm"]                   = {Name = "FiddleSticks", DangerLevel = 5, Spellslot = _R},
+    ["Drain"]                       = {Name = "FiddleSticks", DangerLevel = 3, Spellslot = _W},
+    ["GalioIdolOfDurand"]           = {Name = "Galio",        DangerLevel = 5, Spellslot = _R},
+    ["ReapTheWhirlwind"]            = {Name = "Janna",        DangerLevel = 1, Spellslot = _R},
+    ["KarthusFallenOne"]            = {Name = "Karthus",      DangerLevel = 5, Spellslot = _R},
+    ["KatarinaR"]                   = {Name = "Katarina",     DangerLevel = 5, Spellslot = _R},
+    ["LucianR"]                     = {Name = "Lucian",       DangerLevel = 5, Spellslot = _R},
+    ["AlZaharNetherGrasp"]          = {Name = "Malzahar",     DangerLevel = 5, Spellslot = _R},
+	["Meditate"]                    = {Name = "MasterYi",     DangerLevel = 1, Spellslot = _W},
+    ["MissFortuneBulletTime"]       = {Name = "MissFortune",  DangerLevel = 5, Spellslot = _R},
+    ["AbsoluteZero"]                = {Name = "Nunu",         DangerLevel = 4, Spellslot = _R},                        
+    ["PantheonRJump"]               = {Name = "Pantheon",     DangerLevel = 5, Spellslot = _R},
+    ["PantheonRFall"]               = {Name = "Pantheon",     DangerLevel = 5, Spellslot = _R},
+    ["ShenStandUnited"]             = {Name = "Shen",         DangerLevel = 3, Spellslot = _R},
+    ["Destiny"]                     = {Name = "TwistedFate",  DangerLevel = 3, Spellslot = _R},
+    ["UrgotSwap2"]                  = {Name = "Urgot",        DangerLevel = 4, Spellslot = _R},
+    ["VarusQ"]                      = {Name = "Varus",        DangerLevel = 3, Spellslot = _Q},
+    ["VelkozR"]                     = {Name = "Velkoz",       DangerLevel = 5, Spellslot = _R},
+    ["InfiniteDuress"]              = {Name = "Warwick",      DangerLevel = 5, Spellslot = _R},
+    ["XerathLocusOfPower2"]         = {Name = "Xerath",       DangerLevel = 3, Spellslot = _R}
   }
 
   GAPCLOSER_SPELLS = {
@@ -677,8 +677,8 @@ end
 function Ahri:Combo()
   if not Target then return end
   
-  if IsReady(_E) and Config.Combo.E and GetDistanceSqr(Target) < (mySpellData[2].range)^2 then
-    Cast(_E, Target)
+  if IsReady(_E) and MainMenu.Combo.E:Value() and GetDistanceSqr(Target) < (mySpellData[2].range)^2 then
+    Cast(_E,Target)
   end
   
   if MainMenu.Combo.R:Value() and GetDistanceSqr(Target) < (mySpellData[3].range)^2 then
@@ -705,7 +705,7 @@ function Ahri:Combo()
   end
   
   if IsReady(_Q) and MainMenu.Combo.Q:Value() and GetDistanceSqr(Target) < (mySpellData[0].range)^2 then
-    Cast(_Q, Target)
+    Cast(_Q,Target)
   end
   
 end
@@ -713,8 +713,8 @@ end
 function Ahri:Harass()
   if not Target or GetPercentMP(myHero) < MainMenu.Harass.Mana:Value() then return end
   
-  if IsReady(_E) and Config.Harass.E and GetDistanceSqr(Target) < (mySpellData[2].range)^2 then
-    Cast(_E, Target)
+  if IsReady(_E) and MainMenu.Harass.E:Value() and GetDistanceSqr(Target) < (mySpellData[2].range)^2 then
+    Cast(_E,Target)
   end
   
   if IsReady(_W) and MainMenu.Harass.W:Value() and GetDistanceSqr(Target) < (mySpellData[1].range)^2 then
@@ -722,27 +722,27 @@ function Ahri:Harass()
   end
   
   if IsReady(_Q) and MainMenu.Harass.Q:Value() and GetDistanceSqr(Target) < (mySpellData[0].range)^2 then
-    Cast(_Q, Target)
+    Cast(_Q,Target)
   end
   
 end
 
 function Ahri:Killsteal()
   for _,enemy in pairs(GetEnemyHeroes()) do
-    if ValidTarget(enemy) then
+    if enemy and not enemy.dead and enemy.visible and enemy.bTargetable then
 	
       if Ignite and MainMenu.Misc.Autoignite:Value() then
-        if IsReady(Ignite) and 20*GetLevel(myHero)+50 > enemy.health+enemy.shieldAD+enemy.hpRegen*3 and GetDistanceSqr(enemy) <= 600^2 then
-          CastTargetSpell(enemy, Ignite)
+        if IsReady(Ignite) and enemy.health+enemy.shieldAD+enemy.hpRegen*3 > getdmg("IGNITE",myHero) and GetDistanceSqr(enemy) <= 600^2 then
+          Cast(Ignite,enemy)
         end
       end
 	
 	  if IsReady(_W) and GetDistanceSqr(enemy) < (mySpellData[1].range)^2 and MainMenu.Killsteal.W:Value() and enemy.health+enemy.shieldAD+enemy.shieldAP < getdmg("W",enemy,myHero,3) then
-	  CastSpell(_W)
+	  Cast(_W)
 	  elseif IsReady(_Q) and GetDistanceSqr(enemy) < (mySpellData[0].range)^2 and MainMenu.Killsteal.Q:Value() and enemy.health+enemy.shieldAD+enemy.shieldAP < getdmg("Q",enemy) then 
-	  Cast(_Q, enemy)
+	  Cast(_Q,enemy)
 	  elseif IsReady(_E) and GetDistanceSqr(enemy) < (mySpellData[2].range)^2 and MainMenu.Killsteal.E:Value() and enemy.health+enemy.shieldAD+enemy.shieldAP < getdmg("E",enemy) then
-	  Cast(_E, enemy)
+	  Cast(_E,enemy)
       end
 	
     end
@@ -773,12 +773,17 @@ function Ahri:LaneClear()
     end
 	
     if MainMenu.LaneClear.J:Value() then
+	
+	  if IsReady(_Q) and MainMenu.LaneClear.Q:Value() then
+        local BestPos, BestHit = GetLineFarmPosition(880, 50, 300)
+        if BestPos and BestHit > 2 then 
+          CastSkillShot(_Q, BestPos)
+        end
+      end
+	  
       for i,mobs in pairs(minionManager.objects) do
 	  
         if mobs and not mobs.dead and mobs.visible and mobs.bTargetable and mobs.team == 300 then
-          if IsReady(_Q) and MainMenu.LaneClear.Q:Value() and GetDistanceSqr(mobs) <= (mySpellData[0].range)^2 then
-          CastSkillShot(_Q,mobs.pos)
-	  end
 		
 	  if IsReady(_W) and MainMenu.LaneClear.W:Value() and GetDistanceSqr(mobs) <= (mySpellData[1].range)^2 then
 	  CastSpell(_W)
@@ -804,6 +809,334 @@ function Ahri:LastHit()
       end
     end
   end
+end
+
+class "Alistar"
+
+function Alistar:__init()
+end
+
+function Alistar:Load()
+  self:Menu()
+  local str = {[_Q] = "Q", [_W] = "W", [_E] = "E", [_R] = "R"}
+  for i, spell in pairs(CHANELLING_SPELLS) do
+    for _,k in pairs(GetEnemyHeroes()) do
+      if spell["Name"] == GetObjectName(k) then
+      MainMenu.Misc.Interrupt:Boolean(GetObjectName(k).."Inter", "On "..GetObjectName(k).." "..(type(spell.Spellslot) == 'number' and str[spell.Spellslot]), true)
+      end
+    end
+  end
+end
+
+function Alistar:Menu()
+  MainMenu.Combo:Boolean("Q", "Use Q", true)
+  MainMenu.Combo:Boolean("WQ", "Use W+Q Combo", true)
+  MainMenu.Harass:Boolean("Q", "Use Q", true)
+  MainMenu.Harass:Boolean("E", "Use W+Q Combo", true)
+  MainMenu.Harass:Slider("Mana", "if Mana % >", 30, 0, 80, 1)
+  MainMenu.Killsteal:Boolean("Q", "Killsteal with Q", true)
+  MainMenu.Killsteal:Boolean("W", "Killsteal with W", true)
+  MainMenu.Killsteal:Boolean("WQ", "Killsteal with W+Q", true)
+  if Ignite ~= nil then MainMenu.Misc:Boolean("Autoignite", "Auto Ignite", true) end
+  MainMenu.Misc:Boolean("Eme", "Self-Heal", true)
+  MainMenu.Misc:Slider("mpEme", "Minimum Mana %", 25, 0, 100, 0)
+  MainMenu.Misc:Slider("hpEme", "Minimum HP%", 70, 0, 100, 0)
+  MainMenu.Misc:Boolean("Eally", "Heal Allies", true)
+  MainMenu.Misc:Slider("mpEally", "Minimum Mana %", 50, 0, 100, 0)
+  MainMenu.Misc:Slider("hpEally", "Minimum HP %", 35, 0, 100, 0)
+  MainMenu.Misc:Menu("Interrupt", "Interrupt")
+  MainMenu.Misc.Interrupt:Menu("SupportedSpells", "Supported Spells")
+  MainMenu.Misc.Interrupt.SupportedSpells:Boolean("Q", "Use Q", true)
+  MainMenu.Misc.Interrupt.SupportedSpells:Boolean("W", "Use W", true)
+  AddGapcloseEvent(_Q, 365, false, MainMenu.Misc)
+  AddGapcloseEvent(_W, 650, true, MainMenu.Misc)
+end
+
+function Alistar:ProcessSpell(unit, spell)
+  if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) and CHANELLING_SPELLS[spell.name] and and GetObjectName(unit) == CHANELLING_SPELLS[spell.name].Name and MainMenu.Misc.Interrupt[GetObjectName(unit).."Inter"]:Value() then
+    if ValidTarget(unit, 650) and IsReady(_W)  and AlistarMenu.Interrupt.SupportedSpells.W:Value() then
+    Cast(_W,unit)
+    elseif ValidTarget(unit, 365) and IsReady(_Q) and AlistarMenu.Interrupt.SupportedSpells.Q:Value() then
+    Cast(_Q)
+    end
+  end
+end
+
+function Alistar:Combo()
+  if not Target then return end
+  
+  if IsReady(_Q) and MainMenu.Combo.Q:Value() and GetDistanceSqr(Target) < (mySpellData[0].range)^2 then
+    Cast(_Q)
+  end
+  
+  if IsReady(_W) and IsReady(_Q) and MainMenu.Combo.WQ:Value() and GetDistanceSqr(Target) < (mySpellData[1].range)^2 and myHero.mana >= GetSpellData(myHero,_Q).mana + GetSpellData(myHero,_W).mana then
+    Cast(_W,Target)
+	DelayAction(function() Cast(_Q) end, (math.max(0 , GetDistance(Target) - 500 ) * 0.4 + 25) / 1000)
+  end
+end
+
+function Alistar:Harass()
+  if not Target or GetPercentMP(myHero) < MainMenu.Harass.Mana:Value() then return end
+  
+  if IsReady(_Q) and MainMenu.Harass.Q:Value() and GetDistanceSqr(Target) < (mySpellData[0].range)^2 then
+    Cast(_Q)
+  end
+  
+  if IsReady(_W) and IsReady(_Q) and MainMenu.Harass.WQ:Value() and GetDistanceSqr(Target) < (mySpellData[1].range)^2 and myHero.mana >= GetSpellData(myHero,_Q).mana + GetSpellData(myHero,_W).mana then
+    Cast(_W,Target)
+	DelayAction(function() Cast(_Q) end, (math.max(0 , GetDistance(Target) - 500 ) * 0.4 + 25) / 1000)
+  end
+end
+
+function Alistar:Tick()
+  if not myHero.isRecalling and MainMenu.Misc.Eme:Value() and MainMenu.Misc.mpEme:Value() <= GetPercentMP(myHero) and myHero.maxHealth-myHero.health > 30+30*GetSpellData(myHero,_E).level+0.2*myHero.ap and GetPercentHP(myHero) <= MainMenu.Misc.hpEme:Value() then
+  Cast(_E)
+  end
+	
+  if not myHero.isRecalling and MainMenu.Misc.Eally:Value() and MainMenu.Misc.mpEally:Value() <= GetPercentMP(myHero) then
+    for _,ally in pairs(GetAllyHeroes()) do
+      if ally and not ally.isRecalling and ally.valid and GetDistance(ally) <= 575 and ally.maxHealth-ally.health < 15+15*GetSpellData(myHero,_E).level+0.1*myHero.ap and GetPercentHP(v) <= AlistarMenu.Misc.hpEally:Value() then
+      Cast(_E)
+      end
+    end
+  end
+end
+
+function Alistar:Killsteal()
+  for _,enemy in pairs(GetEnemyHeroes()) do
+    if enemy and not enemy.dead and enemy.visible and enemy.bTargetable then
+	  if Ignite and MainMenu.Misc.Autoignite:Value() then
+        if IsReady(Ignite) and enemy.health+enemy.shieldAD+enemy.hpRegen*3 > getdmg("IGNITE",myHero) and GetDistanceSqr(enemy) <= 600^2 then
+        Cast(Ignite,enemy)
+        end
+      end
+		
+      if IsReady(_Q) and GetDistanceSqr(enemy) < (mySpellData[0].range)^2 and MainMenu.Killsteal.Q:Value() and enemy.health+enemy.shieldAD+enemy.shieldAP < getdmg("Q",enemy) then 
+      Cast(_Q)
+      elseif IsReady(_W) and GetDistanceSqr(enemy) < (mySpellData[1].range)^2 and MainMenu.Killsteal.W:Value() and enemy.health+enemy.shieldAD+enemy.shieldAP < getdmg("W",enemy) then
+      Cast(_W,enemy)
+      elseif IsReady(_W) and IsReady(_Q) and GetDistanceSqr(enemy) < (mySpellData[1].range)^2 and MainMenu.Killsteal.WQ:Value() and myHero.mana >= GetSpellData(myHero,_Q).mana + GetSpellData(myHero,_W).mana and enemy.health+enemy.shieldAD+enemy.shieldAP < getdmg("Q",enemy)+getdmg("W",enemy) then
+      Cast(_W,enemy)
+      DelayAction(function() Cast(_Q) end, (math.max(0 , GetDistance(Target) - 500 ) * 0.4 + 25) / 1000)
+      end
+	end
+  end
+end
+
+class "Interrupter"
+
+function Interrupter:__init(menu, callback)
+
+    self.callbacks = {}
+    self.activespells = {}
+    Callback.Add("Tick",(function() self:Tick() end) )
+    Callback.Add("ProcessSpell",(function(unit, spell) self:ProcessSpell(unit, spell) end) )
+	
+    if menu then
+      self:AddToMenu(menu)
+    end
+	
+    if callback then
+      self:AddCallback(callback)
+    end
+
+end
+
+function Interrupter:AddToMenu(cfg)
+
+  assert(cfg, "Interrupter: menu can't be nil!")
+  local SpellAdded = false
+  local ObjectNames = {}
+  
+  for _, enemy in pairs(GetEnemyHeroes()) do
+    table.insert(ObjectNames, enemy.charName)
+  end
+	
+  cfg:Boolean("Enabled", "Enabled", true)
+  for i, data in pairs(CHANELLING_SPELLS) do
+    if table.contains(ObjectNames, data.Name) then
+      cfg:Boolean(string.gsub(i, "_", ""), data.Name.." - "..i, true)
+      SpellAdded = true
+    end
+  end
+	
+  if not SpellAdded then
+    cfg:Info("Info", "No spell available to interrupt")
+  end
+	
+  self.Menu = cfg
+end
+
+function Interrupter:AddCallback(callback)
+  assert(callback and type(callback) == "function", "Interrupter: callback is invalid!")
+  table.insert(self.callbacks, callback)
+end
+
+function Interrupter:TriggerCallbacks(unit, spell)
+  for i, callback in pairs(self.callbacks) do
+    callback(unit, spell)
+  end
+end
+
+function Interrupter:ProcessSpell(unit, spell)
+  if not self.Menu.Enabled:Value() then return end
+  if unit.type == myHero.type and unit.team ~= myHero.team then
+    if CHANELLING_SPELLS[spell.name] then
+      if (self.Menu and self.Menu[string.gsub(spell.name, "_", "")]:Value()) or not self.Menu then
+        local data = {unit = unit, DangerLevel = CHANELLING_SPELLS[spell.name].DangerLevel, endT = os.clock() + 2.5}
+        table.insert(self.activespells, data)
+        self:TriggerCallbacks(data.unit, data)
+      end
+    end
+  end
+end
+
+function Interrupter:Tick()
+  for i = #self.activespells, 1, -1 do
+    if self.activespells[i].endT - os.clock() > 0 then
+      self:TriggerCallbacks(self.activespells[i].unit, self.activespells[i])
+    else
+      table.remove(self.activespells, i)
+    end
+  end
+end
+
+class "AntiGapcloser"
+
+local _GAPCLOSER_TARGETED, _GAPCLOSER_SKILLSHOT = 1, 2
+--Add only very fast skillshots/targeted spells since vPrediction will handle the slow dashes that will trigger OnDash
+local _GAPCLOSER_SPELLS = {
+    ["AatroxQ"]              = "Aatrox",
+    ["AkaliShadowDance"]     = "Akali",
+    ["Headbutt"]             = "Alistar",
+    ["FioraQ"]               = "Fiora",
+    ["DianaTeleport"]        = "Diana",
+    ["EliseSpiderQCast"]     = "Elise",
+    ["FizzPiercingStrike"]   = "Fizz",
+    ["GragasE"]              = "Gragas",
+    ["HecarimUlt"]           = "Hecarim",
+    ["JarvanIVDragonStrike"] = "JarvanIV",
+    ["IreliaGatotsu"]        = "Irelia",
+    ["JaxLeapStrike"]        = "Jax",
+    ["KhazixE"]              = "Khazix",
+    ["khazixelong"]          = "Khazix",
+    ["LeblancSlide"]         = "LeBlanc",
+    ["LeblancSlideM"]        = "LeBlanc",
+    ["BlindMonkQTwo"]        = "LeeSin",
+    ["LeonaZenithBlade"]     = "Leona",
+    ["UFSlash"]              = "Malphite",
+    ["Pantheon_LeapBash"]    = "Pantheon",
+    ["PoppyHeroicCharge"]    = "Poppy",
+    ["RenektonSliceAndDice"] = "Renekton",
+    ["RivenTriCleave"]       = "Riven",
+    ["SejuaniArcticAssault"] = "Sejuani",
+    ["slashCast"]            = "Tryndamere",
+    ["ViQ"]                  = "Vi",
+    ["MonkeyKingNimbus"]     = "MonkeyKing",
+    ["XenZhaoSweep"]         = "XinZhao",
+    ["YasuoDashWrapper"]     = "Yasuo"
+}
+
+function AntiGapcloser:__init(menu, callback)
+
+    self.callbacks = {}
+    self.activespells = {}
+    Callback.Add("Tick",(function() self:Tick() end) )
+    Callback.Add("ProcessSpell",(function(unit, spell) self:ProcessSpell(unit, spell) end) )
+	
+    if menu then
+        self:AddToMenu(menu)
+    end
+	
+    if callback then
+        self:AddCallback(callback)
+    end
+
+end
+
+function AntiGapcloser:AddToMenu(cfg)
+
+    assert(menu, "AntiGapcloser: menu can't be nil!")
+    local SpellAdded = false
+    local ObjectNames = {}
+	
+    for _, enemy in pairs(GetEnemyHeroes()) do
+        table.insert(ObjectNames, enemy.charName)
+    end
+	
+    cfg:Boolean("Enabled", "Enabled", SCRIPT_PARAM_ONOFF, true)
+    for i, ObjectName in pairs(GAPCLOSER_SPELLS) do
+        if table.contains(ObjectNames, charName) then
+            cfg:Boolean(string.gsub(i, "_", ""), ObjectName.." - "..i, true)
+            SpellAdded = true
+        end
+    end
+	
+    if not SpellAdded then
+        cfg:Info("Info", "No spell available to interrupt")
+    end
+	
+    self.Menu = cfg
+
+end
+
+function AntiGapcloser:AddCallback(callback)
+
+    assert(callback and type(callback) == "function", "AntiGapcloser: callback is invalid!")
+    table.insert(self.callbacks, callback)
+
+end
+
+function AntiGapcloser:TriggerCallbacks(unit, spell)
+
+    for i, callback in ipairs(self.callbacks) do
+        callback(unit, spell)
+    end
+
+end
+
+function AntiGapcloser:ProcessSpell(unit, spell)
+
+    if not self.Menu.Enabled then return end
+    if unit.team ~= myHero.team then
+        if GAPCLOSER_SPELLS[spell.name] then
+            local Gapcloser = GAPCLOSER_SPELLS[spell.name]
+            if (self.Menu and self.Menu[string.gsub(spell.name, "_", "")]:Value()) or not self.Menu then
+                local add = false
+                if spell.target and spell.target.isMe then
+                    add = true
+                    startPos = Vector(unit)
+                    endPos = myHero
+                elseif not spell.target then
+                    local endPos1 = Vector(unit) + 300 * (Vector(spell.endPos) - Vector(unit)):normalized()
+                    local endPos2 = Vector(unit) + 100 * (Vector(spell.endPos) - Vector(unit)):normalized()
+                 
+                    if (_GetDistanceSqr(unit) > _GetDistanceSqr(endPos1) or _GetDistanceSqr(unit) > _GetDistanceSqr(endPos2))  then
+                        add = true
+                    end
+                end
+
+                if add then
+                    local data = {unit = unit, spell = spell.name, startT = os.clock(), endT = os.clock() + 1, startPos = startPos, endPos = endPos}
+                    table.insert(self.activespells, data)
+                    self:TriggerCallbacks(data.unit, data)
+                end
+            end
+        end
+    end
+
+end
+
+function AntiGapcloser:Tick()
+
+    for i = #self.activespells, 1, -1 do
+        if self.activespells[i].endT - os.clock() > 0 then
+            self:TriggerCallbacks(self.activespells[i].unit, self.activespells[i])
+        else
+            table.remove(self.activespells, i)
+        end
+    end
+
 end
 
 class "ScriptUpdate"
