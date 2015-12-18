@@ -1,4 +1,4 @@
-DeftLibVersion = 28
+DeftLibVersion = 29
 
 require('Inspired')
 require('IPrediction')
@@ -820,4 +820,66 @@ function getSpellType(unit, spellName)
 	end
 
 	return spelltype, casttype
+end
+
+local SQRT = math.sqrt
+
+function TargetDist(point, target)
+    local origin = GetOrigin(target)
+    local dx, dz = origin.x-point.x, origin.z-point.z
+    return SQRT( dx*dx + dz*dz )
+end
+
+function ExcludeFurthest(point, tbl)
+    local removalId = 1
+    for i=2, #tbl do
+        if TargetDist(point, tbl[i]) > TargetDist(point, tbl[removalId]) then
+            removalId = i
+        end
+    end
+    
+    local newTable = {}
+    for i=1, #tbl do
+        if i ~= removalId then
+            newTable[#newTable+1] = tbl[i]
+        end
+    end
+    return newTable
+end
+
+function GetMEC(aoe_radius, listOfEntities, starTarget)
+    local average = {x=0, y=0, z=0, count = 0}
+    for i=1, #listOfEntities do
+        local ori = GetOrigin(listOfEntities[i])
+        average.x = average.x + ori.x
+        average.y = average.y + ori.y
+        average.z = average.z + ori.z
+        average.count = average.count + 1
+    end
+    if starTarget then
+        local ori = GetOrigin(starTarget)
+        average.x = average.x + ori.x
+        average.y = average.y + ori.y
+        average.z = average.z + ori.z
+        average.count = average.count + 1
+    end
+    average.x = average.x / average.count
+    average.y = average.y / average.count
+    average.z = average.z / average.count
+    
+    local targetsInRange = 0
+    for i=1, #listOfEntities do
+        if TargetDist(average, listOfEntities[i]) <= aoe_radius then
+            targetsInRange = targetsInRange + 1
+        end
+    end
+    if starTarget and TargetDist(average, starTarget) <= aoe_radius then
+        targetsInRange = targetsInRange + 1
+    end
+    
+    if targetsInRange == average.count then
+        return average
+    else
+        return GetMEC(aoe_radius, ExcludeFurthest(average, listOfEntities), starTarget)
+    end
 end
