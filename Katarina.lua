@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",13)
+AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",14)
 
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
@@ -164,22 +164,20 @@ local CastingR = false
 local target1 = TargetSelector(675,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 local target2 = TargetSelector(700,TARGET_LESS_CAST_PRIORITY,DAMAGE_MAGIC,true,false)
 
-OnAnimation(function(unit, animationName)
-  if unit == myHero and animationName == "Spell4" then 
-    CastingR = true 
-    IOW.movementEnabled = false
-    IOW.attacksEnabled = false
-  else 
-    CastingR = false 
-    IOW.movementEnabled = true
-    IOW.attacksEnabled = true
-  end
-end)
-
 OnProcessSpell(function(unit,spell)
   if unit == myHero and not spell.name:lower():find("katarina") then
   spellObj = spell
   wardpos = spellObj.endPos
+  end
+  if unit == myHero and spell.name:lower():find("katarinar") then
+    CastingR = true
+    IOW.movementEnabled = false
+    IOW.attacksEnabled = false
+    DelayAction(function() 
+    CastingR = false
+    IOW.movementEnabled = true
+    IOW.attacksEnabled = true
+    end, 2500+spell.windUpTime)
   end
 end)
 
