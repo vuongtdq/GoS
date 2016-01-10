@@ -89,7 +89,7 @@ OnProcessSpellAttack(function(unit,spell)
     CastSkillShot(_Q,GetMousePos())
     end
   end
-  end, GetWindUp(myHero)
+  end, GetWindUp(myHero))
 end)
 
 local IsStealthed = false
