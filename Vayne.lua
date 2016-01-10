@@ -4,7 +4,7 @@ require('MapPositionGOS')
 require('Inspired')
 require('DeftLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Vayne.lua","/D3ftsu/GoS/master/Vayne.version","Vayne.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Vayne.lua","/D3ftsu/GoS/master/Vayne.version","Vayne.lua",4)
 
 local VayneMenu = MenuConfig("Vayne", "Vayne")
 VayneMenu:Menu("Combo", "Combo")
@@ -75,19 +75,21 @@ OnDraw(function(myHero)
   if VayneMenu.Drawings.E:Value() then DrawCircle(pos,GetCastRange(myHero,_E),1,25,GoS.Blue) end
 end)
 
-IOW:AddCallback(AFTER_ATTACK, function(target, mode)
-  if mode == "Combo" and target ~= nil and VayneMenu.Combo.Q.Enabled:Value() and IsReady(_Q) then
+OnProcessSpellAttack(function(unit,spell)
+  DelayAction(function()
+  if unit == myHero and IOW:Mode() == "Combo" and spell.target ~= nil and VayneMenu.Combo.Q.Enabled:Value() and IsReady(_Q) then
     local AfterTumblePos = GetOrigin(myHero) + (Vector(GetMousePos()) - GetOrigin(myHero)):normalized() * 300
-    local DistanceAfterTumble = GetDistance(AfterTumblePos, target)
+    local DistanceAfterTumble = GetDistance(AfterTumblePos, spell.target)
 						  
     if DistanceAfterTumble < 800 and DistanceAfterTumble > 200 then
     CastSkillShot(_Q,GetMousePos())
     end
   
-    if GetDistance(target) > 630 and DistanceAfterTumble < 630 then
+    if GetDistance(spell.target) > 630 and DistanceAfterTumble < 630 then
     CastSkillShot(_Q,GetMousePos())
     end
   end
+  end, GetWindUp(myHero)
 end)
 
 local IsStealthed = false
