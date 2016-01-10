@@ -3,7 +3,7 @@ if GetObjectName(GetMyHero()) ~= "Kalista" then return end
 require('Inspired')
 require('DeftLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",10)
+AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",11)
 
 local KalistaMenu = MenuConfig("Kalista", "Kalista")
 
