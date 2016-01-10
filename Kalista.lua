@@ -68,10 +68,12 @@ DelayAction(function()
   end
 end, 1)
 
-IOW:AddCallback(AFTER_ATTACK, function(target, mode)
-  if mode == "Combo" and ValidTarget(target,1150) and KalistaMenu.Combo.Q:Value() and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_E,GetCastLevel(myHero,_E)) then
-  Cast(_Q,target)
+OnProcessSpellAttack(function(unit,spell)
+  DelayAction(function()
+  if IOW:Mode() == "Combo" and ValidTarget(spell.target,1150) and KalistaMenu.Combo.Q:Value() and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_E,GetCastLevel(myHero,_E)) then
+  Cast(_Q,spell.target)
   end
+  end, GetWindUp(myHero))
 end)
 
 OnDraw(function(myHero)
