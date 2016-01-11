@@ -37,7 +37,7 @@ OnProcessSpell(function(unit,spell)
   
     if spell.name == "CassiopeiaPetrifyingGaze" and GetDistance(unit) <= 750 then 
       IOW.movementEnabled = false
-      local DodgeThat = Vector(myHero)+(Vector(myHero)-Vector(unit)):normalize()*100
+      local DodgeThat = Vector(myHero)+(Vector(myHero)-Vector(unit)):normalized()*100
       MoveToXYZ(DodgeThat)
       if lastRightClick.x ~= nil then
       Move = true
@@ -47,7 +47,7 @@ OnProcessSpell(function(unit,spell)
 	
     if spell.name == "MockingShout" and GetDistance(unit) <= 850 then
       IOW.movementEnabled = false
-      local DodgeThat = Vector(myHero)+(Vector(myHero)-Vector(unit)):normalize()*(-100)
+      local DodgeThat = Vector(myHero)+(Vector(myHero)-Vector(unit)):normalized()*(-100)
       MoveToXYZ(DodgeThat)
       if lastRightClick.x ~= nil then
       Move = true
