@@ -414,20 +414,6 @@ function Ludens()
     return LudensStacks == 100 and 100+0.1*GetBonusAP(myHero) or 0
 end
 
-objManager = {}
-
-OnObjectLoad(function(Object)
-  if GetObjectType(Object) == "Obj_AI_Shop" or GetObjectType(Object) == "Obj_AI_SpawnPoint" then
-  table.insert(objManager,Object)
-  end
-end)
-
-OnCreateObj(function(Object)
-  if GetObjectType(Object) == "Obj_AI_Shop" or GetObjectType(Object) == "Obj_AI_SpawnPoint" then
-  table.insert(objManager,Object)
-  end
-end)
-
 Shield = {}
 Recalling = {}
 Slowed = {}
