@@ -1,4 +1,4 @@
-DeftLibVersion = 29
+DeftLibVersion = 30
 
 require('Inspired')
 require('IPrediction')
@@ -415,13 +415,11 @@ function Ludens()
 end
 
 Shield = {}
-Recalling = {}
 Slowed = {}
 Immobile = {}
 toQSS = false
 ccstun = {5,29,30,24}
 ccslow = {9,21,22,28}
-RecallTable = {"Recall", "RecallImproved", "OdinRecall"}
 
 OnUpdateBuff(function(unit,buff)
   if unit == myHero then
@@ -434,12 +432,6 @@ OnUpdateBuff(function(unit,buff)
     end
     
   end
-  
-    for i = 1, #RecallTable do
-      if buff.Name == RecallTable[i] then 
-      Recalling[GetNetworkID(unit)] = buff.Count
-      end
-    end
 
     for i = 1, #ccstun do
       if buff.Type == ccstun[i] then
@@ -467,12 +459,6 @@ OnRemoveBuff(function(unit,buff)
 
   end
 
-  for i = 1, #RecallTable do
-    if buff.Name == RecallTable[i] then 
-    Recalling[GetNetworkID(unit)] = 0
-    end
-  end
-
   if buff.Type == 15 then
   Shield[GetNetworkID(unit)] = 0
   end
@@ -489,10 +475,6 @@ end
 
 function IsSlowed(unit)
    return (Slowed[GetNetworkID(unit)] or 0) > 0
-end
-
-function IsRecalling(unit)
-   return (Recalling[GetNetworkID(unit)] or 0) > 0
 end
 
 local WINDOW_W = GetResolution().x
