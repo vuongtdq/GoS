@@ -66,7 +66,7 @@ DelayAction(function()
     KalistaMenu.Ult:Boolean("Tahmlista", "Tahmlista Combo", true)
     end
   end
-end, 1)
+end, 0)
 
 OnProcessSpellAttack(function(unit,spell)
   DelayAction(function()
