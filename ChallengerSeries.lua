@@ -1,4 +1,4 @@
-ChallengerSeriesVersion     = 0.01
+ChallengerSeriesVersion     = 0.02
 ChallengerSeriesAutoUpdate  = true  -- Change this to false if you wish to disable auto updater
 -- Sprites Link : http://www79.zippyshare.com/v/Hknq3dID/file.html
 
