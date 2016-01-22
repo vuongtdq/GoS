@@ -3,7 +3,7 @@ if GetObjectName(GetMyHero()) ~= "Kalista" then return end
 require('Inspired')
 require('DeftLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",12)
+AutoUpdate("/D3ftsu/GoS/master/Kalista.lua","/D3ftsu/GoS/master/Kalista.version","Kalista.lua",13)
 
 local KalistaMenu = MenuConfig("Kalista", "Kalista")
 
@@ -104,7 +104,7 @@ for i,enemy in pairs(GetEnemyHeroes()) do
 end
 
 for _,unit in pairs(minionManager.objects) do
-  if GetTeam(unit) == 300 and ValidTarget(unit, 2000) and KalistaMenu.Drawings.Edmg:Value() then
+  if IsObjectAlive(unit) and GetTeam(unit) == 300 and ValidTarget(unit, 2000) and KalistaMenu.Drawings.Edmg:Value() then
     local drawPos = WorldToScreen(1,GetOrigin(unit))
     if Edmg(unit) > GetCurrentHP(unit) then
     DrawText("100%",20,drawPos.x,drawPos.y,0xffffffff)
@@ -136,7 +136,7 @@ OnTick(function(myHero)
         end
 
         for i,minion in pairs(minionManager.objects) do
-          if GetTeam(minion) == MINION_ENEMY and IsReady(_E) and ValidTarget(target, 1000) and KalistaMenu.Combo.E:Value() and GetDistance(target) > GetRange(myHero)+GetHitBox(myHero)+(target and GetHitBox(target) or GetHitBox(myHero)) and Estacks(target) > 0 and GetCurrentHP(minion) < Edmg(minion) then
+          if IsObjectAlive(minion) and GetTeam(minion) == MINION_ENEMY and IsReady(_E) and ValidTarget(target, 1000) and KalistaMenu.Combo.E:Value() and GetDistance(target) > GetRange(myHero)+GetHitBox(myHero)+(target and GetHitBox(target) or GetHitBox(myHero)) and Estacks(target) > 0 and GetCurrentHP(minion) < Edmg(minion) then
           CastSpell(_E)
           end
         end
@@ -236,7 +236,7 @@ OnTick(function(myHero)
 	
     local killableminions = 0
     for i,unit in pairs(minionManager.objects) do
-      if GetTeam(unit) == MINION_ENEMY then
+      if IsObjectAlive(unit) and GetTeam(unit) == MINION_ENEMY then
         if Edmg(unit) > 0 and Edmg(unit) > GetCurrentHP(unit) and (GetObjectName(unit):find("Siege"))  and ValidTarget(unit, 1000) and KalistaMenu.Farm.ECanon:Value() and 100*GetCurrentMana(myHero)/GetMaxMana(myHero) > KalistaMenu.Farm.Mana:Value() then 
         CastSpell(_E)
         end
@@ -277,7 +277,7 @@ if KalistaMenu.Combo.WallJump:Value() then
 end
 	
 for _,unit in pairs(minionManager.objects) do
-    if GetTeam(unit) == 300 and ValidTarget(unit, 1000) and IsReady(_E) and KalistaMenu.Farm.Jungle.je:Value() ~= 1 then
+    if IsObjectAlive(unit) and GetTeam(unit) == 300 and ValidTarget(unit, 1000) and IsReady(_E) and KalistaMenu.Farm.Jungle.je:Value() ~= 1 then
     	
       if KalistaMenu.Farm.Jungle.je:Value() == 2 then
         for i,Epic in pairs(Epics) do
