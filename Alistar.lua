@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",9)
+AutoUpdate("/D3ftsu/GoS/master/Alistar.lua","/D3ftsu/GoS/master/Alistar.version","Alistar.lua",10)
 
 local AlistarMenu = MenuConfig("Alistar", "Alistar")
 AlistarMenu:Menu("Combo", "Combo")
@@ -49,7 +49,7 @@ DelayAction(function()
         end
     end
   end
-end, 1)
+end, 0)
 
 OnProcessSpell(function(unit, spell)
     if GetObjectType(unit) == Obj_AI_Hero and GetTeam(unit) ~= GetTeam(myHero) then
@@ -84,7 +84,7 @@ OnTick(function(myHero)
 		
         if IsReady(_W) and IsReady(_Q) and AlistarMenu.Combo.WQ:Value() and ValidTarget(Wtarget,650) and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) then
         CastTargetSpell(Wtarget, _W)
-	DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(Wtarget) - 500 ) * 0.4 + 25)
+	DelayAction(function() CastSpell(_Q) end, (math.max(0 , GetDistance(Wtarget) - 500 ) * 0.4 + 25))*0.001)
         end
 
     end
@@ -97,7 +97,7 @@ OnTick(function(myHero)
 		
         if IsReady(_W) and IsReady(_Q) and AlistarMenu.Harass.WQ:Value() and ValidTarget(Wtarget,650) and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) then
         CastTargetSpell(Wtarget, _W)
-	DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(Wtarget) - 500 ) * 0.4 + 25)
+	DelayAction(function() CastSpell(_Q) end, (math.max(0 , GetDistance(Wtarget) - 500 ) * 0.4 + 25))*0.001)
         end
 
     end
@@ -128,7 +128,7 @@ OnTick(function(myHero)
       CastTargetSpell(enemy, _W)
       elseif IsReady(_W) and IsReady(_Q) and GetCurrentMana(myHero) >= GetCastMana(myHero,_Q,GetCastLevel(myHero,_Q)) + GetCastMana(myHero,_W,GetCastLevel(myHero,_W)) and ValidTarget(enemy, 650) and AlistarMenu.Killsteal.WQ:Value() and GetHP2(enemy) < getdmg("Q",enemy)+getdmg("W",enemy) then
       CastTargetSpell(enemy, _W)
-      DelayAction(function() CastSpell(_Q) end, math.max(0 , GetDistance(enemy) - 500 ) * 0.4 + 25)
+      DelayAction(function() CastSpell(_Q) end, (math.max(0 , GetDistance(enemy) - 500 ) * 0.4 + 25))*0.001)
       end
 		
     end
