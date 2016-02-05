@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('IPrediction')
 
-AutoUpdate("/D3ftsu/GoS/master/Thresh.lua","/D3ftsu/GoS/master/Thresh.version","Thresh.lua",5)
+AutoUpdate("/D3ftsu/GoS/master/Thresh.lua","/D3ftsu/GoS/master/Thresh.version","Thresh.lua",6)
 
 local ThreshMenu = MenuConfig("Thresh", "Thresh")
 ThreshMenu:Menu("Combo", "Combo")
@@ -193,7 +193,7 @@ function CastQ2()
 end
 
 function CastLantern()
-  if ThreshMenu.Combo.ThrowLantern:Value() == 2 and Wtarget ~= nil and GetDistance(Wtarget) < 950 then
+  if ThreshMenu.Combo.ThrowLantern:Value() == 2 and Wtarget ~= nil and GetDistance(Wtarget) < 950 and IsObjectAlive(Wtarget) then
   CastSkillShot(_W,GetOrigin(Wtarget))
   elseif ThreshMenu.Combo.ThrowLantern:Value() == 1 and GetDistance(FindNearestAlly()) < 950 then
   CastSkillShot(_W,GetOrigin(FindNearestAlly()))
@@ -203,10 +203,10 @@ end
 function FindLowestAlly()
   LowestAlly = nil
   for _,Ally in pairs(GetAllyHeroes()) do
-    if GetDistance(ally) <= 950 then
+    if IsObjectAlive(Ally) and GetDistance(Ally) <= 950 then
       if LowestAlly == nil then
         LowestAlly = Ally
-      elseif IsObjectAlive(Ally) and GetPercentHP(Ally) < GetPercentHP(LowestAlly) then
+      elseif GetPercentHP(Ally) < GetPercentHP(LowestAlly) then
         LowestAlly = Ally
       end
     end
@@ -217,9 +217,9 @@ end
 function FindNearestAlly()
   local NearestAlly = nil
   for _,Ally in pairs(GetAllyHeroes()) do
-    if NearestAlly == nil then
+    if NearestAlly == nil and IsObjectAlive(Ally) then
       NearestAlly = Ally
-    elseif GetDistance(Ally) < GetDistance(NearestAlly) then
+    elseif IsObjectAlive(Ally) and GetDistance(Ally) < GetDistance(NearestAlly) then
       NearestAlly = Ally
     end
   end
