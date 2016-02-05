@@ -4,8 +4,6 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Azir.lua","/D3ftsu/GoS/master/Azir.version","Azir.lua",15)
-
 local AzirMenu = MenuConfig("Azir", "Azir")
 AzirMenu:Menu("Combo", "Combo")
 AzirMenu.Combo:Boolean("Q", "Use Q", true)
