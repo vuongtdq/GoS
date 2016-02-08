@@ -1,4 +1,4 @@
-ChallengerSeriesVersion     = 0.01
+ChallengerAwarenessVersion     = 0.01
 ChallengerAwarenessAutoUpdate  = true  -- Change this to false if you wish to disable auto updater
 -- Sprites Link : http://www79.zippyshare.com/v/Wx6n1Cda/file.html
 
