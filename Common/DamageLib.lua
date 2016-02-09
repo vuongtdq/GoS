@@ -97,7 +97,7 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			if spellname == "Q" then apdmg = 35*Qlvl+45+.8*GetBonusAP(Source)
 			elseif spellname == "W" then apdmg = 45*Wlvl+25+.85*GetBonusAP(Source)
 			elseif spellname == "E" then apdmg = 10*Elvl+10+.2*GetBonusAP(Source) --x each attack suffered
-			elseif spellname == "R" then apdmg = math.max((125*Rlvl+50+.8*GetBonusAP(Source))*stagedmg1,(10*Rlevel+10+.2*GetBonusAP(Source))*stagedmg2,(125*Rlvl+50+.8*GetBonusAP(Source))*stagedmg3) addmg = (25*Rlvl+55)*stagedmg2 --stage1:Summon Tibbers . stage2:Aura AoE xsec + 1 Tibbers Attack. stage3:Summon Tibbers
+			elseif spellname == "R" then apdmg = math.max((125*Rlvl+50+.8*GetBonusAP(Source))*stagedmg1,(10*Rlvl+10+.2*GetBonusAP(Source))*stagedmg2,(125*Rlvl+50+.8*GetBonusAP(Source))*stagedmg3) addmg = (25*Rlvl+55)*stagedmg2 --stage1:Summon Tibbers . stage2:Aura AoE xsec + 1 Tibbers Attack. stage3:Summon Tibbers
 			end
 		elseif GetObjectName(Source) == "Ashe" then  -- script doesn't calculate autos and therefore doesn't take Ashe's crit mechanic on slowed targets into effect
 			if spellname == "Q" then addmg = (.05*Qlvl+.1)*(GetBonusDmg(Source)+GetBaseDamage(Source))  --xhit (bonus)
@@ -676,7 +676,7 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 		elseif GetObjectName(Source) == "Veigar" then
 			if spellname == "Q" then apdmg = 45*Qlvl+35+.6*GetBonusAP(Source)
 			elseif spellname == "W" then apdmg = 50*Wlvl+70+GetBonusAP(Source)
-			elseif spellname == "R" then apdmg = 125*Rlvl+125+GetBonusAP(Source)+.8*GetBonusGetBonusAP(Source)(target)
+			elseif spellname == "R" then apdmg = 125*Rlvl+125+GetBonusAP(Source)+GetBonusAP(myHero)+.8*GetBonusAP(target)
 			end
 		elseif GetObjectName(Source) == "Velkoz" then
 			if spellname == "P" then dmg = 10*GetLevel(Source)+25
