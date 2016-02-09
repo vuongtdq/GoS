@@ -5,7 +5,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Riven.lua","/D3ftsu/GoS/master/Riven.version","Riven.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Riven.lua","/D3ftsu/GoS/master/Riven.version","Riven.lua",)
 
 local RivenMenu = MenuConfig("Riven", "Riven")
 RivenMenu:Menu("Combo", "Combo")
@@ -50,7 +50,7 @@ DelayAction(function()
       end
     end
   end
-end, 1)
+end, 0.001)
 
 local QCast = 0
 local lastE = 0
@@ -75,7 +75,7 @@ OnTick(function(myHero)
 	  
 	  if IsReady(_Q) and IsReady(_E) and RivenMenu.Combo.Q:Value() and RivenMenu.Combo.E:Value() and ValidTarget(target, 715) and GetDistance(target) > GetRange(myHero)+GetHitBox(target) then
 	  CastSkillShot(_E, GetOrigin(target))
-	  DelayAction(function() CastSkillShot(_Q, GetOrigin(target)) end, 267)
+	  DelayAction(function() CastSkillShot(_Q, GetOrigin(target)) end, 0.267)
 	  end
 	end
 	
@@ -86,7 +86,7 @@ OnTick(function(myHero)
 	  
 	  if IsReady(_Q) and IsReady(_E) and RivenMenu.Harass.Q:Value() and RivenMenu.Harass.E:Value() and ValidTarget(target, 715) and GetDistance(target) > GetRange(myHero)+GetHitBox(myHero)*3 then
 	  CastSkillShot(_E, GetOrigin(target))
-	  DelayAction(function() CastSkillShot(_Q, GetOrigin(target)) end, 267)
+	  DelayAction(function() CastSkillShot(_Q, GetOrigin(target)) end, 0.267)
 	  end
 	end
 
@@ -181,7 +181,7 @@ OnProcessSpell(function(unit,spell)
 	end
       end
 
-    end, GetWindUp(myHero)*1000 )
+    end, GetWindUp(myHero) )
     end
 	
     if spell.name == "RivenMartyr" then
@@ -198,7 +198,7 @@ OnProcessSpell(function(unit,spell)
 	end
       end
 
-    end, spell.windUpTime*1000 )
+    end, spell.windUpTime )
     end
 	
     if spell.name == "RivenTriCleave" then
@@ -219,7 +219,7 @@ OnProcessSpell(function(unit,spell)
 	CastSkillShot(_Q, GetOrigin(target)) 
 	end
       end
-    end, spell.windUpTime*1000 )
+    end, spell.windUpTime )
     end
 	
     if spell.name == "RivenFengShuiEngine" then
@@ -236,7 +236,7 @@ OnProcessSpell(function(unit,spell)
 	    CastSkillShot(_Q, GetOrigin(target)) 
 	    end
 	  end
-    end, spell.windUpTime*1000 )
+    end, spell.windUpTime )
     end
 	
     if spell.name == "rivenizunablade" then
@@ -253,7 +253,7 @@ OnProcessSpell(function(unit,spell)
         CastSkillShot(_Q, GetOrigin(target)) 
 	end
       end
-    end, spell.windUpTime*1000 )
+    end, spell.windUpTime )
     end
 	
   end 
