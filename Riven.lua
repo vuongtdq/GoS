@@ -5,7 +5,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Riven.lua","/D3ftsu/GoS/master/Riven.version","Riven.lua",)
+AutoUpdate("/D3ftsu/GoS/master/Riven.lua","/D3ftsu/GoS/master/Riven.version","Riven.lua",4)
 
 local RivenMenu = MenuConfig("Riven", "Riven")
 RivenMenu:Menu("Combo", "Combo")
