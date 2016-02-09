@@ -82,20 +82,3 @@ OnProcessRecall(function(unit,recall)
           end
         end
 end)
-
-function percentToRGB(percent) 
-	local r, g
-    if percent == 100 then
-        percent = 99 end
-		
-    if percent < 50 then
-        r = math.floor(255 * (percent / 50))
-        g = 255
-    else
-        r = 255
-        g = math.floor(255 * ((50 - percent % 50) / 50))
-    end
-	
-    return 0xFF000000+g*0xFFFF+r*0xFF
-end
-
