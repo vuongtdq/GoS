@@ -1,6 +1,6 @@
 require('Inspired')
 
-AutoUpdate("/D3ftsu/GoS/master/Baseult.lua","/D3ftsu/GoS/master/Baseult.version","Baseult.lua",3)
+AutoUpdate("/D3ftsu/GoS/master/Baseult.lua","/D3ftsu/GoS/master/Baseult.version","Baseult.lua",4)
 
 local BasePositions = {
      [SUMMONERS_RIFT] = {
@@ -48,7 +48,6 @@ local SpellData = {
 }
 
 local BaseultMenu = MenuConfig("Baseult", "Baseult")
-BaseultMenu:Boolean("RT", "RecallTracker", true)
 
 if SpellData[GetObjectName(myHero)] then 
 BaseultMenu:Boolean("Enabled", "Enabled", true)
@@ -60,41 +59,6 @@ Damage = SpellData[GetObjectName(myHero)].Damage
 end
 	
 local Isrecalling = {}
-
-OnDraw(function()
-
-if BaseultMenu.RT:Value() then
-	local i = 0
-	for Champ, recall in pairs(Isrecalling) do
-	  local percent=math.floor(GetCurrentHP(recall.Champ)/GetMaxHP(recall.Champ)*100)
-	  local leftTime = recall.starttime - GetTickCount() + recall.info.totalTime
-	  if leftTime<0 then leftTime = 0 end
-	  FillRect(400,500+18*i-2,168,18,0x50000000)
-	  if i>0 then FillRect(400,500+18*i-2,168,1,0xC0000000) end
-  	  DrawText(string.format("%s (%d%%)", Champ, percent), 14, 402, 500+18*i, percentToRGB(percent))
-	    if recall.info.isStart then
-	    DrawText(string.format("%.1fs", leftTime/1000), 14, 515, 500+18*i, percentToRGB(percent))
-	    FillRect(569,500+18*i, 300*leftTime/recall.info.totalTime,14,0x80000000)
-	    else
- 	      if recall.killtime == nil then
-	        if recall.info.isFinish and not recall.info.isStart then
-		recall.result = "finished"
-		recall.killtime =  GetTickCount()+2000
-		elseif not recall.info.isFinish then
-	 	recall.result = "cancelled"
-	        recall.killtime =  GetTickCount()+2000
-		end
-              end
-	      DrawText(recall.result, 14, 515, 500+18*i, percentToRGB(percent))
-	    end
-	    if recall.killtime~=nil and GetTickCount() > recall.killtime then
-	    Isrecalling[Champ] = nil
-	    end
-	    i=i+1
-	  end
-        end
-
-end)
 
 OnProcessRecall(function(unit,recall)
 	if GetTeam(myHero) ~= GetTeam(unit) then
@@ -112,7 +76,7 @@ OnProcessRecall(function(unit,recall)
 	    end
 	    if IsReady(_R) and BaseultMenu.Enabled:Value() and Damage(unit) > GetCurrentHP(unit)+GetDmgShield(unit)+GetHPRegen(unit)*8 then
 	      if (recall.totalTime-recall.passedTime) > Delay + (GetDistance(Base) * 1000 / MissileSpeed) then
-	      DelayAction(function() CastSkillShot(_R,Base) end, (recall.totalTime-recall.passedTime)- (Delay + (GetDistance(Base) * 1000 / MissileSpeed)))
+	      DelayAction(function() CastSkillShot(_R,Base) end, ((recall.totalTime-recall.passedTime)- (Delay + (GetDistance(Base) * 1000 / MissileSpeed)))/1000)
     	      end
 	    end
           end
