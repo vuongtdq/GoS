@@ -1,7 +1,5 @@
 require('Inspired')
 
-AutoUpdate("/D3ftsu/GoS/master/Baseult.lua","/D3ftsu/GoS/master/Baseult.version","Baseult.lua",5)
-
 local BasePositions = {
   [SUMMONERS_RIFT] = {
     [100] = Vector(14340, 171, 14390),
