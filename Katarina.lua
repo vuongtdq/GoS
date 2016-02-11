@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",14)
+AutoUpdate("/D3ftsu/GoS/master/Katarina.lua","/D3ftsu/GoS/master/Katarina.version","Katarina.lua",15)
 
 local KatarinaMenu = MenuConfig("Katarina", "Katarina")
 KatarinaMenu:Menu("Combo", "Combo")
@@ -177,7 +177,7 @@ OnProcessSpell(function(unit,spell)
     CastingR = false
     IOW.movementEnabled = true
     IOW.attacksEnabled = true
-    end, 2500+spell.windUpTime)
+    end, 2.5+spell.windUpTime)
   end
 end)
 
@@ -244,22 +244,22 @@ OnTick(function(myHero)
 		
 		if IsReady(_Q) and IsReady(_W) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 375) then 
 		CastSpell(_W)
-                DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
+                DelayAction(function() CastTargetSpell(enemy, _Q) end, 0.25)
 		end
 	
 	        if IsReady(_E) and IsReady(_W) and GetHP2(enemy) < getdmg("W",enemy) + getdmg("W",enemy) and ValidTarget(enemy, 700) then 
 		CastTargetSpell(enemy, _E)
-		DelayAction(function() CastSpell(_W) end, 250)
+		DelayAction(function() CastSpell(_W) end, 0.25)
 				
 		if IsReady(_Q) and IsReady(_W) and IsReady(_E) and GetHP2(enemy) < getdmg("Q",enemy) + getdmg("W",enemy) + getdmg("E",enemy) and ValidTarget(enemy, 700) then 
 		CastTargetSpell(enemy, _E)
-		DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
-		DelayAction(function() CastSpell(_W) end, 250)
+		DelayAction(function() CastTargetSpell(enemy, _Q) end, 0.25)
+		DelayAction(function() CastSpell(_W) end, 0.25)
 		end
 				
 	        if KatarinaMenu.Killsteal.UseWards:Value() and ValidTarget(enemy, 1275) and GetDistance(enemy) > 700 and IsReady(_Q) and GetHP2(enemy) < getdmg("Q",enemy) then
 		wardJump(GetOrigin(enemy))
-		DelayAction(function() CastTargetSpell(enemy, _Q) end, 250)
+		DelayAction(function() CastTargetSpell(enemy, _Q) end, 0.25)
 	        end
 				
 	end
