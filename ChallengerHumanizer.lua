@@ -1,4 +1,4 @@
-ChallengerHumanizerVersion     = 0.01
+ChallengerHumanizerVersion     = 0.02
 ChallengerHumanizerAutoUpdate  = true  -- Change this to false if you wish to disable auto updater
 
 require('Inspired')
@@ -31,7 +31,6 @@ function ChallengerHumanizer:__init()
   self.PassedMovements = 0
   self.BlockedMovements = 0
   self.TotalMovements = 0
-  self.BanChance = 0
   self:Load()
   Callback.Add("IssueOrder", function(order) self:IssueOrder(order) end)
   Callback.Add("Draw", function() self:Draw() end)
@@ -55,13 +54,11 @@ function ChallengerHumanizer:IssueOrder(order)
       self.PassedMovements = self.PassedMovements + 1
     end
     self.TotalMovements = self.TotalMovements + 1
-    self.BanChance = ((self.BlockedMovements*100)/self.TotalMovements)
   end
 end
 
 function ChallengerHumanizer:Draw()
   if not self.ChallengerHumanizerMenu.Draw:Value() then return end
-  DrawText("Reduced Ban Chance : " .. tostring(math.ceil(self.BanChance)) .. "%",20,40,260,ARGB(255,0,255,255))
   DrawText("Passed Movements : "..tostring(self.PassedMovements),20,40,280,ARGB(255,0,255,255))
   DrawText("Blocked Movements : "..tostring(self.BlockedMovements),20,40,300,ARGB(255,0,255,255))
   DrawText("Total Movements : "..tostring(self.TotalMovements),20,40,320,ARGB(255,0,255,255))
