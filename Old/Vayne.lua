@@ -4,8 +4,6 @@ require('MapPositionGOS')
 require('Inspired')
 require('DeftLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Vayne.lua","/D3ftsu/GoS/master/Vayne.version","Vayne.lua",4)
-
 local VayneMenu = MenuConfig("Vayne", "Vayne")
 VayneMenu:Menu("Combo", "Combo")
 VayneMenu.Combo:Menu("Q", "Tumble (Q)")
