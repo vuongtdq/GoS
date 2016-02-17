@@ -1,4 +1,4 @@
-ChallengerHumanizerVersion     = 0.02
+ChallengerHumanizerVersion     = 0.03
 ChallengerHumanizerAutoUpdate  = true  -- Change this to false if you wish to disable auto updater
 
 require('Inspired')
@@ -26,27 +26,36 @@ end
 class "ChallengerHumanizer"
 
 function ChallengerHumanizer:__init()
-  self.HumanizerTick = 0
+  self.MovementHumanizerTick = 0
   self.LastMove = 0
   self.PassedMovements = 0
   self.BlockedMovements = 0
   self.TotalMovements = 0
+  self.SpellHumanizerTick = 0
+  self.LastSpell = 0
+  self.PassedSpells = 0
+  self.BlockedSpells = 0
+  self.TotalSpells = 0
   self:Load()
   Callback.Add("IssueOrder", function(order) self:IssueOrder(order) end)
+  Callback.Add("SpellCast", function(spell) self:SpellCast(spell) end)
   Callback.Add("Draw", function() self:Draw() end)
 end
 
 function ChallengerHumanizer:Load()
   self.ChallengerHumanizerMenu = MenuConfig("ChallengerHumanizer","Challenger Humanizer")
-  self.ChallengerHumanizerMenu:Boolean("Enabled", "Enable Movement Humanizer", true)
+  self.ChallengerHumanizerMenu:Boolean("EnabledMH", "Enable Movement Humanizer", true)
+  self.ChallengerHumanizerMenu:Boolean("EnabledSH", "Enable Spell Humanizer", true)
   self.ChallengerHumanizerMenu:Boolean("Draw", "Draw Stats", true)
-  self.ChallengerHumanizerMenu:Slider("Max", "Max Movements Per Second", 7, 4, 30, 1, function(max) self.HumanizerTick = (1000 / (max + math.random(-1, 2))) end)
-  self.HumanizerTick = (1000 / (self.ChallengerHumanizerMenu.Max:Value() + math.random(-1, 2)))
+  self.ChallengerHumanizerMenu:Slider("MaxM", "Max Movements Per Second", 4, 4, 30, 1, function(max) self.MovementHumanizerTick = (1000 / (max + math.random(-1, 2))) end)
+  self.ChallengerHumanizerMenu:Slider("MaxS", "Max Spells Per Second", 4, 2, 15, 1, function(max) self.SpellHumanizerTick = (1000 / (max + math.random(-1, 2))) end)
+  self.MovementHumanizerTick = (1000 / (self.ChallengerHumanizerMenu.MaxM:Value() + math.random(-1, 2)))
+  self.SpellHumanizerTick = (1000 / (self.ChallengerHumanizerMenu.MaxS:Value() + math.random(-1, 2)))
 end
 
 function ChallengerHumanizer:IssueOrder(order)
-  if order.flag == 2 and self:Orbwalking() and self.ChallengerHumanizerMenu.Enabled:Value() and not _G.evade then
-    if self.HumanizerTick >= (GetTickCount() - self.LastMove) then
+  if order.flag == 2 and self:Orbwalking() and self.ChallengerHumanizerMenu.EnabledMH:Value() and not _G.evade then
+    if self.MovementHumanizerTick >= (GetTickCount() - self.LastMove) then
       BlockOrder()
       self.BlockedMovements = self.BlockedMovements + 1
     else
@@ -57,11 +66,27 @@ function ChallengerHumanizer:IssueOrder(order)
   end
 end
 
+function ChallengerHumanizer:SpellCast(spell)
+  if self:Orbwalking() and self.ChallengerHumanizerMenu.EnabledSH:Value() then
+    if self.SpellHumanizerTick >= (GetTickCount() - self.LastSpell) then
+      BlockCast()
+      self.BlockedSpells = self.BlockedSpells + 1
+    else
+      self.LastSpell = GetTickCount()
+      self.PassedSpells = self.PassedSpells + 1
+    end
+    self.TotalSpells = self.TotalSpells + 1
+  end
+end
+
 function ChallengerHumanizer:Draw()
   if not self.ChallengerHumanizerMenu.Draw:Value() then return end
   DrawText("Passed Movements : "..tostring(self.PassedMovements),20,40,280,ARGB(255,0,255,255))
   DrawText("Blocked Movements : "..tostring(self.BlockedMovements),20,40,300,ARGB(255,0,255,255))
   DrawText("Total Movements : "..tostring(self.TotalMovements),20,40,320,ARGB(255,0,255,255))
+  DrawText("Passed Spells : "..tostring(self.PassedSpells),20,40,340,ARGB(255,0,255,255))
+  DrawText("Blocked Spells : "..tostring(self.BlockedSpells),20,40,360,ARGB(255,0,255,255))
+  DrawText("Total Spells : "..tostring(self.TotalSpells),20,40,380,ARGB(255,0,255,255))
 end
 
 function ChallengerHumanizer:Orbwalking()
