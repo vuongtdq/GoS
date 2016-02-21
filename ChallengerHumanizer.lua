@@ -1,4 +1,4 @@
-ChallengerHumanizerVersion     = 0.03
+ChallengerHumanizerVersion     = 0.04
 ChallengerHumanizerAutoUpdate  = true  -- Change this to false if you wish to disable auto updater
 
 require('Inspired')
@@ -31,26 +31,17 @@ function ChallengerHumanizer:__init()
   self.PassedMovements = 0
   self.BlockedMovements = 0
   self.TotalMovements = 0
-  self.SpellHumanizerTick = 0
-  self.LastSpell = 0
-  self.PassedSpells = 0
-  self.BlockedSpells = 0
-  self.TotalSpells = 0
   self:Load()
   Callback.Add("IssueOrder", function(order) self:IssueOrder(order) end)
-  Callback.Add("SpellCast", function(spell) self:SpellCast(spell) end)
   Callback.Add("Draw", function() self:Draw() end)
 end
 
 function ChallengerHumanizer:Load()
   self.ChallengerHumanizerMenu = MenuConfig("ChallengerHumanizer","Challenger Humanizer")
   self.ChallengerHumanizerMenu:Boolean("EnabledMH", "Enable Movement Humanizer", true)
-  self.ChallengerHumanizerMenu:Boolean("EnabledSH", "Enable Spell Humanizer", true)
   self.ChallengerHumanizerMenu:Boolean("Draw", "Draw Stats", true)
   self.ChallengerHumanizerMenu:Slider("MaxM", "Max Movements Per Second", 4, 4, 30, 1, function(max) self.MovementHumanizerTick = (1000 / (max + math.random(-1, 2))) end)
-  self.ChallengerHumanizerMenu:Slider("MaxS", "Max Spells Per Second", 4, 2, 15, 1, function(max) self.SpellHumanizerTick = (1000 / (max + math.random(-1, 2))) end)
   self.MovementHumanizerTick = (1000 / (self.ChallengerHumanizerMenu.MaxM:Value() + math.random(-1, 2)))
-  self.SpellHumanizerTick = (1000 / (self.ChallengerHumanizerMenu.MaxS:Value() + math.random(-1, 2)))
 end
 
 function ChallengerHumanizer:IssueOrder(order)
@@ -66,27 +57,11 @@ function ChallengerHumanizer:IssueOrder(order)
   end
 end
 
-function ChallengerHumanizer:SpellCast(spell)
-  if self:Orbwalking() and self.ChallengerHumanizerMenu.EnabledSH:Value() then
-    if self.SpellHumanizerTick >= (GetTickCount() - self.LastSpell) then
-      BlockCast()
-      self.BlockedSpells = self.BlockedSpells + 1
-    else
-      self.LastSpell = GetTickCount()
-      self.PassedSpells = self.PassedSpells + 1
-    end
-    self.TotalSpells = self.TotalSpells + 1
-  end
-end
-
 function ChallengerHumanizer:Draw()
   if not self.ChallengerHumanizerMenu.Draw:Value() then return end
   DrawText("Passed Movements : "..tostring(self.PassedMovements),20,40,280,ARGB(255,0,255,255))
   DrawText("Blocked Movements : "..tostring(self.BlockedMovements),20,40,300,ARGB(255,0,255,255))
   DrawText("Total Movements : "..tostring(self.TotalMovements),20,40,320,ARGB(255,0,255,255))
-  DrawText("Passed Spells : "..tostring(self.PassedSpells),20,40,340,ARGB(255,0,255,255))
-  DrawText("Blocked Spells : "..tostring(self.BlockedSpells),20,40,360,ARGB(255,0,255,255))
-  DrawText("Total Spells : "..tostring(self.TotalSpells),20,40,380,ARGB(255,0,255,255))
 end
 
 function ChallengerHumanizer:Orbwalking()
@@ -111,12 +86,6 @@ end
 
 function ScriptUpdate:print(str)
   print('<font color="#FFFFFF">'..os.clock()..': '..str)
-end
-
-function DrawLines2(t,w,c)
-  for i=1, #t-1 do
-    DrawLine(t[i].x, t[i].y, t[i+1].x, t[i+1].y, w, c)
-  end
 end
 
 function ScriptUpdate:CreateSocket(url)
