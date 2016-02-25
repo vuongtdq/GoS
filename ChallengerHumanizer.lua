@@ -1,4 +1,4 @@
-ChallengerHumanizerVersion     = 0.04
+ChallengerHumanizerVersion     = 0.05
 ChallengerHumanizerAutoUpdate  = true  -- Change this to false if you wish to disable auto updater
 
 require('Inspired')
@@ -101,7 +101,7 @@ function ScriptUpdate:CreateSocket(url)
   self.Socket = self.LuaSocket.tcp()
   self.Socket:settimeout(0, 'b')
   self.Socket:settimeout(99999999, 't')
-  self.Socket:connect('plebleaks.com', 80)
+  self.Socket:connect('GamingOnSteroids.com', 80)
   self.Url = url
   self.Started = false
   self.LastPrint = ""
@@ -144,7 +144,7 @@ function ScriptUpdate:GetOnlineVersion()
   self.Receive, self.Status, self.Snipped = self.Socket:receive(1024)
   if self.Status == 'timeout' and not self.Started then
     self.Started = true
-    self.Socket:send("GET "..self.Url.." HTTP/1.1\r\nHost: plebleaks.com\r\n\r\n")
+    self.Socket:send("GET "..self.Url.." HTTP/1.1\r\nHost: GamingOnSteroids.com\r\n\r\n")
   end
   if (self.Receive or (#self.Snipped > 0)) and not self.RecvStarted then
     self.RecvStarted = true
@@ -205,7 +205,7 @@ function ScriptUpdate:DownloadUpdate()
   self.Receive, self.Status, self.Snipped = self.Socket:receive(1024)
   if self.Status == 'timeout' and not self.Started then
     self.Started = true
-    self.Socket:send("GET "..self.Url.." HTTP/1.1\r\nHost: plebleaks.com\r\n\r\n")
+    self.Socket:send("GET "..self.Url.." HTTP/1.1\r\nHost: GamingOnSteroids.com\r\n\r\n")
   end
   if (self.Receive or (#self.Snipped > 0)) and not self.RecvStarted then
     self.RecvStarted = true
