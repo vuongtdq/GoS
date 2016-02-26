@@ -1,4 +1,4 @@
-ChallengerBaseultVersion     = 0.03
+ChallengerBaseultVersion     = 0.04
 ChallengerBaseultAutoUpdate  = true  -- Change this to false if you wish to disable auto updater
 
 require('Inspired')
@@ -230,7 +230,7 @@ function ScriptUpdate:GetOnlineVersion()
   self.Receive, self.Status, self.Snipped = self.Socket:receive(1024)
   if self.Status == 'timeout' and not self.Started then
     self.Started = true
-    self.Socket:send("GET "..self.Url.." HTTP/1.1\r\nHost: plebleaks.com\r\n\r\n")
+    self.Socket:send("GET "..self.Url.." HTTP/1.1\r\nHost: gamingonsteroids.com\r\n\r\n")
   end
   if (self.Receive or (#self.Snipped > 0)) and not self.RecvStarted then
     self.RecvStarted = true
@@ -291,7 +291,7 @@ function ScriptUpdate:DownloadUpdate()
   self.Receive, self.Status, self.Snipped = self.Socket:receive(1024)
   if self.Status == 'timeout' and not self.Started then
     self.Started = true
-    self.Socket:send("GET "..self.Url.." HTTP/1.1\r\nHost: plebleaks.com\r\n\r\n")
+    self.Socket:send("GET "..self.Url.." HTTP/1.1\r\nHost: gamingonsteroids.com\r\n\r\n")
   end
   if (self.Receive or (#self.Snipped > 0)) and not self.RecvStarted then
     self.RecvStarted = true
