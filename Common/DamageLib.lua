@@ -827,4 +827,3 @@ end
 function GetHP2(unit)
     return GetCurrentHP(unit)+GetDmgShield(unit)+GetMagicShield(unit)
 end
---
