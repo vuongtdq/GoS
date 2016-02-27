@@ -770,37 +770,37 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			elseif spellname == "E" then apdmg = 35*Elvl+25+.5*GetBonusAP(Source)
 			elseif spellname == "R" then apdmg = 85*Rlvl+95+.7*GetBonusAP(Source)
 			end
-         	end
-	        
-	        if apdmg > 0 then apdmg = CalcDamage(Source, target, 0, apdmg + Ludens()) end
-		if addmg > 0 then addmg = CalcDamage(Source, target, addmg) end
-		TrueDmg = apdmg+addmg+dmg
-		
-	elseif (spellname == "AD") then
-                addmg = GetBaseDamage(myHero)+GetBonusDmg(myHero)
-        elseif (spellname == "IGNITE") then
-                dmg = 50+20*GetLevel(myHero)
-        elseif (spellname == "SMITESS") then
-                dmg = 54+6*GetLevel(myHero)
-        elseif (spellname == "SMITESB") then
-                dmg = 20+8*GetLevel(myHero)
-        elseif (spellname == "SHEEN") then
-                TrueDmg = GetBaseDamage(myHero)
-        elseif (spellname == "TRINITY") then
-                TrueDmg = 2*GetBaseDamage(myHero)
-        elseif (spellname == "LICHBANE") then
-                apdmg = 0.75*(GetBaseDamage(myHero))+.5*GetBonusAP(myHero)
-        elseif (spellname == "ICEBORN") then
-                addmg = 1.25*GetBaseDamage(myHero) 
-        elseif (spellname == "MURAMANA") then
-                addmg = .06*GetCurrentMana(myHero)
-        elseif (spellname == "HURRICANE") then
-                addmg = 10+.5*GetBaseDamage(myHero)
+		elseif (spellname == "AD") then
+                        addmg = GetBaseDamage(myHero)+GetBonusDmg(myHero)
+                elseif (spellname == "IGNITE") then
+                	dmg = 50+20*GetLevel(myHero)
+                elseif (spellname == "SMITESS") then
+        	 	dmg = 54+6*GetLevel(myHero)
+                elseif (spellname == "SMITESB") then
+                	dmg = 20+8*GetLevel(myHero)
+                elseif (spellname == "SHEEN") then
+                	TrueDmg = GetBaseDamage(myHero)
+                elseif (spellname == "TRINITY") then
+                	TrueDmg = 2*GetBaseDamage(myHero)
+                elseif (spellname == "LICHBANE") then
+                	apdmg = 0.75*(GetBaseDamage(myHero))+.5*GetBonusAP(myHero)
+                elseif (spellname == "ICEBORN") then
+                	addmg = 1.25*GetBaseDamage(myHero) 
+                elseif (spellname == "MURAMANA") then
+        	 	addmg = .06*GetCurrentMana(myHero)
+                elseif (spellname == "HURRICANE") then
+                	addmg = 10+.5*GetBaseDamage(myHero)
                 
-        else
-               PrintChat("Error spellDmg "..GetObjectName(Source).." "..spellname)
-                TrueDmg = 0
+        	else
+        	        PrintChat("Error spellDmg "..GetObjectName(Source).." "..spellname)
+                        TrueDmg = 0
+                end
         end
+	        
+	if apdmg > 0 then apdmg = CalcDamage(Source, target, 0, apdmg + Ludens()) end
+	if addmg > 0 then addmg = CalcDamage(Source, target, addmg) end
+	TrueDmg = apdmg+addmg+dmg
+		
         return TrueDmg
 end
 
