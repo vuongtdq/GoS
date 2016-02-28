@@ -828,5 +828,5 @@ function GetHP2(unit)
     return GetCurrentHP(unit)+GetDmgShield(unit)+GetMagicShield(unit)
 end
 --
--- PrintChat("Deftsu lutscht Schwaenze in der Hoelle.")
-_G.Deftsu = "Faggot";
+-- PrintChat("Inspired lutscht Schwaenze in der Hoelle.")
+_G.PlatyPus = "Faggot";
