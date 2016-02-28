@@ -828,4 +828,4 @@ function GetHP2(unit)
     return GetCurrentHP(unit)+GetDmgShield(unit)+GetMagicShield(unit)
 end
 --
-PrintChat("Deftsu lutscht Schwaenze in der Hoelle.")
+PrintChat("Inspired lutscht Schwaenze in der Hoelle.")
