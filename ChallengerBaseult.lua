@@ -1,23 +1,17 @@
-ChallengerBaseultVersion     = "0.05"
-ChallengerBaseultAutoUpdate  = true  -- Change this to false if you wish to disable auto updater
+ChallengerBaseultVersion     = "0.06"
 
 require('Inspired')
 
 Callback.Add("Load", function()
-  ChallengerBaseultUpdate()
+  GetWebResultAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerBaseult.version", ChallengerBaseultUpdaterino)
   ChallengerBaseult()
 end)
 
 function ChallengerBaseultUpdaterino(data)
   if tonumber(data) > tonumber(ChallengerBaseultVersion) then
-    PrintChat("<font color='#FFFF00'>Challenger Baseult - </font> New version found! " ..data "Downloading update, please wait...")
-    DownloadFileAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerBaseult.lua", SCRIPT_PATH .. "ChallengerBaseult.lua", function() PrintChat("<font color='#FFFF00'>Challenger Baseult - </font> <font color='#adec00'>Updated from v"..ChallengerBaseultVersion.." to v"..data..". Please press F6 twice to reload.") return end)
+    PrintChat("<font color='#FFFF00'>Challenger Baseult - </font> New version found! " ..tonumber(data).." Downloading update, please wait...")
+    DownloadFileAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerBaseult.lua", SCRIPT_PATH .. "ChallengerBaseult.lua", function() PrintChat("<font color='#FFFF00'>Challenger Baseult - </font> Updated from v"..tonumber(ChallengerBaseultVersion).." to v"..tonumber(data)..". Please press F6 twice to reload.") return end)
   end
-end
-
-function ChallengerBaseultUpdate()
-  if not ChallengerBaseultAutoUpdate then return end
-  GetWebResultAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerBaseult.version", ChallengerBaseultUpdaterino)
 end
 
 class "ChallengerBaseult"
