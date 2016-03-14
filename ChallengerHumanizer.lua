@@ -1,23 +1,19 @@
-ChallengerHumanizerVersion     = "0.06"
-ChallengerHumanizerAutoUpdate  = true  -- Change this to false if you wish to disable auto updater
+ChallengerHumanizerVersion     = "0.07"
 
 require('Inspired')
 
 Callback.Add("Load", function()
-  ChallengerHumanizerUpdate()
+  GetWebResultAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerHumanizer.version", ChallengerHumanizerUpdaterino)
   ChallengerHumanizer()
 end)
 
 function ChallengerHumanizerUpdaterino(data)
   if tonumber(data) > tonumber(ChallengerHumanizerVersion) then
     PrintChat("New version found! " ..data "Downloading update, please wait...")
-    DownloadFileAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerHumanizer.lua", SCRIPT_PATH .. "ChallengerHumanizer.lua", function() PrintChat("<font color='#FFFF00'>Challenger Humanizer - </font> <font color='#adec00'>Updated from v"..ChallengerHumanizerVersion.." to v"..data..". Please press F6 twice to reload.") return end)
+    DownloadFileAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerHumanizer.lua", SCRIPT_PATH .. "ChallengerHumanizer.lua", function() PrintChat("<font color='#FFFF00'>Challenger Humanizer - </font> Updated from v"..tonumber(ChallengerHumanizerVersion).." to v"..tonumber(data)..". Please press F6 twice to reload.") return end)
+  else
+    PrintChat("<font color='#FFFF00'>Challenger Humanizer - </font> Loaded v" ..ChallengerHumanizerVersion)
   end
-end
-
-function ChallengerHumanizerUpdate()
-  if not ChallengerHumanizerAutoUpdate then return end
-  GetWebResultAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerHumanizer.version", ChallengerHumanizerUpdaterino)
 end
 
 class "ChallengerHumanizer"
