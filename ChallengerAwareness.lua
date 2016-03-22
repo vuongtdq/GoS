@@ -5,5 +5,5 @@ LoadGOSScript(Base64Decode("m06HI1TJKRdicMGykz7ROQelW/kwFBr7z371QzFScN3jqef5CDGL
 Changelog:
 v0.13 : Initial VIP Release
 v0.14 : Totally Reworked HUD, Reworked CD Tracker, Added FOW JungleTracker (Baron/Dragon), Reworked Ward Tracker, Improved Towers Range Drawing (less fps drops), Updated Packets Detection for Surrender Votes to 6.5/6.4, Improved Clone Revealer (less fps drops), Fixed Recall Tracker Print Chat, Fixed Runtime Errors, Fixed the Auto Updater, Added some Sexy Voice :p
-v0.15 : Added Gank Tracker, Fixed Sprite AutoDownloader Path, Updated Sounds, Deleted Who Surrended (Sorry, need to learn more to decrypt the packets)
+v0.15 : Added Auth (for free users), Added Gank Tracker, Fixed Sprite AutoDownloader Path, Updated Sounds, Deleted Who Surrended (Sorry, need to learn more to decrypt the packets)
 ]]
