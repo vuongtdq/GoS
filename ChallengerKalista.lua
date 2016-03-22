@@ -7,5 +7,5 @@ v0.01 : Initial Release
 v0.02 : Fixed Auto-Updater
 v0.03 : Fixed Runtime Errors and Fixed Auto-Updater
 v0.04 : Added Champion Load Check
-v0.05 : Fixed Auto R, Improved AA Cancel, Deleted AA Exploit (useless and bannable)
+v0.05 : Added Auth (for free users), Fixed Auto R, Improved AA Cancel, Deleted AA Exploit (useless and bannable)
 ]]
