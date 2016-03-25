@@ -321,7 +321,7 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			end
 		elseif GetObjectName(Source) == "Katarina" then
 			if spellname == "Q" then apdmg = math.max((25*Qlvl+35+.45*GetBonusAP(Source))*stagedmg1,(15*Qlvl+.15*GetBonusAP(Source))*stagedmg2,(40*Qlvl+35+.6*GetBonusAP(Source))*stagedmg3) --stage1:Dagger, Each subsequent hit deals 10% less damage. stage2:On-hit. stage3: Max damage
-			elseif spellname == "W" then apdmg = 35*Wlvl+5+.25*GetBonusAP(Source)+.6*(GetBonusDmg(Source)+GetBaseDamage(Source))
+			elseif spellname == "W" then apdmg = 35*Wlvl+5+.25*GetBonusAP(Source)+.6*GetBonusDmg(Source)
 			elseif spellname == "E" then apdmg = 30*Elvl+10+.25*GetBonusAP(Source)
 			elseif spellname == "R" then apdmg = math.max(20*Rlvl+15+.25*GetBonusAP(Source)+.375*(GetBonusDmg(Source)+GetBaseDamage(Source)),(20*Rlvl+15+.25*GetBonusAP(Source)+.375*(GetBonusDmg(Source)+GetBaseDamage(Source)))*10*stagedmg3) --xdagger (champion can be hit by a maximum of 10 daggers (2 sec)). stage3: Max damage
 			end
@@ -827,6 +827,3 @@ end
 function GetHP2(unit)
     return GetCurrentHP(unit)+GetDmgShield(unit)+GetMagicShield(unit)
 end
---
--- PrintChat("Inspired lutscht Schwaenze in der Hoelle.")
-_G.PlatyPus = "Faggot";
