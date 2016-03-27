@@ -4,7 +4,7 @@ require('Inspired')
 require('DeftLib')
 require('IPrediction')
 
-AutoUpdate("/D3ftsu/GoS/master/Thresh.lua","/D3ftsu/GoS/master/Thresh.version","Thresh.lua",6)
+AutoUpdate("/D3ftsu/GoS/master/Thresh.lua","/D3ftsu/GoS/master/Thresh.version","Thresh.lua",7)
 
 local ThreshMenu = MenuConfig("Thresh", "Thresh")
 ThreshMenu:Menu("Combo", "Combo")
@@ -135,14 +135,14 @@ OnTick(function(myHero)
     if IsReady(_W) then
       if ThreshMenu.Misc.SaveAlly:Value() then
         for _,Ally in pairs(GetAllyHeroes()) do
-          if IsObjectAlive(Ally) and IsReady(_W) and EnemiesAround(GetOrigin(Ally), 950) >= ThreshMenu.Misc.AroundAlly:Value() and GetDistance(Ally) <= 950 then
+          if IsObjectAlive(Ally) and GetPercentHP(Ally) <= 30 and IsReady(_W) and EnemiesAround(GetOrigin(Ally), 950) >= ThreshMenu.Misc.AroundAlly:Value() and GetDistance(Ally) <= 950 then
    	  CastSkillShot(_W,GetOrigin(FindLowestAlly()))
           end
         end
       end
       if ThreshMenu.Misc.cc:Value() then
         for _,Ally in ipairs(GetAllyHeroes()) do
-          if IsObjectAlive(Ally) and GetDistance(Ally) <= 950 then
+          if IsObjectAlive(Ally) and GetDistance(Ally) <= 950 and GetPercentHP(Ally) <= 30 then
             local x,y,z = IPrediction.IsUnitStunned(Ally, 950, math.huge, 0.5, 315, myHero)
             if x and GetDistance(z) <= 950 and IsReady(_W) then
             CastSkillShot(_W,GetOrigin(Ally))
