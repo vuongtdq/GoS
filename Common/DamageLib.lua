@@ -2,7 +2,8 @@
 	Spell Damage Library
 	by eXtragoZ Ported And Updated by Deftsu
 	
-Version = 1.0.0.0
+Version = 1.0.0.1
+--fixed katarina W, aded Ludens, Hextech and Bilgewater
 		
 		Is designed to calculate the damage of the skills to champions, although most of the calculations
 		work for creeps
@@ -772,7 +773,7 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			end
          	end
 	        
-	        if apdmg > 0 then apdmg = CalcDamage(Source, target, 0, apdmg + Ludens()) end
+	        if apdmg > 0 then apdmg = CalcDamage(Source, target, 0, apdmg) end
 		if addmg > 0 then addmg = CalcDamage(Source, target, addmg) end
 		TrueDmg = apdmg+addmg+dmg
 		
@@ -796,7 +797,12 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
                 addmg = .06*GetCurrentMana(myHero)
         elseif (spellname == "HURRICANE") then
                 addmg = 10+.5*GetBaseDamage(myHero)
-                
+        elseif (spellname == "LUDENS") then
+        		apdmg = Ludens()
+        elseif (spellname == "HEXTECH") then
+        		apdmg = 150 + .4 * GetBonusAP(myHero)
+        elseif (spellname == "BILGEWATER") then
+        		apdmg = 100
         else
                PrintChat("Error spellDmg "..GetObjectName(Source).." "..spellname)
                 TrueDmg = 0
