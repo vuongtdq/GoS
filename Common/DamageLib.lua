@@ -2,8 +2,9 @@
 	Spell Damage Library
 	by eXtragoZ Ported And Updated by Deftsu
 	
-Version = 1.0.0.1
---fixed katarina W, aded Ludens, Hextech and Bilgewater
+Version = 1.0.0.2
+--1.0.0.1: fixed katarina W, aded Ludens, Hextech and Bilgewater
+--1.0.0.2: fixed Damage Calc for AD and Items
 		
 		Is designed to calculate the damage of the skills to champions, although most of the calculations
 		work for creeps
@@ -45,7 +46,7 @@ Version = 1.0.0.1
 local LudensStacks = 0
 
 function getdmg(spellname,target,Source,stagedmg,spelllvl)
-        local Source = Source or GetMyHero()
+    local Source = Source or GetMyHero()
 	local Qlvl = spelllvl and spelllvl or GetCastLevel(Source,_Q)
 	local Wlvl = spelllvl and spelllvl or GetCastLevel(Source,_W)
 	local Elvl = spelllvl and spelllvl or GetCastLevel(Source,_E)
@@ -53,13 +54,13 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 	local stagedmg1,stagedmg2,stagedmg3 = 1,0,0
 	if stagedmg == 2 then stagedmg1,stagedmg2,stagedmg3 = 0,1,0
 	elseif stagedmg == 3 then stagedmg1,stagedmg2,stagedmg3 = 0,0,1 end
-	TrueDmg = 0
+	local TrueDmg = 0
+	local apdmg = 0
+	local addmg = 0
+	local dmg = 0
 	if ((spellname == "Q" or spellname == "QM") and Qlvl == 0) or ((spellname == "W" or spellname == "WM") and Wlvl == 0) or ((spellname == "E" or spellname == "EM") and Elvl == 0) or (spellname == "R" and Rlvl == 0) then
 		TrueDmg = 0
 	elseif spellname == "Q" or spellname == "W" or spellname == "E" or spellname == "R" or spellname == "P" or spellname == "QM" or spellname == "WM" or spellname == "EM" then
-		local apdmg = 0
-		local addmg = 0
-		local dmg = 0
 		if GetObjectName(Source) == "Aatrox" then
 			if spellname == "Q" then addmg = 45*Qlvl+25+.6*(GetBonusDmg(Source)+GetBaseDamage(Source))
 			elseif spellname == "W" then addmg = (35*Wlvl+25+(GetBonusDmg(Source)+GetBaseDamage(Source)))*(stagedmg1+stagedmg3) 
@@ -179,7 +180,7 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			elseif spellname == "R" then addmg = 100*Rlvl+75+1.1*(GetBonusDmg(Source)+GetBaseDamage(Source)) --xhit (max 2 hits), deals 8% less damage for each unit hit, down to a minimum of 40%
 			end
 		elseif GetObjectName(Source) == "Ekko" then
-		        if spellname == "P" then apdmg = 10+10*GetLevel(Source)+.8*GetBonusAP(Source)
+		    if spellname == "P" then apdmg = 10+10*GetLevel(Source)+.8*GetBonusAP(Source)
 			elseif spellname == "Q" then apdmg = math.max((15*Qlvl+45+.1*GetBonusAP(Source))*stagedmg1,(25*Qlvl+35+.6*GetBonusAP(Source))*stagedmg2,(40*Qlvl+80+.7*GetBonusAP(Source))*stagedmg3) -- Stage 1 : First Cast, Stage 2 : Q Back, Stage 3 : Max Damage
 			elseif spellname == "E" then apdmg = 30*Elvl+20+.2*GetBonusAP(Source)
 			elseif spellname == "R" then apdmg = 150*Rlvl+50+1.3*GetBonusAP(Source)
@@ -771,43 +772,48 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			elseif spellname == "E" then apdmg = 35*Elvl+25+.5*GetBonusAP(Source)
 			elseif spellname == "R" then apdmg = 85*Rlvl+95+.7*GetBonusAP(Source)
 			end
-         	end
-	        
-	        if apdmg > 0 then apdmg = CalcDamage(Source, target, 0, apdmg) end
-		if addmg > 0 then addmg = CalcDamage(Source, target, addmg) end
-		TrueDmg = apdmg+addmg+dmg
-		
-	elseif (spellname == "AD") then
-                addmg = GetBaseDamage(myHero)+GetBonusDmg(myHero)
-        elseif (spellname == "IGNITE") then
-                dmg = 50+20*GetLevel(myHero)
-        elseif (spellname == "SMITESS") then
-                dmg = 54+6*GetLevel(myHero)
-        elseif (spellname == "SMITESB") then
-                dmg = 20+8*GetLevel(myHero)
-        elseif (spellname == "SHEEN") then
-                TrueDmg = GetBaseDamage(myHero)
-        elseif (spellname == "TRINITY") then
-                TrueDmg = 2*GetBaseDamage(myHero)
-        elseif (spellname == "LICHBANE") then
-                apdmg = 0.75*(GetBaseDamage(myHero))+.5*GetBonusAP(myHero)
-        elseif (spellname == "ICEBORN") then
-                addmg = 1.25*GetBaseDamage(myHero) 
-        elseif (spellname == "MURAMANA") then
-                addmg = .06*GetCurrentMana(myHero)
-        elseif (spellname == "HURRICANE") then
-                addmg = 10+.5*GetBaseDamage(myHero)
-        elseif (spellname == "LUDENS") then
-        		apdmg = Ludens()
-        elseif (spellname == "HEXTECH") then
-        		apdmg = 150 + .4 * GetBonusAP(myHero)
-        elseif (spellname == "BILGEWATER") then
-        		apdmg = 100
-        else
-               PrintChat("Error spellDmg "..GetObjectName(Source).." "..spellname)
-                TrueDmg = 0
         end
-        return TrueDmg
+	elseif (spellname == "AD") then
+            addmg = GetBaseDamage(myHero)+GetBonusDmg(myHero)
+    elseif (spellname == "IGNITE") then
+            dmg = 50+20*GetLevel(myHero)
+    elseif (spellname == "SMITESS") then
+            dmg = 54+6*GetLevel(myHero)
+    elseif (spellname == "SMITESB") then
+            dmg = 20+8*GetLevel(myHero)
+    elseif (spellname == "SHEEN") then
+            TrueDmg = GetBaseDamage(myHero)
+    elseif (spellname == "TRINITY") then
+            TrueDmg = 2*GetBaseDamage(myHero)
+    elseif (spellname == "LICHBANE") then
+            apdmg = 0.75*(GetBaseDamage(myHero))+.5*GetBonusAP(myHero)
+    elseif (spellname == "ICEBORN") then
+            addmg = 1.25*GetBaseDamage(myHero) 
+    elseif (spellname == "MURAMANA") then
+            addmg = .06*GetCurrentMana(myHero)
+    elseif (spellname == "HURRICANE") then
+            addmg = 10+.5*GetBaseDamage(myHero)
+    elseif (spellname == "LUDENS") then
+    		apdmg = Ludens()
+    elseif (spellname == "HEXTECH") then
+    		apdmg = 150 + .4 * GetBonusAP(myHero)
+    elseif (spellname == "BILGEWATER") then
+    		apdmg = 100
+    else
+           PrintChat("Error spellDmg "..GetObjectName(Source).." "..spellname)
+            TrueDmg = 0
+    end
+
+    if apdmg > 0 then 
+		apdmg = CalcDamage(Source, target, 0, apdmg) 
+	end
+	if addmg > 0 then 
+		addmg = CalcDamage(Source, target, addmg) 
+	end
+
+    TrueDmg = apdmg+addmg+dmg
+
+    return TrueDmg
 end
 
 OnUpdateBuff(function(unit,buff)
