@@ -1,7 +1,5 @@
 ChallengerBaseultVersion     = "0.06"
 
-require('Inspired')
-
 Callback.Add("Load", function()
   GetWebResultAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerBaseult.version", ChallengerBaseultUpdaterino)
   ChallengerBaseult()
