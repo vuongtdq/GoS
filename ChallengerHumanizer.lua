@@ -1,6 +1,4 @@
-ChallengerHumanizerVersion     = "0.07"
-
-require('Inspired')
+ChallengerHumanizerVersion     = "0.08"
 
 Callback.Add("Load", function()
   GetWebResultAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerHumanizer.version", ChallengerHumanizerUpdaterino)
@@ -9,8 +7,8 @@ end)
 
 function ChallengerHumanizerUpdaterino(data)
   if tonumber(data) > tonumber(ChallengerHumanizerVersion) then
-    PrintChat("New version found! " ..data "Downloading update, please wait...")
-    DownloadFileAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/ChallengerHumanizer.lua", SCRIPT_PATH .. "ChallengerHumanizer.lua", function() PrintChat("<font color='#FFFF00'>Challenger Humanizer - </font> Updated from v"..tonumber(ChallengerHumanizerVersion).." to v"..tonumber(data)..". Please press F6 twice to reload.") return end)
+    PrintChat("<font color='#FFFF00'>Challenger Humanizer - </font> New version found! "..tonumber(data).." Downloading update, please wait...")
+    DownloadFileAsync("https://raw.githubusercontent.com/D3ftsu/GoS/master/Humanizer.lua", SCRIPT_PATH .. "ChallengerHumanizer.lua", function() PrintChat("<font color='#FFFF00'>Challenger Humanizer - </font> Updated from v"..tonumber(ChallengerHumanizerVersion).." to v"..tonumber(data)..". Please press F6 twice to reload.") return end)
   else
     PrintChat("<font color='#FFFF00'>Challenger Humanizer - </font> Loaded v" ..ChallengerHumanizerVersion)
   end
