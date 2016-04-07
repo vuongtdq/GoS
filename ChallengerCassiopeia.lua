@@ -6,5 +6,5 @@ Changelog:
 v0.01 : Initial VIP Release
 v0.02 : Load Should be fixed
 v0.03 : Fixed JungleClear
-v0.04 : Added Champion Load Check (forgot that :p), Fixed JungleClear Interfering with laneclear
+v0.04 : Added Champion Load Check (forgot that :p), Fixed JungleClear Interfering with laneclear, No Drawings While Dead
 ]]
