@@ -4,8 +4,6 @@ require('Inspired')
 require('DeftLib')
 require('DamageLib')
 
-AutoUpdate("/D3ftsu/GoS/master/Ekko.lua","/D3ftsu/GoS/master/Ekko.version","Ekko.lua",6)
-
 local EkkoMenu = MenuConfig("Ekko", "Ekko")
 EkkoMenu:Menu("Combo", "Combo")
 EkkoMenu.Combo:Boolean("Q", "Use Q", true)
