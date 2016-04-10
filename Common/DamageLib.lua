@@ -2,9 +2,10 @@
 	Spell Damage Library
 	by eXtragoZ Ported And Updated by Deftsu
 	
-Version = 1.0.0.2
+Version = 1.0.0.3
 --1.0.0.1: fixed katarina W, aded Ludens, Hextech and Bilgewater
 --1.0.0.2: fixed Damage Calc for AD and Items
+--1.0.0.3: fixed Bard QLevel
 		
 		Is designed to calculate the damage of the skills to champions, although most of the calculations
 		work for creeps
@@ -114,7 +115,7 @@ function getdmg(spellname,target,Source,stagedmg,spelllvl)
 			end
 		elseif GetObjectName(Source) == "Bard" then
 			if spellname == "P" then apdmg = 30+.3*GetBonusAP(Source)  --I don't know how to check Meep count to calculate damage
-			elseif spellname == "Q" then apdmg = 45*Qlevel+35+.65*GetBonusAP(Source)
+			elseif spellname == "Q" then apdmg = 45*Qlvl+35+.65*GetBonusAP(Source)
 			end
 		elseif GetObjectName(Source) == "Blitzcrank" then
 			if spellname == "Q" then apdmg = 55*Qlvl+25+GetBonusAP(Source)
